@@ -1,0 +1,7 @@
+venv
+__pycache__
+*.pyc
+
+DEV_*
+pathf*
+*_log.txt

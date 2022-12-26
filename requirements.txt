@@ -1,0 +1,25 @@
+
+# API and web.
+fastapi
+uvicorn
+jinja2
+aiofiles
+websockets
+requests
+# Sound, etc.
+pyalsaaudio
+numpy
+scipy
+psutil
+pyusb
+# GPS and date/time.
+pyserial
+pyserial-asyncio
+pytz
+python-dateutil
+# Config.
+pyyaml
+
+# VS Code.
+pylint
+black
