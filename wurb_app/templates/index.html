@@ -39,13 +39,13 @@
                 </div>
                 <div class="container m-1">
                     <div class="buttons is-centered">
-                        <button onclick="fetchAjaxRecord()"
-                            class="button is-small is-rounded is-info XXis-inverted"><strong>Record</strong></button>
-                        <button onclick="fetchAjaxLive()"
+                        <button id="ajax-record-id" onclick="fetchAjaxRecord()"
+                            class="button is-small is-rounded is-info is-inverted"><strong>Record</strong></button>
+                        <button id="ajax-live-id" onclick="fetchAjaxLive()"
                             class="button is-small is-rounded is-info is-inverted"><strong>Live</strong></button>
-                        <button onclick="fetchAjaxAnnotations()"
+                        <button id="ajax-annotations-id" onclick="fetchAjaxAnnotations()"
                             class="button is-small is-rounded is-info is-inverted"><strong>Annotations</strong></button>
-                        <button onclick="fetchAjaxFiles()"
+                        <button id="ajax-files-id" onclick="fetchAjaxFiles()"
                             class="button is-small is-rounded is-info is-inverted"><strong>Files</strong></button>
                     </div>
                 </div>
@@ -54,7 +54,7 @@
 
         <div class="hero-body has-background-grey">
             <!-- <div class="has-background-grey"> -->
-            <div id="id-hero-body" class="">
+            <div id="hero-body-id" class="">
                 <p class="title">NOT LOADED...</p>
             </div>
 
