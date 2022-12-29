@@ -1,0 +1,30 @@
+# Configurations for CloudedBats WURB-2023.
+---
+wurb_app:
+  version: "2023.0.0-development"
+  port: 8000
+  host: "0.0.0.0"
+  log_level: info
+
+sound_capture:
+  device_name: hifiberry # Part of device name.
+  sampling_freq_hz: 192000
+  channels: STEREO # STEREO, MONO, MONO-LEFT, MONO-RIGHT.
+  period_size: 9600
+  buffer_size: 19200
+
+sound_pitch_shifting:
+  pitch_factor: 30
+  volume_percent: 50
+  filter_low_khz: 15.0
+  filter_high_khz: 90.0
+  in_queue_length: 10
+  overlap_factor: 1.5
+
+sound_playback:
+  device_name: Headphones # Part of device name.
+  sampling_freq_hz: 48000
+  period_size: 2048
+  buffer_size: 4800
+  buffer_max_size: 10000
+  in_queue_length: 10

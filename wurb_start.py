@@ -1,5 +1,8 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
+# Project: http://cloudedbats.org, https://github.com/cloudedbats
+# Copyright (c) 2023-present Arnold Andreasson
+# License: MIT License (see LICENSE or http://opensource.org/licenses/mit).
 
 import asyncio
 import uvicorn
@@ -39,7 +42,7 @@ async def main():
 
     # WURB core startup.
     logger.debug("WURB startup.")
-    wurb_core.manager.startup()
+    await wurb_core.manager.startup()
 
     # App config.
     port = wurb_core.config.get("wurb_app.port", default="8000")
