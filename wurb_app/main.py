@@ -51,7 +51,7 @@ async def shutdown_event():
 app.include_router(wurb_app.record_router)
 app.include_router(wurb_app.live_router)
 app.include_router(wurb_app.annotations_router)
-app.include_router(wurb_app.files_router)
+app.include_router(wurb_app.administration_router)
 app.include_router(wurb_app.about_router)
 
 

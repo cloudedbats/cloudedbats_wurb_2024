@@ -11,20 +11,20 @@ import wurb_core
 
 logger = logging.getLogger(wurb_core.used_logger)
 templates = fastapi.templating.Jinja2Templates(directory="wurb_app/templates")
-files_router = fastapi.APIRouter()
+administration_router = fastapi.APIRouter()
 
 
-@files_router.get("/ajax-files/", tags=["AJAX"], description="Files module as AJAX.")
-async def ajax_files(request: fastapi.Request):
+@administration_router.get("/ajax-administration/", tags=["AJAX"], description="Administration module as AJAX.")
+async def ajax_administration(request: fastapi.Request):
     """ """
     try:
-        logger.debug("API called: ajax_files.")
+        logger.debug("API called: ajax_administration.")
         return templates.TemplateResponse(
-            "files.html",
+            "administration.html",
             {
                 "request": request,
                 "wurb_version": wurb_core.__version__,
             },
         )
     except Exception as e:
-        logger.debug("Exception: ajax_files: " + str(e))
+        logger.debug("Exception: ajax_administration: " + str(e))

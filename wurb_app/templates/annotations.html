@@ -1,6 +1,314 @@
-<div class="tile is-parent is-vertical">
-    <article class="tile is-child box has-background-grey-lighter">
-        <p class="title is-4">Annotations</p>
-        <p class="subtitle is-5">Not implemented yet...</p>
-    </article>
-</div>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CloudedBats - WURB</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+
+    <link rel="stylesheet" href="../static/css/wurb_slider.css">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/wurb_slider.css') }}">
+    <script src="../static/js/ajax.js"></script>
+</head>
+
+<body>
+
+    <div class="tile is-ancestor is-vertical py-2">
+        <div class="tile is-parent px---0">
+            <article class="tile is-child box">
+                <div class="content is-large">
+
+                    <div class="field">
+                        <div class="container is-fluid">
+                            <div class="is-pulled-right">
+                                <button class="button is-rounded is-small">
+                                    <strong>Show settings</strong>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="title is-4">
+                        Annotations
+                    </p>
+
+                    <section class="section has-background-grey-lighter p-2 is---hidden">
+
+                        <div class="field">
+                            <label class="label">Select&nbsp;folder&nbsp;/&nbsp;monitoring&nbsp;night</label>
+                        </div>
+                        <div class="field is-grouped">
+                            <div class="control">
+                                <div class="select is-small is-rounded is-info">
+                                    <select>
+                                        <option value="drive-internal">Internal SD card</option>
+                                        <option value="drive-usb">USB: Memory</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="control">
+                                <div class="select is-small is-rounded is-info">
+                                    <select>
+                                        <option value="Taberg_2022-12-30">Taberg_2022-12-30</option>
+                                        <option value="Taberg_2022-12-31">Taberg_2022-12-31</option>
+                                        <option value="Taberg_2023-01-01">Taberg_2023-01-01</option>
+                                        <option value="Taberg_2023-01-02">Taberg_2023-01-02</option>
+                                        <option value="Taberg_2023-01-03">Taberg_2023-01-03</option>
+                                        <option value="Taberg_2023-01-04">Taberg_2023-01-04</option>
+                                        <option value="Taberg_2023-01-05">Taberg_2023-01-05</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Filter&nbsp;on&nbsp;quality</label>
+                        </div>
+                        <div class="tabs m-0">
+                            <ul class="m-0">
+                                <li>
+                                    <a href="" class="p-2">
+                                        <label class="checkbox">
+                                            <input id="filter-q0" type="checkbox" checked>
+                                            Q-0
+                                        </label>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="" class="p-2">
+                                        <label class="checkbox p-0">
+                                            <input id="filter-q1" type="checkbox" checked>
+                                            Q-1
+                                        </label>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="" class="p-2">
+                                        <label class="checkbox">
+                                            <input id="filter-q2" type="checkbox" checked>
+                                            Q-2
+                                        </label>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="" class="p-2">
+                                        <label class="checkbox">
+                                            <input id="filter-q3" type="checkbox" checked>
+                                            Q-3
+                                        </label>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="" class="p-2">
+                                        <label class="checkbox">
+                                            <input id="filter-q4" type="checkbox" checked>
+                                            Q-4
+                                        </label>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="" class="p-2">
+                                        <label class="checkbox">
+                                            <input id="filter-q-not-assigned" type="checkbox" checked>
+                                            Not assigned
+                                        </label>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="" class="p-2">
+                                        <button id="filter-clear-all"
+                                            class="button is-small is-rounded is-info"><strong>Clear</strong>
+                                        </button>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="" class="p-0">
+                                        <button id="filter-clear-all"
+                                            class="button is-small is-rounded is-info"><strong>Mark
+                                                all</strong>
+                                        </button>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="field pt-2">
+                            <label class="label">View recordings</label>
+                        </div>
+                        <div class="field">
+                            <!-- <label class="label">Select</label> -->
+                            <div class="container is-fluid m-2">
+                                <div class="buttons is-centered">
+                                    <button id="visual-feedback-auto-id" onclick="fetchXXX()"
+                                        class="button is-small is-rounded is-info"><strong>Files</strong></button>
+                                    <!-- <button id="visual-feedback-first-id" onclick="fetchXXX()"
+                                        class="button is-small is-rounded is-info"><strong>Overview</strong></button> -->
+                                    <button id="visual-feedback-previous-id" onclick="fetchXXX()"
+                                        class="button is-small is-rounded is-inverted is-info"><strong>Spectrogram</strong></button>
+                                    <button id="visual-feedback-previous-id" onclick="fetchXXX()"
+                                        class="button is-small is-rounded is-info"><strong>Detailed</strong></button>
+                                </div>
+                            </div>
+
+                            <div class="control">
+                                <!-- <figure class="image is-16by9">
+                                        <iframe class="has-ratio" width="640" height="360" src=""
+                                            frameborder="0" allowfullscreen></iframe>
+                                    </figure> -->
+                                <figure class="image is--128x128">
+                                    <img class="is--rounded" src="{{ url_for('static', path='SPECTROGRAM.jpg') }}">
+                                    <!-- <img class="is--rounded" src="file://SPECTROGRAM.jpg"> -->
+                                </figure>
+                            </div>
+                        </div>
+
+                        <div class="container">
+                            <div class="buttons is-centered">
+                                <button id="visual-feedback-first-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info"><strong>First</strong></button>
+                                <button id="visual-feedback-previous-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info"><strong>Previous</strong></button>
+                                <button id="visual-feedback-next-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info"><strong>Next</strong></button>
+                                <button id="visual-feedback-last-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info"><strong>Last</strong></button>
+                            </div>
+                        </div>
+
+
+                        <div class="field pt-2">
+                            <div class="label">
+                                <label class="label">
+                                    Select quality 
+                                </label>
+                            </div>
+                        </div>
+
+
+                        <div class="field">
+                            <div class="content">
+                                <div class="container">
+                                    <div class="control">
+                                        <label class="radio pl-2">
+                                            <input type="radio" name="rsvp">
+                                            Q-0 (trash)
+                                        </label>
+                                        <label class="radio pl-0">
+                                            <input type="radio" name="rsvp">
+                                            Q-1 (maybe bats)
+                                        </label>
+                                        <label class="radio pl-0">
+                                            <input type="radio" name="rsvp">
+                                            Q-2 (unidentified bats)
+                                        </label>
+                                        <label class="radio pl-0">
+                                            <input type="radio" name="rsvp">
+                                            Q-3 (validation needed)
+                                        </label>
+                                        <label class="radio pl-0">
+                                            <input type="radio" name="rsvp">
+                                            Q-4 (specified)
+                                        </label>
+                                        <label class="radio pl-0">
+                                            <input type="radio" name="rsvp" checked>
+                                            Not assigned
+                                        </label>
+                                        <label class="checkbox pl-4">
+                                            <input id="filter-q4" type="checkbox">
+                                            Mark as reference
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="field">
+                            <div class="label">
+                                <label class="label">Select tags (white are selected)</label>
+                            </div>
+                        </div>
+
+                        <div class="container pb-4">
+                            <div class="buttons">
+                                <button id="visual-feedback-first-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info"><strong>Myotis</strong></button>
+                                <button id="visual-feedback-previous-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info"><strong>Mbra/mys</strong></button>
+                                <button id="visual-feedback-auto-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info"><strong>Mnat</strong></button>
+                                <button id="visual-feedback-next-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info is-inverted"><strong>Vmur</strong></button>
+                                <button id="visual-feedback-last-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info"><strong>Paur</strong></button>
+                                <button id="visual-feedback-auto-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info"><strong>Enil</strong></button>
+                                <button id="visual-feedback-next-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info"><strong>Nnoc</strong></button>
+                                <button id="visual-feedback-last-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info is-inverted"><strong>Social</strong></button>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Comments</label>
+                        </div>
+                        <div class="field">
+                            <p class="control">
+                                <input class="input" type="email" placeholder="Comments on recording">
+                            </p>
+                        </div>
+
+
+                        <div class="field">
+                            <label class="label">Fast commands</label>
+                        </div>
+                        <div class="container">
+                            <div class="buttons">
+                                <button id="visual-feedback-auto-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info"><strong>Clear</strong></button>
+                                <button id="visual-feedback-auto-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info">
+                                    <strong>Copy from previous</strong></button>
+                                <button id="visual-feedback-next-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info">
+                                    <strong>Copy + next</strong></button>
+                                <button id="visual-feedback-previous-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info"><strong>Previous</strong></button>
+                                <button id="visual-feedback-first-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info"><strong>Next</strong></button>
+                            </div>
+                        </div>
+
+                    </section>
+
+
+                    <section class="section p-2 is-hidden has-background-grey-light">
+                        <div class="field">
+                            <div class="container is-fluid">
+                                <div class="is-pulled-right">
+                                    <button class="delete is-large m-2"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="title is-4">Settings</label>
+                        </div>
+                    </section>
+
+                </div>
+            </article>
+        </div>
+
+
+
+    </div>
+
+</body>
+
+</html>

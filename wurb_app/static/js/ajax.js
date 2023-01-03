@@ -1,17 +1,24 @@
 
-function fetchAjaxRecord() {
-    $("#ajax-record-id").addClass("is-inverted");
-    $("#ajax-live-id").addClass("is-inverted");
-    $("#ajax-annotations-id").addClass("is-inverted");
-    $("#ajax-files-id").addClass("is-inverted");
+function clearButtonsForAjax() {
+    $("#ajax-record-id").removeClass("is-inverted");
+    $("#ajax-live-id").removeClass("is-inverted");
+    $("#ajax-annotations-id").removeClass("is-inverted");
+    $("#ajax-administration-id").removeClass("is-inverted");
+    // $("#ajax-record-id").addClass("is-inverted");
+    // $("#ajax-live-id").addClass("is-inverted");
+    // $("#ajax-annotations-id").addClass("is-inverted");
+    // $("#ajax-administration-id").addClass("is-inverted");
+}
 
+function fetchAjaxRecord() {
+    clearButtonsForAjax()
     $.ajax({
         // url: '/status/{{ uid }}',
         url: '/ajax-record/',
         type: 'get',
         success: function (data) {
             $("#hero-body-id").html(data);
-            $("#ajax-record-id").removeClass("is-inverted");
+            $("#ajax-record-id").addClass("is-inverted");
         },
         error: function (xhr, status, error) {
             var errorMessage = xhr.status + ': ' + xhr.statusText
@@ -21,18 +28,14 @@ function fetchAjaxRecord() {
 }
 
 function fetchAjaxLive() {
-    $("#ajax-record-id").addClass("is-inverted");
-    $("#ajax-live-id").addClass("is-inverted");
-    $("#ajax-annotations-id").addClass("is-inverted");
-    $("#ajax-files-id").addClass("is-inverted");
-
+    clearButtonsForAjax()
     $.ajax({
         // url: '/status/{{ uid }}',
         url: '/ajax-live/',
         type: 'get',
         success: function (data) {
             $("#hero-body-id").html(data);
-            $("#ajax-live-id").removeClass("is-inverted");
+            $("#ajax-live-id").addClass("is-inverted");
         },
         error: function (xhr, status, error) {
             var errorMessage = xhr.status + ': ' + xhr.statusText
@@ -42,18 +45,14 @@ function fetchAjaxLive() {
 }
 
 function fetchAjaxAnnotations() {
-    $("#ajax-record-id").addClass("is-inverted");
-    $("#ajax-live-id").addClass("is-inverted");
-    $("#ajax-annotations-id").addClass("is-inverted");
-    $("#ajax-files-id").addClass("is-inverted");
-
+    clearButtonsForAjax()
     $.ajax({
         // url: '/status/{{ uid }}',
         url: '/ajax-annotations/',
         type: 'get',
         success: function (data) {
             $("#hero-body-id").html(data);
-            $("#ajax-annotations-id").removeClass("is-inverted");
+            $("#ajax-annotations-id").addClass("is-inverted");
         },
         error: function (xhr, status, error) {
             var errorMessage = xhr.status + ': ' + xhr.statusText
@@ -62,19 +61,15 @@ function fetchAjaxAnnotations() {
     });
 }
 
-function fetchAjaxFiles() {
-    $("#ajax-record-id").addClass("is-inverted");
-    $("#ajax-live-id").addClass("is-inverted");
-    $("#ajax-annotations-id").addClass("is-inverted");
-    $("#ajax-files-id").addClass("is-inverted");
-
+function fetchAjaxAdministration() {
+    clearButtonsForAjax()
     $.ajax({
         // url: '/status/{{ uid }}',
-        url: '/ajax-files/',
+        url: '/ajax-administration/',
         type: 'get',
         success: function (data) {
             $("#hero-body-id").html(data);
-            $("#ajax-files-id").removeClass("is-inverted");
+            $("#ajax-administration-id").addClass("is-inverted");
         },
         error: function (xhr, status, error) {
             var errorMessage = xhr.status + ': ' + xhr.statusText
@@ -84,11 +79,7 @@ function fetchAjaxFiles() {
 }
 
 function fetchAjaxAbout() {
-    $("#ajax-record-id").addClass("is-inverted");
-    $("#ajax-live-id").addClass("is-inverted");
-    $("#ajax-annotations-id").addClass("is-inverted");
-    $("#ajax-files-id").addClass("is-inverted");
-
+    clearButtonsForAjax()
     $.ajax({
         // url: '/status/{{ uid }}',
         url: '/ajax-about/',

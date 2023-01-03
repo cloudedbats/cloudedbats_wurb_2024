@@ -1,6 +1,195 @@
-<div class="tile is-parent is-vertical">
-    <article class="tile is-child box has-background-grey-lighter">
-        <p class="title is-4">Live</p>
-        <p class="subtitle is-5">Not implemented yet...</p>
-    </article>
-</div>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CloudedBats - WURB</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+
+    <link rel="stylesheet" href="../static/css/wurb_slider.css">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/wurb_slider.css') }}">
+    <script src="../static/js/ajax.js"></script>
+</head>
+
+<body>
+
+    <div class="tile is-ancestor is-vertical py-2">
+        <div class="tile is-parent px---0">
+            <article class="tile is-child box">
+                <div class="content is-large">
+
+                    <div class="field">
+                        <div class="container is-fluid">
+                            <div class="is-pulled-right">
+                                <button class="button is-rounded is-small">
+                                    <strong>Hide settings</strong>
+                                    <!-- <strong>Show settings</strong> -->
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="title is-4">
+                        Audio feedback
+                    </p>
+
+                    <section class="section p-4 pb-5 is--hidden has-background-grey-lighter">
+                        <div class="field">
+                            <label class="label">Volume</label>
+                            <div class="control">
+                                <div class="slidecontainer">
+                                    <input type="range" min="0" max="100" value="50" class="slider"
+                                        id="feedback_volume_slider_id">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Pitch</label>
+                            <div class="control">
+                                <div class="slidecontainer">
+                                    <input type="range" min="10" max="50" value="30" class="slider"
+                                        id="feedback_pitch_slider_id">
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="section p-2 is--hidden has-background-grey-light">
+
+                        <div class="field">
+                            <div class="container is-fluid">
+                                <div class="is-pulled-right">
+                                    <button class="delete is-large m-2"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="title is-4">Settings</label>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Mode</label>
+                        </div>
+                        <div class="field is-grouped">
+                            <div class="control">
+                                <div class="select is-small is-rounded is-info">
+                                    <select>
+                                        <option value="feedback-off">Off</option>
+                                        <option value="feedback-on-pitch">On - Pitch shifting</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Frequency&nbsp;filter</label>
+                        </div>
+                        <div class="field is-grouped">
+                            <p class="control">
+                                <input id="settings_feedback_filter_low_id" class="input is-small" type="number"
+                                    placeholder="15.0" value="15.0">
+                            </p>
+                            <label class="label pr-3">to</label>
+                            <p class="control">
+                                <input id="settings_feedback_filter_low_id" class="input is-small" type="number"
+                                    placeholder="100.0" value="100.0">
+                            </p>
+                            <label class="label">kHz</label>
+                        </div>
+
+                    </section>
+                </div>
+            </article>
+        </div>
+
+        <div class="tile is-parent px---0">
+            <article class="tile is-child box">
+                <div class="content is-large">
+
+                    <div class="field">
+                        <div class="container is-fluid">
+                            <div class="is-pulled-right">
+                                <button class="button is-rounded is-small">
+                                    <strong>Show settings</strong>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="title is-4">
+                        Visual feedback
+                    </p>
+
+                    <section class="section p-4 pb-5 is--hidden has-background-grey-lighter">
+
+                        <div class="field pt-2">
+                            <label class="label">View recordings</label>
+                        </div>
+                        <div class="field">
+                            <!-- <label class="label">Select</label> -->
+                            <div class="container is-fluid m-2">
+                                <div class="buttons is-centered">
+                                    <button id="visual-feedback-auto-id" onclick="fetchXXX()"
+                                        class="button is-small is-rounded is-info is-inverted"><strong>Overview</strong></button>
+                                    <button id="visual-feedback-previous-id" onclick="fetchXXX()"
+                                        class="button is-small is-rounded is-info"><strong>Spectrogram</strong></button>
+                                    <button id="visual-feedback-previous-id" onclick="fetchXXX()"
+                                        class="button is-small is-rounded is-info"><strong>Peakogram</strong></button>
+                                </div>
+                            </div>
+
+                            <div class="control">
+                                <!-- <figure class="image is-16by9">
+                                <iframe class="has-ratio" width="640" height="360" src=""
+                                    frameborder="0" allowfullscreen></iframe>
+                            </figure> -->
+                                <figure class="image is--128x128">
+                                    <img class="is--rounded" src="{{ url_for('static', path='PEAKS.png') }}">
+                                    <!-- <img class="is--rounded" src="file://PEAKS.jpg"> -->
+                                </figure>
+                            </div>
+                        </div>
+
+                        <div class="container">
+                            <div class="buttons is-centered">
+                                <button id="visual-feedback-first-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info"><strong>First</strong></button>
+                                <button id="visual-feedback-previous-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info"><strong>Previous</strong></button>
+                                <button id="visual-feedback-next-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info is-inverted"><strong>Auto update</strong></button>
+                                <button id="visual-feedback-next-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info"><strong>Next</strong></button>
+                                <button id="visual-feedback-last-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info"><strong>Last</strong></button>
+                            </div>
+                        </div>
+
+                    </section>
+
+                    <section class="section p-2 is-hidden has-background-grey-light">
+                        <div class="field">
+                            <div class="container is-fluid">
+                                <div class="is-pulled-right">
+                                    <button class="delete is-large m-2"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="title is-4">Settings</label>
+                        </div>
+                    </section>
+
+                </div>
+            </article>
+        </div>
+
+</body>
+
+</html>

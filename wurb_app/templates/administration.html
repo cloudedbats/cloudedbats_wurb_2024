@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CloudedBats - WURB</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+
+    <link rel="stylesheet" href="../static/css/wurb_slider.css">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/wurb_slider.css') }}">
+    <script src="../static/js/ajax.js"></script>
+</head>
+
+<body>
+
+    <div class="tile is-ancestor is-vertical py-2">
+        <div class="tile is-parent px---0">
+            <article class="tile is-child box">
+                <div class="content is-large">
+
+                    <div class="field">
+                        <div class="container is-fluid">
+                            <div class="is-pulled-right">
+                                <button class="button is-rounded is-small">
+                                    <strong>Show settings</strong>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="title is-4">
+                        File administration
+                    </p>
+
+                    <section class="section has-background-grey-lighter p-2 is---hidden">
+
+                        <div class="field">
+                            <label class="label">Select</label>
+                        </div>
+                        <div class="field is-grouped">
+                            <div class="control">
+                                <div class="select is----small is-rounded is-info">
+                                    <select>
+                                        <option value="drive-internal">Internal SD card</option>
+                                        <option value="drive-usb">USB: Memory</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Monitoring&nbsp;nights</label>
+                        </div>
+
+
+                        <div class="field">
+                            <div class="control">
+
+                                <div class="table-container">
+
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Row</th>
+                                                <th>Monitoring night</th>
+                                                <th>Recordings</th>
+                                                <th>View content</th>
+                                                <th>Download</th>
+                                                <th>Delete</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th>1</th>
+                                                <th>Taberg_2022-12-30</th>
+                                                <th>81</th>
+                                                <th><button class="button is-small is-rounded is-info"><strong>View
+                                                            content</strong></button>
+                                                <th><button
+                                                        class="button is-small is-rounded is-info"><strong>Download</strong></button>
+                                                </th>
+                                                <th><button
+                                                        class="button is-small is-rounded is-info"><strong>Delete</strong></button>
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>2</th>
+                                                <th>Taberg_2022-12-31</th>
+                                                <th>70</th>
+                                                <th><button class="button is-small is-rounded is-info"><strong>View
+                                                            content</strong></button>
+                                                <th><button
+                                                        class="button is-small is-rounded is-info"><strong>Download</strong></button>
+                                                </th>
+                                                <th><button
+                                                        class="button is-small is-rounded is-info"><strong>Delete</strong></button>
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>3</th>
+                                                <th>Taberg_2023-01-01</th>
+                                                <th>3</th>
+                                                <th><button class="button is-small is-rounded is-info"><strong>View
+                                                            content</strong></button>
+                                                <th><button
+                                                        class="button is-small is-rounded is-info"><strong>Download</strong></button>
+                                                </th>
+                                                <th><button
+                                                        class="button is-small is-rounded is-info"><strong>Delete</strong></button>
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>4</th>
+                                                <th>Taberg_2023-01-02</th>
+                                                <th>5</th>
+                                                <th><button class="button is-small is-rounded is-info"><strong>View
+                                                            content</strong></button>
+                                                <th><button
+                                                        class="button is-small is-rounded is-info"><strong>Download</strong></button>
+                                                </th>
+                                                <th><button
+                                                        class="button is-small is-rounded is-info"><strong>Delete</strong></button>
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>5</th>
+                                                <th>Taberg_2023-01-03</th>
+                                                <th>10</th>
+                                                <th><button class="button is-small is-rounded is-info"><strong>View
+                                                            content</strong></button>
+                                                <th><button
+                                                        class="button is-small is-rounded is-info"><strong>Download</strong></button>
+                                                </th>
+                                                <th><button
+                                                        class="button is-small is-rounded is-info"><strong>Delete</strong></button>
+                                                </th>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Commands</label>
+                        </div>
+                        <div class="container">
+                            <div class="buttons">
+                                <button id="visual-feedback-auto-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info">
+                                    <strong>Download all</strong></button>
+                                <button id="visual-feedback-auto-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info"><strong>Delete all</strong></button>
+                            </div>
+                        </div>
+                    </section>
+
+
+                    <section class="section p-2 is-hidden has-background-grey-light">
+                        <div class="field">
+                            <div class="container is-fluid">
+                                <div class="is-pulled-right">
+                                    <button class="delete is-large m-2"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="title is-4">Settings</label>
+                        </div>
+                    </section>
+
+                </div>
+            </article>
+        </div>
+    </div>
+</body>
+
+</html>
