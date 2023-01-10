@@ -2,7 +2,7 @@
 ---
 wurb_app:
   version: "2023.0.0-development"
-  port: 8000
+  port: 8001
   host: "0.0.0.0"
   log_level: info
 

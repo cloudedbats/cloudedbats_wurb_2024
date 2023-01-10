@@ -45,7 +45,7 @@ async def main():
     await wurb_core.manager.startup()
 
     # App config.
-    port = wurb_core.config.get("wurb_app.port", default="8000")
+    port = wurb_core.config.get("wurb_app.port", default="8001")
     port = int(port)
     host = wurb_core.config.get("wurb_app.host", default="0.0.0.0")
     log_level = wurb_core.config.get("wurb_app.log_level", default="info")
@@ -61,6 +61,7 @@ async def main():
     logger.debug("WURB shutdown started.")
     wurb_core.manager.shutdown()
     logger.debug("WURB shutdown done.")
+
 
 if __name__ == "__main__":
     """ """
