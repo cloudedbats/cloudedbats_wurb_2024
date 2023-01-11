@@ -3,6 +3,18 @@ function XXXXX() {
     alert("XXXXX...");
 }
 
+function annoToggleSettings() {
+    if ($("#anno-settings-id").hasClass("is-hidden")) {
+        $("#anno-boddy-id").addClass("is-hidden")
+        $("#anno-settings-id").removeClass("is-hidden")
+        $("#anno-show-settings-text-id").text("Hide settings")
+    } else {
+        $("#anno-settings-id").addClass("is-hidden")
+        $("#anno-boddy-id").removeClass("is-hidden")
+        $("#anno-show-settings-text-id").text("Show settings")
+    };
+}
+
 function annoFolderChanged() {
     $("#anno-select-night-id").val("select");
 }

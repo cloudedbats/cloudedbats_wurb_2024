@@ -26,8 +26,9 @@
                     <div class="field">
                         <div class="container is-fluid">
                             <div class="is-pulled-right">
-                                <button class="button is-rounded is-small has-text-weight-bold">
-                                    Show settings
+                                <button class="button is-rounded is-small has-text-weight-bold"
+                                    onclick="annoToggleSettings()">
+                                    <span id="anno-show-settings-text-id">Show settings</span>
                                 </button>
                             </div>
                         </div>
@@ -37,7 +38,7 @@
                         Field annotations
                     </p>
 
-                    <section class="section has-background-grey-lighter p-2 is---hidden">
+                    <section id="anno-boddy-id" class="section has-background-grey-lighter p-2">
 
                         <div class="field">
                             <label class="label">Select&nbsp;folder&nbsp;/&nbsp;monitoring&nbsp;night</label>
@@ -120,7 +121,7 @@
                                     <button id="visual-feedback-first-id" onclick="XXXXX()"
                                         class="button is-rounded is-small has-text-weight-bold is-info">Overview</button>
                                     <button id="visual-feedback-previous-id" onclick="XXXXX()"
-                                        class="button is-rounded is-small has-text-weight-bold is-info">Spectrogram</button>
+                                        class="button is-rounded is-small has-text-weight-bold is-info is-inverted">Spectrogram</button>
                                     <button id="visual-feedback-previous-id" onclick="XXXXX()"
                                         class="button is-rounded is-small has-text-weight-bold is-info">Details</button>
                                 </div>
@@ -280,17 +281,73 @@
                     </section>
 
 
-                    <section class="section p-2 is-hidden has-background-grey-light">
+                    <section id="anno-settings-id" class="section p-2 has-background-grey-light is-hidden">
                         <div class="field">
                             <div class="container is-fluid">
                                 <div class="is-pulled-right">
-                                    <button class="delete is-large m-2"></button>
+                                    <button class="delete is-large m-2" onclick="annoToggleSettings()"></button>
                                 </div>
                             </div>
                         </div>
                         <div class="field">
                             <label class="title is-4">Settings</label>
                         </div>
+
+
+                        <div class="table-container">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Quick key</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>x</td>
+                                        <td>Q0 (trash)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>0</td>
+                                        <td>Q0 (trash)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Q1</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>Q2</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>Q3</td>
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>Q4</td>
+                                    </tr>
+                                    <tr>
+                                        <td>ctrl+left</td>
+                                        <td>First</td>
+                                    </tr>
+                                    <tr>
+                                        <td>left</td>
+                                        <td>Previous</td>
+                                    </tr>
+                                    <tr>
+                                        <td>right</td>
+                                        <td>Next</td>
+                                    </tr>
+                                    <tr>
+                                        <td>ctrl+right</td>
+                                        <td>Last</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+
                     </section>
 
                 </div>

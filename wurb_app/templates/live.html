@@ -26,9 +26,9 @@
                     <div class="field">
                         <div class="container is-fluid">
                             <div class="is-pulled-right">
-                                <button class="button is-rounded is-small">
-                                    <strong>Hide settings</strong>
-                                    <!-- <strong>Show settings</strong> -->
+                                <button class="button is-rounded is-small has-text-weight-bold"
+                                    onclick="liveAudioToggleSettings()">
+                                    <span id="liveaudio-show-settings-text-id">Show settings</span>
                                 </button>
                             </div>
                         </div>
@@ -38,7 +38,7 @@
                         Audio feedback
                     </p>
 
-                    <section class="section p-4 pb-5 is--hidden has-background-grey-lighter">
+                    <section id="liveaudio-boddy-id" class="section p-4 pb-5 has-background-grey-lighter is-hidden">
                         <div class="field">
                             <label class="label">Volume</label>
                             <div class="control">
@@ -60,12 +60,12 @@
                         </div>
                     </section>
 
-                    <section class="section p-2 is--hidden has-background-grey-light">
+                    <section id="liveaudio-settings-id" class="section p-2 is--hidden has-background-grey-light">
 
                         <div class="field">
                             <div class="container is-fluid">
                                 <div class="is-pulled-right">
-                                    <button class="delete is-large m-2"></button>
+                                    <button class="delete is-large m-2" onclick="liveAudioToggleSettings()"></button>
                                 </div>
                             </div>
                         </div>
@@ -115,8 +115,9 @@
                     <div class="field">
                         <div class="container is-fluid">
                             <div class="is-pulled-right">
-                                <button class="button is-rounded is-small">
-                                    <strong>Show settings</strong>
+                                <button class="button is-rounded is-small has-text-weight-bold"
+                                    onclick="liveVisualToggleSettings()">
+                                    <span id="livevisual-show-settings-text-id">Show settings</span>
                                 </button>
                             </div>
                         </div>
@@ -126,7 +127,7 @@
                         Visual feedback
                     </p>
 
-                    <section class="section p-4 pb-5 is--hidden has-background-grey-lighter">
+                    <section id="livevisual-boddy-id" class="section p-4 pb-5 is--hidden has-background-grey-lighter">
 
                         <div class="field pt-2">
                             <label class="label">View recordings</label>
@@ -173,11 +174,11 @@
 
                     </section>
 
-                    <section class="section p-2 is-hidden has-background-grey-light">
+                    <section id="livevisual-settings-id" class="section p-2 has-background-grey-light is-hidden">
                         <div class="field">
                             <div class="container is-fluid">
                                 <div class="is-pulled-right">
-                                    <button class="delete is-large m-2"></button>
+                                    <button class="delete is-large m-2" onclick="liveVisualToggleSettings()"></button>
                                 </div>
                             </div>
                         </div>
