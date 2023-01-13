@@ -3,11 +3,11 @@ function clearButtonsForAjax() {
     $("#ajax-record-id").removeClass("is-inverted");
     $("#ajax-live-id").removeClass("is-inverted");
     $("#ajax-annotations-id").removeClass("is-inverted");
-    $("#ajax-administration-id").removeClass("is-inverted");
+    $("#ajax-adm-id").removeClass("is-inverted");
     // $("#ajax-record-id").addClass("is-inverted");
     // $("#ajax-live-id").addClass("is-inverted");
     // $("#ajax-annotations-id").addClass("is-inverted");
-    // $("#ajax-administration-id").addClass("is-inverted");
+    // $("#ajax-adm-id").addClass("is-inverted");
 }
 
 function fetchAjaxRecord() {
@@ -65,11 +65,11 @@ function fetchAjaxAdministration() {
     clearButtonsForAjax()
     $.ajax({
         // url: '/status/{{ uid }}',
-        url: '/ajax-administration/',
+        url: '/ajax-admin/',
         type: 'get',
         success: function (data) {
             $("#hero-body-id").html(data);
-            $("#ajax-administration-id").addClass("is-inverted");
+            $("#ajax-adm-id").addClass("is-inverted");
         },
         error: function (xhr, status, error) {
             var errorMessage = xhr.status + ': ' + xhr.statusText

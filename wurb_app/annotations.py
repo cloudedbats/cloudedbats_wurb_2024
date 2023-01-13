@@ -30,3 +30,64 @@ async def ajax_annotations(request: fastapi.Request):
         )
     except Exception as e:
         logger.debug("Exception: ajax_annotations: " + str(e))
+
+
+@annotations_router.get(
+    "/ajax-annotations/get-annotations",
+    tags=["File administration"],
+    description="Get annotations for recordings in sampling event.",
+)
+async def get_annotations(request: fastapi.Request):
+    """ """
+    try:
+        logger.debug("API called: get_annotations.")
+        json_data = [
+            {
+                "waveFileName": "w53.......",
+                "quality": "Q2",
+                "tags": ["FM-QCF", "Social"],
+                "comments": "Comment...",
+            },
+            {
+                "waveFileName": "w53.......",
+                "quality": "Q2",
+                "tags": ["FM-QCF", "Social"],
+                "comments": "Comment...",
+            },
+            {
+                "waveFileName": "w53.......",
+                "quality": "Q2",
+                "tags": ["FM-QCF", "Social"],
+                "comments": "Comment...",
+            },
+        ]
+        return JSONResponse(content=json_data)
+    except Exception as e:
+        logger.debug("Exception: get_annotations: " + str(e))
+
+
+@annotations_router.get(
+    "/ajax-annotations/get-recording-info",
+    tags=["File administration"],
+    description="Get info for one sound recording.",
+)
+async def get_recording_info(request: fastapi.Request):
+    """ """
+    try:
+        logger.debug("API called: get_recording_info.")
+        json_data = {
+            "fileIndex": 1,
+            "maxIndex": 70,
+            "eventPath": "wurb_recordings",
+            "waveFileName": "w53.......",
+            "spectrogramPath": "wurb_recordings",
+            "spectrogramName": "Taberg_2022-12-30_PEAKS.png",
+            "overviewPath": "wurb_recordings",
+            "overviewName": "Taberg_2022-12-30_PEAKS.png",
+            "quality": "Q2",
+            "tags": ["FM-QCF", "Social"],
+            "comments": "Comment...",
+        }
+        return JSONResponse(content=json_data)
+    except Exception as e:
+        logger.debug("Exception: get_recording_info: " + str(e))

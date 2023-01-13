@@ -41,7 +41,7 @@
                     <section id="anno-boddy-id" class="section has-background-grey-lighter p-2">
 
                         <div class="field">
-                            <label class="label">Select&nbsp;folder&nbsp;/&nbsp;monitoring&nbsp;night</label>
+                            <label class="label">Select&nbsp;folder&nbsp;/&nbsp;monitoring&nbsp;event</label>
                         </div>
                         <div class="field is-grouped">
                             <div class="control">
@@ -54,15 +54,15 @@
                             </div>
                             <div class="control">
                                 <div class="select is-rounded is-small has-text-weight-bold is-info">
-                                    <select id="anno-select-night-id" onchange="annoNightChanged()">
+                                    <select id="anno-select-event-id" onchange="annoNightChanged()">
                                         <option value="select">Please select:</option>
-                                        <option value="Taberg_2022-12-30">Taberg_2022-12-30</option>
+                                        <!-- <option value="Taberg_2022-12-30">Taberg_2022-12-30</option>
                                         <option value="Taberg_2022-12-31">Taberg_2022-12-31</option>
                                         <option value="Taberg_2023-01-01">Taberg_2023-01-01</option>
                                         <option value="Taberg_2023-01-02">Taberg_2023-01-02</option>
                                         <option value="Taberg_2023-01-03">Taberg_2023-01-03</option>
                                         <option value="Taberg_2023-01-04">Taberg_2023-01-04</option>
-                                        <option value="Taberg_2023-01-05">Taberg_2023-01-05</option>
+                                        <option value="Taberg_2023-01-05">Taberg_2023-01-05</option> -->
                                     </select>
                                 </div>
                             </div>
@@ -116,17 +116,127 @@
                             <!-- <label class="label">Select</label> -->
                             <div class="container is-fluid m-2">
                                 <div class="buttons is-centered">
-                                    <button id="visual-feedback-auto-id" onclick="XXXXX()"
+                                    <button id="anno-view-files-button-id" onclick="annoToggleViewFiles()"
                                         class="button is-rounded is-small has-text-weight-bold is-info">Files</button>
-                                    <button id="visual-feedback-first-id" onclick="XXXXX()"
+                                    <button id="anno-view-overview-button-id" onclick="annoToggleViewOverview()"
                                         class="button is-rounded is-small has-text-weight-bold is-info">Overview</button>
-                                    <button id="visual-feedback-previous-id" onclick="XXXXX()"
+                                    <button id="anno-view-spectrogram-button-id" onclick="annoToggleViewSpectrogram()"
                                         class="button is-rounded is-small has-text-weight-bold is-info is-inverted">Spectrogram</button>
-                                    <button id="visual-feedback-previous-id" onclick="XXXXX()"
-                                        class="button is-rounded is-small has-text-weight-bold is-info">Details</button>
+                                    <button id="anno-view-details-button-id" onclick="annoToggleViewDetails()"
+                                        class="button is-rounded is-small has-text-weight-bold is-info"
+                                        disabled>Details</button>
                                 </div>
                             </div>
+                        </div>
 
+
+
+                        <div id="anno-view-files-id" class="field is-hidden">
+                            <div class="control">
+                                <div class="table-container mx-5 my--2 p-2">
+                                    <table
+                                        class="table is-bordered is-striped is-narrow is-fullwidth is---hoverable is-size-7"
+                                        style="display: block; height: 200px; overflow-y: scroll; text-align: center;">
+                                        <thead>
+                                            <tr>
+                                                <th>Row</th>
+                                                <th>Prefix</th>
+                                                <th>Local time</th>
+                                                <th>Quality</th>
+                                                <th>Tags</th>
+                                                <th>Comments</th>
+                                                <th>Download</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>wurb01</td>
+                                                <td>2023-01-01 23:10:10</td>
+                                                <td>Q2</td>
+                                                <td>FM-QCF Social</td>
+                                                <td></td>
+                                                <td>
+                                                    <button
+                                                        class="button is-rounded is-small has-text-weight-bold is-info"
+                                                        disabled>Download</button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>wurb01</td>
+                                                <td>2023-01-01 23:11:12</td>
+                                                <td>Q2</td>
+                                                <td>FM-QCF</td>
+                                                <td>White belly</td>
+                                                <td>
+                                                    <button
+                                                        class="button is-rounded is-small has-text-weight-bold is-info"
+                                                        disabled>Download</button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>3</td>
+                                                <td>wurb01</td>
+                                                <td>2023-01-01 23:12:35</td>
+                                                <td>Q2</td>
+                                                <td>FM-QCF</td>
+                                                <td></td>
+                                                <td>
+                                                    <button
+                                                        class="button is-rounded is-small has-text-weight-bold is-info"
+                                                        disabled>Download</button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>4</td>
+                                                <td>wurb01</td>
+                                                <td>2023-01-01 23:15:55</td>
+                                                <td>Q2</td>
+                                                <td>FM-QCF</td>
+                                                <td></td>
+                                                <td>
+                                                    <button
+                                                        class="button is-rounded is-small has-text-weight-bold is-info"
+                                                        disabled>Download</button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>5 </td>
+                                                <td>wurb01</td>
+                                                <td>2023-01-01 23:45:03</td>
+                                                <td>Q2</td>
+                                                <td>FM-QCF Social</td>
+                                                <td>Two individuals</td>
+                                                <td>
+                                                    <button
+                                                        class="button is-rounded is-small has-text-weight-bold is-info"
+                                                        disabled>Download</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div id="anno-view-overview-id" class="field is-hidden">
+                            <div class="control">
+                                <!-- <figure class="image is-16by9">
+                                        <iframe class="has-ratio" width="640" height="360" src=""
+                                            frameborder="0" allowfullscreen></iframe>
+                                    </figure> -->
+                                <figure class="image is--128x128">
+                                    <img class="is--rounded" src="{{ url_for('static', path='PEAKS.png') }}">
+                                    <!-- <img class="is--rounded" src="file://SPECTROGRAM.jpg"> -->
+                                </figure>
+                            </div>
+                        </div>
+
+
+                        <div id="anno-view-spectrogram-id" class="field">
                             <div class="control">
                                 <!-- <figure class="image is-16by9">
                                         <iframe class="has-ratio" width="640" height="360" src=""
@@ -139,15 +249,32 @@
                             </div>
                         </div>
 
+
+
+                        <div id="anno-view-details-id" class="field is-hidden">
+                            <div class="control has-background-success">
+                                <figure class="image is-3by1">
+                                    <iframe class="has-ratio" width="100" height="100" src="" frameborder="5"
+                                        allowfullscreen>
+                                    </iframe>
+                                </figure>
+                            </div>
+                        </div>
+
+
+
+
+
+
                         <div class="container">
                             <div class="buttons is-centered">
-                                <button id="visual-feedback-first-id" onclick="annoFirst()"
+                                <button id="anno-XXX-id" onclick="annoFirst()"
                                     class="button is-rounded is-small has-text-weight-bold is-info">First</button>
-                                <button id="visual-feedback-previous-id" onclick="annoPrevious()"
+                                <button id="anno-XXX-id" onclick="annoPrevious()"
                                     class="button is-rounded is-small has-text-weight-bold is-info">Previous</button>
-                                <button id="visual-feedback-next-id" onclick="annoNext()"
+                                <button id="anno-XXX-id" onclick="annoNext()"
                                     class="button is-rounded is-small has-text-weight-bold is-info">Next</button>
-                                <button id="visual-feedback-last-id" onclick="annoLast()"
+                                <button id="anno-XXX-id" onclick="annoLast()"
                                     class="button is-rounded is-small has-text-weight-bold is-info">Last</button>
                             </div>
                         </div>
@@ -184,7 +311,7 @@
                                         </label>
                                         <label class="radio">
                                             <input id="anno-not-assigned-id" type="radio" name="quality"
-                                                onchange="annoSetQNA()">
+                                                onchange="annoSetQNotAssigned()">
                                             Not assigned
                                         </label>
                                     </div>
@@ -201,17 +328,17 @@
 
                         <div class="container pb-4 ml-0">
                             <div class="buttons">
-                                <button id="visual-feedback-first-id" onclick="XXXXX()"
+                                <button id="anno-XXX-id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">FM-CF-FM</button>
-                                <button id="visual-feedback-auto-id" onclick="XXXXX()"
+                                <button id="anno-XXX-id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">FM</button>
-                                <button id="visual-feedback-auto-id" onclick="XXXXX()"
+                                <button id="anno-XXX-id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">FM-QCF</button>
-                                <button id="visual-feedback-auto-id" onclick="XXXXX()"
+                                <button id="anno-XXX-id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">QCF</button>
-                                <button id="visual-feedback-auto-id" onclick="XXXXX()"
+                                <button id="anno-XXX-id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">FM-H2</button>
-                                <button id="visual-feedback-auto-id" onclick="XXXXX()"
+                                <button id="anno-XXX-id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">QCF--FM</button>
 
                             </div>
@@ -219,41 +346,41 @@
 
                         <!-- <div class="container pb-4 ml-0">
                             <div class="buttons">
-                                <button id="visual-feedback-first-id" onclick="XXXXX()"
+                                <button id="anno-XXX-id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">FMd-QCF</button>
-                                <button id="visual-feedback-previous-id" onclick="XXXXX()"
+                                <button id="anno-XXX-id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">FMu-QCF</button>
-                                <button id="visual-feedback-auto-id" onclick="XXXXX()"
+                                <button id="anno-XXX-id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">QCF-FMd</button>
-                                <button id="visual-feedback-next-id" onclick="XXXXX()"
+                                <button id="anno-XXX-id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">CF-FMd</button>
-                                <button id="visual-feedback-last-id" onclick="XXXXX()"
+                                <button id="anno-XXX-id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">FMu-QCF-FMd</button>
-                                <button id="visual-feedback-auto-id" onclick="XXXXX()"
+                                <button id="anno-XXX-id" onclick="XXXtoggleTag(this)XX()"
                                     class="button is-rounded is-small has-text-weight-bold is-info">FMu-CF-FMd</button>
-                                <button id="visual-feedback-auto-id" onclick="XXXXX()"
+                                <button id="anno-XXX-id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">FMd</button>
-                                <button id="visual-feedback-auto-id" onclick="XXXXX()"
+                                <button id="anno-XXX-id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">CF-FMd-CF</button>
                             </div>
                         </div> -->
 
                         <div class="container pb-4 ml-0">
                             <div class="buttons">
-                                <button id="visual-feedback-first-id" onclick="XXXXX()"
+                                <button id="anno-XXX-id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">Social</button>
-                                <button id="visual-feedback-first-id" onclick="XXXXX()"
+                                <button id="anno-XXX-id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">Birds</button>
-                                <button id="visual-feedback-first-id" onclick="XXXXX()"
+                                <button id="anno-XXX-id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">Mammals</button>
-                                <button id="visual-feedback-first-id" onclick="XXXXX()"
+                                <button id="anno-XXX-id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">Crickets</button>
                             </div>
                         </div>
 
 
                         <div class="field">
-                            <label class="label">Comments</label>
+                            <label class="label">Add comments</label>
                         </div>
                         <div class="field">
                             <p class="control">
@@ -267,19 +394,21 @@
                         </div>
                         <div class="container">
                             <div class="buttons">
-                                <button id="visual-feedback-auto-id" onclick="XXXXX()"
+                                <button id="anno-quick-clear-id" onclick="annoQuickClear()"
                                     class="button is-rounded is-small has-text-weight-bold is-info">Clear</button>
-                                <button id="visual-feedback-auto-id" onclick="XXXXX()"
+                                <button id="anno-XXX-id" onclick="annoQuickCopy()"
                                     class="button is-rounded is-small has-text-weight-bold is-info">Copy</button>
-                                <button id="visual-feedback-next-id" onclick="XXXXX()"
-                                    class="button is-rounded is-small has-text-weight-bold is-info">Copy + next</button>
-                                <button id="visual-feedback-first-id" onclick="XXXXX()"
+                                <button id="anno-XXX-id" onclick="annoQuickPaste()"
+                                    class="button is-rounded is-small has-text-weight-bold is-info"
+                                    disabled>Paste</button>
+                                <button id="anno-XXX-id" onclick="annoQuickPasteNext()"
+                                    class="button is-rounded is-small has-text-weight-bold is-info"
+                                    disabled>Paste+next</button>
+                                <button id="anno-XXX-id" onclick="annoQuickDownload()"
                                     class="button is-rounded is-small has-text-weight-bold is-info">Download</button>
                             </div>
                         </div>
-
                     </section>
-
 
                     <section id="anno-settings-id" class="section p-2 has-background-grey-light is-hidden">
                         <div class="field">
@@ -293,61 +422,87 @@
                             <label class="title is-4">Settings</label>
                         </div>
 
-
+                        <div class="field pt-2">
+                            <label class="label">Quick keys (can't be changed)</label>
+                        </div>
                         <div class="table-container">
-                            <table class="table">
+                            <table class="table is-bordered is-striped is-narrow is-hoverable is-size-6">
                                 <thead>
                                     <tr>
                                         <th>Quick key</th>
                                         <th>Action</th>
+                                        <th>Description</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>x</td>
-                                        <td>Q0 (trash)</td>
+                                        <td>shift+x</td>
+                                        <td>Q0</td>
+                                        <td>Set quality Q0 (trash).</td>
                                     </tr>
                                     <tr>
-                                        <td>0</td>
-                                        <td>Q0 (trash)</td>
+                                        <td>shift+0</td>
+                                        <td>Q0</td>
+                                        <td>Set quality Q0 (trash).</td>
                                     </tr>
                                     <tr>
-                                        <td>1</td>
+                                        <td>shift+1</td>
                                         <td>Q1</td>
+                                        <td>Set quality Q1 (red).</td>
                                     </tr>
                                     <tr>
-                                        <td>2</td>
+                                        <td>shift+2</td>
                                         <td>Q2</td>
+                                        <td>Set quality Q2 (yellow).</td>
                                     </tr>
                                     <tr>
-                                        <td>3</td>
+                                        <td>shift+3</td>
                                         <td>Q3</td>
+                                        <td>Set quality Q3 (green).</td>
                                     </tr>
                                     <tr>
-                                        <td>4</td>
-                                        <td>Q4</td>
-                                    </tr>
-                                    <tr>
-                                        <td>ctrl+left</td>
-                                        <td>First</td>
-                                    </tr>
-                                    <tr>
-                                        <td>left</td>
+                                        <td>shift+left</td>
                                         <td>Previous</td>
+                                        <td>Go to previous recording.</td>
                                     </tr>
                                     <tr>
-                                        <td>right</td>
+                                        <td>shift+right</td>
                                         <td>Next</td>
+                                        <td>Go to next recording.</td>
                                     </tr>
                                     <tr>
-                                        <td>ctrl+right</td>
-                                        <td>Last</td>
+                                        <td>shift+q</td>
+                                        <td>Clear</td>
+                                        <td>Clear quality, tags and comments.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>shift+c</td>
+                                        <td>Copy</td>
+                                        <td>Copy quality, tags and comments.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>shift+up</td>
+                                        <td>Copy</td>
+                                        <td>Copy quality, tags and comments.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>shift+v</td>
+                                        <td>Paste</td>
+                                        <td>Paste quality, tags and comments.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>shift+down</td>
+                                        <td>Paste</td>
+                                        <td>Paste quality, tags and comments.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>shift+enter</td>
+                                        <td>Paste and next</td>
+                                        <td>Paste quality, tags and comments. Go to next recording.</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
-
-
                     </section>
 
                 </div>

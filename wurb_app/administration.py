@@ -7,18 +7,19 @@
 import logging
 import fastapi
 import fastapi.templating
+from fastapi.responses import JSONResponse
 import wurb_core
 
 logger = logging.getLogger(wurb_core.used_logger)
 templates = fastapi.templating.Jinja2Templates(directory="wurb_app/templates")
-administration_router = fastapi.APIRouter()
+admin_router = fastapi.APIRouter()
 
 
-@administration_router.get("/ajax-administration/", tags=["AJAX"], description="Administration module as AJAX.")
-async def ajax_administration(request: fastapi.Request):
+@admin_router.get("/ajax-admin/", tags=["File administration"], description="Administration module as AJAX.")
+async def ajax_admin(request: fastapi.Request):
     """ """
     try:
-        logger.debug("API called: ajax_administration.")
+        logger.debug("API called: ajax_admin.")
         return templates.TemplateResponse(
             "administration.html",
             {
@@ -27,4 +28,32 @@ async def ajax_administration(request: fastapi.Request):
             },
         )
     except Exception as e:
-        logger.debug("Exception: ajax_administration: " + str(e))
+        logger.debug("Exception: ajax_admin: " + str(e))
+
+@admin_router.get("/ajax-admin/get-source-dirs", tags=["File administration"], description="Get source directories.")
+async def get_source_dirs(request: fastapi.Request):
+    """ """
+    try:
+        logger.debug("API called: get_source_dirs.")
+        json_data = {"source_dirs": ["../wurb_recordings", "../../wurb_recordings"]}
+        return JSONResponse(content=json_data)
+    except Exception as e:
+        logger.debug("Exception: get_source_dirs: " + str(e))
+
+@admin_router.get("/ajax-admin/get-events-dirs", tags=["File administration"], description="Get source directories.")
+async def get_source_dirs(request: fastapi.Request):
+    """ """
+    try:
+        logger.debug("API called: get_source_dirs.")
+        json_data = [
+            "Taberg_2022-12-30", 
+            "Taberg_2022-12-31",
+            "Taberg_2023-01-01",
+            "Taberg_2023-01-02",
+            "Taberg_2023-01-03",
+            "Taberg_2023-01-04",
+            "Taberg_2023-01-05",
+            ]
+        return JSONResponse(content=json_data)
+    except Exception as e:
+        logger.debug("Exception: get_source_dirs: " + str(e))
