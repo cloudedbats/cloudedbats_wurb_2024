@@ -28,3 +28,12 @@ sound_playback:
   buffer_size: 4800
   buffer_max_size: 10000
   in_queue_length: 10
+
+field_annotations:
+  directories:
+    - source: ../wurb_recordings
+      cache:  ..wurb_cache
+    - source: ../../wurb_recordings
+      cache:  ../../wurb_cache
+    - source: /user/pi/wurb_recordings
+      cache:  /user/pi/wurb_cache
