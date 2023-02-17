@@ -5,28 +5,22 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>CloudedBats WURB</title>
+
     <!-- Bulma stylesheets: https://bulma.io/ -->
-    <!-- <link rel="stylesheet" href="{{ url_for('static', path='css/bulma.min.css') }}"> -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-    <!-- For AJAX. -->
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="{{ url_for('static', path='js/ajax.js/?v=995') }}"></script>
-    <script src="{{ url_for('static', path='js/live.js/?v=995') }}"></script>
-    <script src="{{ url_for('static', path='js/annotations.js/?v=995') }}"></script>
-    <script src="{{ url_for('static', path='js/annotations_client.js/?v=995') }}"></script>
-    <script src="{{ url_for('static', path='js/admin.js/?v=995') }}"></script>
-    <script src="{{ url_for('static', path='js/mousetrap.js/?v=995') }}"></script>
-    <script src="{{ url_for('static', path='js/mousetrap_bindings.js/?v=995') }}"></script>
-
-    <!-- <script src="{{ url_for('static', path='js/wurb_globals.js/?v=15') }}"></script> -->
-    <!-- <script src="{{ url_for('static', path='js/wurb_ui.js/?v=15') }}"></script> -->
-    <!-- <script src="{{ url_for('static', path='js/wurb_client.js/?v=15') }}"></script> -->
-    <!-- <script src="{{ url_for('static', path='js/wurb_onload.js/?v=15') }}"></script> -->
-
+    <link rel="stylesheet" href="{{ url_for('static', path='css/bulma.min.css') }}">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"> -->
     <link rel="stylesheet" href="{{ url_for('static', path='css/wurb_slider.css') }}">
+
+    <script src="{{ url_for('static', path='js/main.js/?v=980') }}"></script>
+    <script src="{{ url_for('static', path='js/live.js/?v=980') }}"></script>
+    <script src="{{ url_for('static', path='js/annotations.js/?v=980') }}"></script>
+    <script src="{{ url_for('static', path='js/annotations_client.js/?v=980') }}"></script>
+    <script src="{{ url_for('static', path='js/admin.js/?v=980') }}"></script>
+    <script src="{{ url_for('static', path='js/mousetrap.js/?v=980') }}"></script>
+    <script src="{{ url_for('static', path='js/mousetrap_bindings.js/?v=980') }}"></script>
 </head>
 
-<body>
+<body onLoad="fetchModules()">
     <section class="hero is-fullheight is-fullwidth">
         <div class="hero-head has-background-black">
             <nav class="navbar" role="navigation" aria-label="main navigation">
@@ -38,7 +32,7 @@
                     <p class="navbar-item p-0">
                         <span
                             class="is-clickable is-family-sans-serif has-text-weight-bold has-text-info is-size-6 mr-3"
-                            onclick="fetchAjaxAbout()">
+                            onclick="activateModuleAbout()">
                             CloudedBats WURB
                         </span>
                     </p>
@@ -46,13 +40,13 @@
             </nav>
             <div class="container is-fluid mb-2">
                 <div class="buttons is-centered">
-                    <button id="ajax-record-id" onclick="fetchAjaxRecord()"
+                    <button id="module-record-id" onclick="activateModuleRecord()"
                         class="button is-small is-rounded is-info"><strong>Record</strong></button>
-                    <button id="ajax-live-id" onclick="fetchAjaxLive()"
+                    <button id="module-live-id" onclick="activateModuleLive()"
                         class="button is-small is-rounded is-info"><strong>Live</strong></button>
-                    <button id="ajax-annotations-id" onclick="fetchAjaxAnnotations()"
+                    <button id="module-annotations-id" onclick="activateModuleAnnotations()"
                         class="button is-small is-rounded is-info"><strong>Annotations</strong></button>
-                    <button id="ajax-adm-id" onclick="fetchAjaxAdministration()"
+                    <button id="module-admin-id" onclick="activateModuleAdministration()"
                         class="button is-small is-rounded is-info"><strong>Administration</strong></button>
                 </div>
             </div>
@@ -61,7 +55,19 @@
         <div class="hero-body has-background-grey m-0 p-0">
             <!-- <div class="has-background-grey"> -->
             <div class="container is-fluid">
-                <div id="hero-body-id" class="is-centered">
+                <div id="hero-body-record-id" class="is-centered is-hidden">
+                    <p class="title m-5">NOT LOADED...</p>
+                </div>
+                <div id="hero-body-live-id" class="is-centered is-hidden">
+                    <p class="title m-5">NOT LOADED...</p>
+                </div>
+                <div id="hero-body-annotations-id" class="is-centered is-hidden">
+                    <p class="title m-5">NOT LOADED...</p>
+                </div>
+                <div id="hero-body-admin-id" class="is-centered is-hidden">
+                    <p class="title m-5">NOT LOADED...</p>
+                </div>
+                <div id="hero-body-about-id" class="is-centered is-hidden">
                     <p class="title m-5">NOT LOADED...</p>
                 </div>
             </div>
@@ -86,7 +92,7 @@
                     </ul>
                     <ul class="is-pulled-right">
                         <li>
-                            <p class="is-clickable has-text-white" onclick="fetchAjaxAbout()">About</>
+                            <p class="is-clickable has-text-white" onclick="activateModuleAbout()">About</>
                         </li>
                     </ul>
                 </div>

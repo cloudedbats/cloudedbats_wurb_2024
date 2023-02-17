@@ -14,11 +14,11 @@ templates = fastapi.templating.Jinja2Templates(directory="wurb_app/templates")
 record_router = fastapi.APIRouter()
 
 
-@record_router.get("/ajax-record/", tags=["AJAX"], description="Record module as AJAX.")
-async def ajax_record(request: fastapi.Request):
+@record_router.get("/module-record/", tags=["module"], description="Record module as module.")
+async def module_record(request: fastapi.Request):
     """ """
     try:
-        logger.debug("API called: ajax_record.")
+        logger.debug("API called: module_record.")
         return templates.TemplateResponse(
             "record.html",
             {
@@ -27,4 +27,4 @@ async def ajax_record(request: fastapi.Request):
             },
         )
     except Exception as e:
-        logger.debug("Exception: ajax_record: " + str(e))
+        logger.debug("Exception: module_record: " + str(e))

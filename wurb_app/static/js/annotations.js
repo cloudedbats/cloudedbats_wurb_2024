@@ -4,35 +4,40 @@ function XXXXX() {
 }
 
 function annoToggleSettings() {
-    if ($("#anno-settings-id").hasClass("is-hidden")) {
-        $("#anno-boddy-id").addClass("is-hidden")
-        $("#anno-settings-id").removeClass("is-hidden")
-        $("#anno-show-settings-text-id").text("Hide settings")
+    if (byId("anno-settings-id").classList.contains("is-hidden")) {
+        byId("anno-boddy-id").classList.add("is-hidden")
+        byId("anno-settings-id").classList.remove("is-hidden")
+        byId("anno-show-settings-text-id").textContent = "Hide settings"
     } else {
-        $("#anno-settings-id").addClass("is-hidden")
-        $("#anno-boddy-id").removeClass("is-hidden")
-        $("#anno-show-settings-text-id").text("Show settings")
+        byId("anno-settings-id").classList.add("is-hidden")
+        byId("anno-boddy-id").classList.remove("is-hidden")
+        byId("anno-show-settings-text-id").textContent = "Show settings"
     };
 }
 
-function annoFolderChanged() {
-    $("#anno-select-event-id").val("select");
-    getEventsDirs()
+function annoSourceLoad() {
+    // byId("anno-select-source-id").val("select");
+    getSourceDirs()
+}
+
+function annoSourceChanged() {
+    // byId("anno-select-night-id").val("select");
+    getNightDirs()
 }
 
 function annoNightChanged() {
-    var value = $("#anno-select-event-id").val();
+    // var value = byId("anno-select-night-id").val();
     getRecordingInfo()
     alert("TEST: " + value);
 }
 
 function annoClearFilter() {
     try {
-        $("#anno-filter-q0-id").prop("checked", false);
-        $("#anno-filter-q1-id").prop("checked", false);
-        $("#anno-filter-q2-id").prop("checked", false);
-        $("#anno-filter-q3-id").prop("checked", false);
-        $("#anno-filter-not-assigned-id").prop("checked", false);
+        byId("anno-filter-q0-id").checked = false;
+        byId("anno-filter-q1-id").checked = false;
+        byId("anno-filter-q2-id").checked = false;
+        byId("anno-filter-q3-id").checked = false;
+        byId("anno-filter-not-assigned-id").checked = false;
     } catch (err) {
         // Block of code to handle errors
     }
@@ -40,53 +45,53 @@ function annoClearFilter() {
 
 function annoSetFilter() {
     try {
-        $("#anno-filter-q0-id").prop("checked", true);
-        $("#anno-filter-q1-id").prop("checked", true);
-        $("#anno-filter-q2-id").prop("checked", true);
-        $("#anno-filter-q3-id").prop("checked", true);
-        $("#anno-filter-not-assigned-id").prop("checked", true);
+        byId("anno-filter-q0-id").checked = true;
+        byId("anno-filter-q1-id").checked = true;
+        byId("anno-filter-q2-id").checked = true;
+        byId("anno-filter-q3-id").checked = true;
+        byId("anno-filter-not-assigned-id").checked = true;
     } catch (err) {
         // Block of code to handle errors
     }
 }
 
 function annoToggleViewFiles() {
-    if ($("#anno-view-files-id").hasClass("is-hidden")) {
-        $("#anno-view-files-button-id").addClass("is-inverted");
-        $("#anno-view-files-id").removeClass("is-hidden")
+    if (byId("anno-view-files-id").classList.contains("is-hidden")) {
+        byId("anno-view-files-button-id").classList.add("is-inverted");
+        byId("anno-view-files-id").classList.remove("is-hidden")
     } else {
-        $("#anno-view-files-button-id").removeClass("is-inverted");
-        $("#anno-view-files-id").addClass("is-hidden")
+        byId("anno-view-files-button-id").classList.remove("is-inverted");
+        byId("anno-view-files-id").classList.add("is-hidden")
     };
 }
 
 function annoToggleViewOverview() {
-    if ($("#anno-view-overview-id").hasClass("is-hidden")) {
-        $("#anno-view-overview-button-id").addClass("is-inverted");
-        $("#anno-view-overview-id").removeClass("is-hidden")
+    if (byId("anno-view-overview-id").classList.contains("is-hidden")) {
+        byId("anno-view-overview-button-id").classList.add("is-inverted");
+        byId("anno-view-overview-id").classList.remove("is-hidden")
     } else {
-        $("#anno-view-overview-button-id").removeClass("is-inverted");
-        $("#anno-view-overview-id").addClass("is-hidden")
+        byId("anno-view-overview-button-id").classList.remove("is-inverted");
+        byId("anno-view-overview-id").classList.add("is-hidden")
     };
 }
 
 function annoToggleViewSpectrogram() {
-    if ($("#anno-view-spectrogram-id").hasClass("is-hidden")) {
-        $("#anno-view-spectrogram-button-id").addClass("is-inverted");
-        $("#anno-view-spectrogram-id").removeClass("is-hidden")
+    if (byId("anno-view-spectrogram-id").classList.contains("is-hidden")) {
+        byId("anno-view-spectrogram-button-id").classList.add("is-inverted");
+        byId("anno-view-spectrogram-id").classList.remove("is-hidden")
     } else {
-        $("#anno-view-spectrogram-button-id").removeClass("is-inverted");
-        $("#anno-view-spectrogram-id").addClass("is-hidden")
+        byId("anno-view-spectrogram-button-id").classList.remove("is-inverted");
+        byId("anno-view-spectrogram-id").classList.add("is-hidden")
     };
 }
 
 function annoToggleViewDetails() {
-    if ($("#anno-view-details-id").hasClass("is-hidden")) {
-        $("#anno-view-details-button-id").addClass("is-inverted");
-        $("#anno-view-details-id").removeClass("is-hidden")
+    if (byId("anno-view-details-id").classList.contains("is-hidden")) {
+        byId("anno-view-details-button-id").classList.add("is-inverted");
+        byId("anno-view-details-id").classList.remove("is-hidden")
     } else {
-        $("#anno-view-details-button-id").removeClass("is-inverted");
-        $("#anno-view-details-id").addClass("is-hidden")
+        byId("anno-view-details-button-id").classList.remove("is-inverted");
+        byId("anno-view-details-id").classList.add("is-hidden")
     };
 }
 
@@ -104,22 +109,22 @@ function annoLast() {
 }
 
 function annoSetQ0() {
-    $("#anno-q0-id").prop("checked", true);
+    byId("anno-q0-id").checked = true;
 }
 function annoSetQ1() {
-    $("#anno-q1-id").prop("checked", true);
+    byId("anno-q1-id").checked = true;
 }
 function annoSetQ2() {
-    $("#anno-q2-id").prop("checked", true);
+    byId("anno-q2-id").checked = true;
 }
-function annoSetQ03() {
-    $("#anno-q3-id").prop("checked", true);
+function annoSetQ3() {
+    byId("anno-q3-id").checked = true;
 }
 function annoSetQNotAssigned() {
-    $("#anno-not-assigned-id").prop("checked", true);
+    byId("anno-not-assigned-id").checked = true;
 }
 function annoQuickClear() {
-    $("#anno-not-assigned-id").prop("checked", true);
+    byId("anno-not-assigned-id").checked = true;
     // TODO: Clear settings.
 }
 function annoQuickCopy() {
@@ -135,9 +140,9 @@ function annoQuickPasteNext() {
 
 
 function toggleTag(tagObject) {
-    if ($(tagObject).hasClass("is-inverted")) {
-        $(tagObject).removeClass("is-inverted")
+    if (tagObject.classList.contains("is-inverted")) {
+        tagObject.classList.remove("is-inverted")
     } else {
-        $(tagObject).addClass("is-inverted");
+        tagObject.classList.add("is-inverted");
      };
 }

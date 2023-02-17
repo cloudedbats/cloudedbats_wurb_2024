@@ -46,15 +46,14 @@
                         <div class="field is-grouped">
                             <div class="control">
                                 <div class="select is-rounded is-small has-text-weight-bold is-info">
-                                    <select id="anno-select-folder-id" onchange="annoFolderChanged()">
-                                        <option value="drive-internal">Internal SD card</option>
-                                        <option value="drive-usb">USB: Memory</option>
-                                    </select>
+                                    <select id="anno-select-source-id" onchange="annoSourceChanged()">
+                                        <option value="select">Please select:</option>
+\ß                                    </select>
                                 </div>
                             </div>
                             <div class="control">
                                 <div class="select is-rounded is-small has-text-weight-bold is-info">
-                                    <select id="anno-select-event-id" onchange="annoNightChanged()">
+                                    <select id="anno-select-night-id" onchange="annoNightChanged()">
                                         <option value="select">Please select:</option>
                                         <!-- <option value="Taberg_2022-12-30">Taberg_2022-12-30</option>
                                         <option value="Taberg_2022-12-31">Taberg_2022-12-31</option>

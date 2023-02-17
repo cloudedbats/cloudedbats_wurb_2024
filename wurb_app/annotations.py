@@ -15,12 +15,12 @@ annotations_router = fastapi.APIRouter()
 
 
 @annotations_router.get(
-    "/ajax-annotations/", tags=["AJAX"], description="Annotations module as AJAX."
+    "/module-annotations/", tags=["module"], description="Annotations module as module."
 )
-async def ajax_annotations(request: fastapi.Request):
+async def module_annotations(request: fastapi.Request):
     """ """
     try:
-        logger.debug("API called: ajax_annotations.")
+        logger.debug("API called: module_annotations.")
         return templates.TemplateResponse(
             "annotations.html",
             {
@@ -29,11 +29,11 @@ async def ajax_annotations(request: fastapi.Request):
             },
         )
     except Exception as e:
-        logger.debug("Exception: ajax_annotations: " + str(e))
+        logger.debug("Exception: module_annotations: " + str(e))
 
 
 @annotations_router.get(
-    "/ajax-annotations/get-annotations",
+    "/module-annotations/get-annotations",
     tags=["File administration"],
     description="Get annotations for recordings in sampling event.",
 )
@@ -43,19 +43,19 @@ async def get_annotations(request: fastapi.Request):
         logger.debug("API called: get_annotations.")
         json_data = [
             {
-                "waveFileName": "w53.......",
+                "recFileName": "w53.......",
                 "quality": "Q2",
                 "tags": ["FM-QCF", "Social"],
                 "comments": "Comment...",
             },
             {
-                "waveFileName": "w53.......",
+                "recFileName": "w53.......",
                 "quality": "Q2",
                 "tags": ["FM-QCF", "Social"],
                 "comments": "Comment...",
             },
             {
-                "waveFileName": "w53.......",
+                "recFileName": "w53.......",
                 "quality": "Q2",
                 "tags": ["FM-QCF", "Social"],
                 "comments": "Comment...",
@@ -67,7 +67,7 @@ async def get_annotations(request: fastapi.Request):
 
 
 @annotations_router.get(
-    "/ajax-annotations/get-recording-info",
+    "/module-annotations/get-recording-info",
     tags=["File administration"],
     description="Get info for one sound recording.",
 )

@@ -14,11 +14,11 @@ templates = fastapi.templating.Jinja2Templates(directory="wurb_app/templates")
 live_router = fastapi.APIRouter()
 
 
-@live_router.get("/ajax-live/", tags=["AJAX"], description="live module as AJAX.")
-async def ajax_live(request: fastapi.Request):
+@live_router.get("/module-live/", tags=["module"], description="live module as module.")
+async def module_live(request: fastapi.Request):
     """ """
     try:
-        logger.debug("API called: ajax_live.")
+        logger.debug("API called: module_live.")
         return templates.TemplateResponse(
             "live.html",
             {
@@ -27,4 +27,4 @@ async def ajax_live(request: fastapi.Request):
             },
         )
     except Exception as e:
-        logger.debug("Exception: ajax_live: " + str(e))
+        logger.debug("Exception: module_live: " + str(e))

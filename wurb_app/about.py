@@ -14,11 +14,11 @@ templates = fastapi.templating.Jinja2Templates(directory="wurb_app/templates")
 about_router = fastapi.APIRouter()
 
 
-@about_router.get("/ajax-about/", tags=["AJAX"], description="About as AJAX.")
-async def ajax_about(request: fastapi.Request):
+@about_router.get("/module-about/", tags=["modules"], description="About as module.")
+async def module_about(request: fastapi.Request):
     """ """
     try:
-        logger.debug("API called: ajax_about.")
+        logger.debug("API called: module_about.")
         return templates.TemplateResponse(
             "about.html",
             {
@@ -27,4 +27,4 @@ async def ajax_about(request: fastapi.Request):
             },
         )
     except Exception as e:
-        logger.debug("Exception: ajax_about: " + str(e))
+        logger.debug("Exception: module_about: " + str(e))

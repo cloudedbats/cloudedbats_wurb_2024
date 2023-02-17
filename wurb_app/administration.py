@@ -15,11 +15,11 @@ templates = fastapi.templating.Jinja2Templates(directory="wurb_app/templates")
 admin_router = fastapi.APIRouter()
 
 
-@admin_router.get("/ajax-admin/", tags=["File administration"], description="Administration module as AJAX.")
-async def ajax_admin(request: fastapi.Request):
+@admin_router.get("/module-admin/", tags=["File administration"], description="Administration module as module.")
+async def module_admin(request: fastapi.Request):
     """ """
     try:
-        logger.debug("API called: ajax_admin.")
+        logger.debug("API called: module_admin.")
         return templates.TemplateResponse(
             "administration.html",
             {
@@ -28,32 +28,25 @@ async def ajax_admin(request: fastapi.Request):
             },
         )
     except Exception as e:
-        logger.debug("Exception: ajax_admin: " + str(e))
+        logger.debug("Exception: module_admin: " + str(e))
 
-@admin_router.get("/ajax-admin/get-source-dirs", tags=["File administration"], description="Get source directories.")
-async def get_source_dirs(request: fastapi.Request):
+@admin_router.get("/module-admin/get-rec-sources", tags=["File administration"], description="Get source directories.")
+async def get_rec_sources(request: fastapi.Request):
     """ """
     try:
         logger.debug("API called: get_source_dirs.")
-        json_data = {"source_dirs": ["../wurb_recordings", "../../wurb_recordings"]}
+        # json_data = {"source_dirs": ["../wurb_recordings", "../../wurb_recordings"]}
+        json_data = wurb_core.sources_and_files.get_rec_sources()
         return JSONResponse(content=json_data)
     except Exception as e:
         logger.debug("Exception: get_source_dirs: " + str(e))
 
-@admin_router.get("/ajax-admin/get-events-dirs", tags=["File administration"], description="Get source directories.")
-async def get_source_dirs(request: fastapi.Request):
+@admin_router.get("/module-admin/get-rec-nights", tags=["File administration"], description="Get source directories.")
+async def get_rec_nights(request: fastapi.Request):
     """ """
     try:
         logger.debug("API called: get_source_dirs.")
-        json_data = [
-            "Taberg_2022-12-30", 
-            "Taberg_2022-12-31",
-            "Taberg_2023-01-01",
-            "Taberg_2023-01-02",
-            "Taberg_2023-01-03",
-            "Taberg_2023-01-04",
-            "Taberg_2023-01-05",
-            ]
+        json_data = wurb_core.sources_and_files.get_rec_nights(source_dir="../wurb_recordings")
         return JSONResponse(content=json_data)
     except Exception as e:
         logger.debug("Exception: get_source_dirs: " + str(e))
