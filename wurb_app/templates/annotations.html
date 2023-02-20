@@ -41,74 +41,26 @@
                     <section id="anno-boddy-id" class="section has-background-grey-lighter p-2">
 
                         <div class="field">
-                            <label class="label">Select&nbsp;folder&nbsp;/&nbsp;monitoring&nbsp;event</label>
+                            <label class="label">Select&nbsp;folder&nbsp;/&nbsp;monitoring&nbsp;night</label>
                         </div>
                         <div class="field is-grouped">
                             <div class="control">
                                 <div class="select is-rounded is-small has-text-weight-bold is-info">
                                     <select id="anno-select-source-id" onchange="annoSourceChanged()">
-                                        <option value="select">Please select:</option>
-\ß                                    </select>
+                                        <option value="select">Select:</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="control">
                                 <div class="select is-rounded is-small has-text-weight-bold is-info">
                                     <select id="anno-select-night-id" onchange="annoNightChanged()">
-                                        <option value="select">Please select:</option>
-                                        <!-- <option value="Taberg_2022-12-30">Taberg_2022-12-30</option>
-                                        <option value="Taberg_2022-12-31">Taberg_2022-12-31</option>
-                                        <option value="Taberg_2023-01-01">Taberg_2023-01-01</option>
-                                        <option value="Taberg_2023-01-02">Taberg_2023-01-02</option>
-                                        <option value="Taberg_2023-01-03">Taberg_2023-01-03</option>
-                                        <option value="Taberg_2023-01-04">Taberg_2023-01-04</option>
-                                        <option value="Taberg_2023-01-05">Taberg_2023-01-05</option> -->
+                                        <option value="select">Select:</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="field">
-                            <label class="label">Filter&nbsp;on&nbsp;quality</label>
-                        </div>
-
-                        <div class="field">
-                            <div class="content">
-                                <div class="container">
-                                    <div class="control has-text-weight-bold">
-                                        <label class="checkbox">
-                                            <input id="anno-filter-q0-id" class="mr-1" type="checkbox"
-                                                onchange="XXXXX()" checked>Q0
-                                        </label>
-                                        <label class="checkbox">
-                                            <input id="anno-filter-q1-id" class="mx-1" type="checkbox"
-                                                onchange="XXXXX()" checked>Q1
-                                        </label>
-                                        <label class="checkbox">
-                                            <input id="anno-filter-q2-id" class="mx-1" type="checkbox"
-                                                onchange="XXXXX()" checked>Q2
-                                        </label>
-                                        <label class="checkbox">
-                                            <input id="anno-filter-q3-id" class="mx-1" type="checkbox"
-                                                onchange="XXXXX()" checked>Q3
-                                        </label>
-                                        <label class="checkbox">
-                                            <input id="anno-filter-not-assigned-id" class="mx-1" type="checkbox"
-                                                onchange="XXXXX()" checked>Not assigned
-                                        </label>
-                                        <button id="anno-filter-clear-all" onclick="annoClearFilter()"
-                                            class="button is-rounded is-small has-text-weight-bold is-info mx-1">
-                                            Clear
-                                        </button>
-                                        <button id="anno-filter-set-all" onclick="annoSetFilter()"
-                                            class="button is-rounded is-small has-text-weight-bold is-info mx-1">
-                                            Mark all
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="field pt-2">
+                        <div class="field pt---2">
                             <label class="label">View recordings</label>
                         </div>
                         <div class="field">
@@ -127,8 +79,6 @@
                                 </div>
                             </div>
                         </div>
-
-
 
                         <div id="anno-view-files-id" class="field is-hidden">
                             <div class="control">
@@ -219,8 +169,6 @@
                             </div>
                         </div>
 
-
-
                         <div id="anno-view-overview-id" class="field is-hidden">
                             <div class="control">
                                 <!-- <figure class="image is-16by9">
@@ -233,7 +181,6 @@
                                 </figure>
                             </div>
                         </div>
-
 
                         <div id="anno-view-spectrogram-id" class="field">
                             <div class="control">
@@ -248,8 +195,6 @@
                             </div>
                         </div>
 
-
-
                         <div id="anno-view-details-id" class="field is-hidden">
                             <div class="control has-background-success">
                                 <figure class="image is-3by1">
@@ -259,11 +204,6 @@
                                 </figure>
                             </div>
                         </div>
-
-
-
-
-
 
                         <div class="container">
                             <div class="buttons is-centered">
@@ -278,7 +218,6 @@
                             </div>
                         </div>
 
-
                         <div class="field pt-2">
                             <div class="label">
                                 <label class="label">
@@ -286,7 +225,6 @@
                                 </label>
                             </div>
                         </div>
-
 
                         <div class="field">
                             <div class="content">
@@ -317,7 +255,6 @@
                                 </div>
                             </div>
                         </div>
-
 
                         <div class="field">
                             <div class="label">
@@ -377,7 +314,6 @@
                             </div>
                         </div>
 
-
                         <div class="field">
                             <label class="label">Add comments</label>
                         </div>
@@ -386,7 +322,6 @@
                                 <input class="input" type="email" placeholder="Comments on recording">
                             </p>
                         </div>
-
 
                         <div class="field">
                             <label class="label">Quick commands</label>
@@ -419,6 +354,47 @@
                         </div>
                         <div class="field">
                             <label class="title is-4">Settings</label>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Filter&nbsp;on&nbsp;quality</label>
+                        </div>
+
+                        <div class="field">
+                            <div class="content">
+                                <div class="container">
+                                    <div class="control has-text-weight-bold">
+                                        <label class="checkbox">
+                                            <input id="anno-filter-q0-id" class="mr-1" type="checkbox"
+                                                onchange="XXXXX()" checked>Q0
+                                        </label>
+                                        <label class="checkbox">
+                                            <input id="anno-filter-q1-id" class="mx-1" type="checkbox"
+                                                onchange="XXXXX()" checked>Q1
+                                        </label>
+                                        <label class="checkbox">
+                                            <input id="anno-filter-q2-id" class="mx-1" type="checkbox"
+                                                onchange="XXXXX()" checked>Q2
+                                        </label>
+                                        <label class="checkbox">
+                                            <input id="anno-filter-q3-id" class="mx-1" type="checkbox"
+                                                onchange="XXXXX()" checked>Q3
+                                        </label>
+                                        <label class="checkbox">
+                                            <input id="anno-filter-not-assigned-id" class="mx-1" type="checkbox"
+                                                onchange="XXXXX()" checked>Not assigned
+                                        </label>
+                                        <button id="anno-filter-clear-all" onclick="annoClearFilter()"
+                                            class="button is-rounded is-small has-text-weight-bold is-info mx-1">
+                                            Clear
+                                        </button>
+                                        <button id="anno-filter-set-all" onclick="annoSetFilter()"
+                                            class="button is-rounded is-small has-text-weight-bold is-info mx-1">
+                                            Mark all
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="field pt-2">

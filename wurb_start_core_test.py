@@ -41,10 +41,6 @@ async def main():
     logger.debug("WURB startup.")
     await wurb_core.manager.startup()
 
-
-
-
-
     ### FOR TEST - START ###
     print("TEST started.")
 
@@ -65,30 +61,55 @@ async def main():
     rec_file = "../wurb_recordings/Taberg-1_2022-12-01/w53u384_20221201T200355+0100_N57.67687E14.0827_TE384_24kHz-39dB.wav"
     metadata = wurb_core.metadata_rec.read_metadata(rec_file)
     metadata["annotations"][0] = {
-            "user": "wurb-user",
-            "quality": "Q2",
-            "tags": [
-                    "Enil", 
-                ],
-            "comments": "Foraging.",
-        }
+        "user": "wurb-user",
+        "quality": "Q2",
+        "tags": [
+            "Enil",
+        ],
+        "comments": "Foraging.",
+    }
     metadata["annotations"].append(
         {
             "user": "AI-user-2",
             "quality": "Q1",
             "tags": [
-                    "None", 
-                ],
+                "None",
+            ],
             "comments": "By AI-2.",
         }
     )
     wurb_core.metadata_rec.write_metadata(rec_file, metadata)
 
-    print("First: ", wurb_core.metadata_rec.get_metadata(rec_file, select="first")["recording"]["timeLocal"])
-    print("Previous: ", wurb_core.metadata_rec.get_metadata(rec_file, select="previous")["recording"]["timeLocal"])
-    print("Same: ", wurb_core.metadata_rec.get_metadata(rec_file, select="")["recording"]["timeLocal"])
-    print("Next: ", wurb_core.metadata_rec.get_metadata(rec_file, select="next")["recording"]["timeLocal"])
-    print("Last: ", wurb_core.metadata_rec.get_metadata(rec_file, select="last")["recording"]["timeLocal"])
+    print(
+        "First: ",
+        wurb_core.metadata_rec.get_metadata(rec_file, select="first")["recording"][
+            "timeLocal"
+        ],
+    )
+    print(
+        "Previous: ",
+        wurb_core.metadata_rec.get_metadata(rec_file, select="previous")["recording"][
+            "timeLocal"
+        ],
+    )
+    print(
+        "Same: ",
+        wurb_core.metadata_rec.get_metadata(rec_file, select="")["recording"][
+            "timeLocal"
+        ],
+    )
+    print(
+        "Next: ",
+        wurb_core.metadata_rec.get_metadata(rec_file, select="next")["recording"][
+            "timeLocal"
+        ],
+    )
+    print(
+        "Last: ",
+        wurb_core.metadata_rec.get_metadata(rec_file, select="last")["recording"][
+            "timeLocal"
+        ],
+    )
 
     print("TEST ended.")
     ### FOR TEST - END ###

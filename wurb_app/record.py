@@ -14,8 +14,10 @@ templates = fastapi.templating.Jinja2Templates(directory="wurb_app/templates")
 record_router = fastapi.APIRouter()
 
 
-@record_router.get("/module-record/", tags=["module"], description="Record module as module.")
-async def module_record(request: fastapi.Request):
+@record_router.get(
+    "/pages/record", tags=["HTML pages"], description="Record page loaded as HTML."
+)
+async def load_record_page(request: fastapi.Request):
     """ """
     try:
         logger.debug("API called: module_record.")

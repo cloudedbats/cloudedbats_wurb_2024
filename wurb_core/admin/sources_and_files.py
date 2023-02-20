@@ -34,7 +34,7 @@ class SourcesAndFiles(object):
                 result.append(str(source_dir_path))
                 self.cache_by_source[str(source_dir_path)] = str(cache_dir_path)
         #
-        return result
+        return sorted(result)
 
     def get_rec_cache(self, source_dir):
         """ """

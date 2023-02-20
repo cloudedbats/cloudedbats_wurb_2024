@@ -16,19 +16,19 @@ function annoToggleSettings() {
 }
 
 function annoSourceLoad() {
-    // byId("anno-select-source-id").val("select");
     getSourceDirs()
 }
 
 function annoSourceChanged() {
-    // byId("anno-select-night-id").val("select");
-    getNightDirs()
+    var sourceId = byId("anno-select-source-id").value;
+    getNights(sourceId);
 }
 
 function annoNightChanged() {
-    // var value = byId("anno-select-night-id").val();
-    getRecordingInfo()
-    alert("TEST: " + value);
+    var sourceId = byId("anno-select-source-id").value;
+    var nightId = byId("anno-select-night-id").value;
+    //    var recordId = byId("anno-record-id").value;
+    getRecordInfo(sourceId, nightId, "");
 }
 
 function annoClearFilter() {
@@ -144,5 +144,5 @@ function toggleTag(tagObject) {
         tagObject.classList.remove("is-inverted")
     } else {
         tagObject.classList.add("is-inverted");
-     };
+    };
 }

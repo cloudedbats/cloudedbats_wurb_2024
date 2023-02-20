@@ -47,99 +47,99 @@ function activateModuleAbout() {
 
 function fetchModuleRecord() {
     hideModules()
-    fetch("/module-record/", { method: "GET" })
-    .then(function (response) {
-        if (response.ok) {
-            return response.text();
-        } else {
-            return Promise.reject(response);
-        }
-    })
-    .then(function (html) {
-        byId('hero-body-record-id').innerHTML = html;
-        byId("module-record-id").classList.add("is-inverted");
-    })
-    .catch(function (err) {
-        console.warn("Something went wrong.", err);
-    })
+    fetch("/pages/record", { method: "GET" })
+        .then(function (response) {
+            if (response.ok) {
+                return response.text();
+            } else {
+                return Promise.reject(response);
+            }
+        })
+        .then(function (html) {
+            byId('hero-body-record-id').innerHTML = html;
+            byId("module-record-id").classList.remove("is-inverted");
+        })
+        .catch(function (err) {
+            console.warn("Something went wrong.", err);
+        })
 };
 
 function fetchModuleLive() {
     hideModules()
-    fetch("/module-live/", { method: "GET" })
-    .then(function (response) {
-        if (response.ok) {
-            return response.text();
-        } else {
-            return Promise.reject(response);
-        }
-    })
-    .then(function (html) {
-        byId('hero-body-live-id').innerHTML = html;
-        byId("module-live-id").classList.add("is-inverted");
-    })
-    .catch(function (err) {
-        console.warn("Something went wrong.", err);
-    })
+    fetch("/pages/live", { method: "GET" })
+        .then(function (response) {
+            if (response.ok) {
+                return response.text();
+            } else {
+                return Promise.reject(response);
+            }
+        })
+        .then(function (html) {
+            byId('hero-body-live-id').innerHTML = html;
+            byId("module-live-id").classList.remove("is-inverted");
+        })
+        .catch(function (err) {
+            console.warn("Something went wrong.", err);
+        })
 };
 
 function fetchModuleAnnotations() {
     hideModules()
-    fetch("/module-annotations/", { method: "GET" })
-    .then(function (response) {
-        if (response.ok) {
-            return response.text();
-        } else {
-            return Promise.reject(response);
-        }
-    })
-    .then(function (html) {
-        byId('hero-body-annotations-id').innerHTML = html;
-        byId("module-annotations-id").classList.add("is-inverted");
+    fetch("/pages/annotations", { method: "GET" })
+        .then(function (response) {
+            if (response.ok) {
+                return response.text();
+            } else {
+                return Promise.reject(response);
+            }
+        })
+        .then(function (html) {
+            byId('hero-body-annotations-id').innerHTML = html;
+            byId("module-annotations-id").classList.remove("is-inverted");
 
-        annoSourceLoad()
+            annoSourceLoad()
 
-    })
-    .catch(function (err) {
-        console.warn("Something went wrong.", err);
-    })
+        })
+        .catch(function (err) {
+            console.warn("Something went wrong.", err);
+        })
 };
 
 function fetchModuleAdministration() {
     hideModules()
-    fetch("/module-admin/", { method: "GET" })
-    .then(function (response) {
-        if (response.ok) {
-            return response.text();
-        } else {
-            return Promise.reject(response);
-        }
-    })
-    .then(function (html) {
-        byId('hero-body-admin-id').innerHTML = html;
-        byId("module-admin-id").classList.add("is-inverted");
-    })
-    .catch(function (err) {
-        console.warn("Something went wrong.", err);
-    })
+    fetch("/pages/admin", { method: "GET" })
+        .then(function (response) {
+            if (response.ok) {
+                return response.text();
+            } else {
+                return Promise.reject(response);
+            }
+        })
+        .then(function (html) {
+            byId('hero-body-admin-id').innerHTML = html;
+            byId("module-admin-id").classList.remove("is-inverted");
+        })
+        .catch(function (err) {
+            console.warn("Something went wrong.", err);
+        })
 };
 
 function fetchModuleAbout() {
     hideModules()
-    fetch("/module-about/", { method: "GET" })
-    .then(function (response) {
-        if (response.ok) {
-            return response.text();
-        } else {
-            return Promise.reject(response);
-        }
-    })
-    .then(function (html) {
-        byId('hero-body-about-id').innerHTML = html;
-    })
-    .catch(function (err) {
-        console.warn("Something went wrong.", err);
-    })
+    fetch("/pages/about", { method: "GET" })
+        .then(function (response) {
+            if (response.ok) {
+                return response.text();
+            } else {
+                return Promise.reject(response);
+            }
+        })
+        .then(function (html) {
+            byId('hero-body-about-id').innerHTML = html;
+        })
+        .catch(function (err) {
+            console.warn("Something went wrong.", err);
+        })
 };
 
 // Called from body onLoad.

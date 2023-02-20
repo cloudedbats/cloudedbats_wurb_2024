@@ -11,8 +11,9 @@ from wurb_core.wurb_gps import WurbGps
 from wurb_core.wurb_manager import WurbManager
 
 from wurb_core.admin.sources_and_files import SourcesAndFiles
-from wurb_core.annotate.rec_metadata import MetadataRec
-from wurb_core.annotate.rec_metadata_table import MetadataRecTable
+from wurb_core.annotations.rec_metadata import MetadataRec
+from wurb_core.annotations.rec_metadata_table import MetadataRecTable
+from wurb_core.annotations.rec_sources import RecSources
 
 
 # To be used similar to singleton objects.
@@ -24,3 +25,4 @@ manager = WurbManager(logger=used_logger)
 sources_and_files = SourcesAndFiles(logger=used_logger)
 metadata_rec = MetadataRec(logger=used_logger)
 metadata_rec_table = MetadataRecTable(logger=used_logger)
+rec_sources = RecSources(logger=used_logger)

@@ -29,11 +29,21 @@ sound_playback:
   buffer_max_size: 10000
   in_queue_length: 10
 
-field_annotations:
-  directories:
-    - source: ../wurb_recordings
-      cache:  ..wurb_cache
-    - source: ../../wurb_recordings
-      cache:  ../../wurb_cache
-    - source: /user/pi/wurb_recordings
-      cache:  /user/pi/wurb_cache
+annotations:
+  sources:
+    - id: local
+      name: Local
+      rec_dir: ../wurb_recordings
+      cache_dir: ..wurb_cache
+    - id: usb
+      name: USB
+      rec_dir: media/pi/wurb_recordings
+      cache_dir: media/pi/wurb_cache
+    - id: ssd
+      name: SSD
+      rec_dir: media/ssd/wurb_recordings
+      cache_dir: media/ssd/wurb_cache
+    - id: internal
+      name: Internal
+      rec_dir: /user/pi/wurb_recordings
+      cache_dir: /user/pi/wurb_cache

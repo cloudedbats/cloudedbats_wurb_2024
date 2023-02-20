@@ -11,13 +11,13 @@
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"> -->
     <link rel="stylesheet" href="{{ url_for('static', path='css/wurb_slider.css') }}">
 
-    <script src="{{ url_for('static', path='js/main.js/?v=980') }}"></script>
-    <script src="{{ url_for('static', path='js/live.js/?v=980') }}"></script>
-    <script src="{{ url_for('static', path='js/annotations.js/?v=980') }}"></script>
-    <script src="{{ url_for('static', path='js/annotations_client.js/?v=980') }}"></script>
-    <script src="{{ url_for('static', path='js/admin.js/?v=980') }}"></script>
-    <script src="{{ url_for('static', path='js/mousetrap.js/?v=980') }}"></script>
-    <script src="{{ url_for('static', path='js/mousetrap_bindings.js/?v=980') }}"></script>
+    <script src="{{ url_for('static', path='js/main.js/?v=975') }}"></script>
+    <script src="{{ url_for('static', path='js/live.js/?v=975') }}"></script>
+    <script src="{{ url_for('static', path='js/annotations.js/?v=975') }}"></script>
+    <script src="{{ url_for('static', path='js/annotations_client.js/?v=975') }}"></script>
+    <script src="{{ url_for('static', path='js/admin.js/?v=975') }}"></script>
+    <script src="{{ url_for('static', path='js/mousetrap.js/?v=975') }}"></script>
+    <script src="{{ url_for('static', path='js/mousetrap_bindings.js/?v=975') }}"></script>
 </head>
 
 <body onLoad="fetchModules()">
@@ -41,13 +41,13 @@
             <div class="container is-fluid mb-2">
                 <div class="buttons is-centered">
                     <button id="module-record-id" onclick="activateModuleRecord()"
-                        class="button is-small is-rounded is-info"><strong>Record</strong></button>
+                        class="button is-small is-rounded is-info is-inverted"><strong>Record</strong></button>
                     <button id="module-live-id" onclick="activateModuleLive()"
-                        class="button is-small is-rounded is-info"><strong>Live</strong></button>
+                        class="button is-small is-rounded is-info is-inverted"><strong>Live</strong></button>
                     <button id="module-annotations-id" onclick="activateModuleAnnotations()"
-                        class="button is-small is-rounded is-info"><strong>Annotations</strong></button>
+                        class="button is-small is-rounded is-info is-inverted"><strong>Annotations</strong></button>
                     <button id="module-admin-id" onclick="activateModuleAdministration()"
-                        class="button is-small is-rounded is-info"><strong>Administration</strong></button>
+                        class="button is-small is-rounded is-info is-inverted"><strong>Administration</strong></button>
                 </div>
             </div>
         </div>

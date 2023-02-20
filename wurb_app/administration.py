@@ -8,6 +8,7 @@ import logging
 import fastapi
 import fastapi.templating
 from fastapi.responses import JSONResponse
+from typing import Union
 import wurb_core
 
 logger = logging.getLogger(wurb_core.used_logger)
@@ -15,8 +16,12 @@ templates = fastapi.templating.Jinja2Templates(directory="wurb_app/templates")
 admin_router = fastapi.APIRouter()
 
 
-@admin_router.get("/module-admin/", tags=["File administration"], description="Administration module as module.")
-async def module_admin(request: fastapi.Request):
+@admin_router.get(
+    "/pages/admin",
+    tags=["HTML pages"],
+    description="Administration page loaded as HTML.",
+)
+async def load_admin_page(request: fastapi.Request):
     """ """
     try:
         logger.debug("API called: module_admin.")
@@ -29,24 +34,3 @@ async def module_admin(request: fastapi.Request):
         )
     except Exception as e:
         logger.debug("Exception: module_admin: " + str(e))
-
-@admin_router.get("/module-admin/get-rec-sources", tags=["File administration"], description="Get source directories.")
-async def get_rec_sources(request: fastapi.Request):
-    """ """
-    try:
-        logger.debug("API called: get_source_dirs.")
-        # json_data = {"source_dirs": ["../wurb_recordings", "../../wurb_recordings"]}
-        json_data = wurb_core.sources_and_files.get_rec_sources()
-        return JSONResponse(content=json_data)
-    except Exception as e:
-        logger.debug("Exception: get_source_dirs: " + str(e))
-
-@admin_router.get("/module-admin/get-rec-nights", tags=["File administration"], description="Get source directories.")
-async def get_rec_nights(request: fastapi.Request):
-    """ """
-    try:
-        logger.debug("API called: get_source_dirs.")
-        json_data = wurb_core.sources_and_files.get_rec_nights(source_dir="../wurb_recordings")
-        return JSONResponse(content=json_data)
-    except Exception as e:
-        logger.debug("Exception: get_source_dirs: " + str(e))

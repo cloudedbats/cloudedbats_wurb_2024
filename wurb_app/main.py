@@ -55,8 +55,8 @@ app.include_router(wurb_app.admin_router)
 app.include_router(wurb_app.about_router)
 
 
-@app.get("/")
-async def webpage(request: fastapi.Request):
+@app.get("/", tags=["HTML pages"], description="Main application page loaded as HTML.")
+async def load_main_application_page(request: fastapi.Request):
     """ """
     try:
         logger.debug("API called: webpage.")
