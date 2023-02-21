@@ -63,8 +63,8 @@ async function getNights(sourceId) {
             for (var i = 0; i < json.length; i++) {
                 var content = json[i];
                 var option = document.createElement("option");
-                option.textContent = content.recId;
-                option.value = content.recFilePath;
+                option.textContent = content.id;
+                option.value = content.id;
                 select.appendChild(option);
             }
         })

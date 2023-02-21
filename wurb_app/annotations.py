@@ -46,7 +46,7 @@ async def get_annotations_sources(request: fastapi.Request):
     try:
         logger.debug("API called: get_source_dirs.")
         # json_data = {"source_dirs": ["../wurb_recordings", "../../wurb_recordings"]}
-        json_data = wurb_core.rec_sources.get_rec_sources()
+        json_data = wurb_core.record_manager.get_rec_sources()
         return JSONResponse(content=json_data)
     except Exception as e:
         logger.debug("Exception: get_source_dirs: " + str(e))
@@ -63,7 +63,7 @@ async def get_recording_nights(
     """ """
     try:
         logger.debug("API called: get_source_dirs.")
-        json_data = wurb_core.rec_sources.get_rec_nights(source_id=sourceId)
+        json_data = wurb_core.record_manager.get_rec_nights(source_id=sourceId)
         return JSONResponse(content=json_data)
     except Exception as e:
         logger.debug("Exception: get_source_dirs: " + str(e))
@@ -82,7 +82,7 @@ async def get_recording_info(
     """ """
     try:
         logger.debug("API called: get_recording_info.")
-        json_data = wurb_core.rec_sources.get_rec_info(
+        json_data = wurb_core.record_manager.get_rec_info(
             source_id=sourceId,
             night_id=nightId,
             record_id=recordId,

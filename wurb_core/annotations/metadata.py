@@ -14,7 +14,7 @@ import yaml
 import wurb_core
 
 
-class MetadataRec(object):
+class Metadata(object):
     """ """
 
     def __init__(self, logger="DefaultLogger"):
@@ -48,6 +48,17 @@ class MetadataRec(object):
         ).resolve()
         #
         return metadata_file_path
+
+    def get_rec_id(self, rec_file_path):
+        """ """
+        data_dir = self.get_data_dir(rec_file_path)
+        prefix, utc_datetime, local_date, local_time = self.get_rec_keys(rec_file_path)
+        datetime_str = (
+            str(local_date).replace("-", "") + "T" + str(local_time).replace(":", "")
+        )
+        rec_id = prefix + "_" + datetime_str
+        #
+        return rec_id
 
     def get_rec_keys(self, rec_file_path):
         """ """
@@ -123,32 +134,33 @@ class MetadataRec(object):
             file.writelines("\n".join(self.metadata_header) + "\n")
             yaml.dump(metadata, file, default_flow_style=False)
 
-    def get_metadata(self, rec_file_path, select="", quality_filter=[]):
+    # def get_metadata(self, rec_file_path, select="", quality_filter=[]):
+    def get_metadata(self, rec_file_path):
         """ """
         metadata = {}
         rec_file_path = pathlib.Path(rec_file_path).resolve()
-        rec_file_str = str(rec_file_path)
-        night_dir_path = rec_file_path.parent
-        rec_files = wurb_core.sources_and_files.get_rec_files(night_dir_path)
+        # rec_file_str = str(rec_file_path)
+        # night_dir_path = rec_file_path.parent
+        # rec_files = wurb_core.sources_and_files.get_rec_files(night_dir_path)
         # for rec_file in rec_files:
         #     print("File: ", str(rec_file))
         # Get first, last, previous or next if asked for.
         selected_rec = rec_file_path
-        if select == "first":
-            selected_rec = rec_files[0]
-        elif select == "last":
-            selected_rec = rec_files[-1]
-        elif select == "previous":
-            for rec_file in rec_files:
-                if rec_file < rec_file_str:
-                    selected_rec = rec_file
-                else:
-                    break
-        elif select == "next":
-            for rec_file in rec_files:
-                if rec_file > rec_file_str:
-                    selected_rec = rec_file
-                    break
+        # if select == "first":
+        #     selected_rec = rec_files[0]
+        # elif select == "last":
+        #     selected_rec = rec_files[-1]
+        # elif select == "previous":
+        #     for rec_file in rec_files:
+        #         if rec_file < rec_file_str:
+        #             selected_rec = rec_file
+        #         else:
+        #             break
+        # elif select == "next":
+        #     for rec_file in rec_files:
+        #         if rec_file > rec_file_str:
+        #             selected_rec = rec_file
+        #             break
         # Read metadata from file.
         metadata = self.read_metadata(selected_rec)
         #

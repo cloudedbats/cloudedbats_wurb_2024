@@ -11,7 +11,7 @@ import pathlib
 import wurb_core
 
 
-class MetadataRecTable(object):
+class MetadataTable(object):
     """ """
 
     def __init__(self, logger="DefaultLogger"):
