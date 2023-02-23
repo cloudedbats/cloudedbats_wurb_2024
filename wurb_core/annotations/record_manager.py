@@ -46,7 +46,7 @@ class RecordManager(object):
         if source:
             result = source.get("rec_dir", "")
         return result
-    
+
     def get_cache_dir(self, source_id):
         """ """
         self.load_sources()
@@ -123,11 +123,12 @@ class RecordManager(object):
         """ """
         rec_file = self.get_rec_file(source_id, night_id, record_id)
         rec_files = self.get_rec_files(source_id, night_id, record_id)
-        prefix, utc_datetime, local_date, local_time = wurb_core.metadata.get_rec_keys(rec_file)
+        prefix, utc_datetime, local_date, local_time = wurb_core.metadata.get_rec_keys(
+            rec_file
+        )
         metadata = wurb_core.metadata.get_metadata(rec_file)
         annotations = metadata.get("annotations", [])
         annotation = annotations[0]
-
 
         rec_ids = []
         for rec in sorted(rec_files):
@@ -146,19 +147,28 @@ class RecordManager(object):
 
         if len(rec_files) > 0:
             for index, rec_id in enumerate(rec_ids):
+                # Use first record if not specified.
                 if record_id in ["", None]:
                     record_id = rec_id
+                # Always add last record during iteration.
                 last_record_id = rec_id
+                # Add firsts record during first iteration.
                 if first_record_id == "":
                     first_record_id = rec_id
+                # Save index for current record.
                 if record_id == rec_id:
-                            record_index = index + 1
+                    record_index = index + 1
+                # Save next record.
                 if next_record_id == "":
                     if rec_id > record_id:
                         next_record_id = rec_id
+                # Save previous record.
                 if rec_id < record_id:
                     previous_record_id = rec_id
-        
+            # If current record is the last one.
+            if record_id == last_record_id:
+                next_record_id = last_record_id
+
         record_data = {
             "sourceId": source_id,
             "nightId": night_id,
@@ -174,8 +184,32 @@ class RecordManager(object):
             "localDate": str(local_date),
             "localTime": str(local_time),
             "dateTimeUtc": str(utc_datetime),
+            "latitude": "N56.7890",
+            "longitude": "E12.3456",
             "quality": annotation.get("quality", ""),
-            "tags": str(annotation.get("tags", [])),
+            "tags": annotation.get("tags", ""),
             "comments": annotation.get("comments", ""),
+        }
+        return record_data
+
+    def set_rec_info(self, source_id, night_id, record_id, quality, tags, comments):
+        """ """
+        rec_file = self.get_rec_file(source_id, night_id, record_id)
+        metadata = wurb_core.metadata.get_metadata(rec_file)
+        annotations = metadata.get("annotations", [])
+        annotation = annotations[0]
+        annotation["quality"] = quality
+        annotation["tags"] = tags
+        annotation["comments"] = comments
+
+        wurb_core.metadata.write_metadata(rec_file, metadata)
+
+        record_data = {
+            "sourceId": source_id,
+            "nightId": night_id,
+            "recordId": record_id,
+            "quality": quality,
+            "tags": tags,
+            "comments": comments,
         }
         return record_data

@@ -1,5 +1,5 @@
 
-var byId = function (id) {
+function byId(id) {
     return document.getElementById(id);
 };
 

@@ -102,9 +102,7 @@ class Metadata(object):
             {
                 "user": "wurb-user",
                 "quality": "NA",
-                "tags": [
-                    # "",
-                ],
+                "tags": "",
                 "comments": "",
             },
         ]

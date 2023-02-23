@@ -75,7 +75,7 @@ async function getNights(sourceId) {
 
 
 async function getRecordInfo(sourceId, nightId, recordId) {
-    fetch("/annotations/record-info?" + new URLSearchParams({
+    fetch("/annotations/metadata?" + new URLSearchParams({
         sourceId: sourceId,
         nightId: nightId,
         recordId: recordId,
@@ -88,9 +88,54 @@ async function getRecordInfo(sourceId, nightId, recordId) {
             }
         })
         .then(function (json) {
-            console.info("Record info: ", json);
-            //     byId('hero-body-record-id').innerHTML = html;
-            //     byId("module-record-id").classList.add("is-inverted");
+            var shortInfo = "Recording " + json.index + " of " + json.maxIndex + ": "
+            byId("anno-recording-short-info").textContent = shortInfo;
+
+            byId("anno-metadata-record-file").textContent = json.recordFile
+            byId("anno-metadata-quality").textContent = json.quality
+            byId("anno-metadata-tags").textContent = json.tags
+            byId("anno-metadata-comments").textContent = json.comments
+            // byId("anno-metadata-prefix").textContent = json.prefix
+            byId("anno-metadata-local-date").textContent = json.localDate
+            byId("anno-metadata-local-time").textContent = json.localTime
+            // byId("anno-metadata-datetime-utc").textContent = json.dateTimeUtc
+            byId("anno-metadata-latitude").textContent = json.latitude
+            byId("anno-metadata-longitude").textContent = json.longitude
+
+            // Save all received data in client.
+            currentRecord = json
+            annoSetQuality(json.quality);
+            annoSetTags(json.tags);
+            annoSetComments(json.comments);
+
+        })
+        .catch(function (err) {
+            console.warn("Something went wrong.", err);
+        })
+};
+
+async function saveRecordInfo(sourceId, nightId, recordId, quality, tags, comments) {
+    fetch("/annotations/metadata?" + new URLSearchParams({
+        sourceId: sourceId,
+        nightId: nightId,
+        recordId: recordId,
+        quality: quality,
+        tags: tags,
+        comments: comments,
+    }), { method: "PUT" })
+        .then(function (response) {
+            if (response.ok) {
+                return response.json();
+            } else {
+                return Promise.reject(response);
+            }
+        })
+        .then(function (json) {
+            if (currentRecord.recordId == json.recordId) {
+                byId("anno-metadata-quality").textContent = json.quality
+                byId("anno-metadata-tags").textContent = json.tags
+                byId("anno-metadata-comments").textContent = json.comments
+            }
         })
         .catch(function (err) {
             console.warn("Something went wrong.", err);

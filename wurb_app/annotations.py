@@ -41,7 +41,7 @@ async def load_annotations_page(request: fastapi.Request):
     tags=["Annotations"],
     description="Get source directories for recordings.",
 )
-async def get_annotations_sources(request: fastapi.Request):
+async def get_recording_sources(request: fastapi.Request):
     """ """
     try:
         logger.debug("API called: get_source_dirs.")
@@ -70,7 +70,7 @@ async def get_recording_nights(
 
 
 @annotations_router.get(
-    "/annotations/record-info",
+    "/annotations/metadata",
     tags=["Annotations"],
     description="Get info for one sound recording.",
 )
@@ -86,6 +86,35 @@ async def get_recording_info(
             source_id=sourceId,
             night_id=nightId,
             record_id=recordId,
+        )
+        return JSONResponse(content=json_data)
+    except Exception as e:
+        logger.debug("Exception: get_recording_info: " + str(e))
+
+
+@annotations_router.put(
+    "/annotations/metadata",
+    tags=["Annotations"],
+    description="Set info for one sound recording.",
+)
+async def set_recording_info(
+    sourceId: str,
+    nightId: str,
+    recordId: str,
+    quality: str,
+    tags: str,
+    comments: str,
+):
+    """ """
+    try:
+        logger.debug("API called: get_recording_info.")
+        json_data = wurb_core.record_manager.set_rec_info(
+            source_id=sourceId,
+            night_id=nightId,
+            record_id=recordId,
+            quality=quality,
+            tags=tags,
+            comments=comments,
         )
         return JSONResponse(content=json_data)
     except Exception as e:
