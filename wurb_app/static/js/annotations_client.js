@@ -30,6 +30,16 @@ async function getSourceDirs() {
                 option.value = content.id;
                 select.appendChild(option);
             }
+
+
+            // During development.
+            byId("anno-select-source-id").value = "local";
+            var sourceId = byId("anno-select-source-id").value;
+            getNights(sourceId);
+
+
+
+
         })
         .catch(function (err) {
             console.warn("Something went wrong.", err);
@@ -67,6 +77,17 @@ async function getNights(sourceId) {
                 option.value = content.id;
                 select.appendChild(option);
             }
+
+
+            // During development.
+            byId("anno-select-night-id").value = "Taberg-1_2022-12-21";
+            var sourceId = byId("anno-select-source-id").value;
+            var nightId = byId("anno-select-night-id").value;
+            getRecordInfo(sourceId, nightId, "");
+
+
+
+
         })
         .catch(function (err) {
             console.warn("Something went wrong.", err);
@@ -88,7 +109,7 @@ async function getRecordInfo(sourceId, nightId, recordId) {
             }
         })
         .then(function (json) {
-            var shortInfo = "Recording " + json.index + " of " + json.maxIndex + ": "
+            var shortInfo = "(file " + json.index + " of " + json.maxIndex + ") "
             byId("anno-recording-short-info").textContent = shortInfo;
 
             byId("anno-metadata-record-file").textContent = json.recordFile
@@ -108,6 +129,48 @@ async function getRecordInfo(sourceId, nightId, recordId) {
             annoSetTags(json.tags);
             annoSetComments(json.comments);
 
+            // image_src = "http://localhost:8001/annotations/spectrogram?"
+            image_src = "/annotations/spectrogram?"
+            image_src += "sourceId="
+            image_src += sourceId
+            image_src += "&nightId="
+            image_src += nightId
+            image_src += "&recordId="
+            image_src += recordId
+            byId("anno-spectrogram-src-id").src = image_src;
+
+            //  file_src = "http://localhost:8001/annotations/file?"
+            file_src = "/annotations/file?"
+            file_src += "sourceId="
+            file_src += sourceId
+            file_src += "&nightId="
+            file_src += nightId
+            file_src += "&recordId="
+            file_src += recordId
+            byId("anno-download-id").href = file_src;
+            byId("anno-download-id").download = json.recordFile;
+
+            if (json.maxIndex <= 1) {
+                byId("anno-first-id").disabled = true;
+                byId("anno-previous-id").disabled = true;
+                byId("anno-next-id").disabled = true;
+                byId("anno-last-id").disabled = true;
+            } else {
+                if (json.index == 1) {
+                    byId("anno-first-id").disabled = true;
+                    byId("anno-previous-id").disabled = true;
+                } else {
+                    byId("anno-first-id").disabled = false;
+                    byId("anno-previous-id").disabled = false;
+                }
+                if (json.index == json.maxIndex) {
+                    byId("anno-next-id").disabled = true;
+                    byId("anno-last-id").disabled = true;
+                } else {
+                    byId("anno-next-id").disabled = false;
+                    byId("anno-last-id").disabled = false;
+                }
+            }
         })
         .catch(function (err) {
             console.warn("Something went wrong.", err);

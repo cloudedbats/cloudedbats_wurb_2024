@@ -213,3 +213,18 @@ class RecordManager(object):
             "comments": comments,
         }
         return record_data
+
+    def get_file_path(self, source_id, night_id, record_id):
+        """ """
+        file_path = str(self.get_rec_file(source_id, night_id, record_id))
+        return str(file_path)
+
+    def get_spectrogram_path(self, source_id, night_id, record_id):
+        """ """
+        img_path = str(self.get_rec_file(source_id, night_id, record_id))
+        img_path = img_path.replace(
+            "/Users/arnold/Documents/batsdev2023/wurb_recordings",
+            "/Users/arnold/Documents/batsdev2023/wurb_cache/spectrograms",
+        )
+        img_path = img_path.replace(".wav", "_SPECTROGRAM.jpg")
+        return str(img_path)

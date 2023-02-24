@@ -7,7 +7,7 @@
 import logging
 import fastapi
 import fastapi.templating
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
 from typing import Union
 import wurb_core
 
@@ -117,5 +117,55 @@ async def set_recording_info(
             comments=comments,
         )
         return JSONResponse(content=json_data)
+    except Exception as e:
+        logger.debug("Exception: get_recording_info: " + str(e))
+
+
+@annotations_router.get(
+    "/annotations/file",
+    tags=["Annotations"],
+    description="Get spectrogram as jpeg for one sound recording.",
+)
+async def get_file(
+    sourceId: str,
+    nightId: str,
+    recordId: str,
+):
+    """ """
+    try:
+
+        file_path = wurb_core.record_manager.get_file_path(
+            source_id=sourceId,
+            night_id=nightId,
+            record_id=recordId,
+        )
+
+        return FileResponse(file_path)
+
+    except Exception as e:
+        logger.debug("Exception: get_recording_info: " + str(e))
+
+
+@annotations_router.get(
+    "/annotations/spectrogram",
+    tags=["Annotations"],
+    description="Get spectrogram as jpeg for one sound recording.",
+)
+async def get_spectrogram(
+    sourceId: str,
+    nightId: str,
+    recordId: str,
+):
+    """ """
+    try:
+
+        spectrogram_path = wurb_core.record_manager.get_spectrogram_path(
+            source_id=sourceId,
+            night_id=nightId,
+            record_id=recordId,
+        )
+
+        return FileResponse(spectrogram_path)
+
     except Exception as e:
         logger.debug("Exception: get_recording_info: " + str(e))

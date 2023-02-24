@@ -1,8 +1,9 @@
 
-var currentRecord = {}
-var copyPasteBufferQuality = ""
-var copyPasteBufferTags = ""
-var copyPasteBufferComments = ""
+var currentRecord = {};
+var copyPasteBufferActive = false;
+var copyPasteBufferQuality = "";
+var copyPasteBufferTags = "";
+var copyPasteBufferComments = "";
 
 function XXXXX() {
     alert("XXXXX...");
@@ -100,6 +101,16 @@ function annoToggleViewDetails() {
     };
 }
 
+function annoEnableDisableButtons() {
+    if (copyPasteBufferActive == true) {
+        byId("anno-paste-id").disabled = false;
+        byId("anno-paste-next-id").disabled = false;
+    } else {
+        byId("anno-paste-id").disabled = true;
+        byId("anno-paste-next-id").disabled = true;
+    }
+}
+
 function annoFirst() {
     var sourceId = byId("anno-select-source-id").value;
     var nightId = byId("anno-select-night-id").value;
@@ -160,9 +171,17 @@ function annoQuickClear() {
     annoSetTags("");
     annoSetComments("");
     annoSaveAnnotations();
+    copyPasteBufferActive = false;
+    copyPasteBufferQuality = "";
+    copyPasteBufferTags = "";
+    copyPasteBufferComments = "";
+    annoEnableDisableButtons();
+
 }
 function annoQuickCopy() {
     annoCopyAnnotations();
+    copyPasteBufferActive = true;
+    annoEnableDisableButtons();
 }
 function annoQuickPaste() {
     annoPasteAnnotations();
@@ -188,6 +207,7 @@ function annoCopyAnnotations() {
     copyPasteBufferQuality = annoGetQuality();
     copyPasteBufferTags = annoGetTags();
     copyPasteBufferComments = annoGetComments();
+    copyPasteBufferActive = true;
 }
 
 function annoPasteAnnotations() {
