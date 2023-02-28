@@ -112,10 +112,20 @@ function annoEnableDisableButtons() {
 }
 
 function annoFirst() {
-    var sourceId = byId("anno-select-source-id").value;
-    var nightId = byId("anno-select-night-id").value;
-    var recordId = currentRecord.firstRecordId;
-    getRecordInfo(sourceId, nightId, recordId);
+    var textContent = byId("anno-first-id").textContent;
+    if (textContent == "Previous night") {
+        optionList = byId("anno-select-night-id");
+        optionIndex = optionList.selectedIndex;
+        optionList.selectedIndex = optionIndex - 1;
+        var sourceId = byId("anno-select-source-id").value;
+        var nightId = byId("anno-select-night-id").value;
+        getRecordInfo(sourceId, nightId, "");
+    } else {
+        var sourceId = byId("anno-select-source-id").value;
+        var nightId = byId("anno-select-night-id").value;
+        var recordId = currentRecord.firstRecordId;
+        getRecordInfo(sourceId, nightId, recordId);
+    }
 }
 function annoPrevious() {
     var sourceId = byId("anno-select-source-id").value;
@@ -130,10 +140,20 @@ function annoNext() {
     getRecordInfo(sourceId, nightId, recordId);
 }
 function annoLast() {
-    var sourceId = byId("anno-select-source-id").value;
-    var nightId = byId("anno-select-night-id").value;
-    var recordId = currentRecord.lastRecordId;
-    getRecordInfo(sourceId, nightId, recordId);
+    var textContent = byId("anno-last-id").textContent;
+    if (textContent == "Next night") {
+        optionList = byId("anno-select-night-id");
+        optionIndex = optionList.selectedIndex;
+        optionList.selectedIndex = optionIndex + 1;
+        var sourceId = byId("anno-select-source-id").value;
+        var nightId = byId("anno-select-night-id").value;
+        getRecordInfo(sourceId, nightId, "");
+    } else {
+        var sourceId = byId("anno-select-source-id").value;
+        var nightId = byId("anno-select-night-id").value;
+        var recordId = currentRecord.lastRecordId;
+        getRecordInfo(sourceId, nightId, recordId);
+    }
 }
 
 function annoSetQ0() {
@@ -167,15 +187,15 @@ function toggleTag(tagObject) {
 }
 
 function annoQuickClear() {
-    annoSetQuality("NA");
+    annoSetQuality("Not assigned");
     annoSetTags("");
     annoSetComments("");
     annoSaveAnnotations();
-    copyPasteBufferActive = false;
-    copyPasteBufferQuality = "";
-    copyPasteBufferTags = "";
-    copyPasteBufferComments = "";
-    annoEnableDisableButtons();
+    // copyPasteBufferActive = false;
+    // copyPasteBufferQuality = "";
+    // copyPasteBufferTags = "";
+    // copyPasteBufferComments = "";
+    // annoEnableDisableButtons();
 
 }
 function annoQuickCopy() {
@@ -231,7 +251,7 @@ function annoGetQuality() {
         quality = "Q3";
     }
     else if (byId("anno-not-assigned-id").checked == true) {
-        quality = "NA";
+        quality = "Not assigned";
     }
     return quality;
 }
@@ -249,7 +269,7 @@ function annoSetQuality(quality) {
     else if (quality == "Q3") {
         byId("anno-q3-id").checked = true;
     }
-    else if (quality == "NA") {
+    else if (quality == "Not assigned") {
         byId("anno-not-assigned-id").checked = true;
     }
 }
@@ -268,11 +288,11 @@ function annoGetTags() {
     if (byId("anno-QCF-id").classList.contains("is-inverted")) {
         tags += "QCF,"
     }
-    if (byId("anno-FM-H2-id").classList.contains("is-inverted")) {
-        tags += "FM-H2,"
+    if (byId("anno-FM+H2-id").classList.contains("is-inverted")) {
+        tags += "FM+H2,"
     }
-    if (byId("anno-QCF--FM-id").classList.contains("is-inverted")) {
-        tags += "QCF--FM,"
+    if (byId("anno-QCF+FM-id").classList.contains("is-inverted")) {
+        tags += "QCF+FM,"
     }
 
     if (byId("anno-Social-id").classList.contains("is-inverted")) {
@@ -316,15 +336,15 @@ function annoSetTags(tags_as_str) {
     } else {
         byId("anno-QCF-id").classList.remove("is-inverted")
     }
-    if (tags_as_str.includes(",FM-H2,")) {
-        byId("anno-FM-H2-id").classList.add("is-inverted")
+    if (tags_as_str.includes(",FM+H2,")) {
+        byId("anno-FM+H2-id").classList.add("is-inverted")
     } else {
-        byId("anno-FM-H2-id").classList.remove("is-inverted")
+        byId("anno-FM+H2-id").classList.remove("is-inverted")
     }
-    if (tags_as_str.includes(",QCF--FM,")) {
-        byId("anno-QCF--FM-id").classList.add("is-inverted")
+    if (tags_as_str.includes(",QCF+FM,")) {
+        byId("anno-QCF+FM-id").classList.add("is-inverted")
     } else {
-        byId("anno-QCF--FM-id").classList.remove("is-inverted")
+        byId("anno-QCF+FM-id").classList.remove("is-inverted")
     }
 
     if (tags_as_str.includes(",Social,")) {

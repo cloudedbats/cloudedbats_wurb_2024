@@ -109,7 +109,7 @@ async function getRecordInfo(sourceId, nightId, recordId) {
             }
         })
         .then(function (json) {
-            var shortInfo = "(file " + json.index + " of " + json.maxIndex + ") "
+            var shortInfo = " for file " + json.index + " of " + json.maxIndex
             byId("anno-recording-short-info").textContent = shortInfo;
 
             byId("anno-metadata-record-file").textContent = json.recordFile
@@ -150,24 +150,40 @@ async function getRecordInfo(sourceId, nightId, recordId) {
             byId("anno-download-id").href = file_src;
             byId("anno-download-id").download = json.recordFile;
 
+
+            byId("anno-first-id").textContent = "First"
+            byId("anno-last-id").textContent = "Last"
+            byId("anno-first-id").disabled = false;
+            byId("anno-previous-id").disabled = false;
+            byId("anno-next-id").disabled = false;
+            byId("anno-last-id").disabled = false;
+            var optionList = byId("anno-select-night-id");
+            var optionIndex = optionList.selectedIndex;
             if (json.maxIndex <= 1) {
-                byId("anno-first-id").disabled = true;
                 byId("anno-previous-id").disabled = true;
                 byId("anno-next-id").disabled = true;
-                byId("anno-last-id").disabled = true;
-            } else {
-                if (json.index == 1) {
-                    byId("anno-first-id").disabled = true;
-                    byId("anno-previous-id").disabled = true;
-                } else {
+                if (optionIndex > 1) {
+                    byId("anno-first-id").textContent = "Previous night"
                     byId("anno-first-id").disabled = false;
-                    byId("anno-previous-id").disabled = false;
                 }
-                if (json.index == json.maxIndex) {
-                    byId("anno-next-id").disabled = true;
-                    byId("anno-last-id").disabled = true;
-                } else {
-                    byId("anno-next-id").disabled = false;
+                if (optionIndex < optionList.options.length -1) {
+                    byId("anno-last-id").textContent = "Next night"
+                    byId("anno-last-id").disabled = false;
+                }
+            }
+            else if (json.index == 1) {
+                byId("anno-previous-id").disabled = true;
+                byId("anno-first-id").disabled = true;
+                if (optionIndex > 1) {
+                    byId("anno-first-id").textContent = "Previous night"
+                    byId("anno-first-id").disabled = false;
+                }
+            }
+            else if (json.index == json.maxIndex) {
+                byId("anno-next-id").disabled = true;
+                byId("anno-last-id").disabled = true;
+                if (optionIndex < optionList.options.length - 1) {
+                    byId("anno-last-id").textContent = "Next night"
                     byId("anno-last-id").disabled = false;
                 }
             }

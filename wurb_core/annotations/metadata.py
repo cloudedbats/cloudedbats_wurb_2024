@@ -101,7 +101,7 @@ class Metadata(object):
         metadata["annotations"] = [
             {
                 "user": "wurb-user",
-                "quality": "NA",
+                "quality": "Not assigned",
                 "tags": "",
                 "comments": "",
             },

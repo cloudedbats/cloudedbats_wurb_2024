@@ -94,26 +94,26 @@
                                                 <td></td>
                                             </tr> -->
                                             <tr>
-                                                <td class="has-text-right">File</td>
-                                                <th colspan="3"><span id="anno-metadata-record-file"></span></th>
+                                                <td class="has-text-right" style="white-space: nowrap;">File</td>
+                                                <th colspan="3" style="white-space: nowrap;"><span  style="white-space: nowrap;" id="anno-metadata-record-file"></span></th>
                                             </tr>
                                             <tr>
-                                                <td class="has-text-right">Quality</td>
-                                                <th colspan="3"><span id="anno-metadata-quality"></span></th>
+                                                <td class="has-text-right" style="white-space: nowrap;">Quality</td>
+                                                <th colspan="3" style="white-space: nowrap;"><span id="anno-metadata-quality"></span></th>
                                             </tr>
                                             <tr>
-                                                <td class="has-text-right">Tags</td>
-                                                <th colspan="3"><span id="anno-metadata-tags"></span></th>
+                                                <td class="has-text-right" style="white-space: nowrap;">Tags</td>
+                                                <th colspan="3" style="white-space: nowrap;"><span id="anno-metadata-tags"></span></th>
                                             </tr>
                                             <tr>
-                                                <td class="has-text-right">Comments</td>
-                                                <th colspan="3"><span id="anno-metadata-comments"></span></th>
+                                                <td class="has-text-right" style="white-space: nowrap;">Comments</td>
+                                                <th colspan="3" style="white-space: nowrap;"><span id="anno-metadata-comments"></span></th>
                                             </tr>
                                             <tr>
-                                                <td class="has-text-right">Local date</td>
-                                                <th colspan="1"><span id="anno-metadata-local-date"></span></th>
-                                                <td class="has-text-right">Latitude</td>
-                                                <th colspan="1"><span id="anno-metadata-latitude"></span></th>
+                                                <td class="has-text-right" style="white-space: nowrap;">Local date</td>
+                                                <th colspan="1" style="white-space: nowrap;"><span id="anno-metadata-local-date"></span></th>
+                                                <td class="has-text-right" style="white-space: nowrap;">Latitude</td>
+                                                <th colspan="1" style="white-space: nowrap; width: 90%;"><span id="anno-metadata-latitude"></span></th>
                                                 <!-- <td>Prefix</td>
                                                 <th colspan="1"><span id="anno-metadata-prefix"></span></th> -->
                                             </tr>
@@ -124,10 +124,10 @@
                                                 <td></td>
                                             </tr> -->
                                             <tr>
-                                                <td class="has-text-right">Local time</td>
-                                                <th colspan="1"><span id="anno-metadata-local-time"></span></th>
-                                                <td class="has-text-right">Longitude</td>
-                                                <th colspan="1"><span id="anno-metadata-longitude"></span></th>
+                                                <td class="has-text-right" style="white-space: nowrap;">Local time</td>
+                                                <th colspan="1" style="white-space: nowrap;"><span id="anno-metadata-local-time"></span></th>
+                                                <td class="has-text-right" style="white-space: nowrap;">Longitude</td>
+                                                <th colspan="1" style="white-space: nowrap; width: 90%;"><span id="anno-metadata-longitude"></span></th>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -187,7 +187,7 @@
                         <div class="field pt-2">
                             <div class="label">
                                 <label class="label">
-                                    Quality and tags
+                                    Quality, tags and comments
                                     <span id="anno-recording-short-info"></span>
                                 </label>
                             </div>
@@ -239,10 +239,10 @@
                                     class="button is-rounded is-small has-text-weight-bold is-info">FM-QCF</button>
                                 <button id="anno-QCF-id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">QCF</button>
-                                <button id="anno-FM-H2-id" onclick="toggleTag(this)"
-                                    class="button is-rounded is-small has-text-weight-bold is-info">FM-H2</button>
-                                <button id="anno-QCF--FM-id" onclick="toggleTag(this)"
-                                    class="button is-rounded is-small has-text-weight-bold is-info">QCF--FM</button>
+                                <button id="anno-FM+H2-id" onclick="toggleTag(this)"
+                                    class="button is-rounded is-small has-text-weight-bold is-info">FM+H2</button>
+                                <button id="anno-QCF+FM-id" onclick="toggleTag(this)"
+                                    class="button is-rounded is-small has-text-weight-bold is-info">QCF+FM</button>
 
                             </div>
                         </div>
@@ -281,9 +281,9 @@
                             </div>
                         </div>
 
-                        <div class="field">
+                        <!-- <div class="field">
                             <label class="label">Comments</label>
-                        </div>
+                        </div> -->
                         <div class="field">
                             <p class="control">
                                 <input class="input" type="text" id="anno-comments-id"
