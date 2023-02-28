@@ -18,127 +18,90 @@
 
 <body>
 
-    <div class="tile is-ancestor is-vertical py-2">
-        <div class="tile is-parent px---0">
-            <article class="tile is-child box">
+    <div class="tile is-ancestor is-vertical m-0">
+        <div class="tile is-parent">
+            <article class="tile is-child box py-1">
                 <div class="content is-large">
 
                     <div class="field">
                         <div class="container is-fluid">
                             <div class="is-pulled-right">
-                                <button class="button is-rounded is-small">
-                                    <strong>Show settings</strong>
+                                <button class="button is-rounded is-small has-text-weight-bold"
+                                    onclick="adminToggleSettings()">
+                                    <span id="admin-show-settings-text-id">Show settings</span>
                                 </button>
                             </div>
                         </div>
                     </div>
 
                     <p class="title is-4">
-                        File administration
+                        Administration
                     </p>
 
-                    <section class="section has-background-grey-lighter p-2 is---hidden">
+                    <section id="admin-boddy-id" class="section has-background-grey-lighter p-2">
 
                         <div class="field">
-                            <label class="label">Select</label>
+                            <label class="label">Source&nbsp;folder&nbsp;/&nbsp;monitoring&nbsp;night</label>
                         </div>
                         <div class="field is-grouped">
                             <div class="control">
-                                <div class="select is----small is-rounded is-info">
-                                    <select>
-                                        <option value="drive-internal">Internal SD card</option>
-                                        <option value="drive-usb">USB: Memory</option>
+                                <div class="select is-rounded is-small has-text-weight-bold is-info">
+                                    <select id="admin-select-source-id" onchange="adminSourceChanged()">
+                                        <option value="select">Select:</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="control">
+                                <div class="select is-rounded is-small has-text-weight-bold is-info">
+                                    <select id="admin-select-night-id" onchange="adminNightChanged()">
+                                        <option value="select">Select:</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
 
                         <div class="field">
-                            <label class="label">Monitoring&nbsp;nights</label>
+                            <!-- <label class="label">Select</label> -->
+                            <div class="container is-fluid m-2">
+                                <div class="buttons is-centered">
+                                    <button id="admin-view-metadata-button-id" onclick="adminToggleViewMetadata()"
+                                        class="button is-rounded is-small has-text-weight-bold is-info is-inverted">Data</button>
+                                    <button id="admin-view-spectrogram-button-id" onclick="adminToggleViewMap()"
+                                        class="button is-rounded is-small has-text-weight-bold is-info is---inverted">Map</button>
+                                </div>
+                            </div>
                         </div>
 
-
-                        <div class="field">
+                        <div id="admin-view-metadata-id" class="field is---hidden">
                             <div class="control">
-
-                                <div class="table-container">
-
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th>Row</th>
-                                                <th>Monitoring event</th>
-                                                <th>Recordings</th>
-                                                <th>View content</th>
-                                                <th>Download</th>
-                                                <th>Delete</th>
-                                            </tr>
-                                        </thead>
+                                <div class="table-container mx-5 my--2 p-2">
+                                    <table class="table has-background-white-ter is-striped is-size-7">
                                         <tbody>
                                             <tr>
-                                                <th>1</th>
-                                                <th>Taberg_2022-12-30</th>
-                                                <th>81</th>
-                                                <th><button class="button is-small is-rounded is-info"><strong>View
-                                                            content</strong></button>
-                                                <th><button
-                                                        class="button is-small is-rounded is-info"><strong>Download</strong></button>
-                                                </th>
-                                                <th><button
-                                                        class="button is-small is-rounded is-info"><strong>Delete</strong></button>
-                                                </th>
+                                                <td class="has-text-right" style="white-space: nowrap;">Monitoring night
+                                                </td>
+                                                <th colspan="3" style="width: 90%;"><span
+                                                        id="admin-metadata-record-file"></span></th>
                                             </tr>
                                             <tr>
-                                                <th>2</th>
-                                                <th>Taberg_2022-12-31</th>
-                                                <th>70</th>
-                                                <th><button class="button is-small is-rounded is-info"><strong>View
-                                                            content</strong></button>
-                                                <th><button
-                                                        class="button is-small is-rounded is-info"><strong>Download</strong></button>
-                                                </th>
-                                                <th><button
-                                                        class="button is-small is-rounded is-info"><strong>Delete</strong></button>
-                                                </th>
+                                                <td class="has-text-right" style="white-space: nowrap;">Directory path
+                                                </td>
+                                                <th colspan="3"><span id="admin-metadata-record-file"></span></th>
                                             </tr>
                                             <tr>
-                                                <th>3</th>
-                                                <th>Taberg_2023-01-01</th>
-                                                <th>3</th>
-                                                <th><button class="button is-small is-rounded is-info"><strong>View
-                                                            content</strong></button>
-                                                <th><button
-                                                        class="button is-small is-rounded is-info"><strong>Download</strong></button>
-                                                </th>
-                                                <th><button
-                                                        class="button is-small is-rounded is-info"><strong>Delete</strong></button>
-                                                </th>
+                                                <td class="has-text-right" style="white-space: nowrap;">Number of sound
+                                                    files</td>
+                                                <th colspan="3"><span id="admin-metadata-record-file"></span></th>
                                             </tr>
                                             <tr>
-                                                <th>4</th>
-                                                <th>Taberg_2023-01-02</th>
-                                                <th>5</th>
-                                                <th><button class="button is-small is-rounded is-info"><strong>View
-                                                            content</strong></button>
-                                                <th><button
-                                                        class="button is-small is-rounded is-info"><strong>Download</strong></button>
-                                                </th>
-                                                <th><button
-                                                        class="button is-small is-rounded is-info"><strong>Delete</strong></button>
-                                                </th>
+                                                <td class="has-text-right" style="white-space: nowrap;">Number of Q0
+                                                    (trash)</td>
+                                                <th colspan="3"><span id="admin-metadata-quality"></span></th>
                                             </tr>
                                             <tr>
-                                                <th>5</th>
-                                                <th>Taberg_2023-01-03</th>
-                                                <th>10</th>
-                                                <th><button class="button is-small is-rounded is-info"><strong>View
-                                                            content</strong></button>
-                                                <th><button
-                                                        class="button is-small is-rounded is-info"><strong>Download</strong></button>
-                                                </th>
-                                                <th><button
-                                                        class="button is-small is-rounded is-info"><strong>Delete</strong></button>
-                                                </th>
+                                                <td class="has-text-right" style="white-space: nowrap;">Number of "Not
+                                                    Assigned"</td>
+                                                <th colspan="3"><span id="admin-metadata-tags"></span></th>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -146,38 +109,160 @@
                             </div>
                         </div>
 
+                        <div class="container">
+                            <div class="buttons is-centered">
+                                <button id="admin-previous-id" onclick="adminPrevious()"
+                                    class="button is-rounded is-small has-text-weight-bold is-info">Previous</button>
+                                <button id="admin-next-id" onclick="adminNext()"
+                                    class="button is-rounded is-small has-text-weight-bold is-info">Next</button>
+                                <button id="admin-last-id" onclick="adminUpdate()"
+                                    class="button is-rounded is-small has-text-weight-bold is-info">Update</button>
+                            </div>
+                        </div>
+
+                        <div class="field pt-2">
+                            <div class="label">
+                                <label class="label">
+                                    Comments for monitoring night
+                                    <span id="admin-recording-short-info"></span>
+                                </label>
+                            </div>
+                        </div>
+
+
+                        <!-- <div class="field">
+                            <label class="label">Comments</label>
+                        </div> -->
                         <div class="field">
-                            <label class="label">Commands</label>
+                            <p class="control">
+                                <input class="input" type="text" id="admin-comments-id"
+                                    placeholder="Comments on deployment/night" onchange="adminSaveComments();">
+                            </p>
+                        </div>
+
+
+
+                        <div class="field mt-4">
+                            <label class="label">Cleanup commands</label>
                         </div>
                         <div class="container">
                             <div class="buttons">
                                 <button id="visual-feedback-auto-id" onclick="fetchXXX()"
                                     class="button is-small is-rounded is-info">
-                                    <strong>Download all</strong></button>
+                                    <strong>Remove all Q0 (trash)</strong>
+                                </button>
                                 <button id="visual-feedback-auto-id" onclick="fetchXXX()"
-                                    class="button is-small is-rounded is-info"><strong>Delete all</strong></button>
+                                    class="button is-small is-rounded is-info">
+                                    <strong>Remove all "Not Assigned"</strong>
+                                </button>
                             </div>
                         </div>
+
+
+
+                        <div class="field mt-4">
+                            <label class="label">Rename commands</label>
+                        </div>
+                        <div class="container">
+                            <div class="buttons">
+                                <button id="visual-feedback-auto-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info">
+                                    <strong>Rename sound files</strong>
+                                </button>
+                                <button id="visual-feedback-auto-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info">
+                                    <strong>Adjust positions</strong>
+                                </button>
+                            </div>
+                        </div>
+
+
+
+                        <div class="field mt-4">
+                            <label class="label">Report commands</label>
+                        </div>
+                        <div class="container">
+                            <div class="buttons">
+                                <button id="visual-feedback-auto-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info">
+                                    <strong>Create report</strong>
+                                </button>
+                                <button id="visual-feedback-auto-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info">
+                                    <strong>Preview report</strong>
+                                </button>
+                                <button id="visual-feedback-auto-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info">
+                                    <strong>Download latest report</strong>
+                                </button>
+                            </div>
+                        </div>
+
+
+
+                        <div class="field mt-4">
+                            <label class="label">Copy commands</label>
+                        </div>
+                        <div class="container">
+                            <div class="buttons">
+                                <button id="visual-feedback-auto-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info">
+                                    <strong>Copy monitoring night</strong>
+                                </button>
+                                <button id="visual-feedback-auto-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info">
+                                    <strong>Copy all monitoring nights</strong>
+                                </button>
+                            </div>
+                        </div>
+
+
+
+                        <div class="field mt-4">
+                            <label class="label">Delete commands</label>
+                        </div>
+                        <div class="container mb-4">
+                            <div class="buttons">
+                                <button id="visual-feedback-auto-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info">
+                                    <strong>Delete monitoring night</strong>
+                                </button>
+                                <button id="visual-feedback-auto-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded is-info">
+                                    <strong>Delete all monitoring nights</strong>
+                                </button>
+                            </div>
+                        </div>
+
+
+
                     </section>
 
-
-                    <section class="section p-2 is-hidden has-background-grey-light">
+                    <section id="admin-settings-id" class="section p-2 has-background-grey-light is-hidden">
                         <div class="field">
                             <div class="container is-fluid">
                                 <div class="is-pulled-right">
-                                    <button class="delete is-large m-2"></button>
+                                    <button class="delete is-large m-2" onclick="adminToggleSettings()"></button>
                                 </div>
                             </div>
                         </div>
                         <div class="field">
                             <label class="title is-4">Settings</label>
                         </div>
+
+                        <div class="field">
+                            <label class="label">Filter&nbsp;on&nbsp;quality</label>
+                        </div>
+
                     </section>
+
+
 
                 </div>
             </article>
         </div>
     </div>
+
 </body>
 
 </html>
