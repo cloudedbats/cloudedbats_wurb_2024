@@ -1,6 +1,412 @@
-<div class="tile is-parent is-vertical">
-    <article class="tile is-child box has-background-grey-lighter">
-        <p class="title is-4">Record</p>
-        <p class="subtitle is-5">Not implemented yet...</p>
-    </article>
-</div>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CloudedBats - WURB 2023</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+
+    <link rel="stylesheet" href="../static/css/wurb_slider.css">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/wurb_slider.css') }}">
+    <script src="../static/js/main.js"></script>
+</head>
+
+<body>
+
+    <div class="tile is-ancestor is-vertical m-0">
+        <div class="tile is-parent px---0">
+            <article class="tile is-child box py-1">
+                <div class="content">
+
+                    <div class="field">
+                        <div class="container is-fluid">
+                            <div class="is-pulled-right">
+                                <button class="button is-rounded is-small has-text-weight-bold"
+                                    onclick="liveAudioToggleSettings()">
+                                    <span id="liveaudio-show-settings-text-id">Show settings</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="title is-4">
+                        WURB Recorder
+                    </p>
+
+                    <section id="liveaudio-boddy-id" class="section has-background-grey-lighter p-4">
+
+                        <div id="rec-view-metadata-id" class="is---hidden">
+                            <div class="table-container m-0">
+                                <table class="table has-background-grey-lighter m--0">
+                                    <tbody>
+                                        <tr>
+                                            <td class="p-1">
+                                                <div class="label has-text-left pt-3">
+                                                    Mode
+                                                </div>
+                                            </td>
+                                            <td colspan="1" style="width: 100%;">
+                                                <div class="select is-rounded is-info is-size-6">
+                                                    <select id="detector_mode_select_id"
+                                                        onchange="modeSelectOnChange(update_detector=true)">
+                                                        <option value="mode-off">
+                                                            Microphone - Off
+                                                        </option>
+                                                        <option disabled>
+                                                            ───────────
+                                                        </option>
+                                                        <option value="mode-on">
+                                                            Recording - On (continuously)
+                                                        </option>
+                                                        <option value="mode-auto">
+                                                            Recording - Auto detection
+                                                        </option>
+                                                        <option value="mode-manual">
+                                                            Recording - Manual triggering
+                                                        </option>
+                                                        <option disabled>
+                                                            ───────────
+                                                        </option>
+                                                        <option value="mode-scheduler-on">
+                                                            Scheduler - Recording on
+                                                        </option>
+                                                        <option value="mode-scheduler-auto">
+                                                            Scheduler - Auto detection
+                                                        </option>
+                                                        <option disabled>
+                                                            ───────────
+                                                        </option>
+                                                        <option value="load-user-default">
+                                                            Load "User default" settings
+                                                        </option>
+                                                        <option value="load-start-up">
+                                                            Load "Start-up" settings
+                                                        </option>
+                                                        <option value="load-factory-default">
+                                                            Load "Factory default"
+                                                            settings
+                                                        </option>
+                                                        <option disabled>
+                                                            ───────────
+                                                        </option>
+                                                        <option value="detector-power-off">
+                                                            Detector - Power off...
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div id="div_manual_triggering_id"
+                                style="visibility:hidden; overflow:hidden; height:0; width:0;">
+                                <div style="border:1px solid white; margin: 0px; padding: 25px;">
+                                    <div class="field is-grouped is-grouped-centered">
+                                        <button style="margin:5px;" class="button is-info is-rounded is-large"
+                                            onclick="manualTrigger()">
+                                            Trigger
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="div_detector_power_off_id"
+                                style="visibility:hidden; overflow:hidden; height:0; width:0;">
+                                <div style="border:1px solid white; margin: 0px; padding: 25px;">
+                                    <div class="field is-grouped is-grouped-centered">
+                                        <button style="margin:5px;" class="button is-small is-rounded is-info"
+                                            onclick="raspberryPiControl('rpi_shutdown')">
+                                            Shutdown
+                                        </button>
+                                        <button style="margin:5px;" class="button is-small is-rounded is-info"
+                                            onclick="raspberryPiControl('rpi_reboot')">
+                                            Restart
+                                        </button>
+                                        <button style="margin:5px;" class="button is-small is-rounded is-info"
+                                            onclick="raspberryPiControl('rpi_cancel')">
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="table-container mb-2">
+                                <table class="table has-background-grey-lighter">
+                                    <tbody>
+                                        <tr>
+                                            <td class="p-1">
+                                                <div class="label has-text-left">
+                                                    Status
+                                                </div>
+                                            </td>
+                                            <td colspan="1" style="width: 100%;" class="p-1">
+                                                <span id="detector_status_id">Waiting...</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-1">
+                                                <div class="label has-text-left" style="white-space: nowrap;">
+                                                    (row-2)
+                                                </div>
+                                            </td>
+                                            <td colspan="1" style="width: 100%;" class="p-1">
+                                                <span id="detector_status_row2_id"></span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="table-container m-0" style="height: 10em; overflow: auto;">
+                            <table id="detector_log_table_id"
+                                class="table is-fullwidth is-bordered is-striped has-background-white-ter is-size-7">
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            </table>
+                        </div>
+
+
+
+                        <div class="table-container m-0">
+                            <table class="table has-background-grey-lighter">
+                                <tbody>
+                                    <tr>
+                                        <td class="p-1 pt-3">
+                                            <div class="label has-text-left" style="white-space: nowrap;">
+                                                Directory name
+                                            </div>
+                                        </td>
+                                        <td colspan="1" style="width: 30%;" class="p-1">
+                                            <div class="control">
+                                                <input id="settings_file_directory_id" class="input" value="Station-1">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-1">
+                                            <div class="label has-text-left pt-3" style="white-space: nowrap;">
+                                                Automatic date
+                                            </div>
+                                        </td>
+                                        <td colspan="1" style="width: 30%;">
+                                            <div class="select is-rounded is-info is-size-6">
+                                                <select id="settings_file_directory_date_option_id">
+                                                    <option value="date-not-used">Not used</option>
+                                                    <option value="date-pre-true">Add before - Use date
+                                                    </option>
+                                                    <option value="date-pre-before">Add before - Use date before
+                                                        midnight
+                                                    </option>
+                                                    <option value="date-pre-after">Add before - Use date after
+                                                        midnight
+                                                    </option>
+                                                    <option value="date-post-true">Add after - Use date
+                                                    </option>
+                                                    <option value="date-post-before">Add after - Use date before
+                                                        midnight
+                                                    </option>
+                                                    <option value="date-post-after">Add after - Use date after
+                                                        midnight
+                                                    </option>
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-1 pt-3">
+                                            <div class="label has-text-left" style="white-space: nowrap;">
+                                                Sound file prefix
+                                            </div>
+                                        </td>
+                                        <td colspan="1" style="width: 30%;" class="p-1">
+                                            <div class="field">
+                                                <div class="control">
+                                                    <input id="settings_filename_prefix_id" class="input" value="wurb">
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td colspan="1" style="width: 100%;" class="p-1">
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-1 pt-3">
+                                            <div class="label has-text-left" style="white-space: nowrap;">
+                                                Comments
+                                            </div>
+                                        </td>
+                                        <td colspan="2" style="width: 30%;" class="p-1">
+                                            <div class="field">
+                                                <div class="control">
+                                                    <input id="settings_filename_prefix_id" class="input"
+                                                        placeholder="Comments on place/night">
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="field is-grouped is-grouped-centered pt-2">
+                            <button style="margin:5px;" class="button is-small is-rounded is-info has-text-weight-bold"
+                                onclick="raspberryPiControl('rpi_status')">
+                                Show status
+                            </button>
+                            <button style="margin:5px;" class="button is-small is-rounded is-info has-text-weight-bold"
+                                onclick="setDetectorTime()">
+                                Set time
+                            </button>
+                        </div>
+
+                    </section>
+
+                    </section>
+                </div>
+            </article>
+        </div>
+
+        <div class="tile is-parent px---0">
+            <article class="tile is-child box">
+                <div class="content">
+
+                    <div class="field">
+                        <div class="container is-fluid">
+                            <div class="is-pulled-right">
+                                <button class="button is-rounded is-small has-text-weight-bold"
+                                    onclick="liveVisualToggleSettings()">
+                                    <span id="livevisual-show-settings-text-id">Show settings</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="title is-4">
+                        Geographic location
+                    </p>
+
+                    <section id="liveaudio-boddy-id" class="section has-background-grey-lighter p-4">
+
+                        <div id="rec-view-metadata-id" class="is---hidden">
+                            <div class="table-container m-0">
+                                <table class="table has-background-grey-lighter m--0">
+                                    <tbody>
+                                        <tr>
+                                            <td class="p-1">
+                                                <div class="label has-text-left pt-3">
+                                                    Source
+                                                </div>
+                                            </td>
+                                            <td colspan="1" style="width: 30%;">
+                                                <div class="select is-rounded is-info is-size-6">
+                                                    <select id="location_source_select_id"
+                                                        onchange="geoLocationSourceOnChange(update_detector=true)">
+                                                        <option value="geo-not-used">Not used</option>
+                                                        <option value="geo-manual">Manually entered</option>
+                                                        <!-- <option value="geo-client-gps">Location from client unit -->
+                                                        <!-- </option> -->
+                                                        <option value="geo-gps">GPS
+                                                        <option value="geo-gps-or-manual">GPS or Manually entered
+                                                        </option>
+                                                        <option value="geo-last-gps-or-manual">GPS or Last found GPS or
+                                                            Manually
+                                                            entered
+                                                        </option>
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-1 pb-5">
+                                                <div class="label has-text-left">
+                                                    Status
+                                                </div>
+                                            </td>
+                                            <td colspan="1" style="width: 30%;" class="p-1">
+                                                <span id="location_status_id">No info...</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-1 pt-3">
+                                                <div class="label has-text-left">
+                                                    Latitude
+                                                </div>
+                                            </td>
+                                            <td colspan="1" style="width: 30%;" class="p-1">
+                                                <div class="control">
+                                                    <input id="latitude_dd_id" class="input" type="number" step="0.0001"
+                                                        min="-90.0" max="90.0" placeholder="15.6789">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-1 pt-3">
+                                                <div class="label has-text-left">
+                                                    Longitude
+                                                </div>
+                                            </td>
+                                            <td colspan="1" style="width: 30%;" class="p-1">
+                                                <div class="field">
+                                                    <div class="control">
+                                                        <input id="longitude_dd_id" class="input" type="number"
+                                                            step="0.0001" min="-180.0" max="180.0"
+                                                            placeholder="12.3456">
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td colspan="1" style="width: 100%;" class="p-1">
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="buttons is-centered">
+                                <button style="margin:5px;" id="location_button_id"
+                                    class="button is-info is-small is-rounded has-text-weight-bold"
+                                    onclick="saveLocation()">
+                                    <span id="location_button_text_id">Save</span>
+                                </button>
+                            </div>
+                    </section>
+
+                    <section id="livevisual-settings-id" class="section p-2 has-background-grey-light is-hidden">
+                        <div class="field">
+                            <div class="container is-fluid">
+                                <div class="is-pulled-right">
+                                    <button class="delete is-large m-2" onclick="liveVisualToggleSettings()"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="title is-4">Settings</label>
+                        </div>
+                    </section>
+
+                </div>
+            </article>
+        </div>
+
+</body>
+
+</html>
