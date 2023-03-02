@@ -151,8 +151,8 @@ async function getRecordInfo(sourceId, nightId, recordId) {
             byId("anno-download-id").download = json.recordFile;
 
 
-            byId("anno-first-id").textContent = "First"
-            byId("anno-last-id").textContent = "Last"
+            byId("anno-first-text-id").textContent = "First"
+            byId("anno-last-text-id").textContent = "Last"
             byId("anno-first-id").disabled = false;
             byId("anno-previous-id").disabled = false;
             byId("anno-next-id").disabled = false;
@@ -163,11 +163,11 @@ async function getRecordInfo(sourceId, nightId, recordId) {
                 byId("anno-previous-id").disabled = true;
                 byId("anno-next-id").disabled = true;
                 if (optionIndex > 1) {
-                    byId("anno-first-id").textContent = "Previous night"
+                    byId("anno-first-text-id").textContent = "Previous night"
                     byId("anno-first-id").disabled = false;
                 }
-                if (optionIndex < optionList.options.length -1) {
-                    byId("anno-last-id").textContent = "Next night"
+                if (optionIndex < optionList.options.length - 1) {
+                    byId("anno-last-text-id").textContent = "Next night"
                     byId("anno-last-id").disabled = false;
                 }
             }
@@ -175,7 +175,7 @@ async function getRecordInfo(sourceId, nightId, recordId) {
                 byId("anno-previous-id").disabled = true;
                 byId("anno-first-id").disabled = true;
                 if (optionIndex > 1) {
-                    byId("anno-first-id").textContent = "Previous night"
+                    byId("anno-first-text-id").textContent = "Previous night"
                     byId("anno-first-id").disabled = false;
                 }
             }
@@ -183,7 +183,7 @@ async function getRecordInfo(sourceId, nightId, recordId) {
                 byId("anno-next-id").disabled = true;
                 byId("anno-last-id").disabled = true;
                 if (optionIndex < optionList.options.length - 1) {
-                    byId("anno-last-id").textContent = "Next night"
+                    byId("anno-last-text-id").textContent = "Next night"
                     byId("anno-last-id").disabled = false;
                 }
             }

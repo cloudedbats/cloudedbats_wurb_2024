@@ -38,7 +38,7 @@
                         Administration
                     </p>
 
-                    <section id="admin-boddy-id" class="section has-background-grey-lighter p-2">
+                    <section id="admin-body-id" class="section has-background-grey-lighter p-2">
 
                         <div class="field">
                             <label class="label">Source&nbsp;folder&nbsp;/&nbsp;monitoring&nbsp;night</label>
@@ -65,9 +65,17 @@
                             <div class="container is-fluid m-2">
                                 <div class="buttons is-centered">
                                     <button id="admin-view-metadata-button-id" onclick="adminToggleViewMetadata()"
-                                        class="button is-rounded is-small has-text-weight-bold is-info is-inverted">Data</button>
+                                        class="button is-rounded is-small has-text-weight-bold is-info is-inverted">
+                                        Data
+                                    </button>
                                     <button id="admin-view-spectrogram-button-id" onclick="adminToggleViewMap()"
-                                        class="button is-rounded is-small has-text-weight-bold is-info is---inverted">Map</button>
+                                        class="button is-rounded is-small has-text-weight-bold is-info is---inverted">
+                                        Map
+                                    </button>
+                                    <button id="admin-view-spectrogram-button-id" onclick="adminToggleViewMap()"
+                                        class="button is-rounded is-small has-text-weight-bold is-info is---inverted">
+                                        Sound files
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -112,9 +120,10 @@
                         <div class="container">
                             <div class="buttons is-centered">
                                 <button id="admin-previous-id" onclick="adminPrevious()"
-                                    class="button is-rounded is-small has-text-weight-bold is-info">Previous</button>
+                                    class="button is-rounded is-small has-text-weight-bold is-info">Previous
+                                    night</button>
                                 <button id="admin-next-id" onclick="adminNext()"
-                                    class="button is-rounded is-small has-text-weight-bold is-info">Next</button>
+                                    class="button is-rounded is-small has-text-weight-bold is-info">Next night</button>
                                 <button id="admin-last-id" onclick="adminUpdate()"
                                     class="button is-rounded is-small has-text-weight-bold is-info">Update</button>
                             </div>
@@ -147,13 +156,13 @@
                         </div>
                         <div class="container">
                             <div class="buttons">
-                                <button id="visual-feedback-auto-id" onclick="fetchXXX()"
-                                    class="button is-small is-rounded is-info">
-                                    <strong>Remove all Q0 (trash)</strong>
+                                <button id="admin-auto-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded has-text-weight-bold is-info">
+                                    Remove all Q0 (trash)
                                 </button>
-                                <button id="visual-feedback-auto-id" onclick="fetchXXX()"
-                                    class="button is-small is-rounded is-info">
-                                    <strong>Remove all "Not Assigned"</strong>
+                                <button id="admin-auto-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded has-text-weight-bold is-info">
+                                    Remove all "Not Assigned"
                                 </button>
                             </div>
                         </div>
@@ -165,13 +174,13 @@
                         </div>
                         <div class="container">
                             <div class="buttons">
-                                <button id="visual-feedback-auto-id" onclick="fetchXXX()"
-                                    class="button is-small is-rounded is-info">
-                                    <strong>Rename sound files</strong>
+                                <button id="admin-auto-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded has-text-weight-bold is-info">
+                                    Rename sound files
                                 </button>
-                                <button id="visual-feedback-auto-id" onclick="fetchXXX()"
-                                    class="button is-small is-rounded is-info">
-                                    <strong>Adjust positions</strong>
+                                <button id="admin-auto-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded has-text-weight-bold is-info">
+                                    Adjust positions
                                 </button>
                             </div>
                         </div>
@@ -183,17 +192,17 @@
                         </div>
                         <div class="container">
                             <div class="buttons">
-                                <button id="visual-feedback-auto-id" onclick="fetchXXX()"
-                                    class="button is-small is-rounded is-info">
-                                    <strong>Create report</strong>
+                                <button id="admin-auto-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded has-text-weight-bold is-info">
+                                    Create report
                                 </button>
-                                <button id="visual-feedback-auto-id" onclick="fetchXXX()"
-                                    class="button is-small is-rounded is-info">
-                                    <strong>Preview report</strong>
+                                <button id="admin-auto-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded has-text-weight-bold is-info">
+                                    Preview report
                                 </button>
-                                <button id="visual-feedback-auto-id" onclick="fetchXXX()"
-                                    class="button is-small is-rounded is-info">
-                                    <strong>Download latest report</strong>
+                                <button id="admin-auto-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded has-text-weight-bold is-info">
+                                    Download latest report
                                 </button>
                             </div>
                         </div>
@@ -205,13 +214,13 @@
                         </div>
                         <div class="container">
                             <div class="buttons">
-                                <button id="visual-feedback-auto-id" onclick="fetchXXX()"
-                                    class="button is-small is-rounded is-info">
-                                    <strong>Copy monitoring night</strong>
+                                <button id="admin-auto-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded has-text-weight-bold is-info">
+                                    Copy monitoring night
                                 </button>
-                                <button id="visual-feedback-auto-id" onclick="fetchXXX()"
-                                    class="button is-small is-rounded is-info">
-                                    <strong>Copy all monitoring nights</strong>
+                                <button id="admin-auto-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded has-text-weight-bold is-info">
+                                    Copy all monitoring nights
                                 </button>
                             </div>
                         </div>
@@ -223,13 +232,13 @@
                         </div>
                         <div class="container mb-4">
                             <div class="buttons">
-                                <button id="visual-feedback-auto-id" onclick="fetchXXX()"
-                                    class="button is-small is-rounded is-info">
-                                    <strong>Delete monitoring night</strong>
+                                <button id="admin-auto-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded has-text-weight-bold is-info">
+                                    Delete monitoring night
                                 </button>
-                                <button id="visual-feedback-auto-id" onclick="fetchXXX()"
-                                    class="button is-small is-rounded is-info">
-                                    <strong>Delete all monitoring nights</strong>
+                                <button id="admin-auto-id" onclick="fetchXXX()"
+                                    class="button is-small is-rounded has-text-weight-bold is-info">
+                                    Delete all monitoring nights
                                 </button>
                             </div>
                         </div>

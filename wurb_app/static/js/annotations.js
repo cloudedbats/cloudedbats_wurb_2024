@@ -11,12 +11,12 @@ function XXXXX() {
 
 function annoToggleSettings() {
     if (byId("anno-settings-id").classList.contains("is-hidden")) {
-        byId("anno-boddy-id").classList.add("is-hidden");
+        byId("anno-body-id").classList.add("is-hidden");
         byId("anno-settings-id").classList.remove("is-hidden");
         byId("anno-show-settings-text-id").textContent = "Hide settings";
     } else {
         byId("anno-settings-id").classList.add("is-hidden");
-        byId("anno-boddy-id").classList.remove("is-hidden");
+        byId("anno-body-id").classList.remove("is-hidden");
         byId("anno-show-settings-text-id").textContent = "Show settings";
     };
 }
@@ -112,7 +112,7 @@ function annoEnableDisableButtons() {
 }
 
 function annoFirst() {
-    var textContent = byId("anno-first-id").textContent;
+    var textContent = byId("anno-first-text-id").textContent;
     if (textContent == "Previous night") {
         optionList = byId("anno-select-night-id");
         optionIndex = optionList.selectedIndex;
@@ -140,7 +140,7 @@ function annoNext() {
     getRecordInfo(sourceId, nightId, recordId);
 }
 function annoLast() {
-    var textContent = byId("anno-last-id").textContent;
+    var textContent = byId("anno-last-text-id").textContent;
     if (textContent == "Next night") {
         optionList = byId("anno-select-night-id");
         optionIndex = optionList.selectedIndex;

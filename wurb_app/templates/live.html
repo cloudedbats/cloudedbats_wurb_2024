@@ -38,13 +38,13 @@
                         Audio feedback
                     </p>
 
-                    <section id="liveaudio-boddy-id" class="section p-4 pb-5 has-background-grey-lighter">
+                    <section id="liveaudio-body-id" class="section p-4 pb-5 has-background-grey-lighter">
                         <div class="field">
                             <label class="label">Volume</label>
                             <div class="control">
                                 <div class="slidecontainer">
                                     <input type="range" min="0" max="100" value="50" class="slider"
-                                        id="feedback_volume_slider_id">
+                                        id="feedback-volume-slider-id">
                                 </div>
                             </div>
                         </div>
@@ -54,7 +54,7 @@
                             <div class="control">
                                 <div class="slidecontainer">
                                     <input type="range" min="10" max="50" value="30" class="slider"
-                                        id="feedback_pitch_slider_id">
+                                        id="feedback-pitch-slider-id">
                                 </div>
                             </div>
                         </div>
@@ -92,12 +92,12 @@
                         </div>
                         <div class="field is-grouped">
                             <p class="control">
-                                <input id="settings_feedback_filter_low_id" class="input is-small" type="number"
+                                <input id="settings-feedback-filter-low-id" class="input is-small" type="number"
                                     placeholder="15.0" value="15.0">
                             </p>
                             <label class="label pr-3">to</label>
                             <p class="control">
-                                <input id="settings_feedback_filter_low_id" class="input is-small" type="number"
+                                <input id="settings-feedback-filter-low-id" class="input is-small" type="number"
                                     placeholder="100.0" value="100.0">
                             </p>
                             <label class="label">kHz</label>
@@ -127,7 +127,7 @@
                         Visual feedback
                     </p>
 
-                    <section id="livevisual-boddy-id" class="section p-4 pb-5 is--hidden has-background-grey-lighter">
+                    <section id="livevisual-body-id" class="section p-4 pb-5 is--hidden has-background-grey-lighter">
 
                         <div class="field pt-2">
                             <label class="label">View recordings</label>
@@ -137,11 +137,11 @@
                             <div class="container is-fluid m-2">
                                 <div class="buttons is-centered">
                                     <button id="visual-feedback-auto-id" onclick="fetchXXX()"
-                                        class="button is-small is-rounded is-info is-inverted"><strong>Overview</strong></button>
+                                        class="button is-small is-rounded has-text-weight-bold is-info is-inverted">Overview</button>
                                     <button id="visual-feedback-previous-id" onclick="fetchXXX()"
-                                        class="button is-small is-rounded is-info"><strong>Peakogram</strong></button>
+                                        class="button is-small is-rounded has-text-weight-bold is-info">Peakogram</button>
                                     <button id="visual-feedback-previous-id" onclick="fetchXXX()"
-                                        class="button is-small is-rounded is-info"><strong>Compact</strong></button>
+                                        class="button is-small is-rounded has-text-weight-bold is-info">Compact</button>
                                 </div>
                             </div>
 
@@ -160,16 +160,16 @@
                         <div class="container">
                             <div class="buttons is-centered">
                                 <!-- <button id="visual-feedback-first-id" onclick="fetchXXX()"
-                                    class="button is-small is-rounded is-info"><strong>First</strong></button>
+                                    class="button is-small is-rounded has-text-weight-bold is-info">First</button>
                                 <button id="visual-feedback-previous-id" onclick="fetchXXX()"
-                                    class="button is-small is-rounded is-info"><strong>Previous</strong></button> -->
+                                    class="button is-small is-rounded has-text-weight-bold is-info">Previous</button> -->
                                 <button id="visual-feedback-next-id" onclick="fetchXXX()"
-                                    class="button is-small is-rounded is-info is-inverted"><strong>Auto
-                                        update</strong></button>
+                                    class="button is-small is-rounded is-info has-text-weight-bold is-inverted">Auto
+                                    update</button>
                                 <!-- <button id="visual-feedback-next-id" onclick="fetchXXX()"
-                                    class="button is-small is-rounded is-info"><strong>Next</strong></button>
+                                    class="button is-small is-rounded has-text-weight-bold is-info">Next</button>
                                 <button id="visual-feedback-last-id" onclick="fetchXXX()"
-                                    class="button is-small is-rounded is-info"><strong>Last</strong></button> -->
+                                    class="button is-small is-rounded has-text-weight-bold is-info">Last</button> -->
                             </div>
                         </div>
 

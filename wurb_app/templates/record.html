@@ -27,8 +27,8 @@
                         <div class="container is-fluid">
                             <div class="is-pulled-right">
                                 <button class="button is-rounded is-small has-text-weight-bold"
-                                    onclick="liveAudioToggleSettings()">
-                                    <span id="liveaudio-show-settings-text-id">Show settings</span>
+                                    onclick="recToggleSettings()">
+                                    <span id="rec-settings-text-id">Show settings</span>
                                 </button>
                             </div>
                         </div>
@@ -38,9 +38,9 @@
                         WURB Recorder
                     </p>
 
-                    <section id="liveaudio-boddy-id" class="section has-background-grey-lighter p-4">
+                    <section id="rec-body-id" class="section has-background-grey-lighter p-4">
 
-                        <div id="rec-view-metadata-id" class="is---hidden">
+                        <div id="rec-view-id">
                             <div class="table-container m-0">
                                 <table class="table has-background-grey-lighter m--0">
                                     <tbody>
@@ -52,8 +52,8 @@
                                             </td>
                                             <td colspan="1" style="width: 100%;">
                                                 <div class="select is-rounded is-info is-size-6">
-                                                    <select id="detector_mode_select_id"
-                                                        onchange="modeSelectOnChange(update_detector=true)">
+                                                    <select id="rec-mode-select-id"
+                                                        onchange="modeSelectOnChange(updateDetector=true)">
                                                         <option value="mode-off">
                                                             Microphone - Off
                                                         </option>
@@ -105,7 +105,7 @@
                                 </table>
                             </div>
 
-                            <div id="div_manual_triggering_id"
+                            <div id="rec-manual-triggering-id"
                                 style="visibility:hidden; overflow:hidden; height:0; width:0;">
                                 <div style="border:1px solid white; margin: 0px; padding: 25px;">
                                     <div class="field is-grouped is-grouped-centered">
@@ -116,20 +116,20 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="div_detector_power_off_id"
+                            <div id="rec-detector-power-off-id"
                                 style="visibility:hidden; overflow:hidden; height:0; width:0;">
                                 <div style="border:1px solid white; margin: 0px; padding: 25px;">
                                     <div class="field is-grouped is-grouped-centered">
                                         <button style="margin:5px;" class="button is-small is-rounded is-info"
-                                            onclick="raspberryPiControl('rpi_shutdown')">
+                                            onclick="raspberryPiControl('rpiShutdown')">
                                             Shutdown
                                         </button>
                                         <button style="margin:5px;" class="button is-small is-rounded is-info"
-                                            onclick="raspberryPiControl('rpi_reboot')">
+                                            onclick="raspberryPiControl('rpiReboot')">
                                             Restart
                                         </button>
                                         <button style="margin:5px;" class="button is-small is-rounded is-info"
-                                            onclick="raspberryPiControl('rpi_cancel')">
+                                            onclick="raspberryPiControl('rpiCancel')">
                                             Cancel
                                         </button>
                                     </div>
@@ -146,7 +146,7 @@
                                                 </div>
                                             </td>
                                             <td colspan="1" style="width: 100%;" class="p-1">
-                                                <span id="detector_status_id">Waiting...</span>
+                                                <span id="rec-status-id">Waiting...</span>
                                             </td>
                                         </tr>
                                         <tr>
@@ -156,7 +156,7 @@
                                                 </div>
                                             </td>
                                             <td colspan="1" style="width: 100%;" class="p-1">
-                                                <span id="detector_status_row2_id"></span>
+                                                <span id="rec-status-row2-id"></span>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -165,7 +165,7 @@
                         </div>
 
                         <div class="table-container m-0" style="height: 10em; overflow: auto;">
-                            <table id="detector_log_table_id"
+                            <table id="rec-log-table-id"
                                 class="table is-fullwidth is-bordered is-striped has-background-white-ter is-size-7">
                                 <tr>
                                     <td>&nbsp;</td>
@@ -195,7 +195,7 @@
                                         </td>
                                         <td colspan="1" style="width: 30%;" class="p-1">
                                             <div class="control">
-                                                <input id="settings_file_directory_id" class="input" value="Station-1">
+                                                <input id="rec-file-directory-id" class="input" value="Station-1">
                                             </div>
                                         </td>
                                     </tr>
@@ -207,7 +207,7 @@
                                         </td>
                                         <td colspan="1" style="width: 30%;">
                                             <div class="select is-rounded is-info is-size-6">
-                                                <select id="settings_file_directory_date_option_id">
+                                                <select id="rec-file-directory-date-option-id">
                                                     <option value="date-not-used">Not used</option>
                                                     <option value="date-pre-true">Add before - Use date
                                                     </option>
@@ -239,7 +239,7 @@
                                         <td colspan="1" style="width: 30%;" class="p-1">
                                             <div class="field">
                                                 <div class="control">
-                                                    <input id="settings_filename_prefix_id" class="input" value="wurb">
+                                                    <input id="rec-filename-prefix-id" class="input" value="wurb">
                                                 </div>
                                             </div>
                                         </td>
@@ -256,7 +256,7 @@
                                         <td colspan="2" style="width: 30%;" class="p-1">
                                             <div class="field">
                                                 <div class="control">
-                                                    <input id="settings_filename_prefix_id" class="input"
+                                                    <input id="rec-filename-prefix-id" class="input"
                                                         placeholder="Comments on place/night">
                                                 </div>
                                             </div>
@@ -268,7 +268,7 @@
 
                         <div class="field is-grouped is-grouped-centered pt-2">
                             <button style="margin:5px;" class="button is-small is-rounded is-info has-text-weight-bold"
-                                onclick="raspberryPiControl('rpi_status')">
+                                onclick="raspberryPiControl('rpiStatus')">
                                 Show status
                             </button>
                             <button style="margin:5px;" class="button is-small is-rounded is-info has-text-weight-bold"
@@ -279,6 +279,17 @@
 
                     </section>
 
+                    <section id="rec-settings-id" class="section p-2 has-background-grey-light is-hidden">
+                        <div class="field">
+                            <div class="container is-fluid">
+                                <div class="is-pulled-right">
+                                    <button class="delete is-large m-2" onclick="recToggleSettings()"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="title is-4">Settings</label>
+                        </div>
                     </section>
                 </div>
             </article>
@@ -292,8 +303,8 @@
                         <div class="container is-fluid">
                             <div class="is-pulled-right">
                                 <button class="button is-rounded is-small has-text-weight-bold"
-                                    onclick="liveVisualToggleSettings()">
-                                    <span id="livevisual-show-settings-text-id">Show settings</span>
+                                    onclick="geoToggleSettings()">
+                                    <span id="geo-settings-text-id">Show settings</span>
                                 </button>
                             </div>
                         </div>
@@ -303,9 +314,9 @@
                         Geographic location
                     </p>
 
-                    <section id="liveaudio-boddy-id" class="section has-background-grey-lighter p-4">
+                    <section id="geo-body-id" class="section has-background-grey-lighter p-4">
 
-                        <div id="rec-view-metadata-id" class="is---hidden">
+                        <div id="geo-view-id" class="is---hidden">
                             <div class="table-container m-0">
                                 <table class="table has-background-grey-lighter m--0">
                                     <tbody>
@@ -317,8 +328,8 @@
                                             </td>
                                             <td colspan="1" style="width: 30%;">
                                                 <div class="select is-rounded is-info is-size-6">
-                                                    <select id="location_source_select_id"
-                                                        onchange="geoLocationSourceOnChange(update_detector=true)">
+                                                    <select id="geo-source-select-id"
+                                                        onchange="geoLocationSourceOnChange(updateDetector=true)">
                                                         <option value="geo-not-used">Not used</option>
                                                         <option value="geo-manual">Manually entered</option>
                                                         <!-- <option value="geo-client-gps">Location from client unit -->
@@ -342,7 +353,7 @@
                                                 </div>
                                             </td>
                                             <td colspan="1" style="width: 30%;" class="p-1">
-                                                <span id="location_status_id">No info...</span>
+                                                <span id="geo-status-id">No info...</span>
                                             </td>
                                         </tr>
                                         <tr>
@@ -353,8 +364,8 @@
                                             </td>
                                             <td colspan="1" style="width: 30%;" class="p-1">
                                                 <div class="control">
-                                                    <input id="latitude_dd_id" class="input" type="number" step="0.0001"
-                                                        min="-90.0" max="90.0" placeholder="15.6789">
+                                                    <input id="geo-latitude-dd-id" class="input" type="number"
+                                                        step="0.0001" min="-90.0" max="90.0" placeholder="15.6789">
                                                 </div>
                                             </td>
                                         </tr>
@@ -367,7 +378,7 @@
                                             <td colspan="1" style="width: 30%;" class="p-1">
                                                 <div class="field">
                                                     <div class="control">
-                                                        <input id="longitude_dd_id" class="input" type="number"
+                                                        <input id="geo-longitude-dd-id" class="input" type="number"
                                                             step="0.0001" min="-180.0" max="180.0"
                                                             placeholder="12.3456">
                                                     </div>
@@ -382,19 +393,19 @@
                             </div>
 
                             <div class="buttons is-centered">
-                                <button style="margin:5px;" id="location_button_id"
+                                <button style="margin:5px;" id="geo-save-button-id"
                                     class="button is-info is-small is-rounded has-text-weight-bold"
                                     onclick="saveLocation()">
-                                    <span id="location_button_text_id">Save</span>
+                                    <span id="geo-button-text-id">Save</span>
                                 </button>
                             </div>
                     </section>
 
-                    <section id="livevisual-settings-id" class="section p-2 has-background-grey-light is-hidden">
+                    <section id="geo-settings-id" class="section p-2 has-background-grey-light is-hidden">
                         <div class="field">
                             <div class="container is-fluid">
                                 <div class="is-pulled-right">
-                                    <button class="delete is-large m-2" onclick="liveVisualToggleSettings()"></button>
+                                    <button class="delete is-large m-2" onclick="geoToggleSettings()"></button>
                                 </div>
                             </div>
                         </div>
