@@ -1,14 +1,14 @@
 
 
 function adminToggleSettings() {
-    if (byId("admin-settings-id").classList.contains("is-hidden")) {
-        byId("admin-body-id").classList.add("is-hidden");
-        byId("admin-settings-id").classList.remove("is-hidden");
-        byId("admin-show-settings-text-id").textContent = "Hide settings";
+    if (byId("adminSettingsId").classList.contains("is-hidden")) {
+        byId("adminBodyId").classList.add("is-hidden");
+        byId("adminSettingsId").classList.remove("is-hidden");
+        byId("adminShowSettingsTextId").textContent = "Hide settings";
     } else {
-        byId("admin-settings-id").classList.add("is-hidden");
-        byId("admin-body-id").classList.remove("is-hidden");
-        byId("admin-show-settings-text-id").textContent = "Show settings";
+        byId("adminSettingsId").classList.add("is-hidden");
+        byId("adminBodyId").classList.remove("is-hidden");
+        byId("adminShowSettingsTextId").textContent = "Show settings";
     };
 }
 

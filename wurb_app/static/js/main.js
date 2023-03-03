@@ -4,45 +4,45 @@ function byId(id) {
 };
 
 function hideModules() {
-    byId("module-record-id").classList.remove("is-inverted");
-    byId("module-live-id").classList.remove("is-inverted");
-    byId("module-annotations-id").classList.remove("is-inverted");
-    byId("module-admin-id").classList.remove("is-inverted");
-    byId("hero-body-record-id").classList.add("is-hidden");
-    byId("hero-body-live-id").classList.add("is-hidden");
-    byId("hero-body-annotations-id").classList.add("is-hidden");
-    byId("hero-body-admin-id").classList.add("is-hidden");
-    byId("hero-body-about-id").classList.add("is-hidden");
+    byId("moduleRecordId").classList.remove("is-inverted");
+    byId("moduleLiveId").classList.remove("is-inverted");
+    byId("moduleAnnotationsId").classList.remove("is-inverted");
+    byId("moduleAdminId").classList.remove("is-inverted");
+    byId("heroBodyRecordId").classList.add("is-hidden");
+    byId("heroBodyLiveId").classList.add("is-hidden");
+    byId("heroBodyAnnotationsId").classList.add("is-hidden");
+    byId("heroBodyAdminId").classList.add("is-hidden");
+    byId("heroBodyAboutId").classList.add("is-hidden");
 };
 
 function activateModuleRecord() {
     hideModules();
-    byId("module-record-id").classList.add("is-inverted");
-    byId("hero-body-record-id").classList.remove("is-hidden");
+    byId("moduleRecordId").classList.add("is-inverted");
+    byId("heroBodyRecordId").classList.remove("is-hidden");
 };
 
 function activateModuleLive() {
     hideModules();
-    byId("module-live-id").classList.add("is-inverted");
-    byId("hero-body-live-id").classList.remove("is-hidden");
+    byId("moduleLiveId").classList.add("is-inverted");
+    byId("heroBodyLiveId").classList.remove("is-hidden");
 };
 
 function activateModuleAnnotations() {
     hideModules()
-    byId("module-annotations-id").classList.add("is-inverted");
-    byId("hero-body-annotations-id").classList.remove("is-hidden");
+    byId("moduleAnnotationsId").classList.add("is-inverted");
+    byId("heroBodyAnnotationsId").classList.remove("is-hidden");
 };
 
 function activateModuleAdministration() {
     hideModules()
-    byId("module-admin-id").classList.add("is-inverted");
-    byId("hero-body-admin-id").classList.remove("is-hidden");
+    byId("moduleAdminId").classList.add("is-inverted");
+    byId("heroBodyAdminId").classList.remove("is-hidden");
 };
 
 function activateModuleAbout() {
     hideModules()
-    // byId("module-about-id").classList.add("is-inverted");
-    byId("hero-body-about-id").classList.remove("is-hidden");
+    // byId("moduleAdminId").classList.add("is-inverted");
+    byId("heroBodyAboutId").classList.remove("is-hidden");
 };
 
 function fetchModuleRecord() {
@@ -56,8 +56,8 @@ function fetchModuleRecord() {
             }
         })
         .then(function (html) {
-            byId('hero-body-record-id').innerHTML = html;
-            byId("module-record-id").classList.remove("is-inverted");
+            byId("heroBodyRecordId").innerHTML = html;
+            byId("moduleRecordId").classList.remove("is-inverted");
         })
         .catch(function (err) {
             console.warn("Something went wrong.", err);
@@ -75,8 +75,8 @@ function fetchModuleLive() {
             }
         })
         .then(function (html) {
-            byId('hero-body-live-id').innerHTML = html;
-            byId("module-live-id").classList.remove("is-inverted");
+            byId("heroBodyLiveId").innerHTML = html;
+            byId("moduleLiveId").classList.remove("is-inverted");
         })
         .catch(function (err) {
             console.warn("Something went wrong.", err);
@@ -94,8 +94,8 @@ function fetchModuleAnnotations() {
             }
         })
         .then(function (html) {
-            byId('hero-body-annotations-id').innerHTML = html;
-            byId("module-annotations-id").classList.remove("is-inverted");
+            byId("heroBodyAnnotationsId").innerHTML = html;
+            byId("moduleAnnotationsId").classList.remove("is-inverted");
 
             annoSourceLoad()
 
@@ -116,8 +116,8 @@ function fetchModuleAdministration() {
             }
         })
         .then(function (html) {
-            byId('hero-body-admin-id').innerHTML = html;
-            byId("module-admin-id").classList.remove("is-inverted");
+            byId("heroBodyAdminId").innerHTML = html;
+            byId("moduleAdminId").classList.remove("is-inverted");
         })
         .catch(function (err) {
             console.warn("Something went wrong.", err);
@@ -135,7 +135,7 @@ function fetchModuleAbout() {
             }
         })
         .then(function (html) {
-            byId('hero-body-about-id').innerHTML = html;
+            byId("heroBodyAboutId").innerHTML = html;
         })
         .catch(function (err) {
             console.warn("Something went wrong.", err);

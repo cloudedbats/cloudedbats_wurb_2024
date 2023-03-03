@@ -28,7 +28,7 @@
                             <div class="is-pulled-right">
                                 <button class="button is-rounded is-small has-text-weight-bold"
                                     onclick="annoToggleSettings()">
-                                    <span id="anno-show-settings-text-id">Show settings</span>
+                                    <span id="annoShowSettingsTextId">Show settings</span>
                                 </button>
                             </div>
                         </div>
@@ -38,7 +38,7 @@
                         Field annotations
                     </p>
 
-                    <section id="anno-body-id" class="section has-background-grey-lighter p-2">
+                    <section id="annoBodyId" class="section has-background-grey-lighter p-2">
 
                         <div class="field">
                             <label class="label">Source&nbsp;folder&nbsp;/&nbsp;monitoring&nbsp;night</label>
@@ -46,14 +46,14 @@
                         <div class="field is-grouped">
                             <div class="control">
                                 <div class="select is-rounded is-small has-text-weight-bold is-info">
-                                    <select id="anno-select-source-id" onchange="annoSourceChanged()">
+                                    <select id="annoSelectSourceId" onchange="annoSourceChanged()">
                                         <option value="select">Select:</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="control">
                                 <div class="select is-rounded is-small has-text-weight-bold is-info">
-                                    <select id="anno-select-night-id" onchange="annoNightChanged()">
+                                    <select id="annoSelectNightId" onchange="annoNightChanged()">
                                         <option value="select">Select:</option>
                                     </select>
                                 </div>
@@ -61,26 +61,26 @@
                         </div>
 
                         <!-- <div class="field pt---2">
-                            <label class="label" id="anno-recording-short-info"></label>
+                            <label class="label" id="annoRecordingShortInfoId"></label>
                         </div> -->
                         <div class="field">
                             <!-- <label class="label">Select</label> -->
                             <div class="container is-fluid m-2">
                                 <div class="buttons is-centered">
-                                    <button id="anno-view-metadata-button-id" onclick="annoToggleViewMetadata()"
+                                    <button id="annoViewMetadataButtonId" onclick="annoToggleViewMetadata()"
                                         class="button is-rounded is-small has-text-weight-bold is-info is-inverted">Data</button>
-                                    <!-- <button id="anno-view-overview-button-id" onclick="annoToggleViewOverview()"
+                                    <!-- <button id="annoViewOverviewButtonId" onclick="annoToggleViewOverview()"
                                         class="button is-rounded is-small has-text-weight-bold is-info">Overview</button> -->
-                                    <button id="anno-view-spectrogram-button-id" onclick="annoToggleViewSpectrogram()"
+                                    <button id="annoViewSpectrogramButtonId" onclick="annoToggleViewSpectrogram()"
                                         class="button is-rounded is-small has-text-weight-bold is-info is---inverted">Spectrogram</button>
-                                    <button id="anno-view-details-button-id" onclick="annoToggleViewDetails()"
+                                    <button id="annoViewDetailsButtonId" onclick="annoToggleViewDetails()"
                                         class="button is-rounded is-small has-text-weight-bold is-info"
                                         disabled>Details</button>
                                 </div>
                             </div>
                         </div>
 
-                        <div id="anno-view-metadata-id" class="field is---hidden">
+                        <div id="annoViewMetadataId" class="field is---hidden">
                             <div class="control">
                                 <div class="table-container mx-5 my--2 p-2">
                                     <table class="table has-background-white-ter is-striped is-size-7">
@@ -97,46 +97,46 @@
                                                 <td class="has-text-right" style="white-space: nowrap;">File</td>
                                                 <th colspan="3" style="white-space: nowrap;"><span
                                                         style="white-space: nowrap;"
-                                                        id="anno-metadata-record-file"></span></th>
+                                                        id="annoMetadataRecordFileId"></span></th>
                                             </tr>
                                             <tr>
                                                 <td class="has-text-right" style="white-space: nowrap;">Quality</td>
                                                 <th colspan="3" style="white-space: nowrap;"><span
-                                                        id="anno-metadata-quality"></span></th>
+                                                        id="annoMetadataQualityId"></span></th>
                                             </tr>
                                             <tr>
                                                 <td class="has-text-right" style="white-space: nowrap;">Tags</td>
                                                 <th colspan="3" style="white-space: nowrap;"><span
-                                                        id="anno-metadata-tags"></span></th>
+                                                        id="annoMetadataTagsId"></span></th>
                                             </tr>
                                             <tr>
                                                 <td class="has-text-right" style="white-space: nowrap;">Comments</td>
                                                 <th colspan="3" style="white-space: nowrap;"><span
-                                                        id="anno-metadata-comments"></span></th>
+                                                        id="annoMetadataCommentsId"></span></th>
                                             </tr>
                                             <tr>
                                                 <td class="has-text-right" style="white-space: nowrap;">Local date</td>
                                                 <th colspan="1" style="white-space: nowrap;"><span
-                                                        id="anno-metadata-local-date"></span></th>
+                                                        id="annoMetadataLocalDateId"></span></th>
                                                 <td class="has-text-right" style="white-space: nowrap;">Latitude</td>
                                                 <th colspan="1" style="white-space: nowrap; width: 90%;"><span
-                                                        id="anno-metadata-latitude"></span></th>
+                                                        id="annoMetadataLatitudeId"></span></th>
                                                 <!-- <td>Prefix</td>
-                                                <th colspan="1"><span id="anno-metadata-prefix"></span></th> -->
+                                                <th colspan="1"><span id="annoMetadataPrefixId"></span></th> -->
                                             </tr>
                                             <!-- <tr>
                                                 <th></th>
                                                 <td>UTC</td>
-                                                <th colspan="3"><span id="anno-metadata-datetime-utc"></span></th>
+                                                <th colspan="3"><span id="annoMetadataDatetimeUtcId"></span></th>
                                                 <td></td>
                                             </tr> -->
                                             <tr>
                                                 <td class="has-text-right" style="white-space: nowrap;">Local time</td>
                                                 <th colspan="1" style="white-space: nowrap;"><span
-                                                        id="anno-metadata-local-time"></span></th>
+                                                        id="annoMetadataLocalTimeId"></span></th>
                                                 <td class="has-text-right" style="white-space: nowrap;">Longitude</td>
                                                 <th colspan="1" style="white-space: nowrap; width: 90%;"><span
-                                                        id="anno-metadata-longitude"></span></th>
+                                                        id="annoMetadataLongitudeId"></span></th>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -144,7 +144,7 @@
                             </div>
                         </div>
 
-                        <!-- <div id="anno-view-overview-id" class="field is-hidden">
+                        <!-- <div id="annoViewOverviewId" class="field is-hidden">
                             <div class="control"> -->
                         <!-- <figure class="image is-16by9">
                                         <iframe class="has-ratio" width="640" height="360" src=""
@@ -156,7 +156,7 @@
                             </div>
                         </div> -->
 
-                        <div id="anno-view-spectrogram-id" class="field is-hidden">
+                        <div id="annoViewSpectrogramId" class="field is-hidden">
                             <div class="control">
                                 <!-- <figure class="image is-16by9">
                                         <iframe class="has-ratio" width="640" height="360" src=""
@@ -164,13 +164,13 @@
                                     </figure> -->
                                 <figure class="image is--128x128">
                                     <!-- <img class="" src="http://localhost:8001/annotations/spectrogram?sourceId=local&nightId=Taberg-1_2022-12-12&recordId=w53u384_20221213T085235"> -->
-                                    <img id="anno-spectrogram-src-id" class=""
+                                    <img id="annoSpectrogramSrcId" class=""
                                         src="{{ url_for('static', path='SPECTROGRAM.jpg') }}">
                                 </figure>
                             </div>
                         </div>
 
-                        <div id="anno-view-details-id" class="field is-hidden">
+                        <div id="annoViewDetailsId" class="field is-hidden">
                             <div class="control has-background-success">
                                 <figure class="image is-3by1">
                                     <iframe class="has-ratio" width="100" height="100" src="" frameborder="5"
@@ -182,21 +182,21 @@
 
                         <div class="container">
                             <div class="buttons is-centered">
-                                <button id="anno-first-id" onclick="annoFirst()"
+                                <button id="annoFirstId" onclick="annoFirst()"
                                     class="button is-rounded is-small has-text-weight-bold is-info">
-                                    <span id="anno-first-text-id" style="width: 85px;">First</span>
+                                    <span id="annoFirstTextId" style="width: 85px;">First</span>
                                 </button>
-                                <button id="anno-previous-id" onclick="annoPrevious()"
+                                <button id="annoPreviousId" onclick="annoPrevious()"
                                     class="button is-rounded is-small has-text-weight-bold is-info">
-                                    <span id="anno-previous-text-id" style="width: 50px;">Previous</span>
+                                    <span id="annoPreviousTextId" style="width: 50px;">Previous</span>
                                 </button>
-                                <button id="anno-next-id" onclick="annoNext()"
+                                <button id="annoNextId" onclick="annoNext()"
                                     class="button is-rounded is-small has-text-weight-bold is-info">
-                                    <span id="anno-next-text-id" style="width: 50px;">Next</span>
+                                    <span id="annoNextTextId" style="width: 50px;">Next</span>
                                 </button>
-                                <button id="anno-last-id" onclick="annoLast()"
+                                <button id="annoLastId" onclick="annoLast()"
                                     class="button is-rounded is-small has-text-weight-bold is-info">
-                                    <span id="anno-last-text-id" style="width: 80px;">Last</span>
+                                    <span id="annoLastTextId" style="width: 80px;">Last</span>
                                 </button>
                             </div>
                         </div>
@@ -205,7 +205,7 @@
                             <div class="label">
                                 <label class="label">
                                     Quality, tags and comments
-                                    <span id="anno-recording-short-info"></span>
+                                    <span id="annoRecordingShortInfoId"></span>
                                 </label>
                             </div>
                         </div>
@@ -215,23 +215,23 @@
                                 <div class="container">
                                     <div class="control has-text-weight-bold">
                                         <label class="radio">
-                                            <input id="anno-q0-id" type="radio" name="quality" onchange="annoSetQ0()">
+                                            <input id="annoQ0Id" type="radio" name="quality" onchange="annoSetQ0()">
                                             Q0 (trash)
                                         </label>
                                         <label class="radio">
-                                            <input id="anno-q1-id" type="radio" name="quality" onchange="annoSetQ1()">
+                                            <input id="annoQ1Id" type="radio" name="quality" onchange="annoSetQ1()">
                                             Q1 (red)
                                         </label>
                                         <label class="radio">
-                                            <input id="anno-q2-id" type="radio" name="quality" onchange="annoSetQ2()">
+                                            <input id="annoQ2Id" type="radio" name="quality" onchange="annoSetQ2()">
                                             Q2 (yellow)
                                         </label>
                                         <label class="radio">
-                                            <input id="anno-q3-id" type="radio" name="quality" onchange="annoSetQ3()">
+                                            <input id="annoQ3Id" type="radio" name="quality" onchange="annoSetQ3()">
                                             Q3 (green)
                                         </label>
                                         <label class="radio">
-                                            <input id="anno-not-assigned-id" type="radio" name="quality"
+                                            <input id="annoQNotAssignedId" type="radio" name="quality"
                                                 onchange="annoSetQNotAssigned()">
                                             Not assigned
                                         </label>
@@ -248,52 +248,51 @@
 
                         <div class="container pb-4 ml-0">
                             <div class="buttons">
-                                <button id="anno-FM-CF-FM-id" onclick="toggleTag(this)"
+                                <button id="anno-FM-CF-FM-Id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">FM-CF-FM</button>
-                                <button id="anno-FM-id" onclick="toggleTag(this)"
+                                <button id="anno-FM-Id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">FM</button>
-                                <button id="anno-FM-QCF-id" onclick="toggleTag(this)"
+                                <button id="anno-FM-QCF-Id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">FM-QCF</button>
-                                <button id="anno-QCF-id" onclick="toggleTag(this)"
+                                <button id="anno-QCF-Id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">QCF</button>
-                                <button id="anno-FM+H2-id" onclick="toggleTag(this)"
+                                <button id="anno-FM+H2-Id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">FM+H2</button>
-                                <button id="anno-QCF+FM-id" onclick="toggleTag(this)"
+                                <button id="anno-QCF+FM-Id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">QCF+FM</button>
-
                             </div>
                         </div>
 
                         <!-- <div class="container pb-4 ml-0">
                             <div class="buttons">
-                                <button id="anno-XXX-id" onclick="toggleTag(this)"
+                                <button id="anno-XXX-Id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">FMd-QCF</button>
-                                <button id="anno-XXX-id" onclick="toggleTag(this)"
+                                <button id="anno-XXX-Id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">FMu-QCF</button>
-                                <button id="anno-XXX-id" onclick="toggleTag(this)"
+                                <button id="anno-XXX-Id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">QCF-FMd</button>
-                                <button id="anno-XXX-id" onclick="toggleTag(this)"
+                                <button id="anno-XXX-Id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">CF-FMd</button>
-                                <button id="anno-XXX-id" onclick="toggleTag(this)"
+                                <button id="anno-XXX-Id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">FMu-QCF-FMd</button>
-                                <button id="anno-XXX-id" onclick="XXXtoggleTag(this)XX()"
+                                <button id="anno-XXX-Id" onclick="XXXtoggleTag(this)XX()"
                                     class="button is-rounded is-small has-text-weight-bold is-info">FMu-CF-FMd</button>
-                                <button id="anno-XXX-id" onclick="toggleTag(this)"
+                                <button id="anno-XXX-Id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">FMd</button>
-                                <button id="anno-XXX-id" onclick="toggleTag(this)"
+                                <button id="anno-XXX-Id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">CF-FMd-CF</button>
                             </div>
                         </div> -->
 
                         <div class="container pb-4 ml-0">
                             <div class="buttons">
-                                <button id="anno-Social-id" onclick="toggleTag(this)"
+                                <button id="anno-Social-Id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">Social</button>
-                                <button id="anno-Birds-id" onclick="toggleTag(this)"
+                                <button id="anno-Birds-Id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">Birds</button>
-                                <button id="anno-Mammals-id" onclick="toggleTag(this)"
+                                <button id="anno-Mammals-Id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">Mammals</button>
-                                <button id="anno-Crickets-id" onclick="toggleTag(this)"
+                                <button id="anno-Crickets-Id" onclick="toggleTag(this)"
                                     class="button is-rounded is-small has-text-weight-bold is-info">Crickets</button>
                             </div>
                         </div>
@@ -303,7 +302,7 @@
                         </div> -->
                         <div class="field">
                             <p class="control">
-                                <input class="input" type="text" id="anno-comments-id"
+                                <input class="input" type="text" id="annoCommentsId"
                                     placeholder="Comments on recording" onchange="annoSaveAnnotations();">
                             </p>
                         </div>
@@ -313,20 +312,20 @@
                         </div> -->
                         <div class="container">
                             <div class="buttons is-centered">
-                                <button id="anno-clear-id" onclick="annoQuickClear()"
+                                <button id="annoClearId" onclick="annoQuickClear()"
                                     class="button is-rounded is-small has-text-weight-bold is-info">Clear</button>
-                                <button id="anno-copy-id" onclick="annoQuickCopy()"
+                                <button id="annoCopyId" onclick="annoQuickCopy()"
                                     class="button is-rounded is-small has-text-weight-bold is-info">Copy</button>
-                                <button id="anno-paste-id" onclick="annoQuickPaste()"
+                                <button id="annoPasteId" onclick="annoQuickPaste()"
                                     class="button is-rounded is-small has-text-weight-bold is-info"
                                     disabled>Paste</button>
-                                <button id="anno-paste-next-id" onclick="annoQuickPasteNext()"
+                                <button id="annoPasteNextId" onclick="annoQuickPasteNext()"
                                     class="button is-rounded is-small has-text-weight-bold is-info"
                                     disabled>Paste+next</button>
-                                <!-- <button id="anno-download-id" onclick="annoQuickDownload()"
+                                <!-- <button id="annoDownloadId" onclick="annoQuickDownload()"
                                     class="button is-rounded is-small has-text-weight-bold is-info"
                                     disabled>Download</button> -->
-                                <a id="anno-download-id" onclick="annoQuickDownload()"
+                                <a id="annoDownloadId" onclick="annoQuickDownload()"
                                     class="button is-rounded is-small has-text-weight-bold is-info" href=""
                                     download>Download</a>
 
@@ -334,7 +333,7 @@
                         </div>
                     </section>
 
-                    <section id="anno-settings-id" class="section p-2 has-background-grey-light is-hidden">
+                    <section id="annoSettingsId" class="section p-2 has-background-grey-light is-hidden">
                         <div class="field">
                             <div class="container is-fluid">
                                 <div class="is-pulled-right">
@@ -355,30 +354,30 @@
                                 <div class="container">
                                     <div class="control has-text-weight-bold">
                                         <label class="checkbox">
-                                            <input id="anno-filter-q0-id" class="mr-1" type="checkbox"
+                                            <input id="annoFilterQ0Id" class="mr-1" type="checkbox"
                                                 onchange="XXXXX()" checked>Q0
                                         </label>
                                         <label class="checkbox">
-                                            <input id="anno-filter-q1-id" class="mx-1" type="checkbox"
+                                            <input id="annoFilterQ1Id" class="mx-1" type="checkbox"
                                                 onchange="XXXXX()" checked>Q1
                                         </label>
                                         <label class="checkbox">
-                                            <input id="anno-filter-q2-id" class="mx-1" type="checkbox"
+                                            <input id="annoFilterQ2Id" class="mx-1" type="checkbox"
                                                 onchange="XXXXX()" checked>Q2
                                         </label>
                                         <label class="checkbox">
-                                            <input id="anno-filter-q3-id" class="mx-1" type="checkbox"
+                                            <input id="annoFilterQ3Id" class="mx-1" type="checkbox"
                                                 onchange="XXXXX()" checked>Q3
                                         </label>
                                         <label class="checkbox">
-                                            <input id="anno-filter-not-assigned-id" class="mx-1" type="checkbox"
+                                            <input id="annoFilterQNotAssignedId" class="mx-1" type="checkbox"
                                                 onchange="XXXXX()" checked>Not assigned
                                         </label>
-                                        <button id="anno-filter-clear-all" onclick="annoClearFilter()"
+                                        <button id="annoFilterClearAll" onclick="annoClearFilter()"
                                             class="button is-rounded is-small has-text-weight-bold is-info mx-1">
                                             Clear
                                         </button>
-                                        <button id="anno-filter-set-all" onclick="annoSetFilter()"
+                                        <button id="annoFilterSetAll" onclick="annoSetFilter()"
                                             class="button is-rounded is-small has-text-weight-bold is-info mx-1">
                                             Mark all
                                         </button>

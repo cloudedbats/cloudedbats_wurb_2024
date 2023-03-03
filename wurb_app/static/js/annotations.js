@@ -10,14 +10,14 @@ function XXXXX() {
 }
 
 function annoToggleSettings() {
-    if (byId("anno-settings-id").classList.contains("is-hidden")) {
-        byId("anno-body-id").classList.add("is-hidden");
-        byId("anno-settings-id").classList.remove("is-hidden");
-        byId("anno-show-settings-text-id").textContent = "Hide settings";
+    if (byId("annoSettingsId").classList.contains("is-hidden")) {
+        byId("annoBodyId").classList.add("is-hidden");
+        byId("annoSettingsId").classList.remove("is-hidden");
+        byId("annoShowSettingsTextId").textContent = "Hide settings";
     } else {
-        byId("anno-settings-id").classList.add("is-hidden");
-        byId("anno-body-id").classList.remove("is-hidden");
-        byId("anno-show-settings-text-id").textContent = "Show settings";
+        byId("annoSettingsId").classList.add("is-hidden");
+        byId("annoBodyId").classList.remove("is-hidden");
+        byId("annoShowSettingsTextId").textContent = "Show settings";
     };
 }
 
@@ -26,24 +26,24 @@ function annoSourceLoad() {
 }
 
 function annoSourceChanged() {
-    var sourceId = byId("anno-select-source-id").value;
+    var sourceId = byId("annoSelectSourceId").value;
     getNights(sourceId);
 }
 
 function annoNightChanged() {
-    var sourceId = byId("anno-select-source-id").value;
-    var nightId = byId("anno-select-night-id").value;
-    //    var recordId = byId("anno-record-id").value;
+    var sourceId = byId("annoSelectSourceId").value;
+    var nightId = byId("annoSelectNightId").value;
+    //    var recordId = byId("annoRecordId").value;
     getRecordInfo(sourceId, nightId, "");
 }
 
 function annoClearFilter() {
     try {
-        byId("anno-filter-q0-id").checked = false;
-        byId("anno-filter-q1-id").checked = false;
-        byId("anno-filter-q2-id").checked = false;
-        byId("anno-filter-q3-id").checked = false;
-        byId("anno-filter-not-assigned-id").checked = false;
+        byId("annoFilterQ0Id").checked = false;
+        byId("annoFilterQ1Id").checked = false;
+        byId("annoFilterQ2Id").checked = false;
+        byId("annoFilterQ3Id").checked = false;
+        byId("annoFilterQNotAssignedId").checked = false;
     } catch (err) {
         // Block of code to handle errors
     }
@@ -51,129 +51,129 @@ function annoClearFilter() {
 
 function annoSetFilter() {
     try {
-        byId("anno-filter-q0-id").checked = true;
-        byId("anno-filter-q1-id").checked = true;
-        byId("anno-filter-q2-id").checked = true;
-        byId("anno-filter-q3-id").checked = true;
-        byId("anno-filter-not-assigned-id").checked = true;
+        byId("annoFilterQ0Id").checked = true;
+        byId("annoFilterQ1Id").checked = true;
+        byId("annoFilterQ2Id").checked = true;
+        byId("annoFilterQ3Id").checked = true;
+        byId("annoFilterQNotAssignedId").checked = true;
     } catch (err) {
         // Block of code to handle errors
     }
 }
 
 function annoToggleViewMetadata() {
-    if (byId("anno-view-metadata-id").classList.contains("is-hidden")) {
-        byId("anno-view-metadata-button-id").classList.add("is-inverted");
-        byId("anno-view-metadata-id").classList.remove("is-hidden");
+    if (byId("annoViewMetadataId").classList.contains("is-hidden")) {
+        byId("annoViewMetadataButtonId").classList.add("is-inverted");
+        byId("annoViewMetadataId").classList.remove("is-hidden");
     } else {
-        byId("anno-view-metadata-button-id").classList.remove("is-inverted");
-        byId("anno-view-metadata-id").classList.add("is-hidden");
+        byId("annoViewMetadataButtonId").classList.remove("is-inverted");
+        byId("annoViewMetadataId").classList.add("is-hidden");
     };
 }
 
 // function annoToggleViewOverview() {
-//     if (byId("anno-view-overview-id").classList.contains("is-hidden")) {
-//         byId("anno-view-overview-button-id").classList.add("is-inverted");
-//         byId("anno-view-overview-id").classList.remove("is-hidden");
+//     if (byId("annoViewOverviewId").classList.contains("is-hidden")) {
+//         byId("annoViewOverview-buttonId").classList.add("is-inverted");
+//         byId("annoViewOverviewId").classList.remove("is-hidden");
 //     } else {
-//         byId("anno-view-overview-button-id").classList.remove("is-inverted");
-//         byId("anno-view-overview-id").classList.add("is-hidden");
+//         byId("annoViewOverview-buttonId").classList.remove("is-inverted");
+//         byId("annoViewOverviewId").classList.add("is-hidden");
 //     };
 // }
 
 function annoToggleViewSpectrogram() {
-    if (byId("anno-view-spectrogram-id").classList.contains("is-hidden")) {
-        byId("anno-view-spectrogram-button-id").classList.add("is-inverted");
-        byId("anno-view-spectrogram-id").classList.remove("is-hidden");
+    if (byId("annoViewSpectrogramId").classList.contains("is-hidden")) {
+        byId("annoViewSpectrogramButtonId").classList.add("is-inverted");
+        byId("annoViewSpectrogramId").classList.remove("is-hidden");
     } else {
-        byId("anno-view-spectrogram-button-id").classList.remove("is-inverted");
-        byId("anno-view-spectrogram-id").classList.add("is-hidden");
+        byId("annoViewSpectrogramButtonId").classList.remove("is-inverted");
+        byId("annoViewSpectrogramId").classList.add("is-hidden");
     };
 }
 
 function annoToggleViewDetails() {
-    if (byId("anno-view-details-id").classList.contains("is-hidden")) {
-        byId("anno-view-details-button-id").classList.add("is-inverted");
-        byId("anno-view-details-id").classList.remove("is-hidden");
+    if (byId("annoViewDetailsId").classList.contains("is-hidden")) {
+        byId("annoViewDetailsButtonId").classList.add("is-inverted");
+        byId("annoViewDetailsId").classList.remove("is-hidden");
     } else {
-        byId("anno-view-details-button-id").classList.remove("is-inverted");
-        byId("anno-view-details-id").classList.add("is-hidden");
+        byId("annoViewDetailsButtonId").classList.remove("is-inverted");
+        byId("annoViewDetailsId").classList.add("is-hidden");
     };
 }
 
 function annoEnableDisableButtons() {
     if (copyPasteBufferActive == true) {
-        byId("anno-paste-id").disabled = false;
-        byId("anno-paste-next-id").disabled = false;
+        byId("annoPasteId").disabled = false;
+        byId("annoPasteNextId").disabled = false;
     } else {
-        byId("anno-paste-id").disabled = true;
-        byId("anno-paste-next-id").disabled = true;
+        byId("annoPasteId").disabled = true;
+        byId("annoPasteNextId").disabled = true;
     }
 }
 
 function annoFirst() {
-    var textContent = byId("anno-first-text-id").textContent;
+    var textContent = byId("annoFirstTextId").textContent;
     if (textContent == "Previous night") {
-        optionList = byId("anno-select-night-id");
+        optionList = byId("annoSelectNightId");
         optionIndex = optionList.selectedIndex;
         optionList.selectedIndex = optionIndex - 1;
-        var sourceId = byId("anno-select-source-id").value;
-        var nightId = byId("anno-select-night-id").value;
+        var sourceId = byId("annoSelectSourceId").value;
+        var nightId = byId("annoSelectNightId").value;
         getRecordInfo(sourceId, nightId, "");
     } else {
-        var sourceId = byId("anno-select-source-id").value;
-        var nightId = byId("anno-select-night-id").value;
+        var sourceId = byId("annoSelectSourceId").value;
+        var nightId = byId("annoSelectNightId").value;
         var recordId = currentRecord.firstRecordId;
         getRecordInfo(sourceId, nightId, recordId);
     }
 }
 function annoPrevious() {
-    var sourceId = byId("anno-select-source-id").value;
-    var nightId = byId("anno-select-night-id").value;
+    var sourceId = byId("annoSelectSourceId").value;
+    var nightId = byId("annoSelectNightId").value;
     var recordId = currentRecord.previousRecordId;
     getRecordInfo(sourceId, nightId, recordId);
 }
 function annoNext() {
-    var sourceId = byId("anno-select-source-id").value;
-    var nightId = byId("anno-select-night-id").value;
+    var sourceId = byId("annoSelectSourceId").value;
+    var nightId = byId("annoSelectNightId").value;
     var recordId = currentRecord.nextRecordId;
     getRecordInfo(sourceId, nightId, recordId);
 }
 function annoLast() {
-    var textContent = byId("anno-last-text-id").textContent;
+    var textContent = byId("annoLastTextId").textContent;
     if (textContent == "Next night") {
-        optionList = byId("anno-select-night-id");
+        optionList = byId("annoSelectNightId");
         optionIndex = optionList.selectedIndex;
         optionList.selectedIndex = optionIndex + 1;
-        var sourceId = byId("anno-select-source-id").value;
-        var nightId = byId("anno-select-night-id").value;
+        var sourceId = byId("annoSelectSourceId").value;
+        var nightId = byId("annoSelectNightId").value;
         getRecordInfo(sourceId, nightId, "");
     } else {
-        var sourceId = byId("anno-select-source-id").value;
-        var nightId = byId("anno-select-night-id").value;
+        var sourceId = byId("annoSelectSourceId").value;
+        var nightId = byId("annoSelectNightId").value;
         var recordId = currentRecord.lastRecordId;
         getRecordInfo(sourceId, nightId, recordId);
     }
 }
 
 function annoSetQ0() {
-    byId("anno-q0-id").checked = true;
+    byId("annoQ0Id").checked = true;
     annoSaveAnnotations();
 }
 function annoSetQ1() {
-    byId("anno-q1-id").checked = true;
+    byId("annoQ1Id").checked = true;
     annoSaveAnnotations();
 }
 function annoSetQ2() {
-    byId("anno-q2-id").checked = true;
+    byId("annoQ2Id").checked = true;
     annoSaveAnnotations();
 }
 function annoSetQ3() {
-    byId("anno-q3-id").checked = true;
+    byId("annoQ3Id").checked = true;
     annoSaveAnnotations();
 }
 function annoSetQNotAssigned() {
-    byId("anno-not-assigned-id").checked = true;
+    byId("annoQNotAssignedId").checked = true;
     annoSaveAnnotations();
 }
 function toggleTag(tagObject) {
@@ -238,19 +238,19 @@ function annoPasteAnnotations() {
 
 function annoGetQuality() {
     var quality = ""
-    if (byId("anno-q0-id").checked == true) {
+    if (byId("annoQ0Id").checked == true) {
         quality = "Q0";
     }
-    else if (byId("anno-q1-id").checked == true) {
+    else if (byId("annoQ1Id").checked == true) {
         quality = "Q1";
     }
-    else if (byId("anno-q2-id").checked == true) {
+    else if (byId("annoQ2Id").checked == true) {
         quality = "Q2";
     }
-    else if (byId("anno-q3-id").checked == true) {
+    else if (byId("annoQ3Id").checked == true) {
         quality = "Q3";
     }
-    else if (byId("anno-not-assigned-id").checked == true) {
+    else if (byId("annoQNotAssignedId").checked == true) {
         quality = "Not assigned";
     }
     return quality;
@@ -258,53 +258,53 @@ function annoGetQuality() {
 
 function annoSetQuality(quality) {
     if (quality == "Q0") {
-        byId("anno-q0-id").checked = true;
+        byId("annoQ0Id").checked = true;
     }
     else if (quality == "Q1") {
-        byId("anno-q1-id").checked = true;
+        byId("annoQ1Id").checked = true;
     }
     else if (quality == "Q2") {
-        byId("anno-q2-id").checked = true;
+        byId("annoQ2Id").checked = true;
     }
     else if (quality == "Q3") {
-        byId("anno-q3-id").checked = true;
+        byId("annoQ3Id").checked = true;
     }
     else if (quality == "Not assigned") {
-        byId("anno-not-assigned-id").checked = true;
+        byId("annoQNotAssignedId").checked = true;
     }
 }
 
 function annoGetTags() {
     tags = ""
-    if (byId("anno-FM-CF-FM-id").classList.contains("is-inverted")) {
+    if (byId("anno-FM-CF-FM-Id").classList.contains("is-inverted")) {
         tags += "FM-CF-FM,"
     }
-    if (byId("anno-FM-id").classList.contains("is-inverted")) {
+    if (byId("anno-FM-Id").classList.contains("is-inverted")) {
         tags += "FM,"
     }
-    if (byId("anno-FM-QCF-id").classList.contains("is-inverted")) {
+    if (byId("anno-FM-QCF-Id").classList.contains("is-inverted")) {
         tags += "FM-QCF,"
     }
-    if (byId("anno-QCF-id").classList.contains("is-inverted")) {
+    if (byId("anno-QCF-Id").classList.contains("is-inverted")) {
         tags += "QCF,"
     }
-    if (byId("anno-FM+H2-id").classList.contains("is-inverted")) {
+    if (byId("anno-FM+H2-Id").classList.contains("is-inverted")) {
         tags += "FM+H2,"
     }
-    if (byId("anno-QCF+FM-id").classList.contains("is-inverted")) {
+    if (byId("anno-QCF+FM-Id").classList.contains("is-inverted")) {
         tags += "QCF+FM,"
     }
 
-    if (byId("anno-Social-id").classList.contains("is-inverted")) {
+    if (byId("anno-Social-Id").classList.contains("is-inverted")) {
         tags += "Social,"
     }
-    if (byId("anno-Birds-id").classList.contains("is-inverted")) {
+    if (byId("anno-Birds-Id").classList.contains("is-inverted")) {
         tags += "Birds,"
     }
-    if (byId("anno-Mammals-id").classList.contains("is-inverted")) {
+    if (byId("anno-Mammals-Id").classList.contains("is-inverted")) {
         tags += "Mammals,"
     }
-    if (byId("anno-Crickets-id").classList.contains("is-inverted")) {
+    if (byId("anno-Crickets-Id").classList.contains("is-inverted")) {
         tags += "Crickets,"
     }
     if (tags.length > 1) {
@@ -317,63 +317,63 @@ function annoSetTags(tags_as_str) {
     // Add trailing/leading , for compare strings.
     tags_as_str = "," + tags_as_str + ","
     if (tags_as_str.includes(",FM-CF-FM,")) {
-        byId("anno-FM-CF-FM-id").classList.add("is-inverted")
+        byId("anno-FM-CF-FM-Id").classList.add("is-inverted")
     } else {
-        byId("anno-FM-CF-FM-id").classList.remove("is-inverted")
+        byId("anno-FM-CF-FM-Id").classList.remove("is-inverted")
     }
     if (tags_as_str.includes(",FM,")) {
-        byId("anno-FM-id").classList.add("is-inverted")
+        byId("anno-FM-Id").classList.add("is-inverted")
     } else {
-        byId("anno-FM-id").classList.remove("is-inverted")
+        byId("anno-FM-Id").classList.remove("is-inverted")
     }
     if (tags_as_str.includes(",FM-QCF,")) {
-        byId("anno-FM-QCF-id").classList.add("is-inverted")
+        byId("anno-FM-QCF-Id").classList.add("is-inverted")
     } else {
-        byId("anno-FM-QCF-id").classList.remove("is-inverted")
+        byId("anno-FM-QCF-Id").classList.remove("is-inverted")
     }
     if (tags_as_str.includes(",QCF,")) {
-        byId("anno-QCF-id").classList.add("is-inverted")
+        byId("anno-QCF-Id").classList.add("is-inverted")
     } else {
-        byId("anno-QCF-id").classList.remove("is-inverted")
+        byId("anno-QCF-Id").classList.remove("is-inverted")
     }
     if (tags_as_str.includes(",FM+H2,")) {
-        byId("anno-FM+H2-id").classList.add("is-inverted")
+        byId("anno-FM+H2-Id").classList.add("is-inverted")
     } else {
-        byId("anno-FM+H2-id").classList.remove("is-inverted")
+        byId("anno-FM+H2-Id").classList.remove("is-inverted")
     }
     if (tags_as_str.includes(",QCF+FM,")) {
-        byId("anno-QCF+FM-id").classList.add("is-inverted")
+        byId("anno-QCF+FM-Id").classList.add("is-inverted")
     } else {
-        byId("anno-QCF+FM-id").classList.remove("is-inverted")
+        byId("anno-QCF+FM-Id").classList.remove("is-inverted")
     }
 
     if (tags_as_str.includes(",Social,")) {
-        byId("anno-Social-id").classList.add("is-inverted")
+        byId("anno-Social-Id").classList.add("is-inverted")
     } else {
-        byId("anno-Social-id").classList.remove("is-inverted")
+        byId("anno-Social-Id").classList.remove("is-inverted")
     }
     if (tags_as_str.includes(",Birds,")) {
-        byId("anno-Birds-id").classList.add("is-inverted")
+        byId("anno-Birds-Id").classList.add("is-inverted")
     } else {
-        byId("anno-Birds-id").classList.remove("is-inverted")
+        byId("anno-Birds-Id").classList.remove("is-inverted")
     }
     if (tags_as_str.includes(",Mammals,")) {
-        byId("anno-Mammals-id").classList.add("is-inverted")
+        byId("anno-Mammals-Id").classList.add("is-inverted")
     } else {
-        byId("anno-Mammals-id").classList.remove("is-inverted")
+        byId("anno-Mammals-Id").classList.remove("is-inverted")
     }
     if (tags_as_str.includes(",Crickets,")) {
-        byId("anno-Crickets-id").classList.add("is-inverted")
+        byId("anno-Crickets-Id").classList.add("is-inverted")
     } else {
-        byId("anno-Crickets-id").classList.remove("is-inverted")
+        byId("anno-Crickets-Id").classList.remove("is-inverted")
     }
 }
 
 function annoGetComments() {
-    var comments = byId("anno-comments-id").value
+    var comments = byId("annoCommentsId").value
     return comments;
 }
 
 function annoSetComments(comment) {
-    byId("anno-comments-id").value = comment
+    byId("annoCommentsId").value = comment
 }

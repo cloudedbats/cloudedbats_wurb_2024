@@ -1,20 +1,14 @@
 
-function liveAudioToggleSettings() {
-    if (byId("liveaudio-settings-id").classList.contains("is-hidden")) {
-        byId("liveaudio-settings-id").classList.remove("is-hidden")
-        byId("liveaudio-show-settings-text-id").textContent = "Hide settings"
-    } else {
-        byId("liveaudio-settings-id").classList.add("is-hidden")
-        byId("liveaudio-show-settings-text-id").textContent = "Show settings"
-    };
-}
 
-function liveVisualToggleSettings() {
-    if (byId("livevisual-settings-id").classList.contains("is-hidden")) {
-        byId("livevisual-settings-id").classList.remove("is-hidden")
-        byId("livevisual-show-settings-text-id").textContent = "Hide settings"
-    } else {
-        byId("livevisual-settings-id").classList.add("is-hidden")
-        byId("livevisual-show-settings-text-id").textContent = "Show settings"
+async function setAudioFeedback() {
+    try {
+        let volume = feedback_volume_slider_id.value;
+        let pitch = feedback_pitch_slider_id.value;
+        let url_string = "/live/set-audio-feedback/?volume=${volume}&pitch=${pitch}";
+        await fetch(url_string);
+    } catch (err) {
+        alert("ERROR setAudioFeedback: ${err}");
+        console.log(err);
     };
-}
+};
+

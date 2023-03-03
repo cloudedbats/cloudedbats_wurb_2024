@@ -1,20 +1,20 @@
 
 function liveAudioToggleSettings() {
-    if (byId("liveaudio-settings-id").classList.contains("is-hidden")) {
-        byId("liveaudio-settings-id").classList.remove("is-hidden")
-        byId("liveaudio-show-settings-text-id").textContent = "Hide settings"
+    if (byId("liveaudioSettingsId").classList.contains("is-hidden")) {
+        byId("liveaudioSettingsId").classList.remove("is-hidden")
+        byId("liveaudioShowSettingsTextId").textContent = "Hide settings"
     } else {
-        byId("liveaudio-settings-id").classList.add("is-hidden")
-        byId("liveaudio-show-settings-text-id").textContent = "Show settings"
+        byId("liveaudioSettingsId").classList.add("is-hidden")
+        byId("liveaudioShowSettingsTextId").textContent = "Show settings"
     };
 }
 
 function liveVisualToggleSettings() {
-    if (byId("livevisual-settings-id").classList.contains("is-hidden")) {
-        byId("livevisual-settings-id").classList.remove("is-hidden")
-        byId("livevisual-show-settings-text-id").textContent = "Hide settings"
+    if (byId("livevisualSettingsId").classList.contains("is-hidden")) {
+        byId("livevisualSettingsId").classList.remove("is-hidden")
+        byId("livevisualShowSettingsTextId").textContent = "Hide settings"
     } else {
-        byId("livevisual-settings-id").classList.add("is-hidden")
-        byId("livevisual-show-settings-text-id").textContent = "Show settings"
+        byId("livevisualSettingsId").classList.add("is-hidden")
+        byId("livevisualShowSettingsTextId").textContent = "Show settings"
     };
 }

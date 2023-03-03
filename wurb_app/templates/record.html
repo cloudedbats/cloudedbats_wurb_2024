@@ -28,7 +28,7 @@
                             <div class="is-pulled-right">
                                 <button class="button is-rounded is-small has-text-weight-bold"
                                     onclick="recToggleSettings()">
-                                    <span id="rec-settings-text-id">Show settings</span>
+                                    <span id="recSettingsTextId">Show settings</span>
                                 </button>
                             </div>
                         </div>
@@ -38,9 +38,9 @@
                         WURB Recorder
                     </p>
 
-                    <section id="rec-body-id" class="section has-background-grey-lighter p-4">
+                    <section id="recBodyId" class="section has-background-grey-lighter p-4">
 
-                        <div id="rec-view-id">
+                        <div id="recViewId">
                             <div class="table-container m-0">
                                 <table class="table has-background-grey-lighter m--0">
                                     <tbody>
@@ -52,7 +52,7 @@
                                             </td>
                                             <td colspan="1" style="width: 100%;">
                                                 <div class="select is-rounded is-info is-size-6">
-                                                    <select id="rec-mode-select-id"
+                                                    <select id="recModeSelectId"
                                                         onchange="modeSelectOnChange(updateDetector=true)">
                                                         <option value="mode-off">
                                                             Microphone - Off
@@ -105,7 +105,7 @@
                                 </table>
                             </div>
 
-                            <div id="rec-manual-triggering-id"
+                            <div id="recManualTriggeringId"
                                 style="visibility:hidden; overflow:hidden; height:0; width:0;">
                                 <div style="border:1px solid white; margin: 0px; padding: 25px;">
                                     <div class="field is-grouped is-grouped-centered">
@@ -116,7 +116,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="rec-detector-power-off-id"
+                            <div id="recDetectorPowerOffId"
                                 style="visibility:hidden; overflow:hidden; height:0; width:0;">
                                 <div style="border:1px solid white; margin: 0px; padding: 25px;">
                                     <div class="field is-grouped is-grouped-centered">
@@ -146,7 +146,7 @@
                                                 </div>
                                             </td>
                                             <td colspan="1" style="width: 100%;" class="p-1">
-                                                <span id="rec-status-id">Waiting...</span>
+                                                <span id="recStatusId">Waiting...</span>
                                             </td>
                                         </tr>
                                         <tr>
@@ -156,7 +156,7 @@
                                                 </div>
                                             </td>
                                             <td colspan="1" style="width: 100%;" class="p-1">
-                                                <span id="rec-status-row2-id"></span>
+                                                <span id="recStatusRow2Id"></span>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -165,7 +165,7 @@
                         </div>
 
                         <div class="table-container m-0" style="height: 10em; overflow: auto;">
-                            <table id="rec-log-table-id"
+                            <table id="recLogTableId"
                                 class="table is-fullwidth is-bordered is-striped has-background-white-ter is-size-7">
                                 <tr>
                                     <td>&nbsp;</td>
@@ -195,7 +195,7 @@
                                         </td>
                                         <td colspan="1" style="width: 30%;" class="p-1">
                                             <div class="control">
-                                                <input id="rec-file-directory-id" class="input" value="Station-1">
+                                                <input id="recFileDirectoryId" class="input" value="Station-1">
                                             </div>
                                         </td>
                                     </tr>
@@ -207,7 +207,7 @@
                                         </td>
                                         <td colspan="1" style="width: 30%;">
                                             <div class="select is-rounded is-info is-size-6">
-                                                <select id="rec-file-directory-date-option-id">
+                                                <select id="recFileDirectoryDateOptionId">
                                                     <option value="date-not-used">Not used</option>
                                                     <option value="date-pre-true">Add before - Use date
                                                     </option>
@@ -239,7 +239,7 @@
                                         <td colspan="1" style="width: 30%;" class="p-1">
                                             <div class="field">
                                                 <div class="control">
-                                                    <input id="rec-filename-prefix-id" class="input" value="wurb">
+                                                    <input id="recFilenamePrefixId" class="input" value="wurb">
                                                 </div>
                                             </div>
                                         </td>
@@ -256,7 +256,7 @@
                                         <td colspan="2" style="width: 30%;" class="p-1">
                                             <div class="field">
                                                 <div class="control">
-                                                    <input id="rec-filename-prefix-id" class="input"
+                                                    <input id="recFilenamePrefixId" class="input"
                                                         placeholder="Comments on place/night">
                                                 </div>
                                             </div>
@@ -279,7 +279,7 @@
 
                     </section>
 
-                    <section id="rec-settings-id" class="section p-2 has-background-grey-light is-hidden">
+                    <section id="recSettingsId" class="section p-2 has-background-grey-light is-hidden">
                         <div class="field">
                             <div class="container is-fluid">
                                 <div class="is-pulled-right">
@@ -304,7 +304,7 @@
                             <div class="is-pulled-right">
                                 <button class="button is-rounded is-small has-text-weight-bold"
                                     onclick="geoToggleSettings()">
-                                    <span id="geo-settings-text-id">Show settings</span>
+                                    <span id="geoSettingsTextId">Show settings</span>
                                 </button>
                             </div>
                         </div>
@@ -314,9 +314,9 @@
                         Geographic location
                     </p>
 
-                    <section id="geo-body-id" class="section has-background-grey-lighter p-4">
+                    <section id="geoBodyId" class="section has-background-grey-lighter p-4">
 
-                        <div id="geo-view-id" class="is---hidden">
+                        <div id="geoViewId" class="is---hidden">
                             <div class="table-container m-0">
                                 <table class="table has-background-grey-lighter m--0">
                                     <tbody>
@@ -328,7 +328,7 @@
                                             </td>
                                             <td colspan="1" style="width: 30%;">
                                                 <div class="select is-rounded is-info is-size-6">
-                                                    <select id="geo-source-select-id"
+                                                    <select id="geoSourceSelectId"
                                                         onchange="geoLocationSourceOnChange(updateDetector=true)">
                                                         <option value="geo-not-used">Not used</option>
                                                         <option value="geo-manual">Manually entered</option>
@@ -353,7 +353,7 @@
                                                 </div>
                                             </td>
                                             <td colspan="1" style="width: 30%;" class="p-1">
-                                                <span id="geo-status-id">No info...</span>
+                                                <span id="geoStatusId">No info...</span>
                                             </td>
                                         </tr>
                                         <tr>
@@ -364,7 +364,7 @@
                                             </td>
                                             <td colspan="1" style="width: 30%;" class="p-1">
                                                 <div class="control">
-                                                    <input id="geo-latitude-dd-id" class="input" type="number"
+                                                    <input id="geoLatitudeDdId" class="input" type="number"
                                                         step="0.0001" min="-90.0" max="90.0" placeholder="15.6789">
                                                 </div>
                                             </td>
@@ -378,7 +378,7 @@
                                             <td colspan="1" style="width: 30%;" class="p-1">
                                                 <div class="field">
                                                     <div class="control">
-                                                        <input id="geo-longitude-dd-id" class="input" type="number"
+                                                        <input id="geoLongitudeDdId" class="input" type="number"
                                                             step="0.0001" min="-180.0" max="180.0"
                                                             placeholder="12.3456">
                                                     </div>
@@ -393,15 +393,15 @@
                             </div>
 
                             <div class="buttons is-centered">
-                                <button style="margin:5px;" id="geo-save-button-id"
+                                <button style="margin:5px;" id="geoSaveButtonId"
                                     class="button is-info is-small is-rounded has-text-weight-bold"
                                     onclick="saveLocation()">
-                                    <span id="geo-button-text-id">Save</span>
+                                    <span id="geoButtonTextId">Save</span>
                                 </button>
                             </div>
                     </section>
 
-                    <section id="geo-settings-id" class="section p-2 has-background-grey-light is-hidden">
+                    <section id="geoSettingsId" class="section p-2 has-background-grey-light is-hidden">
                         <div class="field">
                             <div class="container is-fluid">
                                 <div class="is-pulled-right">

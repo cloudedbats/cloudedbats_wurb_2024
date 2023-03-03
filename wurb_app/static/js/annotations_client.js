@@ -12,7 +12,7 @@ async function getSourceDirs() {
         })
         .then(function (json) {
             // Populate options to select list.
-            var select = byId("anno-select-source-id");
+            var select = byId("annoSelectSourceId");
             // Empty.
             while (select.firstChild) {
                 select.removeChild(select.firstChild);
@@ -33,8 +33,8 @@ async function getSourceDirs() {
 
 
             // During development.
-            byId("anno-select-source-id").value = "local";
-            var sourceId = byId("anno-select-source-id").value;
+            byId("annoSelectSourceId").value = "local";
+            var sourceId = byId("annoSelectSourceId").value;
             getNights(sourceId);
 
 
@@ -59,7 +59,7 @@ async function getNights(sourceId) {
         })
         .then(function (json) {
             // Populate options to select list.
-            var select = byId("anno-select-night-id");
+            var select = byId("annoSelectNightId");
             // Empty.
             while (select.firstChild) {
                 select.removeChild(select.firstChild);
@@ -80,9 +80,9 @@ async function getNights(sourceId) {
 
 
             // During development.
-            byId("anno-select-night-id").value = "Taberg-1_2022-12-21";
-            var sourceId = byId("anno-select-source-id").value;
-            var nightId = byId("anno-select-night-id").value;
+            byId("annoSelectNightId").value = "Taberg-1_2022-12-21";
+            var sourceId = byId("annoSelectSourceId").value;
+            var nightId = byId("annoSelectNightId").value;
             getRecordInfo(sourceId, nightId, "");
 
 
@@ -110,18 +110,18 @@ async function getRecordInfo(sourceId, nightId, recordId) {
         })
         .then(function (json) {
             var shortInfo = " for file " + json.index + " of " + json.maxIndex
-            byId("anno-recording-short-info").textContent = shortInfo;
+            byId("annoRecordingShortInfoId").textContent = shortInfo;
 
-            byId("anno-metadata-record-file").textContent = json.recordFile
-            byId("anno-metadata-quality").textContent = json.quality
-            byId("anno-metadata-tags").textContent = json.tags
-            byId("anno-metadata-comments").textContent = json.comments
-            // byId("anno-metadata-prefix").textContent = json.prefix
-            byId("anno-metadata-local-date").textContent = json.localDate
-            byId("anno-metadata-local-time").textContent = json.localTime
-            // byId("anno-metadata-datetime-utc").textContent = json.dateTimeUtc
-            byId("anno-metadata-latitude").textContent = json.latitude
-            byId("anno-metadata-longitude").textContent = json.longitude
+            byId("annoMetadataRecordFileId").textContent = json.recordFile
+            byId("annoMetadataQualityId").textContent = json.quality
+            byId("annoMetadataTagsId").textContent = json.tags
+            byId("annoMetadataCommentsId").textContent = json.comments
+            // byId("annoMetadataPrefixId").textContent = json.prefix
+            byId("annoMetadataLocalDateId").textContent = json.localDate
+            byId("annoMetadataLocalTimeId").textContent = json.localTime
+            // byId("annoMetadataDatetimeUtcId").textContent = json.dateTimeUtc
+            byId("annoMetadataLatitudeId").textContent = json.latitude
+            byId("annoMetadataLongitudeId").textContent = json.longitude
 
             // Save all received data in client.
             currentRecord = json
@@ -137,7 +137,7 @@ async function getRecordInfo(sourceId, nightId, recordId) {
             image_src += nightId
             image_src += "&recordId="
             image_src += recordId
-            byId("anno-spectrogram-src-id").src = image_src;
+            byId("annoSpectrogramSrcId").src = image_src;
 
             //  file_src = "http://localhost:8001/annotations/file?"
             file_src = "/annotations/file?"
@@ -147,44 +147,43 @@ async function getRecordInfo(sourceId, nightId, recordId) {
             file_src += nightId
             file_src += "&recordId="
             file_src += recordId
-            byId("anno-download-id").href = file_src;
-            byId("anno-download-id").download = json.recordFile;
+            byId("annoDownloadId").href = file_src;
+            byId("annoDownloadId").download = json.recordFile;
 
-
-            byId("anno-first-text-id").textContent = "First"
-            byId("anno-last-text-id").textContent = "Last"
-            byId("anno-first-id").disabled = false;
-            byId("anno-previous-id").disabled = false;
-            byId("anno-next-id").disabled = false;
-            byId("anno-last-id").disabled = false;
-            var optionList = byId("anno-select-night-id");
+            byId("annoFirstTextId").textContent = "First"
+            byId("annoFirstTextId").textContent = "Last"
+            byId("annoFirstId").disabled = false;
+            byId("annoPreviousId").disabled = false;
+            byId("annoNextId").disabled = false;
+            byId("annoLastId").disabled = false;
+            var optionList = byId("annoSelectNightId");
             var optionIndex = optionList.selectedIndex;
             if (json.maxIndex <= 1) {
-                byId("anno-previous-id").disabled = true;
-                byId("anno-next-id").disabled = true;
+                byId("annoPreviousId").disabled = true;
+                byId("annoNextId").disabled = true;
                 if (optionIndex > 1) {
-                    byId("anno-first-text-id").textContent = "Previous night"
-                    byId("anno-first-id").disabled = false;
+                    byId("annoFirstTextId").textContent = "Previous night"
+                    byId("annoFirstId").disabled = false;
                 }
                 if (optionIndex < optionList.options.length - 1) {
-                    byId("anno-last-text-id").textContent = "Next night"
-                    byId("anno-last-id").disabled = false;
+                    byId("annoLastTextId").textContent = "Next night"
+                    byId("annoLastId").disabled = false;
                 }
             }
             else if (json.index == 1) {
-                byId("anno-previous-id").disabled = true;
-                byId("anno-first-id").disabled = true;
+                byId("annoPreviousId").disabled = true;
+                byId("annoFirstId").disabled = true;
                 if (optionIndex > 1) {
-                    byId("anno-first-text-id").textContent = "Previous night"
-                    byId("anno-first-id").disabled = false;
+                    byId("annoFirstTextId").textContent = "Previous night"
+                    byId("annoFirstId").disabled = false;
                 }
             }
             else if (json.index == json.maxIndex) {
-                byId("anno-next-id").disabled = true;
-                byId("anno-last-id").disabled = true;
+                byId("annoNextId").disabled = true;
+                byId("annoLastId").disabled = true;
                 if (optionIndex < optionList.options.length - 1) {
-                    byId("anno-last-text-id").textContent = "Next night"
-                    byId("anno-last-id").disabled = false;
+                    byId("annoLastTextId").textContent = "Next night"
+                    byId("annoLastId").disabled = false;
                 }
             }
         })
@@ -211,9 +210,9 @@ async function saveRecordInfo(sourceId, nightId, recordId, quality, tags, commen
         })
         .then(function (json) {
             if (currentRecord.recordId == json.recordId) {
-                byId("anno-metadata-quality").textContent = json.quality
-                byId("anno-metadata-tags").textContent = json.tags
-                byId("anno-metadata-comments").textContent = json.comments
+                byId("annoMetadataQualityId").textContent = json.quality
+                byId("annoMetadataTagsId").textContent = json.tags
+                byId("annoMetadataCommentsId").textContent = json.comments
             }
         })
         .catch(function (err) {

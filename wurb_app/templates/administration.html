@@ -28,7 +28,7 @@
                             <div class="is-pulled-right">
                                 <button class="button is-rounded is-small has-text-weight-bold"
                                     onclick="adminToggleSettings()">
-                                    <span id="admin-show-settings-text-id">Show settings</span>
+                                    <span id="adminShowSettingsTextId">Show settings</span>
                                 </button>
                             </div>
                         </div>
@@ -38,7 +38,7 @@
                         Administration
                     </p>
 
-                    <section id="admin-body-id" class="section has-background-grey-lighter p-2">
+                    <section id="adminBodyId" class="section has-background-grey-lighter p-2">
 
                         <div class="field">
                             <label class="label">Source&nbsp;folder&nbsp;/&nbsp;monitoring&nbsp;night</label>
@@ -46,14 +46,14 @@
                         <div class="field is-grouped">
                             <div class="control">
                                 <div class="select is-rounded is-small has-text-weight-bold is-info">
-                                    <select id="admin-select-source-id" onchange="adminSourceChanged()">
+                                    <select id="adminSelectSourceId" onchange="adminSourceChanged()">
                                         <option value="select">Select:</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="control">
                                 <div class="select is-rounded is-small has-text-weight-bold is-info">
-                                    <select id="admin-select-night-id" onchange="adminNightChanged()">
+                                    <select id="adminSelectNightId" onchange="adminNightChanged()">
                                         <option value="select">Select:</option>
                                     </select>
                                 </div>
@@ -64,15 +64,15 @@
                             <!-- <label class="label">Select</label> -->
                             <div class="container is-fluid m-2">
                                 <div class="buttons is-centered">
-                                    <button id="admin-view-metadata-button-id" onclick="adminToggleViewMetadata()"
+                                    <button id="adminViewMetadataButtonId" onclick="adminToggleViewMetadata()"
                                         class="button is-rounded is-small has-text-weight-bold is-info is-inverted">
                                         Data
                                     </button>
-                                    <button id="admin-view-spectrogram-button-id" onclick="adminToggleViewMap()"
+                                    <button id="adminViewSpectrogramButtonId" onclick="adminToggleViewMap()"
                                         class="button is-rounded is-small has-text-weight-bold is-info is---inverted">
                                         Map
                                     </button>
-                                    <button id="admin-view-spectrogram-button-id" onclick="adminToggleViewMap()"
+                                    <button id="adminViewSpectrogramButtonId" onclick="adminToggleViewMap()"
                                         class="button is-rounded is-small has-text-weight-bold is-info is---inverted">
                                         Sound files
                                     </button>
@@ -80,7 +80,7 @@
                             </div>
                         </div>
 
-                        <div id="admin-view-metadata-id" class="field is---hidden">
+                        <div id="adminViewMetadataId" class="field is---hidden">
                             <div class="control">
                                 <div class="table-container mx-5 my--2 p-2">
                                     <table class="table has-background-white-ter is-striped is-size-7">
@@ -89,27 +89,27 @@
                                                 <td class="has-text-right" style="white-space: nowrap;">Monitoring night
                                                 </td>
                                                 <th colspan="3" style="width: 90%;"><span
-                                                        id="admin-metadata-record-file"></span></th>
+                                                        id="adminMetadataRecordFile"></span></th>
                                             </tr>
                                             <tr>
                                                 <td class="has-text-right" style="white-space: nowrap;">Directory path
                                                 </td>
-                                                <th colspan="3"><span id="admin-metadata-record-file"></span></th>
+                                                <th colspan="3"><span id="adminMetadataRecordFileId"></span></th>
                                             </tr>
                                             <tr>
                                                 <td class="has-text-right" style="white-space: nowrap;">Number of sound
                                                     files</td>
-                                                <th colspan="3"><span id="admin-metadata-record-file"></span></th>
+                                                <th colspan="3"><span id="adminMetadataRecordFileId"></span></th>
                                             </tr>
                                             <tr>
                                                 <td class="has-text-right" style="white-space: nowrap;">Number of Q0
                                                     (trash)</td>
-                                                <th colspan="3"><span id="admin-metadata-quality"></span></th>
+                                                <th colspan="3"><span id="adminMetadataQualityId"></span></th>
                                             </tr>
                                             <tr>
                                                 <td class="has-text-right" style="white-space: nowrap;">Number of "Not
                                                     Assigned"</td>
-                                                <th colspan="3"><span id="admin-metadata-tags"></span></th>
+                                                <th colspan="3"><span id="adminNetadataTagsId"></span></th>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -119,12 +119,12 @@
 
                         <div class="container">
                             <div class="buttons is-centered">
-                                <button id="admin-previous-id" onclick="adminPrevious()"
+                                <button id="adminPreviousId" onclick="adminPrevious()"
                                     class="button is-rounded is-small has-text-weight-bold is-info">Previous
                                     night</button>
-                                <button id="admin-next-id" onclick="adminNext()"
+                                <button id="adminNextId" onclick="adminNext()"
                                     class="button is-rounded is-small has-text-weight-bold is-info">Next night</button>
-                                <button id="admin-last-id" onclick="adminUpdate()"
+                                <button id="adminLastId" onclick="adminUpdate()"
                                     class="button is-rounded is-small has-text-weight-bold is-info">Update</button>
                             </div>
                         </div>
@@ -133,7 +133,7 @@
                             <div class="label">
                                 <label class="label">
                                     Comments for monitoring night
-                                    <span id="admin-recording-short-info"></span>
+                                    <span id="adminRecordingShortInfoID"></span>
                                 </label>
                             </div>
                         </div>
@@ -144,7 +144,7 @@
                         </div> -->
                         <div class="field">
                             <p class="control">
-                                <input class="input" type="text" id="admin-comments-id"
+                                <input class="input" type="text" id="adminCommentsId"
                                     placeholder="Comments on deployment/night" onchange="adminSaveComments();">
                             </p>
                         </div>
@@ -156,11 +156,11 @@
                         </div>
                         <div class="container">
                             <div class="buttons">
-                                <button id="admin-auto-id" onclick="fetchXXX()"
+                                <button id="adminAutoId" onclick="fetchXXX()"
                                     class="button is-small is-rounded has-text-weight-bold is-info">
                                     Remove all Q0 (trash)
                                 </button>
-                                <button id="admin-auto-id" onclick="fetchXXX()"
+                                <button id="adminAutoId" onclick="fetchXXX()"
                                     class="button is-small is-rounded has-text-weight-bold is-info">
                                     Remove all "Not Assigned"
                                 </button>
@@ -174,11 +174,11 @@
                         </div>
                         <div class="container">
                             <div class="buttons">
-                                <button id="admin-auto-id" onclick="fetchXXX()"
+                                <button id="admin-autoId" onclick="fetchXXX()"
                                     class="button is-small is-rounded has-text-weight-bold is-info">
                                     Rename sound files
                                 </button>
-                                <button id="admin-auto-id" onclick="fetchXXX()"
+                                <button id="admin-autoId" onclick="fetchXXX()"
                                     class="button is-small is-rounded has-text-weight-bold is-info">
                                     Adjust positions
                                 </button>
@@ -192,15 +192,15 @@
                         </div>
                         <div class="container">
                             <div class="buttons">
-                                <button id="admin-auto-id" onclick="fetchXXX()"
+                                <button id="admin-autoId" onclick="fetchXXX()"
                                     class="button is-small is-rounded has-text-weight-bold is-info">
                                     Create report
                                 </button>
-                                <button id="admin-auto-id" onclick="fetchXXX()"
+                                <button id="admin-autoId" onclick="fetchXXX()"
                                     class="button is-small is-rounded has-text-weight-bold is-info">
                                     Preview report
                                 </button>
-                                <button id="admin-auto-id" onclick="fetchXXX()"
+                                <button id="admin-autoId" onclick="fetchXXX()"
                                     class="button is-small is-rounded has-text-weight-bold is-info">
                                     Download latest report
                                 </button>
@@ -214,11 +214,11 @@
                         </div>
                         <div class="container">
                             <div class="buttons">
-                                <button id="admin-auto-id" onclick="fetchXXX()"
+                                <button id="adminAutoId" onclick="fetchXXX()"
                                     class="button is-small is-rounded has-text-weight-bold is-info">
                                     Copy monitoring night
                                 </button>
-                                <button id="admin-auto-id" onclick="fetchXXX()"
+                                <button id="adminAutoId" onclick="fetchXXX()"
                                     class="button is-small is-rounded has-text-weight-bold is-info">
                                     Copy all monitoring nights
                                 </button>
@@ -232,11 +232,11 @@
                         </div>
                         <div class="container mb-4">
                             <div class="buttons">
-                                <button id="admin-auto-id" onclick="fetchXXX()"
+                                <button id="adminAutoId" onclick="fetchXXX()"
                                     class="button is-small is-rounded has-text-weight-bold is-info">
                                     Delete monitoring night
                                 </button>
-                                <button id="admin-auto-id" onclick="fetchXXX()"
+                                <button id="adminAautoId" onclick="fetchXXX()"
                                     class="button is-small is-rounded has-text-weight-bold is-info">
                                     Delete all monitoring nights
                                 </button>
@@ -247,7 +247,7 @@
 
                     </section>
 
-                    <section id="admin-settings-id" class="section p-2 has-background-grey-light is-hidden">
+                    <section id="adminSettingsId" class="section p-2 has-background-grey-light is-hidden">
                         <div class="field">
                             <div class="container is-fluid">
                                 <div class="is-pulled-right">
