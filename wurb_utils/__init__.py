@@ -5,8 +5,11 @@
 from wurb_utils.logger import Logger
 from wurb_utils.configuration import Configuration
 
-from wurb_utils.sound.cards import SoundCards
-from wurb_utils.sound.capture import SoundCapture
-from wurb_utils.sound.pitch_shifting import SoundPitchShifting
-from wurb_utils.sound.playback import SoundPlayback
+from wurb_utils.sound_capture import SoundCapture
+from wurb_utils.sound_pitchshifting import SoundPitchshifting
+from wurb_utils.sound_playback import SoundPlayback
 
+from wurb_utils.pettersson_m500 import PetterssonM500
+from wurb_utils.pettersson_m500_batmic import PetterssonM500BatMic
+
+from wurb_utils.solartime import SolarTime

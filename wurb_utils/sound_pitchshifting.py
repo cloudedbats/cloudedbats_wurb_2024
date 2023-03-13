@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
-# Project: http://cloudedbats.org, https://github.com/cloudedbats
+# Main project: https://github.com/cloudedbats
 # Copyright (c) 2023-present Arnold Andreasson
 # License: MIT License (see LICENSE or http://opensource.org/licenses/mit).
 
@@ -8,13 +8,10 @@ import asyncio
 import numpy
 import scipy.signal
 import scipy.interpolate
-import os
-import sys
-import pathlib
 import logging
 
 
-class SoundPitchShifting(object):
+class SoundPitchshifting(object):
     """
     For audio feedback by using Pitch shifting.
     Simple time domain implementation by using overlapped
@@ -24,16 +21,21 @@ class SoundPitchShifting(object):
     def __init__(self, logger="DefaultLogger"):
         """ """
         self.logger = logging.getLogger(logger)
-        # From setup.
-        self.sampling_freq_in = 48000
-        self.sampling_freq_out = 48000
-        self.volume = 5.0
-        self.pitch_div_factor = 30
+        self.queue = None
+        self.clear()
+
+    def clear(self):
+        """ """
+        self.channels = None
+        self.sampling_freq_in = None
+        self.sampling_freq_out = None
+        self.volume = None
+        self.pitch_div_factor = None
         self.time_exp_freq = None
         self.hop_out_length = None
         self.hop_in_length = None
         self.resample_factor = None
-        kaiser_beta = None
+        self.kaiser_beta = None
         self.window_size = None
         self.filter_order = 10
         # Work buffers.
@@ -45,14 +47,40 @@ class SoundPitchShifting(object):
         self.work_in_right = None
         self.work_out_right = None
 
-    def setup(self, config):
+    def setup(
+        self,
+        channels,
+        sampling_freq_in,
+        sampling_freq_out,
+        pitch_factor,
+        volume_percent,
+        filter_low_khz,
+        filter_high_khz,
+        overlap_factor,
+        in_queue_length,
+    ):
         """ """
-        self.config = config
+        self.channels = channels
+        self.sampling_freq_in = int(sampling_freq_in)
+        self.sampling_freq_out = int(sampling_freq_out)
+        pitch_factor = int(pitch_factor)
+        volume = int(volume_percent)
+        filter_low_khz = filter_low_khz
+        filter_high_khz = filter_high_khz
+        self.pitch_div_factor = int(float(pitch_factor))
+
+        # self.volume = float((float(volume) / 100.0) * 10.0)
+        self.volume = float((float(volume) / 100.0) * 1.0)
+
+        self.filter_low_limit_hz = int(float(filter_low_khz) * 1000.0)
+        self.filter_high_limit_hz = int(float(filter_high_khz) * 1000.0)
+        self.overlap_factor = overlap_factor
         # Setup queue for data in.
-        in_queue_length = int(self.config["in_queue_length"])
         self.queue = asyncio.Queue(maxsize=in_queue_length)
         # List of out data queues.
         self.out_queue_list = []
+
+        self.calc_params()
 
     def get_queue(self):
         """ """
@@ -65,19 +93,19 @@ class SoundPitchShifting(object):
     def calc_params(self):
         """ """
         try:
-            self.channels = self.config["channels"]
-            self.sampling_freq_in = int(self.config["sampling_freq_in_hz"])
-            self.sampling_freq_out = int(self.config["sampling_freq_out_hz"])
+            # self.channels = self.config["channels"]
+            # self.sampling_freq_in = int(self.config["sampling_freq_in_hz"])
+            # self.sampling_freq_out = int(self.config["sampling_freq_out_hz"])
             # Volume and pitch.
-            volume = int(self.config["volume_percent"])
-            self.volume = float((float(volume) / 100.0) * 10.0)
-            pitch_factor = int(self.config["pitch_factor"])
-            self.pitch_div_factor = int(float(pitch_factor))
+            # volume = int(self.config["volume_percent"])
+            # self.volume = float((float(volume) / 100.0) * 10.0)
+            # pitch_factor = int(self.config["pitch_factor"])
+            # self.pitch_div_factor = int(float(pitch_factor))
             # Filter.
-            filter_low_khz = self.config["filter_low_khz"]
-            filter_high_khz = self.config["filter_high_khz"]
-            self.filter_low_limit_hz = int(float(filter_low_khz) * 1000.0)
-            self.filter_high_limit_hz = int(float(filter_high_khz) * 1000.0)
+            # filter_low_khz = self.config["filter_low_khz"]
+            # filter_high_khz = self.config["filter_high_khz"]
+            # self.filter_low_limit_hz = int(float(filter_low_khz) * 1000.0)
+            # self.filter_high_limit_hz = int(float(filter_high_khz) * 1000.0)
             # Calculated parameters.
             self.time_exp_freq = int(self.sampling_freq_in / self.pitch_div_factor)
             self.hop_out_length = int(
@@ -86,7 +114,7 @@ class SoundPitchShifting(object):
             self.hop_in_length = int(self.hop_out_length * self.pitch_div_factor)
             self.resample_factor = self.time_exp_freq / self.sampling_freq_out
             # Buffers.
-            buffer_in_overlap_factor = float(self.config["overlap_factor"])
+            buffer_in_overlap_factor = float(self.overlap_factor)
             kaiser_beta = int(self.pitch_div_factor * 0.8)
             self.window_size = int(self.hop_in_length * buffer_in_overlap_factor)
             self.window_function = numpy.kaiser(self.window_size, beta=kaiser_beta)
@@ -202,12 +230,10 @@ class SoundPitchShifting(object):
             # Buffer delivered as int16. Transform to interval -1 to 1.
             buffer = buffer_int16 / 32768.0
 
-
             # Check sound level. Reduce if necessary to avoid clipping.
             max_value = buffer.max() * self.volume + 0.05
             if max_value > 1.0:
                 buffer = buffer / max_value
-
 
             # Separate left and right channels.
             left_buffer = buffer[::2].copy()
@@ -281,12 +307,11 @@ class SoundPitchShifting(object):
             # Buffer delivered as int16. Transform to intervall -1 to 1.
             buffer = buffer_int16 / 32768.0
 
-
             # Check sound level. Reduce if necessary to avoid clipping.
-            max_value = buffer.max() * self.volume + 0.05
+            max_value = buffer.max() * self.volume + 0.20
             if max_value > 1.0:
                 buffer = buffer / max_value
-
+                print("MAX VALUE: " + str(max_value - 0.20))
 
             # Filter buffer. Butterworth bandpass.
             filtered = self.butterworth_filter(buffer)
@@ -359,7 +384,9 @@ class SoundPitchShifting(object):
                         self.capture_active = False
                         break
         except Exception as e:
-            self.logger.debug("Exception: WurbPitchShifting: buffer_to_queues: " + str(e))
+            self.logger.debug(
+                "Exception: WurbPitchShifting: buffer_to_queues: " + str(e)
+            )
 
     def butterworth_filter(self, buffer):
         # Filter buffer. Butterworth bandpass.
@@ -382,7 +409,7 @@ class SoundPitchShifting(object):
         except Exception as e:
             pass
             self.logger.debug("EXCEPTION: Butterworth: " + str(e))
-        #
+
         return filtered
 
     def resample(self, x, kind="linear"):

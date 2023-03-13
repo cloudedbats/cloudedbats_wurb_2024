@@ -7,7 +7,7 @@ aiofiles
 websockets
 requests
 # Sound, etc.
-pyalsaaudio
+pyaudio
 numpy
 scipy
 psutil
@@ -19,7 +19,6 @@ pytz
 python-dateutil
 # Config.
 pyyaml
-
 # VS Code.
 pylint
 black
