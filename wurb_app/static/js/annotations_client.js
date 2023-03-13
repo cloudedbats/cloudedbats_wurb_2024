@@ -129,29 +129,29 @@ async function getRecordInfo(sourceId, nightId, recordId) {
             annoSetTags(json.tags);
             annoSetComments(json.comments);
 
-            // image_src = "http://localhost:8001/annotations/spectrogram?"
-            image_src = "/annotations/spectrogram?"
-            image_src += "sourceId="
-            image_src += sourceId
-            image_src += "&nightId="
-            image_src += nightId
-            image_src += "&recordId="
-            image_src += recordId
-            byId("annoSpectrogramSrcId").src = image_src;
+            // imageSrc = "http://localhost:8001/annotations/spectrogram?"
+            imageSrc = "/annotations/spectrogram?"
+            imageSrc += "sourceId="
+            imageSrc += sourceId
+            imageSrc += "&nightId="
+            imageSrc += nightId
+            imageSrc += "&recordId="
+            imageSrc += recordId
+            byId("annoSpectrogramSrcId").src = imageSrc;
 
-            //  file_src = "http://localhost:8001/annotations/file?"
-            file_src = "/annotations/file?"
-            file_src += "sourceId="
-            file_src += sourceId
-            file_src += "&nightId="
-            file_src += nightId
-            file_src += "&recordId="
-            file_src += recordId
-            byId("annoDownloadId").href = file_src;
+            //  fileSrc = "http://localhost:8001/annotations/file?"
+            fileSrc = "/annotations/file?"
+            fileSrc += "sourceId="
+            fileSrc += sourceId
+            fileSrc += "&nightId="
+            fileSrc += nightId
+            fileSrc += "&recordId="
+            fileSrc += recordId
+            byId("annoDownloadId").href = fileSrc;
             byId("annoDownloadId").download = json.recordFile;
 
             byId("annoFirstTextId").textContent = "First"
-            byId("annoFirstTextId").textContent = "Last"
+            byId("annoLastTextId").textContent = "Last"
             byId("annoFirstId").disabled = false;
             byId("annoPreviousId").disabled = false;
             byId("annoNextId").disabled = false;

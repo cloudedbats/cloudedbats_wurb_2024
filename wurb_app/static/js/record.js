@@ -25,152 +25,151 @@ function geoToggleSettings() {
 }
 
 // Generic functions.
-function hideDivision(div_id) {
-    if (div_id != 'undefined') {
-        div_id.style.visibility = "hidden";
-        div_id.style.overflow = "hidden";
-        div_id.style.height = "0";
-        div_id.style.width = "0";
+function hideDivision(divId) {
+    if (divId != 'undefined') {
+        divId.style.visibility = "hidden";
+        divId.style.overflow = "hidden";
+        divId.style.height = "0";
+        divId.style.width = "0";
     }
 };
 
-function showDivision(div_id) {
-    if (div_id != 'undefined') {
-        div_id.style.visibility = null;
-        div_id.style.overflow = null;
-        div_id.style.height = null;
-        div_id.style.width = null;
+function showDivision(divId) {
+    if (divId != 'undefined') {
+        divId.style.visibility = null;
+        divId.style.overflow = null;
+        divId.style.height = null;
+        divId.style.width = null;
     }
 };
 
 // For detector mode.
-function modeSelectOnChange(update_detector) {
-    let selected_value = detector_mode_select_id.options[detector_mode_select_id.selectedIndex].value
-    hideDivision(div_manual_triggering_id);
-    hideDivision(div_detector_power_off_id);
-    if (selected_value == "mode-off") {
+function modeSelectOnChange(updateDetector) {
+    let selectedValue = byId("recModeSelectId").options[byId("recModeSelectId").selectedIndex].value
+    hideDivision(byId("recManualTriggeringId"));
+    hideDivision(byId("recDetectorPowerOffId"));
+    if (selectedValue == "mode-off") {
         // stopRecording()
-        if (update_detector) {
+        if (updateDetector) {
             saveSettings()
         }
     }
-    else if (selected_value == "mode-on") {
-        if (update_detector) {
+    else if (selectedValue == "mode-on") {
+        if (updateDetector) {
             saveSettings()
         }
         // startRecording()
     }
-    else if (selected_value == "mode-auto") {
-        if (update_detector) {
+    else if (selectedValue == "mode-auto") {
+        if (updateDetector) {
             saveSettings()
         }
         // startRecording()
     }
-    else if (selected_value == "mode-manual") {
-        showDivision(div_manual_triggering_id);
-        if (update_detector) {
+    else if (selectedValue == "mode-manual") {
+        showDivision(byId("recManualTriggeringId"));
+        if (updateDetector) {
             saveSettings()
         }
         // startRecording()
     }
-    else if (selected_value == "mode-scheduler-on") {
+    else if (selectedValue == "mode-scheduler-on") {
         // stopRecording()
-        if (update_detector) {
+        if (updateDetector) {
             saveSettings()
         }
     }
-    else if (selected_value == "mode-scheduler-auto") {
+    else if (selectedValue == "mode-scheduler-auto") {
         // stopRecording()
-        if (update_detector) {
+        if (updateDetector) {
             saveSettings()
         }
     }
-    else if (selected_value == "load-user-default") {
+    else if (selectedValue == "load-user-default") {
         stopRecording()
-        loadSettings(settings_type = "user-default")
+        loadSettings(settingsType = "user-default")
     }
-    else if (selected_value == "load-start-up") {
+    else if (selectedValue == "load-start-up") {
         stopRecording()
-        loadSettings(settings_type = "start-up")
+        loadSettings(settingsType = "start-up")
     }
-    else if (selected_value == "load-factory-default") {
+    else if (selectedValue == "load-factory-default") {
         stopRecording()
-        loadSettings(settings_type = "factory-default")
+        loadSettings(settingsType = "factory-default")
     }
-    else if (selected_value == "detector-power-off") {
-        showDivision(div_detector_power_off_id);
+    else if (selectedValue == "detector-power-off") {
+        showDivision(byId("recDetectorPowerOffId"));
     }
-    // Trigging Audio feedback sliders
-    feedback_volume_slider_id.oninput()
-    feedback_pitch_slider_id.oninput()
+    // // Trigging Audio feedback sliders
+    // byId("feedbackVolumeSliderId").oninput()
+    // byId("feedbackPitchSliderId").oninput()
 }
 
 // For the geographic location tile.
-function geoLocationSourceOnChange(update_detector) {
-    let selected_value = location_source_select_id.options[location_source_select_id.selectedIndex].value
-    location_button_text_id.innerHTML = "Save"
-    if (selected_value == "geo-not-used") {
-        latitude_dd_id.value = "0.0";
-        longitude_dd_id.value = "0.0";
-        latitude_dd_id.disabled = true;
-        longitude_dd_id.disabled = true;
-        location_button_id.disabled = true;
-        if (update_detector) {
+function geoLocationSourceOnChange(updateDetector) {
+    let selectedValue = byId("geoSourceSelectId").options[byId("geoSourceSelectId").selectedIndex].value
+    byId("geoButtonTextId").innerHTML = "Save"
+    if (selectedValue == "geo-not-used") {
+        byId("geoLatitudeDdId").value = "0.0";
+        byId("geoLongitudeDdId").value = "0.0";
+        byId("geoLatitudeDdId").disabled = true;
+        byId("geoLongitudeDdId").disabled = true;
+        byId("geoLocationButtonId").disabled = true;
+        if (updateDetector) {
             saveLocationSource()
         }
     }
-    else if (selected_value == "geo-manual") {
+    else if (selectedValue == "geo-manual") {
         getManualLocation();
-        location_button_text_id.innerHTML = "Save lat/long"
-        latitude_dd_id.disabled = false;
-        longitude_dd_id.disabled = false;
-        location_button_id.disabled = false;
-        if (update_detector) {
+        byId("geoButtonTextId").innerHTML = "Save lat/long"
+        byId("geoLatitudeDdId").disabled = false;
+        byId("geoLongitudeDdId").disabled = false;
+        byId("geoLocationButtonId").disabled = false;
+        if (updateDetector) {
             saveLocationSource()
         }
     }
     // Disabled, HTTPS is needed.
-    // else if (selected_value == "geo-client-gps") {
+    // else if (selectedValue == "geo-client-gps") {
     //   activateGeoLocation()
-    //   latitude_dd_id.disabled = true;
-    //   longitude_dd_id.disabled = true;
-    //   location_button_id.disabled = false;
-    //   if (update_detector) {
+    //   byId("geoLatitudeDdId").disabled = true;
+    //   byId("geoLongitudeDdId").disabled = true;
+    //   byId("geoLocationButtonId").disabled = false;
+    //   if (updateDetector) {
     //     saveLocationSource()
     //   }
     // }
-    else if (selected_value == "geo-gps") {
-        location_button_text_id.innerHTML = "Use as manually entered"
-        latitude_dd_id.disabled = true;
-        longitude_dd_id.disabled = true;
-        location_button_id.disabled = false;
-        if (update_detector) {
+    else if (selectedValue == "geo-gps") {
+        byId("geoButtonTextId").innerHTML = "Use as manually entered"
+        byId("geoLatitudeDdId").disabled = true;
+        byId("geoLongitudeDdId").disabled = true;
+        byId("geoLocationButtonId").disabled = false;
+        if (updateDetector) {
             saveLocationSource()
         }
     }
-    else if (selected_value == "geo-gps-or-manual") {
-        location_button_text_id.innerHTML = "Save"
-        latitude_dd_id.disabled = true;
-        latitude_dd_id.disabled = true;
-        longitude_dd_id.disabled = true;
-        location_button_id.disabled = true;
-        if (update_detector) {
+    else if (selectedValue == "geo-gps-or-manual") {
+        byId("geoButtonTextId").innerHTML = "Save"
+        byId("geoLatitudeDdId").disabled = true;
+        byId("geoLongitudeDdId").disabled = true;
+        byId("geoLocationButtonId").disabled = true;
+        if (updateDetector) {
             saveLocationSource()
         }
     }
-    else if (selected_value == "geo-last-gps-or-manual") {
-        location_button_text_id.innerHTML = "Save"
-        latitude_dd_id.disabled = true;
-        longitude_dd_id.disabled = true;
-        location_button_id.disabled = true;
-        if (update_detector) {
+    else if (selectedValue == "geo-last-gps-or-manual") {
+        byId("geoButtonTextId").innerHTML = "Save"
+        byId("geoLatitudeDdId").disabled = true;
+        byId("geoLongitudeDdId").disabled = true;
+        byId("geoLocationButtonId").disabled = true;
+        if (updateDetector) {
             saveLocationSource()
         }
     }
     else {
-        latitude_dd_id.disabled = true;
-        longitude_dd_id.disabled = true;
-        location_button_id.disabled = true;
+        byId("geoLatitudeDdId").disabled = true;
+        byId("geoLongitudeDdId").disabled = true;
+        byId("geoLocationButtonId").disabled = true;
     }
 }
 
@@ -186,8 +185,8 @@ function geoLocationSourceOnChange(update_detector) {
 //   };
 // };
 // function showPosition(location) {
-//   latitude_id.value = location.coords.latitude;
-//   longitude_id.value = location.coords.longitude;
+//   byId("latitudeId").value = location.coords.latitude;
+//   byId("longitudeId").value = location.coords.longitude;
 // };
 // function errorCallback(error) {
 //   alert(`Geo location from client:\nERROR(${error.code}): ${error.message}`);
@@ -195,123 +194,123 @@ function geoLocationSourceOnChange(update_detector) {
 
 function audioFeedbackSliders() {
     // Update slider values.
-    feedback_volume_id.innerHTML = "[" + feedback_volume_slider_id.value + "%]";
-    feedback_pitch_id.innerHTML = "[1/" + feedback_pitch_slider_id.value + "]";
+    byId("feedbackVolumeId").innerHTML = "[" + byId("feedbackVolumeSliderId").value + "%]";
+    byId("feedbackPitchId").innerHTML = "[1/" + byId("feedbackPitchSliderId").value + "]";
     // On changes.
-    feedback_volume_slider_id.oninput = function () {
-        feedback_volume_id.innerHTML = "[" + this.value + "%]";
+    byId("feedbackVolumeSliderId").oninput = function () {
+        byId("feedbackVolumeId").innerHTML = "[" + this.value + "%]";
     }
-    feedback_volume_slider_id.onchange = function () {
+    byId("feedbackVolumeSliderId").onchange = function () {
         // Send to server.
-        feedback_volume_id.innerHTML = "[" + this.value + "%]";
+        byId("feedbackVolumeId").innerHTML = "[" + this.value + "%]";
         setAudioFeedback()
     }
-    feedback_pitch_slider_id.oninput = function () {
-        feedback_pitch_id.innerHTML = "[1/" + this.value + "]";
+    byId("feedbackPitchSliderId").oninput = function () {
+        byId("feedbackPitchId").innerHTML = "[1/" + this.value + "]";
     }
-    feedback_pitch_slider_id.onchange = function () {
+    byId("feedbackPitchSliderId").onchange = function () {
         // Send to server.
-        feedback_pitch_id.innerHTML = "[1/" + this.value + "]";
+        byId("feedbackPitchId").innerHTML = "[1/" + this.value + "]";
         setAudioFeedback()
     }
 }
 
 // Used for the main tabs in the settings tile.
-function hideShowSettingsTabs(tab_name) {
-    tab_settings_basic_id.classList.remove("is-active");
-    tab_settings_more_id.classList.remove("is-active");
-    tab_settings_scheduler_id.classList.remove("is-active");
-    hideDivision(div_settings_basic_id)
-    hideDivision(div_settings_more_id)
-    hideDivision(div_settings_scheduler_id)
+function hideShowSettingsTabs(tabName) {
+    byId("tabSettingsBasicId").classList.remove("is-active");
+    byId("tabSettingsMoreId").classList.remove("is-active");
+    byId("tabSettingsSchedulerId").classList.remove("is-active");
+    hideDivision(byId("divSettingsBasicId"))
+    hideDivision(byId("divSettingsMoreId"))
+    hideDivision(byId("divSettingsSchedulerId"))
 
-    if (tab_name == "basic") {
-        tab_settings_basic_id.classList.add("is-active");
-        showDivision(div_settings_basic_id)
-    } else if (tab_name == "more") {
-        tab_settings_more_id.classList.add("is-active");
-        showDivision(div_settings_more_id)
-    } else if (tab_name == "scheduler") {
-        tab_settings_scheduler_id.classList.add("is-active");
-        showDivision(div_settings_scheduler_id)
+    if (tabName == "basic") {
+        byId("tabSettingsBasicId").classList.add("is-active");
+        showDivision(byId("divSettingsBasicId"))
+    } else if (tabName == "more") {
+        byId("tabSettingsMoreId").classList.add("is-active");
+        showDivision(byId("divSettingsMoreId"))
+    } else if (tabName == "scheduler") {
+        byId("tabSettingsSchedulerId").classList.add("is-active");
+        showDivision(byId("divSettingsSchedulerId"))
     };
 };
 // Functions used to updates fields based on response contents.
 function updateStatus(status) {
-    detector_status_id.innerHTML = status.rec_status;
-    if (status.device_name != "") {
-        detector_status_id.innerHTML += "<br>"
-        detector_status_id.innerHTML += status.device_name;
+    byId("detectorStatusId").innerHTML = status.recStatus;
+    if (status.deviceName != "") {
+        byId("detectorStatusId").innerHTML += "<br>"
+        byId("detectorStatusId").innerHTML += status.deviceName;
     }
-    detector_time_id.innerHTML = status.detector_time;
-    location_status_id.innerHTML = status.location_status;
+    byId("detectorTimeId").innerHTML = status.detectorTime;
+    byId("locationStatusId").innerHTML = status.locationStatus;
 }
 
 function updateLocation(location) {
-    location_source_select_id.value = location.geo_source
-    if (location.geo_source == "geo-manual") {
-        latitude_dd_id.value = location.manual_latitude_dd
-        longitude_dd_id.value = location.manual_longitude_dd
+    byId("locationSourceSelectId").value = location.geoSource
+    if (location.geoSource == "geo-manual") {
+        byId("latitudeDdId").value = location.manualLatitudeDd
+        byId("longitudeDdId").value = location.manualLongitudeDd
     } else {
-        latitude_dd_id.value = location.latitude_dd
-        longitude_dd_id.value = location.longitude_dd
+        byId("latitudeDdId").value = location.latitudeDd
+        byId("longitudeDdId").value = location.longitudeDd
     }
     // Check geolocation:
-    geoLocationSourceOnChange(update_detector = false);
+    geoLocationSourceOnChange(updateDetector = false);
 }
 
 function updateLatLong(latlong) {
-    latitude_dd_id.value = latlong.latitude_dd
-    longitude_dd_id.value = latlong.longitude_dd
+    byId("latitudeDdId").value = latlong.latitudeDd
+    byId("longitudeDdId").value = latlong.longitudeDd
 }
 
 function updateSettings(settings) {
 
-    last_used_settings = settings
+    lastUsedSettings = settings
 
-    detector_mode_select_id.value = settings.rec_mode
-    settings_file_directory_id.value = settings.file_directory
-    settings_file_directory_date_option_id.value = settings.file_directory_date_option
-    settings_filename_prefix_id.value = settings.filename_prefix
-    settings_detection_limit_id.value = settings.detection_limit_khz
-    settings_detection_sensitivity_id.value = settings.detection_sensitivity_dbfs
-    settings_detection_algorithm_id.value = settings.detection_algorithm
-    settings_rec_length_id.value = settings.rec_length_s
-    settings_rec_type_id.value = settings.rec_type
-    settings_feedback_on_off_id.value = settings.feedback_on_off
-    feedback_volume_slider_id.value = settings.feedback_volume
-    feedback_pitch_slider_id.value = settings.feedback_pitch
-    settings_feedback_filter_low_id.value = settings.feedback_filter_low_khz
-    settings_feedback_filter_high_id.value = settings.feedback_filter_high_khz
-    settings_startup_option_id.value = settings.startup_option
-    settings_scheduler_start_event_id.value = settings.scheduler_start_event
-    settings_scheduler_start_adjust_id.value = settings.scheduler_start_adjust
-    settings_scheduler_stop_event_id.value = settings.scheduler_stop_event
-    settings_scheduler_stop_adjust_id.value = settings.scheduler_stop_adjust
-    settings_scheduler_post_action_id.value = settings.scheduler_post_action
-    settings_scheduler_post_action_delay_id.value = settings.scheduler_post_action_delay
+    byId("recModeSelectId").value = settings.recMode
+    byId("settingsFileDirectoryId").value = settings.fileDirectory
+    byId("settingsFileDirectoryDateOptionId").value = settings.fileDirectoryDateOption
+    byId("settingsFilenamePrefixId").value = settings.filenamePrefix
+    byId("settingsDetectionLimitId").value = settings.detectionLimitKhz
+    byId("settingsDetectionSensitivityId").value = settings.detectionSensitivityDbfs
+    byId("settingsDetectionAlgorithmId").value = settings.detectionAlgorithm
+    byId("settingsRecLengthId").value = settings.recLengthS
+    byId("settingsRecTypeId").value = settings.recType
+    byId("settingsFeedbackOnOffId").value = settings.feedbackOnOff
+    byId("feedbackVolumeSliderId").value = settings.feedbackVolume
+    byId("feedbackPitchSliderId").value = settings.feedbackPitch
+    byId("settingsFeedbackFilterLowId").value = settings.feedbackFilterLowKhz
+    byId("settingsFeedbackFilterHighId").value = settings.feedbackFilterHighKhz
+    byId("settingsStartupOptionId").value = settings.startupOption
+    byId("settingsSchedulerStartEventId").value = settings.schedulerStartEvent
+    byId("settingsSchedulerStartAdjustId").value = settings.schedulerStartAdjust
+    byId("settingsSchedulerStopEventId").value = settings.schedulerStopEvent
+    byId("settingsSchedulerStopAdjustId").value = settings.schedulerStopAdjust
+    byId("settingsSchedulerPostActionId").value = settings.schedulerPostAction
+    byId("settingsSchedulerPostActionDelayId").value = settings.schedulerPostActionDelay
 
-    modeSelectOnChange(update_detector = false)
+    modeSelectOnChange(updateDetector = false)
 
     // Trigging Audio feedback sliders
-    feedback_volume_slider_id.oninput()
-    feedback_pitch_slider_id.oninput()
+    byId("feedbackVolumeSliderId").oninput()
+    byId("feedbackPitchSliderId").oninput()
 }
 
 function saveUserDefaultSettings() {
-    saveSettings(settings_type = "user-defined")
+    saveSettings(settingsType = "user-defined")
 }
 
 function saveStartupSettings() {
-    saveSettings(settings_type = "startup")
+    saveSettings(settingsType = "startup")
 }
 
-function updateLogTable(log_rows) {
-    html_table_rows = ""
-    for (row_index in log_rows) {
-        html_table_rows += "<tr><td>"
-        html_table_rows += log_rows[row_index]
-        html_table_rows += "</tr></td>"
+function updateLogTable(logRows) {
+    htmlTableRows = ""
+    for (rowIndex in logRows) {
+        htmlTableRows += "<tr><td>"
+        htmlTableRows += logRows[rowIndex]
+        htmlTableRows += "</tr></td>"
     }
-    document.getElementById("recLogTableId").innerHTML = html_table_rows
+    byId("recLogTableId").innerHTML = htmlTableRows
 }

@@ -182,7 +182,7 @@ function toggleTag(tagObject) {
     } else {
         tagObject.classList.add("is-inverted");
     };
-    tags_as_str = annoGetTags()
+    tagsAsStr = annoGetTags()
     annoSaveAnnotations();
 }
 
@@ -313,56 +313,56 @@ function annoGetTags() {
     return tags;
 }
 
-function annoSetTags(tags_as_str) {
+function annoSetTags(tagsAsStr) {
     // Add trailing/leading , for compare strings.
-    tags_as_str = "," + tags_as_str + ","
-    if (tags_as_str.includes(",FM-CF-FM,")) {
+    tagsAsStr = "," + tagsAsStr + ","
+    if (tagsAsStr.includes(",FM-CF-FM,")) {
         byId("anno-FM-CF-FM-Id").classList.add("is-inverted")
     } else {
         byId("anno-FM-CF-FM-Id").classList.remove("is-inverted")
     }
-    if (tags_as_str.includes(",FM,")) {
+    if (tagsAsStr.includes(",FM,")) {
         byId("anno-FM-Id").classList.add("is-inverted")
     } else {
         byId("anno-FM-Id").classList.remove("is-inverted")
     }
-    if (tags_as_str.includes(",FM-QCF,")) {
+    if (tagsAsStr.includes(",FM-QCF,")) {
         byId("anno-FM-QCF-Id").classList.add("is-inverted")
     } else {
         byId("anno-FM-QCF-Id").classList.remove("is-inverted")
     }
-    if (tags_as_str.includes(",QCF,")) {
+    if (tagsAsStr.includes(",QCF,")) {
         byId("anno-QCF-Id").classList.add("is-inverted")
     } else {
         byId("anno-QCF-Id").classList.remove("is-inverted")
     }
-    if (tags_as_str.includes(",FM+H2,")) {
+    if (tagsAsStr.includes(",FM+H2,")) {
         byId("anno-FM+H2-Id").classList.add("is-inverted")
     } else {
         byId("anno-FM+H2-Id").classList.remove("is-inverted")
     }
-    if (tags_as_str.includes(",QCF+FM,")) {
+    if (tagsAsStr.includes(",QCF+FM,")) {
         byId("anno-QCF+FM-Id").classList.add("is-inverted")
     } else {
         byId("anno-QCF+FM-Id").classList.remove("is-inverted")
     }
 
-    if (tags_as_str.includes(",Social,")) {
+    if (tagsAsStr.includes(",Social,")) {
         byId("anno-Social-Id").classList.add("is-inverted")
     } else {
         byId("anno-Social-Id").classList.remove("is-inverted")
     }
-    if (tags_as_str.includes(",Birds,")) {
+    if (tagsAsStr.includes(",Birds,")) {
         byId("anno-Birds-Id").classList.add("is-inverted")
     } else {
         byId("anno-Birds-Id").classList.remove("is-inverted")
     }
-    if (tags_as_str.includes(",Mammals,")) {
+    if (tagsAsStr.includes(",Mammals,")) {
         byId("anno-Mammals-Id").classList.add("is-inverted")
     } else {
         byId("anno-Mammals-Id").classList.remove("is-inverted")
     }
-    if (tags_as_str.includes(",Crickets,")) {
+    if (tagsAsStr.includes(",Crickets,")) {
         byId("anno-Crickets-Id").classList.add("is-inverted")
     } else {
         byId("anno-Crickets-Id").classList.remove("is-inverted")

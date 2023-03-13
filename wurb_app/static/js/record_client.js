@@ -2,7 +2,7 @@
 
 async function startRecording() {
     try {
-        document.getElementById("recStatusId").innerHTML = "Waiting...";
+        byId("recStatusId").innerHTML = "Waiting...";
         // // Save settings before recording starts.
         // saveSettings()
         await fetch("/record/start-rec/");
@@ -14,7 +14,7 @@ async function startRecording() {
 
 async function stopRecording() {
     try {
-        document.getElementById("recStatusId").innerHTML = "Waiting...";
+        byId("recStatusId").innerHTML = "Waiting...";
         await fetch("/record/stop-rec/");
     } catch (err) {
         alert("ERROR stopRecording: ${err}");
@@ -24,9 +24,9 @@ async function stopRecording() {
 
 async function recModeOnChange() {
     try {
-        let recmode = detector_mode_select_id.value;
-        let url_string = "/record/save-rec-mode/?recmode=${recmode}";
-        await fetch(url_string);
+        let recmode = byId("recModeSelectId").value;
+        let urlString = "/record/save-rec-mode/?recmode=${recmode}";
+        await fetch(urlString);
     } catch (err) {
         alert("ERROR recModeOnChange: ${err}");
         console.log(err);
@@ -36,9 +36,9 @@ async function recModeOnChange() {
 async function saveLocationSource() {
     try {
         let location = {
-            geo_source: location_source_select_id.value,
-            latitude_dd: latitude_dd_id.value,
-            longitude_dd: longitude_dd_id.value,
+            geoSource: byId("geoSourceSelectId").value,
+            latitudeDd: byId("geoLatitudeDdId").value,
+            longitudeDd: byId("geoLongitudeDdId").value,
         }
         await fetch("/record/save-location/",
             {
@@ -57,28 +57,28 @@ async function saveLocationSource() {
 async function saveLocation() {
     try {
         let location = {
-            geo_source: location_source_select_id.value,
-            latitude_dd: latitude_dd_id.value,
-            longitude_dd: longitude_dd_id.value,
+            geoSource: byId("geoSourceSelectId").value,
+            latitudeDd: byId("geoLatitudeDdId").value,
+            longitudeDd: byId("geoLongitudeDdId").value,
         }
-        if (location_source_select_id.value == "geo-manual") {
-            location["manual_latitude_dd"] = latitude_dd_id.value
-            location["manual_longitude_dd"] = longitude_dd_id.value
+        if (byId("geoSourceSelectId").value == "geo-manual") {
+            location["manualLatitudeDd"] = byId("geoLatitudeDdId").value
+            location["manualLongitudeDd"] = byId("geoLongitudeDdId").value
         }
-        if (location_source_select_id.value == "geo-gps") {
-            location["geo_source"] = "geo-manual"
-            location["manual_latitude_dd"] = latitude_dd_id.value
-            location["manual_longitude_dd"] = longitude_dd_id.value
+        if (byId("geoSourceSelectId").value == "geo-gps") {
+            location["geoSource"] = "geo-manual"
+            location["manualLatitudeDd"] = byId("geoLatitudeDdId").value
+            location["manualLongitudeDd"] = byId("geoLongitudeDdId").value
         }
-        if (location_source_select_id.value == "geo-gps-or-manual") {
-            location["geo_source"] = "geo-manual"
-            location["manual_latitude_dd"] = latitude_dd_id.value
-            location["manual_longitude_dd"] = longitude_dd_id.value
+        if (byId("geoSourceSelectId").value == "geo-gps-or-manual") {
+            location["geoSource"] = "geo-manual"
+            location["manualLatitudeDd"] = byId("geoLatitudeDdId").value
+            location["manualLongitudeDd"] = byId("geoLongitudeDdId").value
         }
-        if (location_source_select_id.value == "geo-last-gps-or-manual") {
-            location["geo_source"] = "geo-manual"
-            location["manual_latitude_dd"] = latitude_dd_id.value
-            location["manual_longitude_dd"] = longitude_dd_id.value
+        if (byId("geoSourceSelectId").value == "geo-last-gps-or-manual") {
+            location["geoSource"] = "geo-manual"
+            location["manualLatitudeDd"] = byId("geoLatitudeDdId").value
+            location["manualLongitudeDd"] = byId("geoLongitudeDdId").value
         }
         await fetch("/record/save-location/",
             {
@@ -109,8 +109,8 @@ async function getManualLocation() {
     try {
         let response = await fetch("/record/get-location/");
         let location = await response.json();
-        latitude_dd_id.value = location.manual_latitude_dd
-        longitude_dd_id.value = location.manual_longitude_dd
+        byId("geoLatitudeDdId").value = location.manualLatitudeDd
+        byId("geoLongitudeDdId").value = location.manualLongitudeDd
     } catch (err) {
         alert("ERROR getManualLocation: ${err}");
         console.log(err);
@@ -119,49 +119,49 @@ async function getManualLocation() {
 
 async function setDetectorTime() {
     try {
-        let posix_time_ms = new Date().getTime();
-        // let url_string = "/record/set_time/?posixtime=" + posix_time_ms;    
-        let url_string = "/record/set-time/?posixtime=${posix_time_ms}";
-        await fetch(url_string);
+        let posixTimeMs = new Date().getTime();
+        // let urlString = "/record/setTime/?posixtime=" + posixTimeMs;    
+        let urlString = "/record/set-time/?posixtime=${posixTimeMs}";
+        await fetch(urlString);
     } catch (err) {
         alert("ERROR setDetectorTime: ${err}");
         console.log(err);
     };
 };
 
-async function saveSettings(settings_type) {
+async function saveSettings(settingsType) {
     try {
-        let url_string = "/record/save-settings/";
-        if (settings_type == "user-defined") {
-            url_string = "/record/save-settings-user/";
+        let urlString = "/record/save-settings/";
+        if (settingsType == "user-defined") {
+            urlString = "/record/save-settings-user/";
         }
-        else if (settings_type == "startup") {
-            url_string = "/record/save-settings-startup/";
+        else if (settingsType == "startup") {
+            urlString = "/record/save-settings-startup/";
         }
         let settings = {
-            rec_mode: detector_mode_select_id.value,
-            file_directory: settings_file_directory_id.value,
-            file_directory_date_option: settings_file_directory_date_option_id.value,
-            filename_prefix: settings_filename_prefix_id.value,
-            detection_limit_khz: settings_detection_limit_id.value,
-            detection_sensitivity_dbfs: settings_detection_sensitivity_id.value,
-            detection_algorithm: settings_detection_algorithm_id.value,
-            rec_length_s: settings_rec_length_id.value,
-            rec_type: settings_rec_type_id.value,
-            feedback_on_off: settings_feedback_on_off_id.value,
-            feedback_volume: feedback_volume_slider_id.value,
-            feedback_pitch: feedback_pitch_slider_id.value,
-            feedback_filter_low_khz: settings_feedback_filter_low_id.value,
-            feedback_filter_high_khz: settings_feedback_filter_high_id.value,
-            startup_option: settings_startup_option_id.value,
-            scheduler_start_event: settings_scheduler_start_event_id.value,
-            scheduler_start_adjust: settings_scheduler_start_adjust_id.value,
-            scheduler_stop_event: settings_scheduler_stop_event_id.value,
-            scheduler_stop_adjust: settings_scheduler_stop_adjust_id.value,
-            scheduler_post_action: settings_scheduler_post_action_id.value,
-            scheduler_post_action_delay: settings_scheduler_post_action_delay_id.value,
+            recMode: byId("recModeSelectId").value,
+            fileDirectory: byId("recFileDirectoryId").value,
+            fileDirectoryDateOption: byId("recFileDirectoryDateOptionId").value,
+            filenamePrefix: byId("recFilenamePrefixId").value,
+            // detectionLimitKhz: byId("settingsDetectionLimitId").value,
+            // detectionSensitivityDbfs: byId("settingsDetectionSensitivityId").value,
+            // detectionAlgorithm: byId("settingsDetectionAlgorithmId").value,
+            // recLengthS: byId("settingsRecLengthId").value,
+            // recType: byId("settingsRecTypeId").value,
+            // feedbackOnOff: byId("settingsFeedbackOnOffId").value,
+            // feedbackVolume: byId("feedbackVolumeSliderId").value,
+            // feedbackPitch: byId("feedbackPitchSliderId").value,
+            // feedbackFilterLowKhz: byId("settingsFeedbackFilterLowId").value,
+            // feedbackFilterHighKhz: byId("settingsFeedbackFilterHighId").value,
+            // startupOption: byId("settingsStartupOptionId").value,
+            // schedulerStartEvent: byId("settingsSchedulerStartEventId").value,
+            // schedulerStartAdjust: byId("settingsSchedulerStartAdjustId").value,
+            // schedulerStopEvent: byId("settingsSchedulerStopEventId").value,
+            // schedulerStopAdjust: byId("settingsSchedulerStopAdjustId").value,
+            // schedulerPostAction: byId("settingsSchedulerPostActionId").value,
+            // schedulerPostActionDelay: byId("settingsSchedulerPostActionDelayId").value,
         }
-        await fetch(url_string,
+        await fetch(urlString,
             {
                 method: "POST",
                 headers: {
@@ -197,9 +197,9 @@ async function getDefaultSettings() {
     };
 };
 
-async function loadSettings(settings_type) {
+async function loadSettings(settingsType) {
     try {
-        let response = await fetch("/record/load-settings/?settings_type=" + settings_type);
+        let response = await fetch("/record/load-settings/?settingsType=" + settingsType);
         await response.json();
     } catch (err) {
         alert("ERROR getSettings: ${err}");
@@ -209,8 +209,8 @@ async function loadSettings(settings_type) {
 
 async function manualTrigger() {
     try {
-        let url_string = "/record/rec-manual-trigger/";
-        await fetch(url_string);
+        let urlString = "/record/rec-manual-trigger/";
+        await fetch(urlString);
     } catch (err) {
         alert("ERROR manualTrigger: ${err}");
         console.log(err);
@@ -219,14 +219,14 @@ async function manualTrigger() {
 
 async function raspberryPiControl(command) {
     try {
-        if (command == "rpi_cancel") {
-            detector_mode_select_id.value = last_used_settings.rec_mode
-            modeSelectOnChange(update_detector = true)
+        if (command == "rpiCancel") {
+            byId("recModeSelectId").value = lastUsedSettings.recMode
+            modeSelectOnChange(updateDetector = true)
         } else {
-            detector_mode_select_id.value = last_used_settings.rec_mode
-            modeSelectOnChange(update_detector = true)
-            let url_string = "/record/rpi-control/?command=${command}";
-            await fetch(url_string);
+            byId("recModeSelectId").value = lastUsedSettings.recMode
+            modeSelectOnChange(updateDetector = true)
+            let urlString = "/record/rpi-control/?command=${command}";
+            await fetch(urlString);
         }
     } catch (err) {
         alert("ERROR raspberryPiControl: ${err}");
@@ -234,53 +234,53 @@ async function raspberryPiControl(command) {
     };
 };
 
-let wait_text_nr = 0
+let waitTextNr = 0
 
-function startWebsocket(ws_url) {
+function startWebsocket(wsUrl) {
     // let ws = new WebSocket("ws://localhost:8000/ws");
-    let ws = new WebSocket(ws_url);
+    let ws = new WebSocket(wsUrl);
     ws.onmessage = function (event) {
-        let data_json = JSON.parse(event.data);
-        if ("status" in data_json === true) {
-            updateStatus(data_json.status)
+        let dataJson = JSON.parse(event.data);
+        if ("status" in dataJson === true) {
+            updateStatus(dataJson.status)
         }
-        if ("location" in data_json === true) {
-            updateLocation(data_json.location)
+        if ("location" in dataJson === true) {
+            updateLocation(dataJson.location)
         }
-        if ("latlong" in data_json === true) {
-            updateLatLong(data_json.latlong)
+        if ("latlong" in dataJson === true) {
+            updateLatLong(dataJson.latlong)
         }
-        if ("settings" in data_json === true) {
-            updateSettings(data_json.settings)
+        if ("settings" in dataJson === true) {
+            updateSettings(dataJson.settings)
         }
-        if ("log_rows" in data_json === true) {
-            updateLogTable(data_json.log_rows)
+        if ("logRows" in dataJson === true) {
+            updateLogTable(dataJson.logRows)
         }
     }
     ws.onclose = function () {
         // Try to reconnect in 5th seconds. Will continue...
         ws = null;
 
-        if (wait_text_nr == 0) {
-            wait_text = "Waiting for response from detector..."
-        } else if (wait_text_nr == 1) {
-            wait_text = "Waiting for response from detector."
-        } else if (wait_text_nr == 2) {
-            wait_text = "Waiting for response from detector.."
+        if (waitTextNr == 0) {
+            waitText = "Waiting for response from detector..."
+        } else if (waitTextNr == 1) {
+            waitText = "Waiting for response from detector."
+        } else if (waitTextNr == 2) {
+            waitText = "Waiting for response from detector.."
         }
-        wait_text_nr += 1
-        if (wait_text_nr >= 3) {
-            wait_text_nr = 0
+        waitTextNr += 1
+        if (waitTextNr >= 3) {
+            waitTextNr = 0
         }
 
-        let status_when_disconnected = {
-            rec_status: wait_text,
-            device_name: "",
-            detector_time: "",
-            location_status: ""
+        let statusWhenDisconnected = {
+            recStatus: waitText,
+            deviceName: "",
+            detectorTime: "",
+            locationStatus: ""
         }
-        updateStatus(status_when_disconnected)
+        updateStatus(statusWhenDisconnected)
 
-        setTimeout(function () { startWebsocket(ws_url) }, 5000);
+        setTimeout(function () { startWebsocket(wsUrl) }, 5000);
     };
 };

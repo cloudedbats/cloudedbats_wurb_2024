@@ -257,7 +257,7 @@
                                             <div class="field">
                                                 <div class="control">
                                                     <input id="recFilenamePrefixId" class="input"
-                                                        placeholder="Comments on place/night">
+                                                        placeholder="Comments on monitoring night">
                                                 </div>
                                             </div>
                                         </td>
@@ -274,6 +274,10 @@
                             <button style="margin:5px;" class="button is-small is-rounded is-info has-text-weight-bold"
                                 onclick="setDetectorTime()">
                                 Set time
+                            </button>
+                            <button style="margin:5px;" class="button is-small is-rounded is-info has-text-weight-bold"
+                                onclick="saveSettings()">
+                                Save settings
                             </button>
                         </div>
 
@@ -393,7 +397,7 @@
                             </div>
 
                             <div class="buttons is-centered">
-                                <button style="margin:5px;" id="geoSaveButtonId"
+                                <button style="margin:5px;" id="geoLocationButtonId"
                                     class="button is-info is-small is-rounded has-text-weight-bold"
                                     onclick="saveLocation()">
                                     <span id="geoButtonTextId">Save</span>
