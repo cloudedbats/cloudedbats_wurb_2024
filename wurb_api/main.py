@@ -17,7 +17,7 @@ import websockets.exceptions
 
 # CloudedBats WURB.
 import wurb_core
-import wurb_app
+import wurb_api
 
 logger = logging.getLogger(wurb_core.used_logger)
 
@@ -48,11 +48,11 @@ async def shutdown_event():
 
 
 # Include modules.
-app.include_router(wurb_app.record_router)
-app.include_router(wurb_app.live_router)
-app.include_router(wurb_app.annotations_router)
-app.include_router(wurb_app.admin_router)
-app.include_router(wurb_app.about_router)
+app.include_router(wurb_api.record_router)
+app.include_router(wurb_api.live_router)
+app.include_router(wurb_api.annotations_router)
+app.include_router(wurb_api.admin_router)
+app.include_router(wurb_api.about_router)
 
 
 @app.get("/", tags=["HTML pages"], description="Main application page loaded as HTML.")

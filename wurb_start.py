@@ -40,26 +40,32 @@ async def main():
         config_default_file="wurb_config_default.yaml",
     )
 
+    # WURB settings.
+    wurb_core.wurb_settings.load_settings(
+        settings_dir=settings_dir,
+        # settings_file="wurb_settings.yaml",
+    )
+
     # WURB core startup.
     logger.debug("WURB startup.")
-    await wurb_core.manager.startup()
+    await wurb_core.wurb_manager.startup()
 
     # App config.
-    port = wurb_core.config.get("wurb_app.port", default="8001")
+    port = wurb_core.config.get("wurb_app.port", default="8080")
     port = int(port)
     host = wurb_core.config.get("wurb_app.host", default="0.0.0.0")
     log_level = wurb_core.config.get("wurb_app.log_level", default="info")
 
     logger.debug("Uvicorn startup at port: " + str(port) + ".")
     config = uvicorn.Config(
-        "wurb_app:app", loop="asyncio", host=host, port=port, log_level=log_level
+        "wurb_api:app", loop="asyncio", host=host, port=port, log_level=log_level
     )
     server = uvicorn.Server(config)
     await server.serve()
 
     # WURB core shutdown.
     logger.debug("WURB shutdown started.")
-    wurb_core.manager.shutdown()
+    wurb_core.app_manager.shutdown()
     logger.debug("WURB shutdown done.")
 
 

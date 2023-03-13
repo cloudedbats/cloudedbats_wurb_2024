@@ -7,10 +7,8 @@
 import asyncio
 import logging
 
-import wurb_core
 
-
-class WurbManager(object):
+class AppManager(object):
     """ """
 
     def __init__(self, logger="DefaultLogger"):
@@ -20,7 +18,7 @@ class WurbManager(object):
 
     async def startup(self):
         """ """
-        # await wurb_core.gps.startup()
+        #
 
     def shutdown(self):
         """ """

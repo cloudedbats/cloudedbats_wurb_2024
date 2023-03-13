@@ -46,4 +46,4 @@ async def set_audio_feedback(volume: str, pitch: str):
     except Exception as e:
         # Logging error.
         message = "Called: set_audio_feedback: " + str(e)
-        wurb_rec_manager.wurb_logging.error(message, short_message=message)
+        wurb_rec_manager.wurb_logging.error(message)

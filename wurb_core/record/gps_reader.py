@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
 # Project: http://cloudedbats.org, https://github.com/cloudedbats
-# Copyright (c) 2023-present Arnold Andreasson
-# License: MIT License (see LICENSE or http://opensource.org/licenses/mit).
+# Copyright (c) 2020-present Arnold Andreasson
+# License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 import asyncio
 import serial_asyncio
@@ -10,18 +10,15 @@ import logging
 import pathlib
 import datetime
 
+import wurb_core
 
-class WurbGps(object):
+class GpsReader(object):
     """ GPS reader for USB GPS Receiver. """
 
     def __init__(self, logger="DefaultLogger"):
         """ """
         self.logger_name = logger
         self.logger = logging.getLogger(logger)
-        # self.wurb_manager = wurb_manager
-        # self.wurb_settings = wurb_manager.wurb_settings
-        # self.wurb_logging = wurb_manager.wurb_logging
-        # self.wurb_rpi = wurb_manager.wurb_rpi
         self.asyncio_loop = None
         #
         self.gps_datetime_utc = None
@@ -52,7 +49,7 @@ class WurbGps(object):
         self.last_used_long_dd = 0.0
         self.number_of_satellites = 0
         self.asyncio_loop = asyncio.get_event_loop()
-        self.gps_control_task = asyncio.create_task(self.gps_control_loop(), name="GPS Task")
+        self.gps_control_task = asyncio.create_task(self.gps_control_loop())
 
     async def shutdown(self):
         """ """
@@ -101,7 +98,7 @@ class WurbGps(object):
         except Exception as e:
             # Logging error.
             message = "GPS Control loop: " + str(e)
-            self.logger.error(message)
+            wurb_core.wurb_logger.error(message)
 
     async def start(self):
         """ """
@@ -130,15 +127,9 @@ class WurbGps(object):
             self.last_used_lat_dd = 0.0
             self.last_used_long_dd = 0.0
             self.number_of_satellites = 0
-
-
-
-            # asyncio.run_coroutine_threadsafe(
-            #     self.wurb_settings.save_latlong(0.0, 0.0), self.asyncio_loop,
-            # )
-
-
-
+            asyncio.run_coroutine_threadsafe(
+                wurb_core.wurb_settings.save_latlong(0.0, 0.0), self.asyncio_loop,
+            )
 
     async def stop(self):
         """ """
@@ -208,16 +199,10 @@ class WurbGps(object):
                 self.last_used_lat_dd = 0.0
                 self.last_used_long_dd = 0.0
                 self.number_of_satellites = 0
-
-
-
-                # asyncio.run_coroutine_threadsafe(
-                #     self.wurb_settings.save_latlong(0.0, 0.0), self.asyncio_loop,
-                # )
+                asyncio.run_coroutine_threadsafe(
+                    wurb_core.wurb_settings.save_latlong(0.0, 0.0), self.asyncio_loop,
+                )
                 return
-
-
-
 
             # Extract date and time.
             datetime_utc = datetime.datetime(
@@ -287,7 +272,7 @@ class WurbGps(object):
             except Exception as e:
                 # Logging error.
                 message = "GPS time: " + str(e)
-                self.logger.error(message)
+                wurb_core.wurb_logger.error(message)
 
             # Check if lat/long changed.
             lat_dd = round(self.gps_latitude, 5)
@@ -297,17 +282,9 @@ class WurbGps(object):
                 self.last_used_lat_dd = lat_dd
                 self.last_used_long_dd = long_dd
                 # Connect to main loop.
-
-
-
-
-                # asyncio.run_coroutine_threadsafe(
-                #     self.wurb_settings.save_latlong(lat_dd, long_dd), self.asyncio_loop,
-                # )
-
-
-
-
+                asyncio.run_coroutine_threadsafe(
+                    wurb_core.wurb_settings.save_latlong(lat_dd, long_dd), self.asyncio_loop,
+                )
 
             # print("GPS datetime: ", datetime_utc)
             # print("GPS latitude: ", latitude_dd)
@@ -328,7 +305,7 @@ class WurbGps(object):
         except Exception as e:
             # Logging error.
             message = "GPS is_time_valid: " + str(e)
-            self.logger.error(message)
+            wurb_core.wurb_logger.error(message)
             return False
 
 
