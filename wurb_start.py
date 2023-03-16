@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
-# Project: http://cloudedbats.org, https://github.com/cloudedbats
+# Project: https://cloudedbats.github.io, 
 # Copyright (c) 2023-present Arnold Andreasson
 # License: MIT License (see LICENSE or http://opensource.org/licenses/mit).
 
@@ -24,12 +24,12 @@ async def main():
         log_name="info_log.txt",
         debug_log_name="debug_log.txt",
     )
-    logger = logging.getLogger(wurb_core.used_logger)
+    logger_name = wurb_core.logger.get_logger_name()
+    logger = logging.getLogger(logger_name)
     logger.info("\n\n")
     logger.info("Welcome to CloudedBats WURB-2023")
-    logger.info("Project page: https://cloudedbats.github.io")
-    logger.info("Source code: https://github.com/cloudedbats_wurb_2023")
-    logger.info("======================= ^ö^ =========================")
+    logger.info("Project: https://cloudedbats.github.io")
+    logger.info("================ ^ö^ =================")
     logger.info("")
 
     # WURB configuration.
@@ -48,9 +48,10 @@ async def main():
 
     # WURB core startup.
     logger.debug("WURB startup.")
-    await wurb_core.wurb_manager.startup()
+    wurb_core.wurb_manager.startup()
+    await asyncio.sleep(0)
 
-    # App config.
+    # API and App config.
     port = wurb_core.config.get("wurb_app.port", default="8080")
     port = int(port)
     host = wurb_core.config.get("wurb_app.host", default="0.0.0.0")
@@ -60,12 +61,14 @@ async def main():
     config = uvicorn.Config(
         "wurb_api:app", loop="asyncio", host=host, port=port, log_level=log_level
     )
+
+    # WURB startup.
     server = uvicorn.Server(config)
     await server.serve()
 
-    # WURB core shutdown.
+    # WURB shutdown.
     logger.debug("WURB shutdown started.")
-    wurb_core.app_manager.shutdown()
+    await wurb_core.wurb_manager.shutdown()
     logger.debug("WURB shutdown done.")
 
 

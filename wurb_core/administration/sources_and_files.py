@@ -14,10 +14,17 @@ import wurb_core
 class SourcesAndFiles(object):
     """ """
 
-    def __init__(self, logger="DefaultLogger"):
+    def __init__(self, config=None, logger=None, logger_name="DefaultLogger"):
         """ """
-        self.logger_name = logger
-        self.logger = logging.getLogger(logger)
+        if config == None:
+            self.config = {}
+        else:
+            self.config = config
+        if logger == None:
+            self.logger = logging.getLogger(logger_name)
+        else:
+            self.logger = logger
+        #
         self.cache_by_source = {}
 
     # def get_rec_sources(self):

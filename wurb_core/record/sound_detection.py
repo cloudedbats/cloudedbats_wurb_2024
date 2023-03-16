@@ -12,10 +12,17 @@ import scipy.signal
 class SoundDetection(object):
     """ """
 
-    def __init__(self, logger="DefaultLogger"):
+    def __init__(self, config=None, logger=None, logger_name="DefaultLogger"):
         """ """
-        self.logger_name = logger
-        self.logger = logging.getLogger(logger)
+        if config == None:
+            self.config = {}
+        else:
+            self.config = config
+        if logger == None:
+            self.logger = logging.getLogger(logger_name)
+        else:
+            self.logger = logger
+        #
 
     def get_detection(self):
         """ Select detection algorithm. """
@@ -35,10 +42,17 @@ class SoundDetection(object):
 class SoundDetectionBase:
     """ """
 
-    def __init__(self, logger="DefaultLogger"):
+    def __init__(self, config=None, logger=None, logger_name="DefaultLogger"):
         """ """
-        self.logger_name = logger
-        self.logger = logging.getLogger(logger)
+        if config == None:
+            self.config = {}
+        else:
+            self.config = config
+        if logger == None:
+            self.logger = logging.getLogger(logger_name)
+        else:
+            self.logger = logger
+        #
 
     def config(self, _time_and_data):
         """ Abstract. """
@@ -70,10 +84,17 @@ class SoundDetectionBase:
 class SoundDetectionNone(SoundDetectionBase):
     """ Used for continuous recordings, including silence. """
 
-    def __init__(self, logger="DefaultLogger"):
+    def __init__(self, config=None, logger=None, logger_name="DefaultLogger"):
         """ """
-        self.logger_name = logger
-        self.logger = logging.getLogger(logger)
+        if config == None:
+            self.config = {}
+        else:
+            self.config = config
+        if logger == None:
+            self.logger = logging.getLogger(logger_name)
+        else:
+            self.logger = logger
+        #
         super(SoundDetectionNone, self).__init__(logger)
 
     def config(self):
@@ -92,10 +113,17 @@ class SoundDetectionNone(SoundDetectionBase):
 class SoundDetectionSimple(SoundDetectionBase):
     """ """
 
-    def __init__(self, logger="DefaultLogger"):
+    def __init__(self, config=None, logger=None, logger_name="DefaultLogger"):
         """ """
-        self.logger_name = logger
-        self.logger = logging.getLogger(logger)
+        if config == None:
+            self.config = {}
+        else:
+            self.config = config
+        if logger == None:
+            self.logger = logging.getLogger(logger_name)
+        else:
+            self.logger = logger
+        #
         super(SoundDetectionSimple, self).__init__(logger)
         # Config.
         self.sound_detected_counter_min = 3

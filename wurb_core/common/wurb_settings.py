@@ -9,23 +9,54 @@ import logging
 import datetime
 import pathlib
 
-import wurb_core
-
 
 class WurbSettings(object):
     """ """
 
-    def __init__(self, logger="DefaultLogger"):
+    def __init__(self, config=None, logger=None, logger_name="DefaultLogger"):
         """ """
-        self.logger_name = logger
-        self.logger = logging.getLogger(logger)
+        if config == None:
+            self.config = {}
+        else:
+            self.config = config
+        if logger == None:
+            self.logger = logging.getLogger(logger_name)
+        else:
+            self.logger = logger
+        #
+        self.clear()
+        self.event_loop = asyncio.get_event_loop()
+        self.settings_event = asyncio.Event()
+        self.location_event = asyncio.Event()
+        self.latlong_event = asyncio.Event()
+        self.audiofeedback_event = asyncio.Event()
+
+    def clear(self):
+        """ """
         self.default_settings = None
         self.current_settings = None
         self.default_location = None
         self.current_location = None
-        self.settings_event = None
-        self.location_event = None
-        self.latlong_event = None
+
+    def configure(self):
+        """ """
+        self.max_client_messages = self.config.get(
+            "wurb_logger.max_client_messages", self.max_client_messages
+        )
+
+    def startup(self):
+        """ """
+        self.configure()
+        # GPS.
+        self.save_latlong(0.0, 0.0)
+
+    async def shutdown(self):
+        """ """
+        # Release events.
+        self.settings_event.set()
+        self.location_event.set()
+        self.latlong_event.set()
+        self.audiofeedback_event.set()
 
     def load_settings(self, settings_dir):
         """ """
@@ -56,7 +87,7 @@ class WurbSettings(object):
             "detectionLimitKhz": "17.0",
             "detectionSensitivityDbfs": "-50",
             "detectionAlgorithm": "detection-simple",
-            "recLengthS": "6",
+            "recLengthS": "5",
             "recType": "FS",
             "feedbackOnOff": "feedback-off",
             "feedbackVolume": "50",
@@ -84,34 +115,6 @@ class WurbSettings(object):
             "lastGpsLongitudeDd": "0.0",
         }
 
-    async def startup(self):
-        """ """
-        # GPS.
-        geo_source = self.current_location["geoSource"]
-        if geo_source in ["geo-gps", "geo-gps-or-manual", "geo-last-gps-or-manual"]:
-            await self.save_latlong(0.0, 0.0)
-            await wurb_core.wurb_gps.startup()
-        else:
-            await wurb_core.wurb_gps.shutdown()
-        # Rec. mode. Scheduler, rec-on or rec-off.
-        rec_mode = self.current_settings["recMode"]
-        if rec_mode in [
-            "mode-off",
-            "mode-on",
-            "mode-auto",
-            "mode-manual",
-            "mode-scheduler-on",
-            "mode-scheduler-auto",
-        ]:
-            await wurb_core.wurb_scheduler.startup()
-        else:
-            await wurb_core.wurb_scheduler.shutdown()
-
-    async def shutdown(self):
-        """ """
-        # GPS.
-        await wurb_core.wurb_gps.shutdown()
-
     async def save_settings(self, settings_dict={}, settings_type=None):
         """ """
         is_changed = False
@@ -137,11 +140,11 @@ class WurbSettings(object):
                             + " to: "
                             + str(value)
                         )
-                        wurb_core.wurb_logger.debug(message)
+                        self.logger.debug(message)
                 except Exception as e:
                     # Logging.
                     message = "Error when comparing saved settings. " + str(e)
-                    wurb_core.wurb_logger.debug(message)
+                    self.logger.debug(message)
 
         self.save_settings_to_file()
         if settings_type is not None:
@@ -156,38 +159,32 @@ class WurbSettings(object):
                     skip_keys=["startupOption"],
                 )
 
-        # Active modes.
-        rec_mode = self.current_settings["recMode"]
-        # if rec_mode in ["mode-on", "mode-auto", "mode-manual"]:
-        #     await wurb_core.wurb_manager.start_rec()
-        # if rec_mode in ["mode-off"]:
-        #     await wurb_core.stop_rec()
-        # Passive modes, and monitoring active.
-        if rec_mode in [
-            "mode-off",
-            "mode-on",
-            "mode-auto",
-            "mode-manual",
-            "mode-scheduler-on",
-            "mode-scheduler-auto",
-        ]:
-            await wurb_core.wurb_scheduler.startup()
-        else:
-            await wurb_core.wurb_scheduler.shutdown()
+        # # Active modes.
+        # rec_mode = self.current_settings["recMode"]
+        # # if rec_mode in ["mode-on", "mode-auto", "mode-manual"]:
+        # #     await wurb_core.wurb_manager.start_rec()
+        # # if rec_mode in ["mode-off"]:
+        # #     await wurb_core.stop_rec()
+        # # Passive modes, and monitoring active.
+        # if rec_mode in [
+        #     "mode-off",
+        #     "mode-on",
+        #     "mode-auto",
+        #     "mode-manual",
+        #     "mode-scheduler-on",
+        #     "mode-scheduler-auto",
+        # ]:
+        #     await wurb_core.wurb_scheduler.startup()
+        # else:
+        #     await wurb_core.wurb_scheduler.shutdown()
 
-        # Create a new event and release all from the old event.
-        old_settings_event = self.settings_event
-        self.settings_event = asyncio.Event()
-        if old_settings_event:
-            old_settings_event.set()
+        # Trigger an event.
+        self.trigger_settings_event()
 
         # Logging.
         if is_changed:
             message = "Settings saved."
-            wurb_core.wurb_logger.info(message)
-
-        # Restart recording. Needed for some settings.
-        await wurb_core.wurb_manager.restart_rec()
+            self.logger.info(message)
 
     def get_setting(self, key=None):
         """ """
@@ -227,17 +224,15 @@ class WurbSettings(object):
             self.current_location["longitudeDd"] = 0.0
 
         self.save_settings_to_file()
-        # Create a new event and release all from the old event.
-        old_location_event = self.location_event
-        self.location_event = asyncio.Event()
-        if old_location_event:
-            old_location_event.set()
 
-        # GPS.
-        if geo_source in ["geo-gps", "geo-gps-or-manual", "geo-last-gps-or-manual"]:
-            await wurb_core.wurb_gps.startup()
-        else:
-            await wurb_core.wurb_gps.shutdown()
+        # Trigger an event.
+        self.trigger_location_event()
+
+        # # GPS.
+        # if geo_source in ["geo-gps", "geo-gps-or-manual", "geo-last-gps-or-manual"]:
+        #     await wurb_core.wurb_gps.startup()
+        # else:
+        #     await wurb_core.wurb_gps.shutdown()
 
     async def save_latlong(self, latitude_dd, longitude_dd):
         """ """
@@ -250,11 +245,9 @@ class WurbSettings(object):
                 self.current_location["lastGpsLongitudeDd"] = latitude_dd
                 self.current_location["lastGpsLongitudeDd"] = longitude_dd
         self.save_settings_to_file()
-        # Create a new event and release all from the old event.
-        old_latlong_event = self.latlong_event
-        self.latlong_event = asyncio.Event()
-        if old_latlong_event:
-            old_latlong_event.set()
+
+        # Trigger an event.
+        self.trigger_latlong_event()
 
     def get_valid_location(self):
         """ """
@@ -282,19 +275,19 @@ class WurbSettings(object):
         # Result.
         return latitude, longitude
 
-    def get_location_status(self):
-        """ """
-        lat, long = self.get_valid_location()
-        if (lat == 0.0) and (long == 0.0):
-            return "Not valid. Scheduler not started."
-        else:
-            geo_source = self.get_location_dict().get("geoSource", "")
-            if geo_source == "geo-gps":
-                if wurb_core.wurb_gps:
-                    no_of_satellites = wurb_core.wurb_gps.get_number_of_satellites()
-                    return "Number of satellites: " + str(no_of_satellites)
-            else:
-                return "Lat: " + str(lat) + " Long: " + str(long)
+    # def get_location_status(self):
+    #     """ """
+    #     lat, long = self.get_valid_location()
+    #     if (lat == 0.0) and (long == 0.0):
+    #         return "Not valid. Scheduler not started."
+    #     else:
+    #         geo_source = self.get_location_dict().get("geoSource", "")
+    #         if geo_source == "geo-gps":
+    #             if wurb_core.wurb_gps:
+    #                 no_of_satellites = wurb_core.wurb_gps.get_number_of_satellites()
+    #                 return "Number of satellites: " + str(no_of_satellites)
+    #         else:
+    #             return "Lat: " + str(lat) + " Long: " + str(long)
 
     def get_location_dict(self):
         """ """
@@ -308,48 +301,56 @@ class WurbSettings(object):
         """ """
         self.current_settings["feedbackVolume"] = volume
         self.current_settings["feedbackPitch"] = pitch
-        audiofeedback = wurb_core.wurb_audiofeedback
-        if audiofeedback:
-            await audiofeedback.set_volume(volume)
-            await audiofeedback.set_pitch(pitch)
-        # Create a new event and release all from the old event.
-        old_settings_event = self.settings_event
+        # audiofeedback = wurb_core.wurb_audiofeedback
+        # if audiofeedback:
+        #     await audiofeedback.set_volume(volume)
+        #     await audiofeedback.set_pitch(pitch)
+        # Trigger an event.
+        self.trigger_audiofeedback_event()
+
+    def trigger_settings_event(self):
+        """ """
+        # Event: Create a new and release the old.
+        old_event = self.settings_event
         self.settings_event = asyncio.Event()
-        if old_settings_event:
-            old_settings_event.set()
+        old_event.set()
 
-    async def get_settings_event(self):
+    def get_settings_event(self):
         """ """
-        try:
-            if self.settings_event == None:
-                self.settings_event = asyncio.Event()
-            return self.settings_event
-        except Exception as e:
-            # Logging error.
-            message = "Logging: get_settings_event: " + str(e)
-            wurb_core.wurb_logger.error(message)
+        return self.settings_event
 
-    async def get_location_event(self):
+    def trigger_location_event(self):
         """ """
-        try:
-            if self.location_event == None:
-                self.location_event = asyncio.Event()
-            return self.location_event
-        except Exception as e:
-            # Logging error.
-            message = "Logging: get_location_event: " + str(e)
-            wurb_core.wurb_logger.error(message)
+        # Event: Create a new and release the old.
+        old_event = self.location_event
+        self.location_event = asyncio.Event()
+        old_event.set()
 
-    async def get_latlong_event(self):
+    def get_location_event(self):
         """ """
-        try:
-            if self.latlong_event == None:
-                self.latlong_event = asyncio.Event()
-            return self.latlong_event
-        except Exception as e:
-            # Logging error.
-            message = "Logging: get_latlong_event: " + str(e)
-            wurb_core.wurb_logger.error(message)
+        return self.location_event
+
+    def trigger_latlong_event(self):
+        """ """
+        # Event: Create a new and release the old.
+        old_event = self.latlong_event
+        self.latlong_event = asyncio.Event()
+        old_event.set()
+
+    def get_latlong_event(self):
+        """ """
+        return self.latlong_event
+
+    def trigger_audiofeedback_event(self):
+        """ """
+        # Event: Create a new and release the old.
+        old_event = self.audiofeedback_event
+        self.audiofeedback_event = asyncio.Event()
+        old_event.set()
+
+    def get_audiofeedback_event(self):
+        """ """
+        return self.audiofeedback_event
 
     # async def load_settings(self, settings_type):
     #     """ """

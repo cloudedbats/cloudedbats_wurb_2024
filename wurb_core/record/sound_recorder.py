@@ -21,10 +21,17 @@ import wurb_utils
 class UltrasoundDevices(object):
     """ """
 
-    def __init__(self, logger="DefaultLogger"):
+    def __init__(self, config=None, logger=None, logger_name="DefaultLogger"):
         """ """
-        self.logger_name = logger
-        self.logger = logging.getLogger(logger)
+        if config == None:
+            self.config = {}
+        else:
+            self.config = config
+        if logger == None:
+            self.logger = logging.getLogger(logger_name)
+        else:
+            self.logger = logger
+        #
         # Ultrasound microphones supported by default:
         # - Pettersson: u256, u384, M500-384 and M500.
         # - Dodotronic: UltraMic 192K, 200K, 250K, 384K.
@@ -155,11 +162,17 @@ class UltrasoundDevices(object):
 class WurbRecorder():
     """ """
 
-    def __init__(self, logger="DefaultLogger", queue_max_size=1200):
+    def __init__(self, config=None, logger=None, logger_name="DefaultLogger"):
         """ """
-###         super().__init__(queue_max_size)
-        self.logger_name = logger
-        self.logger = logging.getLogger(logger)
+        if config == None:
+            self.config = {}
+        else:
+            self.config = config
+        if logger == None:
+            self.logger = logging.getLogger(logger_name)
+        else:
+            self.logger = logger
+        #
         self.rec_status = ""
         self.device_name = ""
         self.card_index = ""
@@ -539,10 +552,17 @@ class WaveFileWriter:
     """Each file is connected to a separate file writer object
     to avoid concurrency problems."""
 
-    def __init__(self, logger="DefaultLogger"):
+    def __init__(self, config=None, logger=None, logger_name="DefaultLogger"):
         """ """
-        self.logger_name = logger
-        self.logger = logging.getLogger(logger)
+        if config == None:
+            self.config = {}
+        else:
+            self.config = config
+        if logger == None:
+            self.logger = logging.getLogger(logger_name)
+        else:
+            self.logger = logger
+        #
         self.rec_target_dir_path = None
         self.wave_file = None
         # self.size_counter = 0

@@ -13,10 +13,14 @@ from logging import handlers
 class Logger(object):
     """ """
 
-    def __init__(self, logger="DefaultLogger"):
+    def __init__(self, logger_name="DefaultLogger"):
         """ """
-        self.logger_name = logger
-        self.logger = logging.getLogger(logger)
+        self.logger_name = logger_name
+        self.logger = logging.getLogger(logger_name)
+
+    def get_logger_name(self):
+        """ """
+        return self.logger_name
 
     def setup_rotating_log(
         self,
@@ -41,7 +45,7 @@ class Logger(object):
             # Define rotation log files for info logger.
             log_info_name_path = pathlib.Path(logging_dir, log_name)
             log_handler = handlers.RotatingFileHandler(
-                str(log_info_name_path), maxBytes=1024 * 1024, backupCount=10
+                str(log_info_name_path), maxBytes=512*1024, backupCount=10
             )
             log_handler.setFormatter(
                 logging.Formatter("%(asctime)s %(levelname)-8s : %(message)s ")
@@ -52,7 +56,7 @@ class Logger(object):
             # Define rotation log files for debug logger.
             log_info_name_path = pathlib.Path(logging_dir, debug_log_name)
             log_handler = handlers.RotatingFileHandler(
-                str(log_info_name_path), maxBytes=1024 * 1024, backupCount=10
+                str(log_info_name_path), maxBytes=512*1024, backupCount=10
             )
             log_handler.setFormatter(
                 logging.Formatter("%(asctime)s %(levelname)-8s : %(message)s ")

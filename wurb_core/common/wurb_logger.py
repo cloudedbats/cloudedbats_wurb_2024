@@ -10,25 +10,39 @@ import logging
 from logging import handlers
 
 
-class AppLogger(object):
+class WurbLogger(object):
     """ """
 
-    def __init__(self, logger="DefaultLogger"):
+    def __init__(self, config=None, logger_name="DefaultLogger"):
         """ """
-        self.logger_name = logger
-        self.logger = logging.getLogger(logger)
-        self.logging_event = None
-        self.client_messages = []
-        self.event_loop = None
-        # Config.
-        self.max_client_messages = 80
-
-    async def startup(self):
-        """ """
+        if config == None:
+            self.config = {}
+        else:
+            self.config = config
+        self.logger = logging.getLogger(logger_name)
+        #
+        self.clear()
         self.event_loop = asyncio.get_event_loop()
+        self.logging_event = asyncio.Event()
 
-    async def shutdown(self):
+    def clear(self):
         """ """
+        self.client_messages = []
+        self.max_client_messages = 10
+
+    def configure(self):
+        """ """
+        self.max_client_messages = self.config.get(
+            "wurb_logger.max_client_messages", self.max_client_messages
+        )
+
+    def startup(self):
+        """ """
+        self.configure()
+
+    def shutdown(self):
+        """ """
+        self.logging_event.set()
 
     def info(self, message):
         """ """
@@ -68,36 +82,29 @@ class AppLogger(object):
                 if msg_type in ["info", "warning", "error"]:
                     if msg_type in ["warning", "error"]:
                         self.client_messages.append(
-                            time_str
-                            + " - "
-                            + msg_type.capitalize()
-                            + ": "
-                            + message
+                            time_str + " - " + msg_type.capitalize() + ": " + message
                         )
                     else:
                         self.client_messages.append(time_str + " - " + message)
                     # Log list too large. Remove oldest item.
                     if len(self.client_messages) > self.max_client_messages:
                         del self.client_messages[0]
-                    # Create a new event and release all from the old event.
-                    old_logging_event = self.logging_event
-                    self.logging_event = asyncio.Event()
-                    if old_logging_event:
-                        old_logging_event.set()
+                    # Trigger an event.
+                    self.trigger_logging_event()
         except Exception as e:
             # Can't log this, must use print.
             print("Exception: Logging: write_log_async: ", e)
 
+    async def trigger_logging_event(self):
+        """ """
+        # Event: Create a new and release the old.
+        old_event = self.logging_event
+        self.logging_event = asyncio.Event()
+        old_event.set()
+
     async def get_logging_event(self):
         """ """
-        try:
-            if self.logging_event == None:
-                self.logging_event = asyncio.Event()
-            return self.logging_event
-        except Exception as e:
-            # Logging error.
-            message = "get_logging_event: " + str(e)
-            self.error(message)
+        return self.logging_event
 
     async def get_client_messages(self):
         """ """

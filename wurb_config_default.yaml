@@ -1,7 +1,6 @@
 # Configurations for CloudedBats WURB-2023.
 ---
 wurb_app:
-  version: "2023.0.0-development"
   port: 8080
   host: "0.0.0.0"
   log_level: info
@@ -47,3 +46,16 @@ annotations:
       name: Internal
       rec_dir: /user/pi/wurb_recordings
       cache_dir: /user/pi/wurb_cache
+
+gps_reader:
+  min_number_of_satellites: 3
+  adjust_detector_time: true
+  accepted_detector_time_diff_s: 60
+  gps_devices:
+    - /dev/ttyACM0
+    - /dev/ttyUSB0
+    - /dev/tty.usbserial-2130 # On macOS.
+    - /dev/cu.usbmodem21301 # On macOS.
+    - /dev/cu.usbmodem101 # On macOS.
+  gps_control_loop_sleep_s: 20
+

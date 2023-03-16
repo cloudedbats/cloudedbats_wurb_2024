@@ -11,16 +11,16 @@ import scipy.interpolate
 import logging
 
 
-class SoundPitchshifting(object):
+class SoundPitchShifting(object):
     """
     For audio feedback by using Pitch shifting.
     Simple time domain implementation by using overlapped
     windows and the Kaiser window function.
     """
 
-    def __init__(self, logger="DefaultLogger"):
+    def __init__(self, logger_name="DefaultLogger"):
         """ """
-        self.logger = logging.getLogger(logger)
+        self.logger = logging.getLogger(logger_name)
         self.queue = None
         self.clear()
 
@@ -68,10 +68,8 @@ class SoundPitchshifting(object):
         filter_low_khz = filter_low_khz
         filter_high_khz = filter_high_khz
         self.pitch_div_factor = int(float(pitch_factor))
-
         # self.volume = float((float(volume) / 100.0) * 10.0)
         self.volume = float((float(volume) / 100.0) * 1.0)
-
         self.filter_low_limit_hz = int(float(filter_low_khz) * 1000.0)
         self.filter_high_limit_hz = int(float(filter_high_khz) * 1000.0)
         self.overlap_factor = overlap_factor

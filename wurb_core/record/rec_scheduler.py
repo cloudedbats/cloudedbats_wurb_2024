@@ -7,6 +7,7 @@
 import asyncio
 import logging
 import datetime
+
 import wurb_core
 import wurb_utils
 
@@ -14,11 +15,23 @@ import wurb_utils
 class WurbScheduler(object):
     """ """
 
-    def __init__(self, logger="DefaultLogger"):
+    def __init__(self, config=None, logger=None, logger_name="DefaultLogger"):
         """ """
-        self.logger_name = logger
-        self.logger = logging.getLogger(logger)
-        self.main_loop_task = None
+        if config == None:
+            self.config = {}
+        else:
+            self.config = config
+        if logger == None:
+            self.logger = logging.getLogger(logger_name)
+        else:
+            self.logger = logger
+        #
+        self.clear()
+        self.event_loop = asyncio.get_event_loop()
+    
+    def clear(self):
+        """ """
+        # self.main_loop_task = None
         self.solartime = wurb_utils.SolarTime()
         self.solartime_lookup_dict = {}
         self.solartime_last_used_key = ""
@@ -28,7 +41,7 @@ class WurbScheduler(object):
         self.last_used_scheduler_state = ""
         self.current_scheduler_state = ""
         # Config.
-        self.main_loop_interval_s = 10  # Unit: sec.
+        # self.main_loop_interval_s = 10  # Unit: sec.
         # Translate user modes.
         self.user_mode_for_humans = {
             "mode-off": "Microphone off.",
@@ -39,90 +52,144 @@ class WurbScheduler(object):
             "mode-scheduler-auto": "By scheduler - Auto.",
         }
 
-    async def startup(self):
+    def configure(self):
         """ """
-        if not self.main_loop_task:
-            self.main_loop_task = asyncio.create_task(self.main_loop())
+        # self.max_client_messages = self.config.get(
+        #     "wurb_scheduler.main_loop_interval_s", self.main_loop_interval_s
+        # )
+
+    def startup(self):
+        """ """
+        self.configure()
+        # self.scheduler_loop = asyncio.create_task(self.scheduler_control_loop(), name="rec-main-loop")
         #
-        await self.update_status()
+        # await self.update_status()
 
     async def shutdown(self):
         """ """
-        if self.main_loop_task:
-            self.main_loop_task.cancel()
-            self.main_loop_task = None
+        # self.logging_event.set()
+        # if self.main_loop_task:
+        #     self.main_loop_task.cancel()
+        #     self.main_loop_task = None
 
-    async def main_loop(self):
-        """ """
-        try:
-            while True:
-                try:
-                    await asyncio.sleep(self.main_loop_interval_s)
-                    await self.update_status()
-                except asyncio.CancelledError:
-                    break
-        except Exception as e:
-            # Logging error.
-            message = "Scheduler main loop: " + str(e)
-            wurb_core.wurb_logger.error(message)
-        finally:
-            # Logging error.
-            message = "Scheduler main loop terminated."
-            wurb_core.wurb_logger.debug(message)
+    # async def scheduler_control_loop(self):
+    #     """ """
+    #     try:
+    #         while True:
+    #             try:
+    #                 await asyncio.sleep(self.main_loop_interval_s)
+    #                 await self.check_status()
+    #             except asyncio.CancelledError:
+    #                 break
+    #     except Exception as e:
+    #         # Logging error.
+    #         message = "Scheduler control loop: " + str(e)
+    #         self.logger.debug(message)
+    #     finally:
+    #         # Logging error.
+    #         message = "Scheduler control loop terminated."
+    #         self.logger.error(message)
 
-    async def update_status(self):
-        """ """
-        try:
-            rec_mode = wurb_core.wurb_settings.get_setting("recMode")
-            self.current_mode = rec_mode
-            if rec_mode in ["mode-on", "mode-auto", "mode-manual"]:
-                self.last_used_scheduler_state = ""
-                self.current_scheduler_state = ""
-                await wurb_core.wurb_manager.start_rec()
-            if rec_mode in ["mode-off"]:
-                self.last_used_scheduler_state = ""
-                self.current_scheduler_state = ""
-                await wurb_core.stop_rec()
-            if rec_mode in ["mode-scheduler-on", "mode-scheduler-auto"]:
-                await self.check_scheduler()
-            # Logging of changes in state.
-            if self.current_mode != self.last_used_mode:
-                mode_humans = self.user_mode_for_humans.get(self.current_mode, "Undefined")
-                message = "Mode: " + mode_humans
-                wurb_core.wurb_logger.info(message)
-                self.last_used_mode = self.current_mode
-            if self.current_scheduler_state != self.last_used_scheduler_state:
-                message = "Scheduler state: " + self.current_scheduler_state
-                wurb_core.wurb_logger.info(message)
-                self.last_used_scheduler_state = self.current_scheduler_state
-        except Exception as e:
-            # Logging error.
-            message = "Scheduler update status: " + str(e)
-            wurb_core.wurb_logger.error(message)
+    # async def check_status(self):
+    #     """ """
+    #     try:
+    #         rec_mode = wurb_core.wurb_settings.get_setting("recMode")
+    #         self.current_mode = rec_mode
+    #         if rec_mode in ["mode-on", "mode-auto", "mode-manual"]:
+    #             self.last_used_scheduler_state = ""
+    #             self.current_scheduler_state = ""
+    #             await wurb_core.rec_manager.start_rec()
+    #         if rec_mode in ["mode-off"]:
+    #             self.last_used_scheduler_state = ""
+    #             self.current_scheduler_state = ""
+    #             await wurb_core.rec_manager.stop_rec()
+    #         if rec_mode in ["mode-scheduler-on", "mode-scheduler-auto"]:
+    #             await self.check_scheduler()
+    #         # Logging of changes in state.
+    #         if self.current_mode != self.last_used_mode:
+    #             mode_humans = self.user_mode_for_humans.get(
+    #                 self.current_mode, "Undefined"
+    #             )
+    #             message = "Mode: " + mode_humans
+    #             self.logger.info(message)
+    #             self.last_used_mode = self.current_mode
+    #         if self.current_scheduler_state != self.last_used_scheduler_state:
+    #             message = "Scheduler state: " + self.current_scheduler_state
+    #             self.logger.info(message)
+    #             self.last_used_scheduler_state = self.current_scheduler_state
+    #     except Exception as e:
+    #         # Logging error.
+    #         message = "Scheduler update status: " + str(e)
+    #         self.logger.error(message)
 
-    async def check_scheduler(self):
+    # async def check_scheduler(self):
+    #     """ """
+    #     # Start/stop time.
+    #     start_event_local, stop_event_local = await self.calculate_start_stop()
+    #     if (start_event_local is None) or (stop_event_local is None):
+    #         # Can't calculate start or stop.
+    #         self.current_scheduler_state = "Time or position is missing."
+    #         await wurb_core.rec_manager.stop_rec()
+    #         return
+
+    #     # Evaluate action.
+    #     now_local = datetime.datetime.now().astimezone()
+    #     if start_event_local == stop_event_local:
+    #         # Always off.
+    #         await wurb_core.rec_manager.stop_rec()
+    #     if start_event_local < stop_event_local:
+    #         # Same day.
+    #         if (start_event_local < now_local) and (now_local < stop_event_local):
+    #             self.current_scheduler_state = "Recording active."
+    #             await wurb_core.rec_manager.start_rec()
+    #         else:
+    #             self.current_scheduler_state = "Recording not active."
+    #             await wurb_core.rec_manager.stop_rec()
+    #     else:
+    #         # Different days.
+    #         start_local_new = start_event_local
+    #         stop_local_new = stop_event_local
+    #         # Prepare.
+    #         if now_local < stop_event_local:
+    #             start_local_new = start_event_local - datetime.timedelta(days=1)
+    #         if now_local > stop_event_local:
+    #             stop_local_new = stop_event_local + datetime.timedelta(days=1)
+    #         # Check.
+    #         if (start_local_new < now_local) and (now_local < stop_local_new):
+    #             self.current_scheduler_state = "Recording active."
+    #             await wurb_core.rec_manager.start_rec()
+    #         else:
+    #             self.current_scheduler_state = "Recording not active."
+    #             await wurb_core.rec_manager.stop_rec()
+
+    def check_scheduler(self):
         """ """
+        is_rec_active = False
         # Start/stop time.
-        start_event_local, stop_event_local = await self.calculate_start_stop()
+        start_event_local, stop_event_local = self.calculate_start_stop()
         if (start_event_local is None) or (stop_event_local is None):
             # Can't calculate start or stop.
             self.current_scheduler_state = "Time or position is missing."
-            await wurb_core.stop_rec()
-            return
+            # await wurb_core.rec_manager.stop_rec()
+            is_rec_active = False
+            return is_rec_active
 
         # Evaluate action.
         now_local = datetime.datetime.now().astimezone()
         if start_event_local == stop_event_local:
             # Always off.
-            await wurb_core.stop_rec()
-        if start_event_local < stop_event_local:
+            # await wurb_core.rec_manager.stop_rec()
+            is_rec_active = False
+        elif start_event_local < stop_event_local:
             # Same day.
             if (start_event_local < now_local) and (now_local < stop_event_local):
                 self.current_scheduler_state = "Recording active."
-                await wurb_core.wurb_manager.start_rec()
+                # await wurb_core.rec_manager.start_rec()
+                is_rec_active = True
             else:
                 self.current_scheduler_state = "Recording not active."
-                await wurb_core.stop_rec()
+                # await wurb_core.rec_manager.stop_rec()
+                is_rec_active = False
         else:
             # Different days.
             start_local_new = start_event_local
@@ -135,12 +202,16 @@ class WurbScheduler(object):
             # Check.
             if (start_local_new < now_local) and (now_local < stop_local_new):
                 self.current_scheduler_state = "Recording active."
-                await wurb_core.wurb_manager.start_rec()
+                # await wurb_core.rec_manager.start_rec()
+                is_rec_active = True
             else:
                 self.current_scheduler_state = "Recording not active."
-                await wurb_core.stop_rec()
+                # await wurb_core.rec_manager.stop_rec()
+                is_rec_active = False
 
-    async def calculate_start_stop(self):
+        return is_rec_active
+
+    def calculate_start_stop(self):
         """ """
         # Get settings.
         start_event = wurb_core.wurb_settings.get_setting("schedulerStartEvent")
@@ -148,7 +219,7 @@ class WurbScheduler(object):
         stop_event = wurb_core.wurb_settings.get_setting("schedulerStopEvent")
         stop_event_adjust = wurb_core.wurb_settings.get_setting("schedulerStopAdjust")
         # Get sunset, sunrise, etc.
-        solartime_dict = await self.get_solartime_data()
+        solartime_dict = self.get_solartime_data()
         # Start event.
         if start_event in ["on-sunset", "on-dusk", "on-dawn", "on-sunrise"]:
             if not solartime_dict:
@@ -185,7 +256,7 @@ class WurbScheduler(object):
 
         return (start_event_local, stop_event_local)
 
-    async def get_solartime_data(self, print_new=True):
+    def get_solartime_data(self, print_new=True):
         """ """
         latitude, longitude = wurb_core.wurb_settings.get_valid_location()
         if (latitude == 0.0) or (longitude == 0.0):
@@ -223,7 +294,7 @@ class WurbScheduler(object):
                     message += " Dusk: " + dusk_local.strftime("%H:%M:%S")
                     message += " Dawn: " + dawn_local.strftime("%H:%M:%S")
                     message += " Sunrise: " + sunrise_local.strftime("%H:%M:%S")
-                    wurb_core.wurb_logger.info(message)
+                    self.logger.info(message)
             else:
                 return None
 

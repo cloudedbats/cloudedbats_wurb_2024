@@ -12,9 +12,9 @@ import logging
 class Configuration:
     """ """
 
-    def __init__(self, logger="DefaultLogger"):
+    def __init__(self, logger_name="DefaultLogger"):
         """ """
-        self.logger = logging.getLogger(logger)
+        self.logger = logging.getLogger(logger_name)
         self.clear()
 
     def clear(self):

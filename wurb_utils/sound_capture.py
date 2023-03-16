@@ -12,19 +12,20 @@ import numpy
 class SoundCapture:
     """ """
 
-    def __init__(self, audio, logger="DefaultLogger"):
+    def __init__(self, audio, logger_name="DefaultLogger"):
         """ """
-        self.logger = logging.getLogger(logger)
+        self.logger = logging.getLogger(logger_name)
         self.audio = audio
         self.clear()
 
     def clear(self):
-        self.out_queue_list = []
         self.device_index = None
-        self.sampling_freq_hz = None
         self.channels = None
+        self.sampling_freq_hz = None
         self.frames = None
         self.buffer_size = None
+        #
+        self.out_queue_list = []
         self.main_loop = None
         self.capture_executor = None
 

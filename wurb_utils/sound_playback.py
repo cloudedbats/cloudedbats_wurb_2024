@@ -12,9 +12,9 @@ import numpy
 class SoundPlayback:
     """ """
 
-    def __init__(self, audio, logger="DefaultLogger"):
+    def __init__(self, audio, logger_name="DefaultLogger"):
         """ """
-        self.logger = logging.getLogger(logger)
+        self.logger = logging.getLogger(logger_name)
         self.audio = audio
         self.queue = None
         self.clear()
@@ -78,8 +78,8 @@ class SoundPlayback:
     async def start(self):
         """ """
         # Use executor for the IO-blocking part.
-        main_loop = asyncio.get_event_loop()
-        self.playback_executor = main_loop.run_in_executor(None, self.run_playback)
+        event_loop = asyncio.get_event_loop()
+        self.playback_executor = event_loop.run_in_executor(None, self.run_playback)
         await asyncio.sleep(0.1)
         # Clear queue.
         while not self.queue.empty():

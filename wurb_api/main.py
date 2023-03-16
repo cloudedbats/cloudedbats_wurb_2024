@@ -19,7 +19,7 @@ import websockets.exceptions
 import wurb_core
 import wurb_api
 
-logger = logging.getLogger(wurb_core.used_logger)
+logger = logging.getLogger(wurb_core.logger_name)
 
 app = fastapi.FastAPI(
     title="CloudedBats WURB-2023",

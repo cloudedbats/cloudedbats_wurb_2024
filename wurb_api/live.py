@@ -9,7 +9,7 @@ import fastapi
 import fastapi.templating
 import wurb_core
 
-logger = logging.getLogger(wurb_core.used_logger)
+logger = logging.getLogger(wurb_core.logger_name)
 templates = fastapi.templating.Jinja2Templates(directory="wurb_app/templates")
 live_router = fastapi.APIRouter()
 

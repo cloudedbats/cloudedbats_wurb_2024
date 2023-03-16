@@ -6,7 +6,7 @@ from wurb_utils.logger import Logger
 from wurb_utils.configuration import Configuration
 
 from wurb_utils.sound_capture import SoundCapture
-from wurb_utils.sound_pitchshifting import SoundPitchshifting
+from wurb_utils.sound_pitchshifting import SoundPitchShifting
 from wurb_utils.sound_playback import SoundPlayback
 
 from wurb_utils.pettersson_m500 import PetterssonM500
