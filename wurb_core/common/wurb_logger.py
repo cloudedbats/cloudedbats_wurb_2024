@@ -22,7 +22,6 @@ class WurbLogger(object):
         self.logger = logging.getLogger(logger_name)
         #
         self.clear()
-        self.event_loop = asyncio.get_event_loop()
         self.logging_event = asyncio.Event()
 
     def clear(self):
@@ -66,12 +65,16 @@ class WurbLogger(object):
 
     def write_log(self, msg_type, message):
         """ """
-        # Run the rest in the main asyncio event loop.
-        datetime_local = datetime.datetime.now()
-        asyncio.run_coroutine_threadsafe(
-            self.write_log_async(msg_type, datetime_local, message),
-            self.event_loop,
-        )
+        try:
+            # Run the rest in the main asyncio event loop.
+            datetime_local = datetime.datetime.now()
+            asyncio.run_coroutine_threadsafe(
+                self.write_log_async(msg_type, datetime_local, message),
+                asyncio.get_event_loop(),
+            )
+        except Exception as e:
+            # Can't log this, must use print.
+            print("Exception: Logging: write_log: ", e)
 
     async def write_log_async(self, msg_type, datetime_local, message):
         """ """
@@ -95,17 +98,17 @@ class WurbLogger(object):
             # Can't log this, must use print.
             print("Exception: Logging: write_log_async: ", e)
 
-    async def trigger_logging_event(self):
+    def trigger_logging_event(self):
         """ """
         # Event: Create a new and release the old.
         old_event = self.logging_event
         self.logging_event = asyncio.Event()
         old_event.set()
 
-    async def get_logging_event(self):
+    def get_logging_event(self):
         """ """
         return self.logging_event
 
-    async def get_client_messages(self):
+    def get_client_messages(self):
         """ """
         return self.client_messages[::-1]

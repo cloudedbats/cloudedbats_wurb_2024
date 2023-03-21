@@ -121,7 +121,7 @@ class UltrasoundDevices(object):
             message = "Recorder: reset_devices: " + str(e)
             wurb_core.wurb_logger.error(message)
 
-    async def get_notification_event(self):
+    def get_notification_event(self):
         """ """
         try:
             if self.notification_event == None:
@@ -185,7 +185,7 @@ class WurbRecorder():
         self.rec_length_s = 6  # Unit: sec.
         self.rec_timeout_before_restart_s = 30  # Unit: sec.
 
-    async def get_notification_event(self):
+    def get_notification_event(self):
         """ """
         try:
             if self.notification_event == None:

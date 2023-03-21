@@ -185,8 +185,8 @@ function geoLocationSourceOnChange(updateDetector) {
 //   };
 // };
 // function showPosition(location) {
-//   byId("latitudeId").value = location.coords.latitude;
-//   byId("longitudeId").value = location.coords.longitude;
+//   byId("geoLatitudeId").value = location.coords.latitude;
+//   byId("geoLongitudeId").value = location.coords.longitude;
 // };
 // function errorCallback(error) {
 //   alert(`Geo location from client:\nERROR(${error.code}): ${error.message}`);
@@ -237,31 +237,31 @@ function hideShowSettingsTabs(tabName) {
 };
 // Functions used to updates fields based on response contents.
 function updateStatus(status) {
-    byId("detectorStatusId").innerHTML = status.recStatus;
-    if (status.deviceName != "") {
-        byId("detectorStatusId").innerHTML += "<br>"
-        byId("detectorStatusId").innerHTML += status.deviceName;
-    }
+    // byId("detectorStatusId").innerHTML = status.recStatus;
+    // if (status.deviceName != "") {
+    //     byId("detectorStatusId").innerHTML += "<br>"
+    //     byId("detectorStatusId").innerHTML += status.deviceName;
+    // }
     byId("detectorTimeId").innerHTML = status.detectorTime;
-    byId("locationStatusId").innerHTML = status.locationStatus;
+    byId("geoStatusId").innerHTML = status.locationStatus;
 }
 
 function updateLocation(location) {
-    byId("locationSourceSelectId").value = location.geoSource
+    byId("geoSourceSelectId").value = location.geoSource
     if (location.geoSource == "geo-manual") {
-        byId("latitudeDdId").value = location.manualLatitudeDd
-        byId("longitudeDdId").value = location.manualLongitudeDd
+        byId("geoLatitudeDdId").value = location.manualLatitudeDd
+        byId("geoLongitudeDdId").value = location.manualLongitudeDd
     } else {
-        byId("latitudeDdId").value = location.latitudeDd
-        byId("longitudeDdId").value = location.longitudeDd
+        byId("geoLatitudeDdId").value = location.latitudeDd
+        byId("geoLongitudeDdId").value = location.longitudeDd
     }
     // Check geolocation:
     geoLocationSourceOnChange(updateDetector = false);
 }
 
 function updateLatLong(latlong) {
-    byId("latitudeDdId").value = latlong.latitudeDd
-    byId("longitudeDdId").value = latlong.longitudeDd
+    byId("geoLatitudeDdId").value = latlong.latitudeDd
+    byId("geoLongitudeDdId").value = latlong.longitudeDd
 }
 
 function updateSettings(settings) {
@@ -269,26 +269,26 @@ function updateSettings(settings) {
     lastUsedSettings = settings
 
     byId("recModeSelectId").value = settings.recMode
-    byId("settingsFileDirectoryId").value = settings.fileDirectory
-    byId("settingsFileDirectoryDateOptionId").value = settings.fileDirectoryDateOption
-    byId("settingsFilenamePrefixId").value = settings.filenamePrefix
-    byId("settingsDetectionLimitId").value = settings.detectionLimitKhz
-    byId("settingsDetectionSensitivityId").value = settings.detectionSensitivityDbfs
-    byId("settingsDetectionAlgorithmId").value = settings.detectionAlgorithm
-    byId("settingsRecLengthId").value = settings.recLengthS
-    byId("settingsRecTypeId").value = settings.recType
-    byId("settingsFeedbackOnOffId").value = settings.feedbackOnOff
+    // byId("settingsFileDirectoryId").value = settings.fileDirectory
+    // byId("settingsFileDirectoryDateOptionId").value = settings.fileDirectoryDateOption
+    // byId("settingsFilenamePrefixId").value = settings.filenamePrefix
+    // byId("settingsDetectionLimitId").value = settings.detectionLimitKhz
+    // byId("settingsDetectionSensitivityId").value = settings.detectionSensitivityDbfs
+    // byId("settingsDetectionAlgorithmId").value = settings.detectionAlgorithm
+    // byId("settingsRecLengthId").value = settings.recLengthS
+    // byId("settingsRecTypeId").value = settings.recType
+    // byId("settingsFeedbackOnOffId").value = settings.feedbackOnOff
     byId("feedbackVolumeSliderId").value = settings.feedbackVolume
     byId("feedbackPitchSliderId").value = settings.feedbackPitch
     byId("settingsFeedbackFilterLowId").value = settings.feedbackFilterLowKhz
     byId("settingsFeedbackFilterHighId").value = settings.feedbackFilterHighKhz
-    byId("settingsStartupOptionId").value = settings.startupOption
-    byId("settingsSchedulerStartEventId").value = settings.schedulerStartEvent
-    byId("settingsSchedulerStartAdjustId").value = settings.schedulerStartAdjust
-    byId("settingsSchedulerStopEventId").value = settings.schedulerStopEvent
-    byId("settingsSchedulerStopAdjustId").value = settings.schedulerStopAdjust
-    byId("settingsSchedulerPostActionId").value = settings.schedulerPostAction
-    byId("settingsSchedulerPostActionDelayId").value = settings.schedulerPostActionDelay
+    // byId("settingsStartupOptionId").value = settings.startupOption
+    // byId("settingsSchedulerStartEventId").value = settings.schedulerStartEvent
+    // byId("settingsSchedulerStartAdjustId").value = settings.schedulerStartAdjust
+    // byId("settingsSchedulerStopEventId").value = settings.schedulerStopEvent
+    // byId("settingsSchedulerStopAdjustId").value = settings.schedulerStopAdjust
+    // byId("settingsSchedulerPostActionId").value = settings.schedulerPostAction
+    // byId("settingsSchedulerPostActionDelayId").value = settings.schedulerPostActionDelay
 
     modeSelectOnChange(updateDetector = false)
 

@@ -58,6 +58,14 @@ function fetchModuleRecord() {
         .then(function (html) {
             byId("heroBodyRecordId").innerHTML = html;
             byId("moduleRecordId").classList.remove("is-inverted");
+
+
+
+            activateModuleRecord()
+
+
+
+
         })
         .catch(function (err) {
             console.warn("Something went wrong.", err);
@@ -145,6 +153,7 @@ function fetchModuleAbout() {
 // Called from body onLoad.
 function fetchModules() {
     setTimeout(fetchAllModules, 1000);
+    setTimeout(loadWebsocket, 1500);
 };
 
 function fetchAllModules() {
@@ -153,4 +162,16 @@ function fetchAllModules() {
     fetchModuleAnnotations();
     fetchModuleAdministration();
     fetchModuleAbout();
+
 };
+
+function loadWebsocket() {
+
+    audioFeedbackSliders();
+
+    var ws_url = (window.location.protocol === "https:") ? "wss://" : "ws://"
+    ws_url += window.location.host // Note: Host includes port.
+    ws_url += "/record/ws";
+    startWebsocket(ws_url);
+    //alert("Onload done...")
+}

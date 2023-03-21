@@ -32,7 +32,6 @@ class GpsReader(object):
 
     def configure(self):
         """ """
-        self.event_loop = asyncio.get_event_loop()
         config = self.config
         self.min_number_of_satellites = config.get(
             "gps_reader.min_number_of_satellites", 3
@@ -48,7 +47,6 @@ class GpsReader(object):
 
     def clear(self):
         """ """
-        self.event_loop = asyncio.get_event_loop()
         #
         self.gps_datetime_utc = None
         self.gps_latitude = 0.0
@@ -76,7 +74,7 @@ class GpsReader(object):
         self.last_used_long_dd = 0.0
         self.number_of_satellites = 0
 
-        # asyncio.run_coroutine_threadsafe(self.gps_control_loop(), self.event_loop)
+        # asyncio.run_coroutine_threadsafe(self.gps_control_loop(), asyncio.get_event_loop())
         task = asyncio.create_task(self.gps_control_loop(), name="GPS-control-loop")
 
 
@@ -154,7 +152,7 @@ class GpsReader(object):
         # Read serial, if connected.
         if gps_device_path_found:
             self.serial_coro = serial_asyncio.create_serial_connection(
-                self.event_loop,
+                asyncio.get_event_loop(),
                 ReadGpsSerialNmea,
                 gps_device_path_found,  # For example "/dev/ttyACM0".
                 baudrate=4800,  # 9600, 19200, 38400
@@ -171,7 +169,7 @@ class GpsReader(object):
             self.number_of_satellites = 0
             # asyncio.run_coroutine_threadsafe(
             #     wurb_core.wurb_settings.save_latlong(0.0, 0.0),
-            #     self.event_loop,
+            #     asyncio.get_event_loop(),
             # )
             self.trigger_latlong_event()
 
@@ -245,7 +243,7 @@ class GpsReader(object):
                 self.number_of_satellites = 0
                 # asyncio.run_coroutine_threadsafe(
                 #     wurb_core.wurb_settings.save_latlong(0.0, 0.0),
-                #     self.event_loop,
+                #     asyncio.get_event_loop(),
                 # )
                 self.trigger_latlong_event()
                 return
@@ -296,7 +294,7 @@ class GpsReader(object):
             #                             gps_local_timestamp,
             #                             cmd_source="from GPS",
             #                         ),
-            #                         self.event_loop,
+            #                         asyncio.get_event_loop(),
             #                     )
             #     else:
             #         # Compare detector time and GPS time.
@@ -314,7 +312,7 @@ class GpsReader(object):
             #                 self.wurb_rpi.set_detector_time(
             #                     gps_local_timestamp, cmd_source="from GPS"
             #                 ),
-            #                 self.event_loop,
+            #                 asyncio.get_event_loop(),
             #             )
             # except Exception as e:
             #     # Logging error.
@@ -331,7 +329,7 @@ class GpsReader(object):
                 # Connect to main loop.
                 # asyncio.run_coroutine_threadsafe(
                 #     wurb_core.wurb_settings.save_latlong(lat_dd, long_dd),
-                #     self.event_loop,
+                #     asyncio.get_event_loop(),
                 # )
                 self.trigger_latlong_event()
 

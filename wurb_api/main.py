@@ -11,6 +11,7 @@ import logging
 import fastapi
 import fastapi.staticfiles
 import fastapi.templating
+import fastapi.responses
 from pydantic import BaseModel
 from typing import Optional
 import websockets.exceptions
@@ -69,3 +70,8 @@ async def load_main_application_page(request: fastapi.Request):
         )
     except Exception as e:
         logger.debug("Exception: webpage: " + str(e))
+
+
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon():
+    return fastapi.responses.FileResponse("wurb_app/static/favicon.ico")

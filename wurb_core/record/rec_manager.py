@@ -25,7 +25,6 @@ class RecManager(object):
             self.logger = logger
         #
         self.clear()
-        self.event_loop = asyncio.get_event_loop()
         self.rec_event = asyncio.Event()
 
     def clear(self):

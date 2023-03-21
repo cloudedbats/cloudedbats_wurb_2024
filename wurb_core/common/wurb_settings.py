@@ -9,6 +9,8 @@ import logging
 import datetime
 import pathlib
 
+import wurb_core
+
 
 class WurbSettings(object):
     """ """
@@ -25,7 +27,6 @@ class WurbSettings(object):
             self.logger = logger
         #
         self.clear()
-        self.event_loop = asyncio.get_event_loop()
         self.settings_event = asyncio.Event()
         self.location_event = asyncio.Event()
         self.latlong_event = asyncio.Event()
@@ -275,19 +276,19 @@ class WurbSettings(object):
         # Result.
         return latitude, longitude
 
-    # def get_location_status(self):
-    #     """ """
-    #     lat, long = self.get_valid_location()
-    #     if (lat == 0.0) and (long == 0.0):
-    #         return "Not valid. Scheduler not started."
-    #     else:
-    #         geo_source = self.get_location_dict().get("geoSource", "")
-    #         if geo_source == "geo-gps":
-    #             if wurb_core.wurb_gps:
-    #                 no_of_satellites = wurb_core.wurb_gps.get_number_of_satellites()
-    #                 return "Number of satellites: " + str(no_of_satellites)
-    #         else:
-    #             return "Lat: " + str(lat) + " Long: " + str(long)
+    def get_location_status(self):
+        """ """
+        lat, long = self.get_valid_location()
+        if (lat == 0.0) and (long == 0.0):
+            return "Not valid. Scheduler not started."
+        else:
+            geo_source = self.get_location_dict().get("geoSource", "")
+            if geo_source == "geo-gps":
+                if wurb_core.wurb_gps:
+                    no_of_satellites = wurb_core.wurb_gps.get_number_of_satellites()
+                    return "Number of satellites: " + str(no_of_satellites)
+            else:
+                return "Lat: " + str(lat) + " Long: " + str(long)
 
     def get_location_dict(self):
         """ """

@@ -27,7 +27,6 @@ class WurbScheduler(object):
             self.logger = logger
         #
         self.clear()
-        self.event_loop = asyncio.get_event_loop()
     
     def clear(self):
         """ """
