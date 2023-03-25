@@ -7,9 +7,10 @@
 import asyncio
 import logging
 import numpy
+import time
 
 
-class SoundCapture:
+class AudioCapture:
     """ """
 
     def __init__(self, audio, logger_name="DefaultLogger"):
@@ -73,7 +74,7 @@ class SoundCapture:
         self.main_loop = asyncio.get_event_loop()
         self.capture_executor = self.main_loop.run_in_executor(None, self.run_capture)
 
-    async def stop(self):
+    def stop(self):
         """ """
         self.capture_active = False
         if self.capture_executor:
@@ -97,6 +98,9 @@ class SoundCapture:
                 input_device_index=self.device_index,
                 frames_per_buffer=self.frames,
             )
+            # Time related.
+            calculated_time_s = time.time()
+            time_increment_s = self.buffer_size / self.sampling_freq_hz
             # Empty numpy buffer.
             in_buffer_int16 = numpy.array([], dtype=numpy.int16)
             while self.capture_active:
@@ -123,11 +127,18 @@ class SoundCapture:
 
                     # Put data on queues in the queue list.
                     for data_queue in self.out_queue_list:
+                        # Time rounded to half sec.
+                        calculated_time_s += time_increment_s
+                        device_time = int((calculated_time_s) * 2) / 2
+                        # Used to detect time drift.
+                        detector_time = time.time()
                         # Copy data.
                         data_int16_copy = data_int16.copy()
                         # Put together.
                         data_dict = {
                             "status": "data",
+                            "adc_time": device_time,
+                            "detector_time": detector_time,
                             "data": data_int16_copy,
                         }
                         try:

@@ -6,7 +6,7 @@ jinja2
 aiofiles
 websockets
 requests
-# Sound, etc.
+# Audio, etc.
 pyaudio
 numpy
 scipy

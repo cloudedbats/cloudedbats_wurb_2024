@@ -5,14 +5,14 @@ wurb_app:
   host: "0.0.0.0"
   log_level: info
 
-sound_capture:
+audio_capture:
   device_name: hifiberry # Part of device name.
   sampling_freq_hz: 192000
   channels: STEREO # STEREO, MONO, MONO-LEFT, MONO-RIGHT.
   period_size: 9600
   buffer_size: 19200
 
-sound_pitch_shifting:
+audio_pitch_shifting:
   pitch_factor: 30
   volume_percent: 50
   filter_low_khz: 15.0
@@ -20,13 +20,32 @@ sound_pitch_shifting:
   in_queue_length: 10
   overlap_factor: 1.5
 
-sound_playback:
+audio_playback:
   device_name: Headphones # Part of device name.
   sampling_freq_hz: 48000
   period_size: 2048
   buffer_size: 4800
   buffer_max_size: 10000
   in_queue_length: 10
+
+record:
+  target:
+    id: development
+    name: Development
+    rec_dir: DEV_wurb_recordings
+  # targets:
+  #   - id: local
+  #     name: Local
+  #     rec_dir: ../wurb_recordings
+  #   - id: usb
+  #     name: USB
+  #     rec_dir: media/pi/wurb_recordings
+  #   - id: ssd
+  #     name: SSD
+  #     rec_dir: media/ssd/wurb_recordings
+  #   - id: internal
+  #     name: Internal
+  #     rec_dir: /user/pi/wurb_recordings
 
 annotations:
   sources:

@@ -25,11 +25,10 @@ class WurbManager(object):
             self.logger = logger
         #
         self.clear()
-        self.event_loop = asyncio.get_event_loop()
 
     def clear(self):
         """ """
-        self.wurb_loop = None
+        # self.wurb_loop = None
 
     def configure(self):
         """ """
@@ -40,19 +39,19 @@ class WurbManager(object):
     def startup(self):
         """ """
         self.configure()
-        # GPS test.
+
         wurb_core.wurb_logger.startup()
         wurb_core.rec_manager.startup()
-        self.wurb_loop = asyncio.create_task(
-            self.control_loop(), name="WurbManager control-loop"
-        )
+        # self.wurb_loop = asyncio.create_task(
+        #     self.wurb_control_loop(), name="Wurb manager control loop"
+        # )
 
     async def shutdown(self):
         """ """
-        await wurb_core.wurb_logger.stashutdownrtup()
-        await wurb_core.rec_manager.shutdown()
-        if self.wurb_loop:
-            self.wurb_loop.cancel()
+        wurb_core.wurb_logger.shutdown()
+        wurb_core.rec_manager.shutdown()
+        # if self.wurb_loop:
+        #     self.wurb_loop.cancel()
 
         # Get a list of all running tasks.
         await asyncio.sleep(0)
@@ -70,8 +69,8 @@ class WurbManager(object):
             self.logger.debug("- Cancel task: " + task_name)
             task.cancel()
 
-    async def control_loop(self):
-        """ """
-        while True:
-            print("DEBUG wurb_manager main loop.")
-            await asyncio.sleep(10.0)
+    # async def wurb_control_loop(self):
+    #     """ """
+    #     while True:
+    #         print("DEBUG wurb_manager main loop.")
+    #         await asyncio.sleep(10.0)

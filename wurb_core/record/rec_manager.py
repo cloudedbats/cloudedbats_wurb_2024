@@ -42,17 +42,19 @@ class RecManager(object):
     def startup(self):
         """ """
         self.configure()
+
         wurb_core.gps.startup()
-        wurb_core.wurb_scheduler.startup()
+        wurb_core.rec_scheduler.startup()
         self.gps_loop = asyncio.create_task(
-            self.gps_control_loop(), name="RecManager gps-loop"
+            self.gps_control_loop(), name="RecManager gps task"
         )
         self.control_loop = asyncio.create_task(
-            self.rec_control_loop(), name="RecManager gps-loop"
+            self.rec_control_loop(), name="RecManager control task"
         )
 
-    async def shutdown(self):
+    def shutdown(self):
         """ """
+        wurb_core.gps.shutdown()
         self.rec_event.set()
         if self.gps_loop:
             self.gps_loop.cancel()
@@ -83,6 +85,7 @@ class RecManager(object):
                 if latlong_event.is_set():
                     # await self.check_status()
                     latitude, longitude = wurb_core.gps.get_latitude_longitude()
+                    print("Lat-long: ", latitude, "   ", longitude)
                     await wurb_core.wurb_settings.save_latlong(latitude, longitude)
                     latlong_event = wurb_core.gps.get_latlong_event()
 
@@ -149,6 +152,35 @@ class RecManager(object):
                 # await wurb_core.rec_manager.stop_rec()
 
             print("REC MANAGER: ", status_info_text)
+
+
+
+
+
+            # ========== TEST ==========
+
+
+
+
+
+            if status_info_text == "Rec. on.":
+                wurb_core.rec_worker.start_recording()
+            else:
+                wurb_core.rec_worker.stop_recording()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         except Exception as e:
             # Logging error.

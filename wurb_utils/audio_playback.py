@@ -9,7 +9,7 @@ import logging
 import numpy
 
 
-class SoundPlayback:
+class AudioPlayback:
     """ """
 
     def __init__(self, audio, logger_name="DefaultLogger"):

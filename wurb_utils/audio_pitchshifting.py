@@ -11,7 +11,7 @@ import scipy.interpolate
 import logging
 
 
-class SoundPitchShifting(object):
+class AudioPitchShifting(object):
     """
     For audio feedback by using Pitch shifting.
     Simple time domain implementation by using overlapped
@@ -371,7 +371,7 @@ class SoundPitchShifting(object):
                     if not data_queue.full():
                         data_queue.put_nowait(data_dict)
                     else:
-                        self.logger.debug("Sound capture: Queue full.")
+                        self.logger.debug("Sound pithshifting: Queue full.")
                 #
                 except Exception as e:
                     # Logging error.

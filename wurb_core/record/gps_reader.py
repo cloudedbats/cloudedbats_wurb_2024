@@ -75,7 +75,7 @@ class GpsReader(object):
         self.number_of_satellites = 0
 
         # asyncio.run_coroutine_threadsafe(self.gps_control_loop(), asyncio.get_event_loop())
-        task = asyncio.create_task(self.gps_control_loop(), name="GPS-control-loop")
+        self.gps_control_task = asyncio.create_task(self.gps_control_loop(), name="GPS control loop")
 
 
     def shutdown(self):
