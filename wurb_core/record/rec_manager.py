@@ -262,6 +262,22 @@ class RecManager(object):
         self.rec_event = asyncio.Event()
         old_rec_event.set()
 
+    async def restart_rec(self):
+        """ """
+        try:
+            rec_status = await self.wurb_recorder.get_rec_status()
+            if rec_status == "Microphone is on.":
+                # Logging.
+                # message = "Rec. restart initiated."
+                # wurb_core.wurb_logger.info(message)
+                await self.stop_rec()
+                await asyncio.sleep(1.0)
+                await wurb_core.wurb_manager.start_rec()
+        except Exception as e:
+            # Logging error.
+            message = "Manager: restart_rec: " + str(e)
+            wurb_core.wurb_logger.error(message)
+
     # def clear(self):
     #     """ """
     #     try:

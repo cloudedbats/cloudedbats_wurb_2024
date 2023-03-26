@@ -6,11 +6,11 @@ wurb_app:
   log_level: info
 
 audio_capture:
-  device_name: hifiberry # Part of device name.
-  sampling_freq_hz: 192000
-  channels: STEREO # STEREO, MONO, MONO-LEFT, MONO-RIGHT.
+  device_name: Pettersson u384 USB Ultrasound Microphone
+  sampling_freq_hz: 384000
+  channels: MONO # STEREO, MONO, MONO-LEFT, MONO-RIGHT.
   period_size: 9600
-  buffer_size: 19200
+  buffer_size: 192000
 
 audio_pitch_shifting:
   pitch_factor: 30

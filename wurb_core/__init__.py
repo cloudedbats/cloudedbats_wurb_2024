@@ -25,9 +25,7 @@ from wurb_core.record.rec_manager import RecManager
 from wurb_core.record.rec_devices import RecDevices
 from wurb_core.record.rec_worker import RecWorker
 from wurb_core.record.rec_sound_detection import SoundDetection
-from wurb_core.record.rec_sound_detection import SoundDetectionBase
-from wurb_core.record.rec_sound_detection import SoundDetectionNone
-from wurb_core.record.rec_sound_detection import SoundDetectionSimple
+
 from wurb_core.record.rec_file_writer import RecFileWriter
 
 
@@ -53,11 +51,7 @@ rec_manager = RecManager(config, wurb_logger)
 rec_scheduler = WurbScheduler(config, wurb_logger)
 rec_devices = RecDevices(config, wurb_logger)
 rec_worker = RecWorker(config, wurb_logger)
-### rec_file_writer = RecFileWriter(config, wurb_logger)
-sound_detection_base = SoundDetectionBase(config, wurb_logger)
-sound_detection = SoundDetection(config, wurb_logger)
-sound_detection_none = SoundDetectionNone(config, wurb_logger)
-sound_detection_simple = SoundDetectionSimple(config, wurb_logger)
+sound_detection = SoundDetection(logger_name=logger_name)
 wurb_rpi = WurbRaspberryPi(config, wurb_logger)
 gps = GpsReader(config, wurb_logger)
 

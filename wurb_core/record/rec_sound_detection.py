@@ -8,32 +8,27 @@ import logging
 import numpy as np
 import scipy.signal
 
+import wurb_core
+
 
 class SoundDetection(object):
     """ """
 
-    def __init__(self, config=None, logger=None, logger_name="DefaultLogger"):
+    def __init__(self, logger_name="DefaultLogger"):
         """ """
-        if config == None:
-            self.config = {}
-        else:
-            self.config = config
-        if logger == None:
-            self.logger = logging.getLogger(logger_name)
-        else:
-            self.logger = logger
-        #
+        self.logger_name = logger_name
+        self.logger = logging.getLogger(logger_name)
 
     def get_detection(self):
-        """ Select detection algorithm. """
+        """Select detection algorithm."""
         algorithm = wurb_core.wurb_settings.get_setting("detectionAlgorithm")
         if algorithm == "detection-none":
-            detection_object = SoundDetectionNone(wurb_core)
+            detection_object = SoundDetectionNone(logger_name=self.logger_name)
         elif algorithm == "detection-simple":
-            detection_object = SoundDetectionSimple(wurb_core)
+            detection_object = SoundDetectionSimple(logger_name=self.logger_name)
         else:
             # Use the most common as default.
-            detection_object = SoundDetectionSimple(wurb_core)
+            detection_object = SoundDetectionSimple(logger_name=self.logger_name)
         #
         detection_object.config()
         return detection_object
@@ -42,24 +37,15 @@ class SoundDetection(object):
 class SoundDetectionBase:
     """ """
 
-    def __init__(self, config=None, logger=None, logger_name="DefaultLogger"):
+    def __init__(self):
         """ """
-        if config == None:
-            self.config = {}
-        else:
-            self.config = config
-        if logger == None:
-            self.logger = logging.getLogger(logger_name)
-        else:
-            self.logger = logger
-        #
 
     def config(self, _time_and_data):
-        """ Abstract. """
+        """Abstract."""
         pass  # Should be overridden.
 
     def check_for_sound(self, time_and_data):
-        """ Abstract. """
+        """Abstract."""
         # Returns "is sound", "freq. at peak", "dBFS at peak".
         return True, None, None  # Should be overridden.
 
@@ -82,20 +68,11 @@ class SoundDetectionBase:
 
 
 class SoundDetectionNone(SoundDetectionBase):
-    """ Used for continuous recordings, including silence. """
+    """Used for continuous recordings, including silence."""
 
-    def __init__(self, config=None, logger=None, logger_name="DefaultLogger"):
+    def __init__(self, logger_name="DefaultLogger"):
         """ """
-        if config == None:
-            self.config = {}
-        else:
-            self.config = config
-        if logger == None:
-            self.logger = logging.getLogger(logger_name)
-        else:
-            self.logger = logger
-        #
-        super(SoundDetectionNone, self).__init__(logger)
+        self.logger = logging.getLogger(logger_name)
 
     def config(self):
         """ """
@@ -113,24 +90,17 @@ class SoundDetectionNone(SoundDetectionBase):
 class SoundDetectionSimple(SoundDetectionBase):
     """ """
 
-    def __init__(self, config=None, logger=None, logger_name="DefaultLogger"):
+    def __init__(self, logger_name="DefaultLogger"):
         """ """
-        if config == None:
-            self.config = {}
-        else:
-            self.config = config
-        if logger == None:
-            self.logger = logging.getLogger(logger_name)
-        else:
-            self.logger = logger
-        #
-        super(SoundDetectionSimple, self).__init__(logger)
+        self.logger = logging.getLogger(logger_name)
         # Config.
         self.sound_detected_counter_min = 3
 
     def config(self):
         """ """
-        sampling_freq = wurb_core.wurb_recorder.sampling_freq_hz
+
+        sampling_freq = wurb_core.rec_worker.connected_device_freq_hz
+
         filter_min_khz = wurb_core.wurb_settings.get_setting("detectionLimitKhz")
         threshold_dbfs = wurb_core.wurb_settings.get_setting("detectionSensitivityDbfs")
 
@@ -221,7 +191,7 @@ class SoundDetectionSimple(SoundDetectionBase):
             #     wurb_core.wurb_logger.info(message)
             #
         except Exception as e:
-            print("DEBUG: xception in check_for_sound: ", e)
+            print("DEBUG: Exception in check_for_sound: ", e)
 
         # Check if running in manual triggering mode.
         sound_detected = self.manual_triggering_check(sound_detected)

@@ -4,10 +4,10 @@
 # Copyright (c) 2023-present Arnold Andreasson
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
-import asyncio
 import logging
 import pathlib
 import wave
+import datetime
 import time
 
 import wurb_core
@@ -16,55 +16,120 @@ import wurb_core
 class RecFileWriter(object):
     """ """
 
-    def __init__(self, config=None, logger=None, logger_name="DefaultLogger"):
+    def __init__(self):
         """ """
-        if config == None:
-            self.config = {}
-        else:
-            self.config = config
-        if logger == None:
-            self.logger = logging.getLogger(logger_name)
-        else:
-            self.logger = logger
-        #
         self.clear()
 
     def clear(self):
         """ """
-        self.rec_target_dir_path = None
+        self.device_name = None
         self.wave_file = None
-        # self.size_counter = 0
+        self.rec_target_dir_path = None
+        self.rec_file_prefix = None
+        self.rec_type = None
+        self.sampling_freq_hz = None
+        self.rec_datetime_str = None
+        self.latitude_dd = None
+        self.longitude_dd = None
+        self.rec_latlongstring = None
+        self.rec_type_str = None
+        self.peak_info_str = None
+        self.rec_filename_path = None
+        self.max_peak_freq_hz = None
+        self.max_peak_dbfs = None
 
-    def create(self, start_time, max_peak_freq_hz, max_peak_dbfs):
+    def prepare(
+        self, device_name, sampling_freq_hz, start_time, max_peak_freq_hz, max_peak_dbfs
+    ):
         """ """
-        rec_file_prefix = wurb_core.wurb_settings.get_setting("filenamePrefix")
-        rec_type = wurb_core.wurb_settings.get_setting("recType")
-        sampling_freq_hz = 384000 ############### self.wurb_recorder.sampling_freq_hz
-        if rec_type == "TE":
-            sampling_freq_hz = int(sampling_freq_hz / 10.0)
+        self.clear()
+        self.device_name = device_name
+        self.prepare_rec_target_dir()
+        self.rec_file_prefix = wurb_core.wurb_settings.get_setting("filenamePrefix")
+        self.rec_type = wurb_core.wurb_settings.get_setting("recType")
+        self.sampling_freq_hz = int(sampling_freq_hz)
+        if self.rec_type == "TE":
+            self.sampling_freq_hz = int(self.sampling_freq_hz / 10.0)
+        self.prepare_datetime(start_time)
+        self.prepare_location()
+        self.prepare_rec_type_str(self.sampling_freq_hz, self.rec_type)
+        self.prepare_peak_info(max_peak_freq_hz, max_peak_dbfs)
+        self.max_peak_freq_hz = max_peak_freq_hz
+        self.max_peak_dbfs = max_peak_dbfs
 
-
-        try:
-            # self.rec_target_dir_path = wurb_core.wurb_rpi.get_wavefile_target_dir_path()
-            rec_target_dir = wurb_core.config.get("record.target.rec_dir", default="../wurb_recordings")
-            self.rec_target_dir_path = pathlib.Path(rec_target_dir)
-            if not self.rec_target_dir_path.exists():
-                self.rec_target_dir_path.mkdir(parents=True)
-        except:
-            pass
-
-        if self.rec_target_dir_path is None:
-            self.wave_file = None
-            return
-
-        rec_datetime = self.get_datetime(start_time)
-        rec_location = self.get_location()
-        rec_type_str = self.create_rec_type_str(
-            384000, rec_type
-            ########### self.wurb_recorder.sampling_freq_hz, rec_type
+    def prepare_rec_target_dir(self):
+        """ """
+        target_directory = wurb_core.config.get(
+            "record.target.rec_dir", default="../wurb_recordings"
         )
+        file_directory = wurb_core.wurb_settings.get_setting("fileDirectory")
+        # Add date to file directory.
+        # date_option = wurb_core.config.get(
+        #     "file_directory_date_option", default="date-post-after"
+        # )
+        date_option = wurb_core.wurb_settings.get_setting("fileDirectoryDateOption")
 
-        # Peak info to filename.
+        used_date_str = ""
+        if date_option in ["date-pre-true", "date-post-true"]:
+            used_date = datetime.datetime.now()
+            used_date_str = used_date.strftime("%Y-%m-%d")
+        if date_option in ["date-pre-after", "date-post-after"]:
+            used_date = datetime.datetime.now() + datetime.timedelta(hours=12)
+            used_date_str = used_date.strftime("%Y-%m-%d")
+        if date_option in ["date-pre-before", "date-post-before"]:
+            used_date = datetime.datetime.now() - datetime.timedelta(hours=12)
+            used_date_str = used_date.strftime("%Y-%m-%d")
+        if date_option in ["date-pre-true", "date-pre-after", "date-pre-before"]:
+            rec_target_dir = used_date_str + "_" + file_directory
+        elif date_option in ["date-post-true", "date-post-after", "date-post-before"]:
+            rec_target_dir = file_directory + "_" + used_date_str
+        else:
+            rec_target_dir = file_directory
+        #
+        self.rec_target_dir_path = pathlib.Path(target_directory, rec_target_dir)
+        if not self.rec_target_dir_path.exists():
+            self.rec_target_dir_path.mkdir(parents=True)
+
+    def prepare_datetime(self, start_time):
+        """ """
+        rec_datetime_str = time.strftime("%Y%m%dT%H%M%S%z", time.localtime(start_time))
+        self.rec_datetime_str = rec_datetime_str
+
+    def prepare_location(self):
+        """ """
+        latlongstring = ""
+        try:
+            latitude_dd, longitude_dd = wurb_core.wurb_settings.get_valid_location()
+            if latitude_dd >= 0.0:
+                latlongstring += "N"
+            else:
+                latlongstring += "S"
+            latlongstring += str(abs(latitude_dd))
+            #
+            if longitude_dd >= 0.0:
+                latlongstring += "E"
+            else:
+                latlongstring += "W"
+            latlongstring += str(abs(longitude_dd))
+        except:
+            latlongstring = "N00.00E00.00"
+        #
+        self.latitude_dd = latitude_dd
+        self.longitude_dd = longitude_dd
+        self.rec_latlongstring = latlongstring
+
+    def prepare_rec_type_str(self, sampling_freq_hz, rec_type):
+        """ """
+        try:
+            sampling_freq_khz = sampling_freq_hz / 1000.0
+            sampling_freq_khz = int(round(sampling_freq_khz, 0))
+        except:
+            sampling_freq_khz = "FS000"
+
+        self.rec_type_str = rec_type + str(sampling_freq_khz)
+
+    def prepare_peak_info(self, max_peak_freq_hz, max_peak_dbfs):
+        """ """
         peak_info_str = ""
         if max_peak_freq_hz and max_peak_dbfs:
             peak_info_str += "_"  # "_Peak"
@@ -72,33 +137,41 @@ class RecFileWriter(object):
             peak_info_str += "kHz"
             peak_info_str += str(int(round(max_peak_dbfs, 0)))
             peak_info_str += "dB"
+        self.peak_info_str = peak_info_str
+
+    def open(self):
+        """ """
+        if self.rec_target_dir_path is None:
+            self.wave_file = None
+            return
 
         # Filename example: "WURB1_20180420T205942+0200_N00.00E00.00_TE384.wav"
-        filename = rec_file_prefix
+        filename = self.rec_file_prefix
         filename += "_"
-        filename += rec_datetime
+        filename += self.rec_datetime_str
         filename += "_"
-        filename += rec_location
+        filename += self.rec_latlongstring
         filename += "_"
-        filename += rec_type_str
-        filename += peak_info_str
+        filename += self.rec_type_str
+        filename += self.peak_info_str
         filename += ".wav"
 
         # Create directories.
         if not self.rec_target_dir_path.exists():
             self.rec_target_dir_path.mkdir(parents=True)
+
         # Open wave file for writing.
-        filenamepath = pathlib.Path(self.rec_target_dir_path, filename)
-        self.wave_file = wave.open(str(filenamepath), "wb")
+        self.rec_filename_path = pathlib.Path(self.rec_target_dir_path, filename)
+        self.wave_file = wave.open(str(self.rec_filename_path), "wb")
         self.wave_file.setnchannels(1)  # 1=Mono.
         self.wave_file.setsampwidth(2)  # 2=16 bits.
-        self.wave_file.setframerate(sampling_freq_hz)
+        self.wave_file.setframerate(self.sampling_freq_hz)
         # Logging.
         target_path_str = str(self.rec_target_dir_path)
         target_path_str = target_path_str.replace("/media/pi/", "USB:")
         target_path_str = target_path_str.replace("/home/pi/", "SD-card:/home/pi/")
         message_rec_type = ""
-        if rec_type == "TE":
+        if self.rec_type == "TE":
             message_rec_type = "(TE) "
         message = "Sound file " + message_rec_type + "to: " + target_path_str
         wurb_core.wurb_logger.info(message)
@@ -110,15 +183,18 @@ class RecFileWriter(object):
         """ """
         if self.wave_file is not None:
             self.wave_file.writeframes(buffer)
-            # self.size_counter += len(buffer) / 2  # Count frames.
 
     def close(self):
         """ """
         if self.wave_file is not None:
             self.wave_file.close()
             self.wave_file = None
+            #
+            self.copy_settings()
+            self.create_metadata()
 
-        # Copy settings to target directory.
+    def copy_settings(self):
+        """Copy settings to target directory."""
         try:
             if self.rec_target_dir_path is not None:
                 from_dir = wurb_core.wurb_settings.settings_dir_path
@@ -133,39 +209,33 @@ class RecFileWriter(object):
             message = "Recorder: Copy settings to wave file directory: " + str(e)
             wurb_core.wurb_logger.error(message)
 
-    def get_datetime(self, start_time):
+    def create_metadata(self):
         """ """
-        datetime_str = time.strftime("%Y%m%dT%H%M%S%z", time.localtime(start_time))
-        return datetime_str
+        geoSource = wurb_core.wurb_settings.get_location_dict().get("geoSource", "")
+        detectionLimitKhz = wurb_core.wurb_settings.get_setting("detectionLimitKhz")
+        detectionSensitivityDbfs = wurb_core.wurb_settings.get_setting(
+            "detectionSensitivityDbfs"
+        )
+        detectionAlgorithm = wurb_core.wurb_settings.get_setting("detectionAlgorithm")
+        schedulerStartEvent = wurb_core.wurb_settings.get_setting("schedulerStartEvent")
+        schedulerStartAdjust = wurb_core.wurb_settings.get_setting(
+            "schedulerStartAdjust"
+        )
+        schedulerStopEvent = wurb_core.wurb_settings.get_setting("schedulerStopEvent")
+        schedulerStopAdjust = wurb_core.wurb_settings.get_setting("schedulerStopAdjust")
 
-    def get_location(self):
-        """ """
-        latlongstring = ""
-        try:
-            latitude_dd, longitude_dd = wurb_core.wurb_settings.get_valid_location()
-
-            if latitude_dd >= 0.0:
-                latlongstring += "N"
-            else:
-                latlongstring += "S"
-            latlongstring += str(abs(latitude_dd))
-            #
-            if longitude_dd >= 0.0:
-                latlongstring += "E"
-            else:
-                latlongstring += "W"
-            latlongstring += str(abs(longitude_dd))
-        except:
-            latlongstring = "N00.00E00.00"
-
-        return latlongstring
-
-    def create_rec_type_str(self, sampling_freq_hz, rec_type):
-        """ """
-        try:
-            sampling_freq_khz = sampling_freq_hz / 1000.0
-            sampling_freq_khz = int(round(sampling_freq_khz, 0))
-        except:
-            sampling_freq_khz = "FS000"
-
-        return rec_type + str(sampling_freq_khz)
+        metadata = wurb_core.metadata.read_metadata(self.rec_filename_path)
+        recording = metadata.get("recording", {})
+        recording["deviceName"] = self.device_name
+        recording["geoSource"] = geoSource
+        recording["detectionLimitKhz"] = detectionLimitKhz
+        recording["detectionSensitivityDbfs"] = detectionSensitivityDbfs
+        recording["detectionAlgorithm"] = detectionAlgorithm
+        recording["schedulerStartEvent"] = schedulerStartEvent
+        recording["schedulerStartAdjust"] = schedulerStartAdjust
+        recording["schedulerStopEvent"] = schedulerStopEvent
+        recording["schedulerStopAdjust"] = schedulerStopAdjust
+        recording["maxPeakFreqHz"] = str(round(self.max_peak_freq_hz))
+        recording["maxPeakDbfs"] = str(round(self.max_peak_dbfs, 1))
+        #
+        wurb_core.metadata.write_metadata(self.rec_filename_path, metadata)
