@@ -38,7 +38,7 @@ class Configuration:
             if not config_path.parent.exists():
                 config_path.parent.mkdir(parents=True)
             config_path.write_text(config_default_path.read_text())
-            self.logger.info(
+            self.logger.debug(
                 "Config file missing. Copy of default config made: " + config_path.name
             )
         # Load config files.

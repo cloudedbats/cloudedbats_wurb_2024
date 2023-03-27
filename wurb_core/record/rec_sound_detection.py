@@ -21,18 +21,23 @@ class SoundDetection(object):
 
     def get_detection(self):
         """Select detection algorithm."""
-        algorithm = wurb_core.wurb_settings.get_setting("detectionAlgorithm")
-        if algorithm == "detection-none":
-            detection_object = SoundDetectionNone(logger_name=self.logger_name)
-        elif algorithm == "detection-simple":
-            detection_object = SoundDetectionSimple(logger_name=self.logger_name)
+        # Check if sound detection is used.
+        rec_mode = wurb_core.wurb_settings.get_setting("recMode")
+        if rec_mode in ["mode-auto", "mode-scheduler-auto", "mode-manual"]:
+            algorithm = wurb_core.wurb_settings.get_setting("detectionAlgorithm")
+            if algorithm == "detection-none":
+                detection_object = SoundDetectionNone(logger_name=self.logger_name)
+            elif algorithm == "detection-simple":
+                detection_object = SoundDetectionSimple(logger_name=self.logger_name)
+            else:
+                # Use the most common as default.
+                detection_object = SoundDetectionSimple(logger_name=self.logger_name)
         else:
-            # Use the most common as default.
-            detection_object = SoundDetectionSimple(logger_name=self.logger_name)
+            # Record everything.
+            detection_object = SoundDetectionNone(logger_name=self.logger_name)
         #
         detection_object.config()
         return detection_object
-
 
 class SoundDetectionBase:
     """ """
@@ -57,9 +62,9 @@ class SoundDetectionBase:
             return True
         # Check manual mode triggering.
         if rec_mode == "mode-manual":
-            if wurb_core.manual_trigger_activated:
+            if wurb_core.rec_manager.manual_trigger_activated:
                 # Reset value.
-                wurb_core.manual_trigger_activated = False
+                wurb_core.rec_manager.manual_trigger_activated = False
                 return True
             else:
                 return False
@@ -188,7 +193,7 @@ class SoundDetectionSimple(SoundDetectionBase):
             #         + str(round(peak_dbfs_at_max, 1))
             #         + " dBFS."
             #     )
-            #     wurb_core.wurb_logger.info(message)
+            #     self.logger.info(message)
             #
         except Exception as e:
             print("DEBUG: Exception in check_for_sound: ", e)

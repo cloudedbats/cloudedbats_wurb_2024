@@ -19,7 +19,7 @@ from wurb_core.annotations.record_manager import RecordManager
 
 from wurb_core.record.rec_manager import RecManager
 from wurb_core.record.gps_reader import GpsReader
-from wurb_core.record.rpi_control import WurbRaspberryPi
+# from wurb_core.record.rpi_control import WurbRaspberryPi
 from wurb_core.record.rec_scheduler import WurbScheduler
 from wurb_core.record.rec_manager import RecManager
 from wurb_core.record.rec_devices import RecDevices
@@ -52,7 +52,7 @@ rec_scheduler = WurbScheduler(config, wurb_logger)
 rec_devices = RecDevices(config, wurb_logger)
 rec_worker = RecWorker(config, wurb_logger)
 sound_detection = SoundDetection(logger_name=logger_name)
-wurb_rpi = WurbRaspberryPi(config, wurb_logger)
+# wurb_rpi = WurbRaspberryPi(config, wurb_logger)
 gps = GpsReader(config, wurb_logger)
 
 # Annotations and administration.

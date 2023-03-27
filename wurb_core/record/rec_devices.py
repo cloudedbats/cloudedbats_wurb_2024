@@ -42,6 +42,24 @@ class RecDevices(object):
 # ####        self.alsa_cards = wurb_core.AlsaSoundCards()
 #         self.alsa_capture = None
 
+    def is_mic_available(self):
+        """ """
+        mic_available = False
+        try:
+            capture_devices = wurb_core.audio_capture.get_capture_devices()
+            for capture_device in capture_devices:
+                dev_name = capture_device.get("name", "")
+                for device_name_part in self.default_name_part_list:
+                    if device_name_part in dev_name:
+                        mic_available = True
+                        break
+        except Exception as e:
+            # Logging error.
+            message = "Rec. is_mic_available: " + str(e)
+            self.logger.error(message)
+
+        return mic_available
+
     def check_devices(self):
         """For asyncio events."""
         try:
@@ -79,7 +97,7 @@ class RecDevices(object):
         except Exception as e:
             # Logging error.
             message = "Rec. check_devices: " + str(e)
-            wurb_core.wurb_logger.error(message)
+            self.logger.error(message)
 
     def reset_devices(self):
         """For asyncio events."""
@@ -89,7 +107,7 @@ class RecDevices(object):
         except Exception as e:
             # Logging error.
             message = "Recorder: reset_devices: " + str(e)
-            wurb_core.wurb_logger.error(message)
+            self.logger.error(message)
 
     def get_notification_event(self):
         """ """
@@ -100,7 +118,7 @@ class RecDevices(object):
         except Exception as e:
             # Logging error.
             message = "Recorder: get_notification_event: " + str(e)
-            wurb_core.wurb_logger.error(message)
+            self.logger.error(message)
 
     def get_connected_device(self):
         """ """
@@ -109,7 +127,7 @@ class RecDevices(object):
         except Exception as e:
             # Logging error.
             message = "Recorder: get_connected_device: " + str(e)
-            wurb_core.wurb_logger.error(message)
+            self.logger.error(message)
 
     def set_connected_device(self, device_name, device_index, sampling_freq_hz):
         """ """
@@ -125,4 +143,4 @@ class RecDevices(object):
         except Exception as e:
             # Logging error.
             message = "Recorder: set_connected_device: " + str(e)
-            wurb_core.wurb_logger.error(message)
+            self.logger.error(message)

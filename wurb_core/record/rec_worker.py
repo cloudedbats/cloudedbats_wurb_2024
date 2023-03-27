@@ -127,137 +127,6 @@ class RecWorker(object):
         except Exception as e:
             print("Exception, TEST terminated: " + str(e))
 
-    # ### class WurbRecorder(wurb_core.SoundStreamManager):
-    # class WurbRecorder():
-    #     """ """
-
-    #     def __init__(self, config=None, logger=None, logger_name="DefaultLogger"):
-    #         """ """
-    #         if config == None:
-    #             self.config = {}
-    #         else:
-    #             self.config = config
-    #         if logger == None:
-    #             self.logger = logging.getLogger(logger_name)
-    #         else:
-    #             self.logger = logger
-    #         #
-    #         self.rec_status = ""
-    #         self.device_name = ""
-    #         self.card_index = ""
-    #         self.sampling_freq_hz = 0
-    #         self.notification_event = None
-    #         self.rec_start_time = None
-    #         self.restart_activated = False
-    #         # Config.
-    #         self.max_adc_time_diff_s = 10  # Unit: sec.
-    #         self.rec_length_s = 6  # Unit: sec.
-    #         self.rec_timeout_before_restart_s = 30  # Unit: sec.
-
-    #     def get_notification_event(self):
-    #         """ """
-    #         try:
-    #             if self.notification_event == None:
-    #                 self.notification_event = asyncio.Event()
-    #             return self.notification_event
-    #         except Exception as e:
-    #             # Logging error.
-    #             message = "Recorder: get_notification_event: " + str(e)
-    #             wurb_core.wurb_logger.error(message)
-
-    #     async def get_rec_status(self):
-    #         """ """
-    #         try:
-    #             return self.rec_status
-    #         except Exception as e:
-    #             # Logging error.
-    #             message = "Recorder: get_rec_status: " + str(e)
-    #             wurb_core.wurb_logger.error(message)
-
-    #     async def set_rec_status(self, rec_status):
-    #         """ """
-    #         try:
-    #             self.rec_status = rec_status
-    #             # Create a new event and release all from the old event.
-    #             old_notification_event = self.notification_event
-    #             self.notification_event = asyncio.Event()
-    #             if old_notification_event:
-    #                 old_notification_event.set()
-    #         except Exception as e:
-    #             # Logging error.
-    #             message = "Recorder: set_rec_status: " + str(e)
-    #             wurb_core.wurb_logger.error(message)
-
-    #     async def set_device(self, device_name, card_index, sampling_freq_hz):
-    #         """ """
-    #         try:
-    #             self.device_name = device_name
-    #             self.card_index = card_index
-    #             self.sampling_freq_hz = sampling_freq_hz
-    #         except Exception as e:
-    #             # Logging error.
-    #             message = "Recorder: set_device: " + str(e)
-    #             wurb_core.wurb_logger.error(message)
-
-    #     async def sound_source_worker(self):
-    #         """ """
-    #         self.rec_start_time = None
-    #         loop = asyncio.get_event_loop()
-    #         self.restart_activated = False
-
-    #         # Pettersson M500, not compatible with ALSA.
-    #         pettersson_m500 = wurb_core.PetterssonM500(
-    #             data_queue=self.from_source_queue,
-    #             direct_target=wurb_core.wurb_audiofeedback,
-    #         )
-    #         if self.device_name == pettersson_m500.get_device_name():
-    #             # Logging.
-    #             await self.set_rec_status("Microphone is on.")
-    #             try:
-    #                 buffer_size = int(self.sampling_freq_hz / 2)  # 0.5 sec.
-    #                 await pettersson_m500.initiate_capture(
-    #                     card_index=self.card_index,
-    #                     sampling_freq=self.sampling_freq_hz,
-    #                     buffer_size=buffer_size,
-    #                 )
-    #                 await pettersson_m500.start_capture_in_executor()
-    #             except asyncio.CancelledError:
-    #                 await pettersson_m500.stop_capture()
-    #             except Exception as e:
-    #                 # Logging error.
-    #                 message = "Recorder: sound_source_worker: " + str(e)
-    #                 wurb_core.wurb_logger.error(message)
-    #             finally:
-    #                 await pettersson_m500.stop_capture()
-    #                 await self.set_rec_status("Recording finished.")
-    #             return
-
-    #         # Standard ASLA microphones.
-    #         recorder_alsa = wurb_core.AlsaSoundCapture(
-    #             data_queue=self.from_source_queue,
-    #             direct_target=self.wurb_audiofeedback,
-    #         )
-    #         # Logging.
-    #         await self.set_rec_status("Microphone is on.")
-    #         try:
-    #             buffer_size = int(self.sampling_freq_hz / 2)  # 0.5 sec.
-    #             await recorder_alsa.initiate_capture(
-    #                 card_index=self.card_index,
-    #                 sampling_freq=self.sampling_freq_hz,
-    #                 buffer_size=buffer_size,
-    #             )
-    #             await recorder_alsa.start_capture_in_executor()
-    #         except asyncio.CancelledError:
-    #             await recorder_alsa.stop_capture()
-    #         except Exception as e:
-    #             # Logging error.
-    #             message = "Recorder: sound_source_worker: " + str(e)
-    #             wurb_core.wurb_logger.error(message)
-    #         finally:
-    #             await recorder_alsa.stop_capture()
-    #             await self.set_rec_status("Recording finished.")
-    #         return
-
     async def rec_process_worker(self):
         """ """
 
@@ -268,7 +137,8 @@ class RecWorker(object):
             self.process_deque = deque()  # Double ended queue.
             self.process_deque.clear()
             self.process_deque_length = self.rec_length_s * 2
-            self.detection_counter_max = self.process_deque_length - 3  # 1.5 s before.
+            # self.detection_counter_max = self.process_deque_length - 3  # 1.5 s before.
+            self.detection_counter_max = self.process_deque_length - 2  # 1.0 s before.
             #
             first_sound_detected = False
             sound_detected = False
@@ -296,12 +166,12 @@ class RecWorker(object):
                             message = (
                                 "Lost connection with the microphone. Rec. restarted."
                             )
-                            wurb_core.wurb_logger.warning(message)
+                            self.logger.warning(message)
                             # Restart recording.
                             self.restart_activated = True
                             loop = asyncio.get_event_loop()
                             asyncio.run_coroutine_threadsafe(
-                                wurb_core.wurb_manager.restart_rec(),
+                                wurb_core.rec_manager.restart_rec(),
                                 loop,
                             )
                             await self.remove_items_from_queue(self.from_source_queue)
@@ -336,7 +206,7 @@ class RecWorker(object):
                                         return
                                     # Logging.
                                     message = "Warning: Time diff. detected. Rec. will be restarted."
-                                    wurb_core.wurb_logger.info(message)
+                                    self.logger.info(message)
                                     # Restart recording.
                                     self.restart_activated = True
                                     loop = asyncio.get_event_loop()
@@ -390,7 +260,7 @@ class RecWorker(object):
                                             + str(round(peak_dbfs, 1))
                                             + " dBFS."
                                         )
-                                        wurb_core.wurb_logger.info(message)
+                                        self.logger.info(message)
 
                                 # Accumulate in file queue.
                                 if first_sound_detected == True:
@@ -429,13 +299,6 @@ class RecWorker(object):
                                                 await self.to_target_queue.put(
                                                     to_file_item
                                                 )
-
-                                            # await asyncio.sleep(0)
-
-                            # status = item.get('status', '')
-                            # adc_time = item.get('time', '')
-                            # data = item.get('data', '')
-                            # print("DEBUG: Process status:", status, " time:", adc_time, " data: ", len(data))
                         finally:
                             self.from_source_queue.task_done()
                             await asyncio.sleep(0)
@@ -449,14 +312,15 @@ class RecWorker(object):
                 except Exception as e:
                     # Logging error.
                     message = "Recorder: sound_process_worker(1): " + str(e)
-                    wurb_core.wurb_logger.error(message)
+                    self.logger.error(message)
 
+                await asyncio.sleep(0)
             # While end.
 
         except Exception as e:
             # Logging error.
             message = "Recorder: sound_process_worker(2): " + str(e)
-            wurb_core.wurb_logger.error(message)
+            self.logger.error(message)
         finally:
             pass
 
@@ -511,11 +375,14 @@ class RecWorker(object):
                 except Exception as e:
                     # Logging error.
                     message = "Recorder: sound_target_worker: " + str(e)
-                    wurb_core.wurb_logger.error(message)
+                    self.logger.error(message)
+
+                await asyncio.sleep(0)
+                
         except Exception as e:
             # Logging error.
             message = "Recorder: sound_target_worker: " + str(e)
-            wurb_core.wurb_logger.error(message)
+            self.logger.error(message)
         finally:
             pass
 

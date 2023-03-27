@@ -306,7 +306,7 @@ async def rec_manual_trigger():
         # Logging debug.
         message = "API called: manual-trigger."
         logger.debug(message)
-        # await wurb_rec_manager.manual_trigger()
+        await wurb_core.rec_manager.manual_trigger()
     except Exception as e:
         # Logging error.
         message = "Called: rec_manual_trigger: " + str(e)
