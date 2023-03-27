@@ -174,10 +174,10 @@ class RecFileWriter(object):
         if self.rec_type == "TE":
             message_rec_type = "(TE) "
         message = "Sound file " + message_rec_type + "to: " + target_path_str
-        self.logger.info(message)
+        wurb_core.wurb_logger.info(message)
         # Logging debug.
         message = "Filename: " + filename
-        self.logger.debug(message=message)
+        wurb_core.wurb_logger.debug(message=message)
 
     def write(self, buffer):
         """ """
@@ -203,11 +203,11 @@ class RecFileWriter(object):
         #         to_file_path = pathlib.Path(self.rec_target_dir_path, log_file_name)
         #         to_file_path.write_text(from_file_path.read_text())
         #         # Logging debug.
-        #         self.logger.debug(message="File closed.")
+        #         wurb_core.wurb_logger.debug(message="File closed.")
         # except Exception as e:
         #     # Logging error.
         #     message = "Recorder: Copy settings to wave file directory: " + str(e)
-        #     self.logger.error(message)
+        #     wurb_core.wurb_logger.error(message)
 
     def create_metadata(self):
         """ """

@@ -41,10 +41,7 @@ async def main():
     )
 
     # WURB settings.
-    wurb_core.wurb_settings.load_settings(
-        settings_dir=settings_dir,
-        # settings_file="wurb_settings.yaml",
-    )
+    wurb_core.wurb_settings.startup(settings_dir=settings_dir)
 
     # WURB core startup.
     logger.debug("WURB startup.")
@@ -67,6 +64,7 @@ async def main():
     await server.serve()
 
     logger.debug("WURB shutdown started.")
+    await wurb_core.wurb_settings.shutdown()
     await wurb_core.wurb_manager.shutdown()
     logger.debug("WURB shutdown done.")
 
