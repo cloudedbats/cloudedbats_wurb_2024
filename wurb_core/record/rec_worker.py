@@ -49,10 +49,18 @@ class RecWorker(object):
         self.rec_timeout_before_restart_s = 10
         self.max_adc_time_diff_s = 10
         self.restart_activated = False
-        self.connected_device_name = None
-        self.connected_device_freq_hz = None
+        self.connected_device_name = ""
+        self.connected_device_freq_hz = ""
 
         wurb_core.audio_capture.add_out_queue(self.from_source_queue)
+
+    def get_connected_device_name(self):
+        """ """
+        return self.connected_device_name
+
+    def get_connected_device_freq_hz(self):
+        """ """
+        return self.connected_device_freq_hz
 
     def start_recording(self):
         """ """
@@ -378,7 +386,7 @@ class RecWorker(object):
                     self.logger.error(message)
 
                 await asyncio.sleep(0)
-                
+
         except Exception as e:
             # Logging error.
             message = "Recorder: sound_target_worker: " + str(e)

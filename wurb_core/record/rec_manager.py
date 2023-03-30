@@ -26,6 +26,7 @@ class RecManager(object):
         #
         self.clear()
         self.rec_event = asyncio.Event()
+        self.notification_event = asyncio.Event()
 
     def clear(self):
         """ """
@@ -34,6 +35,7 @@ class RecManager(object):
         self.control_loop_interval_s = 10
         self.last_used_rec_mode = ""
         self.manual_trigger_activated = False
+        self.status_info_text = ""
 
     def configure(self):
         """ """
@@ -110,7 +112,7 @@ class RecManager(object):
             is_rec_mode_on = False
             is_scheduler_used = False
             is_rec_to_be_activated = False
-            status_info_text = ""
+            self.status_info_text = ""
 
             # Check rec mode and scheduler.
             rec_mode = wurb_core.wurb_settings.get_setting("recMode")
@@ -138,24 +140,24 @@ class RecManager(object):
                         scheduler_on = wurb_core.rec_scheduler.check_scheduler()
                         if scheduler_on:
                             is_rec_to_be_activated = True
-                            status_info_text = "Rec. on by scheduler."
+                            self.status_info_text = "Recording on by scheduler."
                         else:
                             is_rec_to_be_activated = False
-                            status_info_text = "Rec. off by scheduler."
+                            self.status_info_text = "Recording off by scheduler."
                             # await wurb_core.rec_manager.stop_rec()
                     else:
                         is_rec_to_be_activated = True
-                        status_info_text = "Rec. on."
+                        self.status_info_text = "Recording on."
                 else:
                     is_rec_to_be_activated = False
-                    status_info_text = "No microphone available."
+                    self.status_info_text = "No microphone available."
                     # await wurb_core.rec_manager.stop_rec()
             else:
                 is_rec_to_be_activated = False
-                status_info_text = "Rec. off."
+                self.status_info_text = "Recording off."
                 # await wurb_core.rec_manager.stop_rec()
 
-            print("REC MANAGER: ", status_info_text)
+            print("REC MANAGER: ", self.status_info_text)
 
             if is_rec_to_be_activated:
                 wurb_core.rec_worker.start_recording()
@@ -203,6 +205,17 @@ class RecManager(object):
         self.rec_event = asyncio.Event()
         old_rec_event.set()
 
+    def get_notification_event(self):
+        """Used for synchronization."""
+        return self.notification_event
+
+    def trigger_rec_event(self):
+        """Used for synchronization."""
+        # Create a new event and release the old.
+        old_rec_event = self.rec_event
+        self.rec_event = asyncio.Event()
+        old_rec_event.set()
+
     async def restart_rec(self):
         """ """
         try:
@@ -214,35 +227,35 @@ class RecManager(object):
             message = "Manager: restart_rec: " + str(e)
             self.logger.error(message)
 
-    # async def get_notification_event(self):
-    #     """ """
-    #     try:
-    #         if self.notification_event == None:
-    #             self.notification_event = asyncio.Event()
-    #         return self.notification_event
-    #     except Exception as e:
-    #         # Logging error.
-    #         message = "Manager: get_notification_event: " + str(e)
-    #         self.logger.error(message)
+    async def get_status_dict(self):
+        """ """
+        try:
+            # status_dict = {
+            #     "rec_status": "TEST-STATUS",
+            #     "device_name": "TEST-DEV",
+            #     "sample_rate": "1234556",
+            # }
+            # return(status_dict)
 
-    # async def get_status_dict(self):
-    #     """ """
-    #     try:
-    #         # Avoid too long device names in the user interface.
-    #         device_name = self.ultrasound_devices.device_name
-    #         device_name = device_name.replace("USB Ultrasound Microphone", "")
-    #         if len(device_name) > 25:
-    #             device_name = device_name[:24] + "..."
-    #         status_dict = {
-    #             "rec_status": self.wurb_recorder.rec_status,
-    #             "device_name": device_name,
-    #             "sample_rate": str(self.ultrasound_devices.sampling_freq_hz),
-    #         }
-    #         return status_dict
-    #     except Exception as e:
-    #         # Logging error.
-    #         message = "Manager: get_status_dict: " + str(e)
-    #         self.logger.error(message)
+            # Avoid too long device names in the user interface.
+            device_name = wurb_core.rec_worker.get_connected_device_name()
+            device_freq_hz = wurb_core.rec_worker.get_connected_device_freq_hz()
+            device_name = device_name.replace("USB Ultrasound Microphone", "")
+            if len(device_name) > 25:
+                device_name = device_name[:24] + "..."
+            status_dict = {
+                "rec_status": self.status_info_text,
+                "device_name": device_name,
+                "sample_rate": str(device_freq_hz),
+                # "rec_status": self.wurb_recorder.rec_status,
+                # "device_name": device_name,
+                # "sample_rate": str(self.ultrasound_devices.sampling_freq_hz),
+            }
+            return status_dict
+        except Exception as e:
+            # Logging error.
+            message = "Manager: get_status_dict: " + str(e)
+            self.logger.error(message)
 
     # async def update_status(self):
     #     """ """
@@ -259,11 +272,8 @@ class RecManager(object):
     #                 ]
     #                 await asyncio.wait(events, return_when=asyncio.FIRST_COMPLETED)
 
-    #                 # Create a new event and release all from the old event.
-    #                 old_notification_event = self.notification_event
-    #                 self.notification_event = asyncio.Event()
-    #                 if old_notification_event:
-    #                     old_notification_event.set()
+    #                 # Trigger event.
+    #                 self.trigger_notification_event()
     #             except asyncio.CancelledError:
     #                 exit
     #     except Exception as e:

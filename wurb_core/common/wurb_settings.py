@@ -61,11 +61,11 @@ class WurbSettings(object):
         # Select settings for startup.
         startup_option = self.loaded_settings.get("startupOption", "")
         if startup_option == "startup-settings":
-            self.current_settings = self.loaded_settings["startup"].copy()
+            self.current_settings = self.loaded_settings["startupSettings"].copy()
             self.current_location = self.loaded_settings["startupLocation"].copy()
         else:
-            self.current_settings = self.default_settings.copy()
-            self.current_location = self.default_location.copy()
+            self.current_settings = self.loaded_settings["currentSettings"].copy()
+            self.current_location = self.loaded_settings["currentLocation"].copy()
         # GPS.
         self.save_latlong(0.0, 0.0)
 
@@ -104,7 +104,7 @@ class WurbSettings(object):
             "feedbackPitch": "30",
             "feedbackFilterLowKhz": "15",
             "feedbackFilterHighKhz": "150",
-            "startupOption": "as-last-session",
+            # "startupOption": "as-last-session",
             "schedulerStartEvent": "on-sunset",
             "schedulerStartAdjust": "-15",
             "schedulerStopEvent": "off-sunrise",
@@ -155,6 +155,10 @@ class WurbSettings(object):
                     # Logging.
                     message = "Error when comparing saved settings. " + str(e)
                     self.logger.debug(message)
+
+        startupOption = settings_dict.get("startupOption", "")
+        self.loaded_settings["startupOption"] = startupOption
+
         if is_changed:
             self.loaded_settings["currentSettings"] = self.current_settings.copy()
             self.save_settings_to_file()
@@ -370,37 +374,24 @@ class WurbSettings(object):
         """ """
         return self.audiofeedback_event
 
-    # async def load_settings(self, settings_type):
-    #     """ """
-    #     # Keep startup_option.
-    #     startup_option = self.current_settings.get("startupOption", "")
-    #     if settings_type == "user-default":
-    #         self.load_settings_from_file(
-    #             settings_file_name=self.settings_user_file_name
-    #         )
-    #     elif settings_type == "start-up":
-    #         self.load_settings_from_file(
-    #             settings_file_name=self.settings_startup_file_name
-    #         )
-    #     elif settings_type == "factory-default":
-    #         self.current_settings = self.default_settings.copy()
-    #         self.current_location = self.default_location.copy()
-    #     # Keep startup_option.
-    #     self.current_settings["startupOption"] = startup_option
-    #     # Create a new event and release all from the old event.
-    #     old_settings_event = self.settings_event
-    #     self.settings_event = asyncio.Event()
-    #     if old_settings_event:
-    #         old_settings_event.set()
-    #     # Create a new event and release all from the old event.
-    #     old_location_event = self.location_event
-    #     self.location_event = asyncio.Event()
-    #     if old_location_event:
-    #         old_location_event.set()
+    async def load_settings(self, settings_type):
+        """ """
+        if settings_type == "user-default":
+            self.current_settings = self.loaded_settings["userSettings"].copy()
+            self.current_location = self.loaded_settings["userLocation"].copy()
+        elif settings_type == "start-up":
+            self.current_settings = self.loaded_settings["startupSettings"].copy()
+            self.current_location = self.loaded_settings["startupLocation"].copy()
+        elif settings_type == "factory-default":
+            self.current_settings = self.default_settings.copy()
+            self.current_location = self.default_location.copy()
+
+        # Trigger an event.
+        self.trigger_settings_event()
+        self.trigger_location_event()
 
     def load_settings_from_file(self, settings_file_name=None):
         """Load from file."""
-
         if settings_file_name is None:
             settings_file_name = self.settings_file_name
         settings_file_path = pathlib.Path(self.settings_dir, settings_file_name)
@@ -409,7 +400,8 @@ class WurbSettings(object):
                 self.loaded_settings = yaml.load(settings_file, Loader=yaml.FullLoader)
                 print(self.loaded_settings)
         else:
-            self.loaded_settings["startupOption"] = ""
+            # Use
+            self.loaded_settings["startupOption"] = "as-last-session"
             self.loaded_settings["currentSettings"] = self.default_settings.copy()
             self.loaded_settings["startupSettings"] = self.default_settings.copy()
             self.loaded_settings["userSettings"] = self.default_settings.copy()
@@ -420,7 +412,6 @@ class WurbSettings(object):
 
     def save_settings_to_file(self):
         """Save to file."""
-
         # settings_file.write("# CloudedBats, http://cloudedbats.org" + "\n")
         # settings_file.write("# Settings for the WURB bat detector." + "\n")
 

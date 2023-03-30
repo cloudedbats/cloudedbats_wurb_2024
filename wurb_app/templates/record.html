@@ -20,7 +20,7 @@
 
     <div class="tile is-ancestor is-vertical m-0">
         <div class="tile is-parent px---0">
-            <article class="tile is-child box py-1">
+            <article class="tile is-child box pt-1 pb-3">
                 <div class="content">
 
                     <div class="field">
@@ -152,11 +152,11 @@
                                         <tr>
                                             <td class="p-1">
                                                 <div class="label has-text-left" style="white-space: nowrap;">
-                                                    (row-2)
+                                                    Time
                                                 </div>
                                             </td>
                                             <td colspan="1" style="width: 100%;" class="p-1">
-                                                <span id="recStatusRow2Id"></span>
+                                                <span id="recDetectorTimeId">Waiting...</span>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -199,7 +199,7 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <!-- <tr>
                                         <td class="p-1">
                                             <div class="label has-text-left pt-3" style="white-space: nowrap;">
                                                 Automatic date
@@ -229,7 +229,7 @@
                                                 </select>
                                             </div>
                                         </td>
-                                    </tr>
+                                    </tr> -->
                                     <tr>
                                         <td class="p-1 pt-3">
                                             <div class="label has-text-left" style="white-space: nowrap;">
@@ -294,13 +294,405 @@
                         <div class="field">
                             <label class="title is-4">Settings</label>
                         </div>
+
+
+                        <div class="tabs is-fullwidth is-medium">
+                            <ul>
+                                <li id="tabSettingsBasicId" class="is-active" onclick="hideShowSettingsTabs('basic');">
+                                    <a>
+                                        <span><strong>Basic</strong></span>
+                                    </a>
+                                </li>
+                                <li id="tabSettingsMoreId" class="" onclick="hideShowSettingsTabs('more');">
+                                    <a>
+                                        <span><strong>More</strong></span>
+                                    </a>
+                                </li>
+                                <li id="tabSettingsSchedulerId" class="" onclick="hideShowSettingsTabs('scheduler');">
+                                    <a>
+                                        <span><strong>Scheduler</strong></span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Settings: Tab - Basic. -->
+                        <div id="divSettingsBasicId">
+                            <!-- <div class="field">
+                                <label class="label">Directory&nbsp;name&nbsp;for&nbsp;sound&nbsp;files</label>
+                                <div class="control">
+                                    <input id="settings_file_directory_id" class="input"
+                                        placeholder="recorded_files" value="recorded_files">
+                                </div>
+                                <p class="help is-info">
+                                    Stored on USB memory if available, otherwise stored internally.
+                                </p>
+                            </div> -->
+                            <div class="field is-narrow">
+                                <label class="label">Automatic&nbsp;date&nbsp;in&nbsp;directory&nbsp;name</label>
+                                <div class="control is-narrow">
+                                    <div class="select is-narrow">
+                                        <select id="recFileDirectoryDateOptionId">
+                                            <option value="date-not-used">Not used</option>
+                                            <option value="date-pre-true">Add before - Use date
+                                            </option>
+                                            <option value="date-pre-before">Add before - Use date before
+                                                midnight
+                                            </option>
+                                            <option value="date-pre-after">Add before - Use date after
+                                                midnight
+                                            </option>
+                                            <option value="date-post-true">Add after - Use date
+                                            </option>
+                                            <option value="date-post-before">Add after - Use date before
+                                                midnight
+                                            </option>
+                                            <option value="date-post-after">Add after - Use date after
+                                                midnight
+                                            </option>
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="field">
+                                <label class="label">Sound&nbsp;file&nbsp;name&nbsp;prefix</label>
+                                <div class="control">
+                                    <input id="settings_filename_prefix_id" class="input" placeholder="wurb"
+                                        value="wurb">
+                                </div>
+                            </div> -->
+                            <div class="field">
+                                <div class="field-label label is-normal has-text-left">
+                                    Automatic&nbsp;detection:&nbsp;Low&nbsp;limit&nbsp;(kHz)
+                                </div>
+                                <div class="field-body">
+                                    <div class="field is-narrow">
+                                        <div class="control">
+                                            <input id="recDetectionLimitId" class="input is-narrow" type="number"
+                                                placeholder="15.0" value="15.0">
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="help is-info">
+                                    Sound above this limit will be used for automatic detection.
+                                </p>
+                            </div>
+                            <div class="field">
+                                <div class="field-label label is-normal has-text-left">
+                                    Automatic&nbsp;detection:&nbsp;Sensitivity&nbsp;(dBFS)
+                                </div>
+                                <div class="field-body">
+                                    <div class="field is-narrow">
+                                        <div class="control">
+                                            <input id="recDetectionSensitivityId" class="input" type="number"
+                                                placeholder="-50" value="-50">
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="help is-info">
+                                    The value -60 gives more files and -40 less.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Settings: Tab - More. -->
+                        <div id="divSettingsMoreId" style="visibility:hidden; overflow:hidden; height:0; width:0;"
+                            class="">
+                            <div class="field">
+                                <label class="label">Automatic&nbsp;detection&nbsp;algorithm</label>
+                                <div class="control">
+                                    <div class="select">
+                                        <select id="recDetectionAlgorithmId">
+                                            <option value="detection-none">None (everything is recorded)
+                                            </option>
+                                            <option value="detection-simple">Simple (single trigging event)
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label">Length of recorded sound files</label>
+                                <div class="control">
+                                    <div class="select">
+                                        <select id="recRecLengthId">
+                                            <option value="4">4 seconds</option>
+                                            <option value="5">5 seconds</option>
+                                            <option value="6">6 seconds</option>
+                                            <option value="7">7 seconds</option>
+                                            <option value="8">8 seconds</option>
+                                            <option value="9">9 seconds</option>
+                                            <option value="10">10 seconds</option>
+                                            <option value="12">12 seconds</option>
+                                            <option value="15">15 seconds</option>
+                                            <option value="20">20 seconds</option>
+                                            <option value="30">30 seconds</option>
+                                            <option value="40">40 seconds</option>
+                                            <option value="50">50 seconds</option>
+                                            <option value="60">1 minute</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <p class="help is-info">
+                                    Up to 2 sec. before the detected sound will be included.
+                                </p>
+                            </div>
+                            <div class="field">
+                                <label class="label">Recorded sound file type (FS or TE)</label>
+                                <div class="control">
+                                    <div class="select">
+                                        <select id="recTypeId">
+                                            <option value="FS">Full Spectrum (FS)
+                                            </option>
+                                            <option value="TE">Time Expansion (TE), 10x
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="field">
+                                <label class="label">Audio&nbsp;feedback</label>
+                                <div class="control">
+                                    <div class="select">
+                                        <select id="settings_feedback_on_off_id">
+                                            <option value="feedback-off">Off</option>
+                                            <option value="feedback-on">On</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="field-label label is-normal has-text-left">
+                                    Audio&nbsp;feedback&nbsp;filter:&nbsp;Low&nbsp;limit&nbsp;(kHz)
+                                </div>
+                                <div class="field-body">
+                                    <div class="field is-narrow">
+                                        <div class="control">
+                                            <input id="settings_feedback_filter_low_id" class="input" type="number"
+                                                placeholder="15.0" value="15.0">
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="help is-info">
+                                    Mainly used to remove low frequency noise.
+                                </p>
+                            </div>
+                            <div class="field">
+                                <div class="field-label label is-normal has-text-left">
+                                    Audio&nbsp;feedback&nbsp;filter:&nbsp;High&nbsp;limit&nbsp;(kHz)
+                                </div>
+                                <div class="field-body">
+                                    <div class="field is-narrow">
+                                        <div class="control">
+                                            <input id="settings_feedback_filter_high_id" class="input" type="number"
+                                                placeholder="120.0" value="120.0">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+                            <div class="field">
+                                <div class="field-label label is-normal has-text-left">
+                                    Save current settings as:
+                                </div>
+                                <div class="field-body">
+                                    <div class="control">
+                                        <button style="margin:5px;" class="button is-info is-rounded is-small"
+                                            onclick="saveUserDefaultSettings()">
+                                            "User default"
+                                        </button>
+                                        <button style="margin:5px;" class="button is-info is-rounded is-small"
+                                            onclick="saveStartupSettings()">
+                                            "Start-up"
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="field-label label is-normal has-text-left">
+                                    Define start-up configuration
+                                </div>
+                                <div class="field-body">
+                                    <div class="control">
+                                        <div class="select">
+                                            <select id="settingsStartupOptionId">
+                                                <option value="as-last-session">Start-up with same settings as last
+                                                    session</option>
+                                                <option value="startup-settings">Start-up with "Start-up" settings
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Settings: Tab - Scheduler. -->
+                        <div id="divSettingsSchedulerId" style="visibility:hidden; overflow:hidden; height:0; width:0;"
+                            class="">
+                            <div class="field">
+                                <label class="label">Start&nbsp;recording&nbsp;at</label>
+                                <div class="control">
+                                    <div class="select">
+                                        <select id="recSchedulerStartEventId">
+                                            <option value="on-sunset">Sunset</option>
+                                            <option value="on-dusk">Dusk</option>
+                                            <option value="on-dawn">Dawn</option>
+                                            <option value="on-sunrise">Sunrise</option>
+                                            <option value="on-00">00:00</option>
+                                            <option value="on-01">01:00</option>
+                                            <option value="on-02">02:00</option>
+                                            <option value="on-03">03:00</option>
+                                            <option value="on-04">04:00</option>
+                                            <option value="on-05">05:00</option>
+                                            <option value="on-06">06:00</option>
+                                            <option value="on-07">07:00</option>
+                                            <option value="on-08">08:00</option>
+                                            <option value="on-09">09:00</option>
+                                            <option value="on-10">10:00</option>
+                                            <option value="on-11">11:00</option>
+                                            <option value="on-12">12:00</option>
+                                            <option value="on-13">13:00</option>
+                                            <option value="on-14">14:00</option>
+                                            <option value="on-15">15:00</option>
+                                            <option value="on-16">16:00</option>
+                                            <option value="on-17">17:00</option>
+                                            <option value="on-18">18:00</option>
+                                            <option value="on-19">19:00</option>
+                                            <option value="on-20">20:00</option>
+                                            <option value="on-21">21:00</option>
+                                            <option value="on-22">22:00</option>
+                                            <option value="on-23">23:00</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="field-label label is-normal has-text-left">
+                                    Adjust&nbsp;start&nbsp;time&nbsp;(minutes)
+                                </div>
+                                <div class="field-body">
+                                    <div class="field is-narrow">
+                                        <div class="control">
+                                            <input id="recSchedulerStartAdjustId" class="input" type="number"
+                                                placeholder="-15" value="-15">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label">Stop&nbsp;recording&nbsp;at</label>
+                                <div class="control">
+                                    <div class="select">
+                                        <select id="recSchedulerStopEventId">
+                                            <option value="off-sunset">Sunset</option>
+                                            <option value="off-dusk">Dusk</option>
+                                            <option value="off-dawn">Dawn</option>
+                                            <option value="off-sunrise">Sunrise</option>
+                                            <option value="off-00">00:00</option>
+                                            <option value="off-01">01:00</option>
+                                            <option value="off-02">02:00</option>
+                                            <option value="off-03">03:00</option>
+                                            <option value="off-04">04:00</option>
+                                            <option value="off-05">05:00</option>
+                                            <option value="off-06">06:00</option>
+                                            <option value="off-07">07:00</option>
+                                            <option value="off-08">08:00</option>
+                                            <option value="off-09">09:00</option>
+                                            <option value="off-10">10:00</option>
+                                            <option value="off-11">11:00</option>
+                                            <option value="off-12">12:00</option>
+                                            <option value="off-13">13:00</option>
+                                            <option value="off-14">14:00</option>
+                                            <option value="off-15">15:00</option>
+                                            <option value="off-16">16:00</option>
+                                            <option value="off-17">17:00</option>
+                                            <option value="off-18">18:00</option>
+                                            <option value="off-19">19:00</option>
+                                            <option value="off-20">20:00</option>
+                                            <option value="off-21">21:00</option>
+                                            <option value="off-22">22:00</option>
+                                            <option value="off-23">23:00</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="field-label label is-normal has-text-left">
+                                    Adjust&nbsp;stop&nbsp;time&nbsp;(minutes)
+                                </div>
+                                <div class="field-body">
+                                    <div class="field is-narrow">
+                                        <div class="control">
+                                            <input id="recSchedulerStopAdjustId" class="input" type="number"
+                                                placeholder="15" value="15">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="field">
+                                <label class="label">Post&nbsp;action</label>
+                                <div class="control">
+                                    <div class="select">
+                                        <select id="recSchedulerPostActionId" disabled>
+                                            <option value="post-none">No action</option>
+                                            <option value="post-shutdown">Detector shutdown</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="field-label label is-normal has-text-left">
+                                    Post&nbsp;action&nbsp;delay&nbsp;(minutes)
+                                </div>
+                                <div class="field-body">
+                                    <div class="field is-narrow">
+                                        <div class="control">
+                                            <input id="recSchedulerPostActionDelayId" class="input" type="number"
+                                                placeholder="5" value="5" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+                        </div>
+
+                        <hr>
+
+                        <div class="field is-horizontal">
+                            <div class="field-body">
+                                <div class="control">
+                                    <button style="margin:5px;" id="settings_save_button_id"
+                                        class="button is-info is-rounded" onclick="saveSettings()">
+                                        Save
+                                    </button>
+                                    <button style="margin:5px;" id="settings_reset_button_id"
+                                        class="button is-info is-rounded" onclick="getSettings()">
+                                        Cancel
+                                        <!-- Last saved -->
+                                    </button>
+                                    <!-- <button style="margin:5px;" id="settings_default_button_id" -->
+                                    <!-- class="button is-info is-rounded" onclick="getDefaultSettings()"> -->
+                                    <!-- User default -->
+                                    <!-- </button> -->
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+
+
                     </section>
                 </div>
             </article>
         </div>
 
         <div class="tile is-parent px---0">
-            <article class="tile is-child box">
+            <article class="tile is-child box pt-1 pb-3">
                 <div class="content">
 
                     <div class="field">

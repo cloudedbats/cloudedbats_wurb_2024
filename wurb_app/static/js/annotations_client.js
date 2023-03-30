@@ -32,10 +32,10 @@ async function getSourceDirs() {
             }
 
 
-            // During development.
-            byId("annoSelectSourceId").value = "local";
-            var sourceId = byId("annoSelectSourceId").value;
-            getNights(sourceId);
+            // // During development.
+            // byId("annoSelectSourceId").value = "local";
+            // var sourceId = byId("annoSelectSourceId").value;
+            // getNights(sourceId);
 
 
 
@@ -79,11 +79,11 @@ async function getNights(sourceId) {
             }
 
 
-            // During development.
-            byId("annoSelectNightId").value = "Taberg-1_2022-12-21";
-            var sourceId = byId("annoSelectSourceId").value;
-            var nightId = byId("annoSelectNightId").value;
-            getRecordInfo(sourceId, nightId, "");
+            // // During development.
+            // byId("annoSelectNightId").value = "Taberg-1_2022-12-21";
+            // var sourceId = byId("annoSelectSourceId").value;
+            // var nightId = byId("annoSelectNightId").value;
+            // getRecordInfo(sourceId, nightId, "");
 
 
 

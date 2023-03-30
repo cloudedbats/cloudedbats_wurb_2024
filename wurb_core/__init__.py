@@ -17,9 +17,8 @@ from wurb_core.annotations.metadata import Metadata
 from wurb_core.annotations.metadata_table import MetadataTable
 from wurb_core.annotations.record_manager import RecordManager
 
-from wurb_core.record.rec_manager import RecManager
 from wurb_core.record.gps_reader import GpsReader
-# from wurb_core.record.rpi_control import WurbRaspberryPi
+from wurb_core.record.rpi_control import WurbRaspberryPi
 from wurb_core.record.rec_scheduler import WurbScheduler
 from wurb_core.record.rec_manager import RecManager
 from wurb_core.record.rec_devices import RecDevices
@@ -35,7 +34,7 @@ from wurb_core.record.rec_file_writer import RecFileWriter
 config = wurb_utils.Configuration(logger_name=logger_name)
 logger = wurb_utils.Logger(logger_name=logger_name)
 
-# Basic WURB. 
+# Basic WURB.
 wurb_logger = WurbLogger(config, logger_name=logger_name)
 wurb_settings = WurbSettings(config, wurb_logger)
 wurb_manager = WurbManager(config, wurb_logger)
@@ -52,7 +51,7 @@ rec_scheduler = WurbScheduler(config, wurb_logger)
 rec_devices = RecDevices(config, wurb_logger)
 rec_worker = RecWorker(config, wurb_logger)
 sound_detection = SoundDetection(logger_name=logger_name)
-# wurb_rpi = WurbRaspberryPi(config, wurb_logger)
+wurb_rpi = WurbRaspberryPi(config, wurb_logger)
 gps = GpsReader(config, wurb_logger)
 
 # Annotations and administration.
@@ -60,5 +59,3 @@ sources_and_files = SourcesAndFiles(config, wurb_logger)
 metadata = Metadata(config, logger)
 metadata_table = MetadataTable(config, wurb_logger)
 record_manager = RecordManager(config, wurb_logger)
-
-

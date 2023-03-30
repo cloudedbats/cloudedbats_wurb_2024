@@ -7,7 +7,7 @@ async function startRecording() {
         // saveSettings()
         await fetch("/record/start-rec/");
     } catch (err) {
-        alert("ERROR startRecording: ${err}");
+        alert("ERROR startRecording: " + err);
         console.log(err);
     };
 };
@@ -17,21 +17,32 @@ async function stopRecording() {
         byId("recStatusId").innerHTML = "Waiting...";
         await fetch("/record/stop-rec/");
     } catch (err) {
-        alert("ERROR stopRecording: ${err}");
+        alert("ERROR stopRecording: " + err);
         console.log(err);
     };
 };
 
-async function recModeOnChange() {
-    try {
-        let recmode = byId("recModeSelectId").value;
-        let urlString = "/record/save-rec-mode/?recmode=${recmode}";
-        await fetch(urlString);
-    } catch (err) {
-        alert("ERROR recModeOnChange: ${err}");
-        console.log(err);
-    };
-};
+// async function recModeOnChange() {
+//     try {
+//         // let recmode = byId("recModeSelectId").value;
+//         // let urlString = "/record/save-rec-mode/?recmode=" + recmode;
+//         // await fetch(urlString);
+//         let data = {
+//             recMode: byId("recModeSelectId").value,
+//         }
+//         await fetch("/record/save-rec-mode/",
+//         {
+//             method: "POST",
+//             headers: {
+//                 "Content-Type": "application/json"
+//             },
+//             body: JSON.stringify(data)
+//         })
+//     } catch (err) {
+//         alert("ERROR recModeOnChange: " + err);
+//         console.log(err);
+//     };
+// };
 
 async function saveLocationSource() {
     try {
@@ -49,7 +60,7 @@ async function saveLocationSource() {
                 body: JSON.stringify(location)
             })
     } catch (err) {
-        alert("ERROR saveLocation: ${err}");
+        alert("ERROR saveLocation: " + err);
         console.log(err);
     };
 };
@@ -89,7 +100,7 @@ async function saveLocation() {
                 body: JSON.stringify(location)
             })
     } catch (err) {
-        alert("ERROR saveLocation: ${err}");
+        alert("ERROR saveLocation: " + err);
         console.log(err);
     };
 };
@@ -100,7 +111,7 @@ async function getLocation() {
         let data = await response.json();
         updateLocation(data);
     } catch (err) {
-        alert("ERROR getLocation: ${err}");
+        alert("ERROR getLocation: " + err);
         console.log(err);
     };
 };
@@ -112,7 +123,7 @@ async function getManualLocation() {
         byId("geoLatitudeDdId").value = location.manualLatitudeDd
         byId("geoLongitudeDdId").value = location.manualLongitudeDd
     } catch (err) {
-        alert("ERROR getManualLocation: ${err}");
+        alert("ERROR getManualLocation: " + err);
         console.log(err);
     };
 };
@@ -120,11 +131,11 @@ async function getManualLocation() {
 async function setDetectorTime() {
     try {
         let posixTimeMs = new Date().getTime();
-        // let urlString = "/record/setTime/?posixtime=" + posixTimeMs;    
-        let urlString = "/record/set-time/?posixtime=${posixTimeMs}";
+        // let urlString = "/record/setTime/?posixtime=" + posixTimeMs;
+        let urlString = "/record/set-time/?posixtime=" + posixTimeMs;
         await fetch(urlString);
     } catch (err) {
-        alert("ERROR setDetectorTime: ${err}");
+        alert("ERROR setDetectorTime: " + err);
         console.log(err);
     };
 };
@@ -143,23 +154,23 @@ async function saveSettings(settingsType) {
             fileDirectory: byId("recFileDirectoryId").value,
             fileDirectoryDateOption: byId("recFileDirectoryDateOptionId").value,
             filenamePrefix: byId("recFilenamePrefixId").value,
-            // detectionLimitKhz: byId("settingsDetectionLimitId").value,
-            // detectionSensitivityDbfs: byId("settingsDetectionSensitivityId").value,
-            // detectionAlgorithm: byId("settingsDetectionAlgorithmId").value,
-            // recLengthS: byId("settingsRecLengthId").value,
-            // recType: byId("settingsRecTypeId").value,
-            // feedbackOnOff: byId("settingsFeedbackOnOffId").value,
-            // feedbackVolume: byId("feedbackVolumeSliderId").value,
-            // feedbackPitch: byId("feedbackPitchSliderId").value,
-            // feedbackFilterLowKhz: byId("settingsFeedbackFilterLowId").value,
-            // feedbackFilterHighKhz: byId("settingsFeedbackFilterHighId").value,
-            // startupOption: byId("settingsStartupOptionId").value,
-            // schedulerStartEvent: byId("settingsSchedulerStartEventId").value,
-            // schedulerStartAdjust: byId("settingsSchedulerStartAdjustId").value,
-            // schedulerStopEvent: byId("settingsSchedulerStopEventId").value,
-            // schedulerStopAdjust: byId("settingsSchedulerStopAdjustId").value,
-            // schedulerPostAction: byId("settingsSchedulerPostActionId").value,
-            // schedulerPostActionDelay: byId("settingsSchedulerPostActionDelayId").value,
+            detectionLimitKhz: byId("recDetectionLimitId").value,
+            detectionSensitivityDbfs: byId("recDetectionSensitivityId").value,
+            detectionAlgorithm: byId("recDetectionAlgorithmId").value,
+            recLengthS: byId("recRecLengthId").value,
+            recType: byId("recTypeId").value,
+            feedbackOnOff: byId("liveFeedbackOnOffId").value,
+            feedbackVolume: byId("liveFeedbackVolumeSliderId").value,
+            feedbackPitch: byId("liveFeedbackPitchSliderId").value,
+            feedbackFilterLowKhz: byId("liveFeedbackFilterLowId").value,
+            feedbackFilterHighKhz: byId("liveFeedbackFilterHighId").value,
+            startupOption: byId("settingsStartupOptionId").value,
+            schedulerStartEvent: byId("recSchedulerStartEventId").value,
+            schedulerStartAdjust: byId("recSchedulerStartAdjustId").value,
+            schedulerStopEvent: byId("recSchedulerStopEventId").value,
+            schedulerStopAdjust: byId("recSchedulerStopAdjustId").value,
+            // schedulerPostAction: byId("recSchedulerPostActionId").value,
+            // schedulerPostActionDelay: byId("recSchedulerPostActionDelayId").value,
         }
         await fetch(urlString,
             {
@@ -170,7 +181,7 @@ async function saveSettings(settingsType) {
                 body: JSON.stringify(settings)
             })
     } catch (err) {
-        alert("ERROR saveSettings: ${err}");
+        alert("ERROR saveSettings: " + err);
         console.log(err);
     };
 };
@@ -181,7 +192,7 @@ async function getSettings() {
         let data = await response.json();
         updateSettings(data);
     } catch (err) {
-        alert("ERROR getSettings: ${err}");
+        alert("ERROR getSettings: " + err);
         console.log(err);
     };
 };
@@ -192,7 +203,7 @@ async function getDefaultSettings() {
         let data = await response.json();
         updateSettings(data);
     } catch (err) {
-        alert("ERROR getDefaultSettings: ${err}");
+        alert("ERROR getDefaultSettings: " + err);
         console.log(err);
     };
 };
@@ -202,7 +213,7 @@ async function loadSettings(settingsType) {
         let response = await fetch("/record/load-settings/?settingsType=" + settingsType);
         await response.json();
     } catch (err) {
-        alert("ERROR getSettings: ${err}");
+        alert("ERROR getSettings: " + err);
         console.log(err);
     };
 };
@@ -212,7 +223,7 @@ async function manualTrigger() {
         let urlString = "/record/rec-manual-trigger/";
         await fetch(urlString);
     } catch (err) {
-        alert("ERROR manualTrigger: ${err}");
+        alert("ERROR manualTrigger: " + err);
         console.log(err);
     };
 };
@@ -225,11 +236,11 @@ async function raspberryPiControl(command) {
         } else {
             byId("recModeSelectId").value = lastUsedSettings.recMode
             modeSelectOnChange(updateDetector = true)
-            let urlString = "/record/rpi-control/?command=${command}";
+            let urlString = "/record/rpi-control/?command=" + command;
             await fetch(urlString);
         }
     } catch (err) {
-        alert("ERROR raspberryPiControl: ${err}");
+        alert("ERROR raspberryPiControl: " + err);
         console.log(err);
     };
 };

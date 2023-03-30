@@ -27,7 +27,7 @@ class WurbScheduler(object):
             self.logger = logger
         #
         self.clear()
-    
+
     def clear(self):
         """ """
         # self.main_loop_task = None
@@ -54,7 +54,7 @@ class WurbScheduler(object):
     def configure(self):
         """ """
         # self.max_client_messages = self.config.get(
-        #     "wurb_scheduler.main_loop_interval_s", self.main_loop_interval_s
+        #     "rec_scheduler.main_loop_interval_s", self.main_loop_interval_s
         # )
 
     def startup(self):

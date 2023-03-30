@@ -20,7 +20,7 @@
 
     <div class="tile is-ancestor is-vertical m-0">
         <div class="tile is-parent">
-            <article class="tile is-child box py-1">
+            <article class="tile is-child box pt-1 pb-3">
                 <div class="content">
 
                     <div class="field">
@@ -41,25 +41,25 @@
                     <section id="liveaudioBodyId" class="section p-4 pb-5 has-background-grey-lighter">
                         <div class="field">
                             <label class="label">Volume
-                                <span id="feedbackVolumeId"></span>
+                                <span id="liveFeedbackVolumeId"></span>
                             </label>
                             <div class="control">
                                 <div class="slidecontainer">
                                     <input type="range" min="0" max="100" value="50" class="slider"
-                                        id="feedbackVolumeSliderId">
+                                        id="liveFeedbackVolumeSliderId">
                                 </div>
                             </div>
                         </div>
 
                         <div class="field">
                             <label class="label">Pitch
-                                <span id="feedbackPitchId"></span>
+                                <span id="liveFeedbackPitchId"></span>
                             </label>
 
                             <div class="control">
                                 <div class="slidecontainer">
                                     <input type="range" min="10" max="50" value="30" class="slider"
-                                        id="feedbackPitchSliderId">
+                                        id="liveFeedbackPitchSliderId">
                                 </div>
                             </div>
                         </div>
@@ -84,7 +84,7 @@
                         <div class="field is-grouped">
                             <div class="control">
                                 <div class="select is-small is-rounded is-info">
-                                    <select>
+                                    <select id="liveFeedbackOnOffId">
                                         <option value="feedback-off">Off</option>
                                         <option value="feedback-on-pitch">On - Pitch shifting</option>
                                     </select>
@@ -97,12 +97,12 @@
                         </div>
                         <div class="field is-grouped">
                             <p class="control">
-                                <input id="settingsFeedbackFilterLowId" class="input is-small" type="number"
+                                <input id="liveFeedbackFilterLowId" class="input is-small" type="number"
                                     placeholder="15.0" value="15.0">
                             </p>
                             <label class="label pr-3">to</label>
                             <p class="control">
-                                <input id="settingsFeedbackFilterHighId" class="input is-small" type="number"
+                                <input id="liveFeedbackFilterHighId" class="input is-small" type="number"
                                     placeholder="100.0" value="100.0">
                             </p>
                             <label class="label">kHz</label>
@@ -114,7 +114,7 @@
         </div>
 
         <div class="tile is-parent px---0">
-            <article class="tile is-child box">
+            <article class="tile is-child box pt-1 pb-3">
                 <div class="content">
 
                     <div class="field">

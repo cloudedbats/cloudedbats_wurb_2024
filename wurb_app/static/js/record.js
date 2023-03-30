@@ -100,9 +100,9 @@ function modeSelectOnChange(updateDetector) {
     else if (selectedValue == "detector-power-off") {
         showDivision(byId("recDetectorPowerOffId"));
     }
-    // // Trigging Audio feedback sliders
-    // byId("feedbackVolumeSliderId").oninput()
-    // byId("feedbackPitchSliderId").oninput()
+    // Trigging Audio feedback sliders
+    byId("liveFeedbackVolumeSliderId").oninput()
+    byId("liveFeedbackPitchSliderId").oninput()
 }
 
 // For the geographic location tile.
@@ -189,28 +189,28 @@ function geoLocationSourceOnChange(updateDetector) {
 //   byId("geoLongitudeId").value = location.coords.longitude;
 // };
 // function errorCallback(error) {
-//   alert(`Geo location from client:\nERROR(${error.code}): ${error.message}`);
+//   alert(`Geo location from client:\nERROR(" + error.code + " : " + error.message);
 // };
 
 function audioFeedbackSliders() {
     // Update slider values.
-    byId("feedbackVolumeId").innerHTML = "[" + byId("feedbackVolumeSliderId").value + "%]";
-    byId("feedbackPitchId").innerHTML = "[1/" + byId("feedbackPitchSliderId").value + "]";
+    byId("liveFeedbackVolumeId").innerHTML = "[" + byId("liveFeedbackVolumeSliderId").value + "%]";
+    byId("liveFeedbackPitchId").innerHTML = "[1/" + byId("liveFeedbackPitchSliderId").value + "]";
     // On changes.
-    byId("feedbackVolumeSliderId").oninput = function () {
-        byId("feedbackVolumeId").innerHTML = "[" + this.value + "%]";
+    byId("liveFeedbackVolumeSliderId").oninput = function () {
+        byId("liveFeedbackVolumeId").innerHTML = "[" + this.value + "%]";
     }
-    byId("feedbackVolumeSliderId").onchange = function () {
+    byId("liveFeedbackVolumeSliderId").onchange = function () {
         // Send to server.
-        byId("feedbackVolumeId").innerHTML = "[" + this.value + "%]";
+        byId("liveFeedbackVolumeId").innerHTML = "[" + this.value + "%]";
         setAudioFeedback()
     }
-    byId("feedbackPitchSliderId").oninput = function () {
-        byId("feedbackPitchId").innerHTML = "[1/" + this.value + "]";
+    byId("liveFeedbackPitchSliderId").oninput = function () {
+        byId("liveFeedbackPitchId").innerHTML = "[1/" + this.value + "]";
     }
-    byId("feedbackPitchSliderId").onchange = function () {
+    byId("liveFeedbackPitchSliderId").onchange = function () {
         // Send to server.
-        byId("feedbackPitchId").innerHTML = "[1/" + this.value + "]";
+        byId("liveFeedbackPitchId").innerHTML = "[1/" + this.value + "]";
         setAudioFeedback()
     }
 }
@@ -237,11 +237,12 @@ function hideShowSettingsTabs(tabName) {
 };
 // Functions used to updates fields based on response contents.
 function updateStatus(status) {
-    // byId("detectorStatusId").innerHTML = status.recStatus;
-    // if (status.deviceName != "") {
-    //     byId("detectorStatusId").innerHTML += "<br>"
-    //     byId("detectorStatusId").innerHTML += status.deviceName;
-    // }
+    byId("recStatusId").innerHTML = status.recStatus;
+    if (status.deviceName != "") {
+        byId("recStatusId").innerHTML += "<br>"
+        byId("recStatusId").innerHTML += status.deviceName;
+    }
+    byId("recDetectorTimeId").innerHTML = status.detectorTime;
     byId("detectorTimeId").innerHTML = status.detectorTime;
     byId("geoStatusId").innerHTML = status.locationStatus;
 }
@@ -269,32 +270,32 @@ function updateSettings(settings) {
     lastUsedSettings = settings
 
     byId("recModeSelectId").value = settings.recMode
-    // byId("settingsFileDirectoryId").value = settings.fileDirectory
-    // byId("settingsFileDirectoryDateOptionId").value = settings.fileDirectoryDateOption
-    // byId("settingsFilenamePrefixId").value = settings.filenamePrefix
-    // byId("settingsDetectionLimitId").value = settings.detectionLimitKhz
-    // byId("settingsDetectionSensitivityId").value = settings.detectionSensitivityDbfs
-    // byId("settingsDetectionAlgorithmId").value = settings.detectionAlgorithm
-    // byId("settingsRecLengthId").value = settings.recLengthS
-    // byId("settingsRecTypeId").value = settings.recType
-    // byId("settingsFeedbackOnOffId").value = settings.feedbackOnOff
-    byId("feedbackVolumeSliderId").value = settings.feedbackVolume
-    byId("feedbackPitchSliderId").value = settings.feedbackPitch
-    byId("settingsFeedbackFilterLowId").value = settings.feedbackFilterLowKhz
-    byId("settingsFeedbackFilterHighId").value = settings.feedbackFilterHighKhz
-    // byId("settingsStartupOptionId").value = settings.startupOption
-    // byId("settingsSchedulerStartEventId").value = settings.schedulerStartEvent
-    // byId("settingsSchedulerStartAdjustId").value = settings.schedulerStartAdjust
-    // byId("settingsSchedulerStopEventId").value = settings.schedulerStopEvent
-    // byId("settingsSchedulerStopAdjustId").value = settings.schedulerStopAdjust
-    // byId("settingsSchedulerPostActionId").value = settings.schedulerPostAction
-    // byId("settingsSchedulerPostActionDelayId").value = settings.schedulerPostActionDelay
+    byId("recFileDirectoryId").value = settings.fileDirectory
+    byId("recFileDirectoryDateOptionId").value = settings.fileDirectoryDateOption
+    byId("recFilenamePrefixId").value = settings.filenamePrefix
+    byId("recDetectionLimitId").value = settings.detectionLimitKhz
+    byId("recDetectionSensitivityId").value = settings.detectionSensitivityDbfs
+    byId("recDetectionAlgorithmId").value = settings.detectionAlgorithm
+    byId("recRecLengthId").value = settings.recLengthS
+    byId("recTypeId").value = settings.recType
+    byId("liveFeedbackOnOffId").value = settings.feedbackOnOff
+    byId("liveFeedbackVolumeSliderId").value = settings.feedbackVolume
+    byId("liveFeedbackPitchSliderId").value = settings.feedbackPitch
+    byId("liveFeedbackFilterLowId").value = settings.feedbackFilterLowKhz
+    byId("liveFeedbackFilterLowId").value = settings.feedbackFilterHighKhz
+    byId("settingsStartupOptionId").value = settings.startupOption
+    byId("recSchedulerStartEventId").value = settings.schedulerStartEvent
+    byId("recSchedulerStartAdjustId").value = settings.schedulerStartAdjust
+    byId("recSchedulerStopEventId").value = settings.schedulerStopEvent
+    byId("recSchedulerStopAdjustId").value = settings.schedulerStopAdjust
+    // byId("recSchedulerPostActionId").value = settings.schedulerPostAction
+    // byId("recSchedulerPostActionDelayId").value = settings.schedulerPostActionDelay
 
     modeSelectOnChange(updateDetector = false)
 
     // Trigging Audio feedback sliders
-    byId("feedbackVolumeSliderId").oninput()
-    byId("feedbackPitchSliderId").oninput()
+    byId("liveFeedbackVolumeSliderId").oninput()
+    byId("liveFeedbackPitchSliderId").oninput()
 }
 
 function saveUserDefaultSettings() {
