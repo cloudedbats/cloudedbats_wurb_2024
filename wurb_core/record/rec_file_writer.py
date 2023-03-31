@@ -239,5 +239,14 @@ class RecFileWriter(object):
             recording["maxPeakFreqHz"] = str(round(self.max_peak_freq_hz))
         if self.max_peak_dbfs:
             recording["maxPeakDbfs"] = str(round(self.max_peak_dbfs, 1))
+
+        latitude, longitude = wurb_core.wurb_settings.get_valid_location()
+        if (latitude == 0.0) or (longitude == 0.0):
+            pass
+        else:
+            sun_moon_dict = wurb_core.sun_moon.get_sun_moon_info(latitude, longitude)
+            recording["sunsetLocal"] = str(sun_moon_dict.get("sunset_local", ""))
+            recording["sunriseLocal"] = str(sun_moon_dict.get("sunrise_local", ""))
+            recording["moonPhase"] = sun_moon_dict.get("moon_phase", "")
         #
         wurb_core.metadata.write_metadata(self.rec_filename_path, metadata)

@@ -11,6 +11,8 @@ import datetime
 import pathlib
 import psutil
 
+import wurb_core
+
 
 class WurbRaspberryPi(object):
     """ """
@@ -28,32 +30,32 @@ class WurbRaspberryPi(object):
         #
         self.os_raspbian = None
 
-    # async def rpi_control(self, command):
-    #     """ """
-    #     if command == "rpi_status":
-    #         await self.rpi_status()
-    #         return
+    async def rpi_control(self, command):
+        """ """
+        if command == "rpiStatus":
+            await self.rpi_status()
+            return
 
-    #     # First check: OS Raspbian. Only valid for Raspbian and user pi.
-    #     if self.is_os_raspbian():
-    #         # Select command.
-    #         if command == "rpi_shutdown":
-    #             await self.rpi_shutdown()
-    #         elif command == "rpi_reboot":
-    #             await self.rpi_reboot()
-    #         elif command == "rpi_sd_to_usb":
-    #             await self.rpi_sd_to_usb()
-    #         # elif command == "rpi_clear_sd_ok":
-    #         elif command == "rpi_clear_sd":
-    #             await self.rpi_clear_sd()
-    #         else:
-    #             # Logging.
-    #             message = "Raspberry Pi command failed. Not a valid command: " + command
-    #             self.logger.error(message)
-    #     else:
-    #         # Logging.
-    #         message = "Raspberry Pi command failed (" + command + "), not Raspbian OS."
-    #         self.logger.warning(message)
+        # # First check: OS Raspbian. Only valid for Raspbian and user pi.
+        # if self.is_os_raspbian():
+        #     # Select command.
+        #     if command == "rpi_shutdown":
+        #         await self.rpi_shutdown()
+        #     elif command == "rpi_reboot":
+        #         await self.rpi_reboot()
+        #     elif command == "rpi_sd_to_usb":
+        #         await self.rpi_sd_to_usb()
+        #     # elif command == "rpi_clear_sd_ok":
+        #     elif command == "rpi_clear_sd":
+        #         await self.rpi_clear_sd()
+        #     else:
+        #         # Logging.
+        #         message = "Raspberry Pi command failed. Not a valid command: " + command
+        #         self.logger.error(message)
+        # else:
+        #     # Logging.
+        #     message = "Raspberry Pi command failed (" + command + "), not Raspbian OS."
+        #     self.logger.warning(message)
 
     async def set_detector_time(self, posix_time_s, cmd_source=""):
         """Only valid for Raspbian and user pi."""
@@ -213,48 +215,61 @@ class WurbRaspberryPi(object):
     #     message = "The Raspberry Pi command 'Clear SD card' is not implemented."
     #     self.logger.info(message)
 
-    # async def rpi_status(self):
-    #     """ """
-    #     # Mic.
-    #     rec_status = await wurb_core.wurb_recorder.get_rec_status()
-    #     if rec_status != "Microphone is on.":
-    #         await wurb_core.ultrasound_devices.check_devices()
-    #         device_name = wurb_core.ultrasound_devices.device_name
-    #         sampling_freq_hz = wurb_core.ultrasound_devices.sampling_freq_hz
-    #         if device_name:
-    #             # Logging.
-    #             message = "Connected microphone: "
-    #             message += device_name
-    #             message += " Frequency: "
-    #             message += str(sampling_freq_hz)
-    #             message += " Hz."
-    #             self.logger.info(message)
-    #         else:
-    #             # Logging.
-    #             message = "No microphone is found. "
-    #             self.logger.info(message)
+    async def rpi_status(self):
+        """ """
+        #     # Mic.
+        #     rec_status = await wurb_core.wurb_recorder.get_rec_status()
+        #     if rec_status != "Microphone is on.":
+        #         await wurb_core.ultrasound_devices.check_devices()
+        #         device_name = wurb_core.ultrasound_devices.device_name
+        #         sampling_freq_hz = wurb_core.ultrasound_devices.sampling_freq_hz
+        #         if device_name:
+        #             # Logging.
+        #             message = "Connected microphone: "
+        #             message += device_name
+        #             message += " Frequency: "
+        #             message += str(sampling_freq_hz)
+        #             message += " Hz."
+        #             self.logger.info(message)
+        #         else:
+        #             # Logging.
+        #             message = "No microphone is found. "
+        #             self.logger.info(message)
 
-    #     # Solartime.
-    #     solartime_dict = await wurb_core.rec_scheduler.get_solartime_data(
-    #         print_new=False
-    #     )
-    #     if solartime_dict:
-    #         sunset_utc = solartime_dict.get("sunset", None)
-    #         dusk_utc = solartime_dict.get("dusk", None)
-    #         dawn_utc = solartime_dict.get("dawn", None)
-    #         sunrise_utc = solartime_dict.get("sunrise", None)
-    #         if sunset_utc and dusk_utc and dawn_utc and sunrise_utc:
-    #             sunset_local = sunset_utc.astimezone()
-    #             dusk_local = dusk_utc.astimezone()
-    #             dawn_local = dawn_utc.astimezone()
-    #             sunrise_local = sunrise_utc.astimezone()
-    #             message = "Solartime: "
-    #             message += " Sunset: " + sunset_local.strftime("%H:%M:%S")
-    #             message += " Dusk: " + dusk_local.strftime("%H:%M:%S")
-    #             message += " Dawn: " + dawn_local.strftime("%H:%M:%S")
-    #             message += " Sunrise: " + sunrise_local.strftime("%H:%M:%S")
-    #             self.logger.info(message)
-    #     else:
-    #         # Logging.
-    #         message = "Can't calculate solartime. Lat/long is missing."
-    #         self.logger.info(message)
+        # Solartime.
+        latitude, longitude = wurb_core.wurb_settings.get_valid_location()
+        if (latitude == 0.0) or (longitude == 0.0):
+            message = "Can't calculate solartime. Lat/long is missing."
+            self.logger.info(message)
+            return
+
+        sun_moon_dict = wurb_core.sun_moon.get_sun_moon_info(latitude, longitude)
+
+        if sun_moon_dict:
+            sunset = sun_moon_dict.get("sunset_local", None)
+            dusk = sun_moon_dict.get("dusk_local", None)
+            dawn = sun_moon_dict.get("dawn_local", None)
+            sunrise = sun_moon_dict.get("sunrise_local", None)
+            moon_phase = sun_moon_dict.get("moon_phase", None)
+            moon_phase_detailed = sun_moon_dict.get("moon_phase_detailed", None)
+            if not sunset:
+                sunset = sun_moon_dict.get("sunset_comment", "")
+            if not dusk:
+                dusk = sun_moon_dict.get("dusk_comment", "")
+            if not dawn:
+                dawn = sun_moon_dict.get("dawn_comment", "")
+            if not sunrise:
+                sunrise = sun_moon_dict.get("sunrise_comment", "")
+            if sunset and dusk and dawn and sunrise and moon_phase:
+                message = ""
+                message += " Sunset: " + str(sunset)
+                message += " Dusk: " + str(dusk)
+                message += " Dawn: " + str(dawn)
+                message += " Sunrise: " + str(sunrise)
+                message += " Moon: " + moon_phase
+                message += " (" + moon_phase_detailed + ")."
+                self.logger.info(message)
+        else:
+            # Logging.
+            message = "Can't calculate solartime."
+            self.logger.info(message)

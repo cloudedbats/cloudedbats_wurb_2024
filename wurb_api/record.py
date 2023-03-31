@@ -286,7 +286,7 @@ async def rpi_control(command: str):
         # Logging debug.
         message = "API called: rpi-control:" + command + "."
         # logger.debug(message)
-        # await wurb_core.rec_manager.wurb_rpi.rpi_control(command)
+        await wurb_core.wurb_rpi.rpi_control(command)
     except Exception as e:
         # Logging error.
         message = "Called: rpi_control: " + str(e)

@@ -59,3 +59,6 @@ sources_and_files = SourcesAndFiles(config, wurb_logger)
 metadata = Metadata(config, logger)
 metadata_table = MetadataTable(config, wurb_logger)
 record_manager = RecordManager(config, wurb_logger)
+
+# Sunset, sunrice, etc.
+sun_moon = wurb_utils.SunMoon()

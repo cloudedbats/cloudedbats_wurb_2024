@@ -48,7 +48,6 @@ class RecManager(object):
         self.configure()
 
         wurb_core.gps.startup()
-        wurb_core.rec_scheduler.startup()
         self.gps_loop = asyncio.create_task(
             self.gps_control_loop(), name="RecManager gps task"
         )

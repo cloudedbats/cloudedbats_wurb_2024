@@ -17,6 +17,7 @@ pyserial
 pyserial-asyncio
 pytz
 python-dateutil
+astral
 # Config.
 pyyaml
 # VS Code.

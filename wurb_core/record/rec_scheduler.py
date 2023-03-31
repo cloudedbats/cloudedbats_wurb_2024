@@ -9,7 +9,6 @@ import logging
 import datetime
 
 import wurb_core
-import wurb_utils
 
 
 class WurbScheduler(object):
@@ -30,136 +29,14 @@ class WurbScheduler(object):
 
     def clear(self):
         """ """
-        # self.main_loop_task = None
-        self.solartime = wurb_utils.SolarTime()
         self.solartime_lookup_dict = {}
         self.solartime_last_used_key = ""
-        # For logging.
-        self.last_used_mode = ""
-        self.current_mode = ""
-        self.last_used_scheduler_state = ""
-        self.current_scheduler_state = ""
-        # Config.
-        # self.main_loop_interval_s = 10  # Unit: sec.
-        # Translate user modes.
-        self.user_mode_for_humans = {
-            "mode-off": "Microphone off.",
-            "mode-on": "Rec continuously.",
-            "mode-auto": "Auto detection.",
-            "mode-manual": "Manual triggering.",
-            "mode-scheduler-on": "By scheduler - Rec on.",
-            "mode-scheduler-auto": "By scheduler - Auto.",
-        }
 
     def configure(self):
         """ """
         # self.max_client_messages = self.config.get(
         #     "rec_scheduler.main_loop_interval_s", self.main_loop_interval_s
         # )
-
-    def startup(self):
-        """ """
-        self.configure()
-        # self.scheduler_loop = asyncio.create_task(self.scheduler_control_loop(), name="rec-main-loop")
-        #
-        # await self.update_status()
-
-    async def shutdown(self):
-        """ """
-        # self.logging_event.set()
-        # if self.main_loop_task:
-        #     self.main_loop_task.cancel()
-        #     self.main_loop_task = None
-
-    # async def scheduler_control_loop(self):
-    #     """ """
-    #     try:
-    #         while True:
-    #             try:
-    #                 await asyncio.sleep(self.main_loop_interval_s)
-    #                 await self.check_status()
-    #             except asyncio.CancelledError:
-    #                 break
-    #     except Exception as e:
-    #         # Logging error.
-    #         message = "Scheduler control loop: " + str(e)
-    #         self.logger.debug(message)
-    #     finally:
-    #         # Logging error.
-    #         message = "Scheduler control loop terminated."
-    #         self.logger.error(message)
-
-    # async def check_status(self):
-    #     """ """
-    #     try:
-    #         rec_mode = wurb_core.wurb_settings.get_setting("recMode")
-    #         self.current_mode = rec_mode
-    #         if rec_mode in ["mode-on", "mode-auto", "mode-manual"]:
-    #             self.last_used_scheduler_state = ""
-    #             self.current_scheduler_state = ""
-    #             await wurb_core.rec_manager.start_rec()
-    #         if rec_mode in ["mode-off"]:
-    #             self.last_used_scheduler_state = ""
-    #             self.current_scheduler_state = ""
-    #             await wurb_core.rec_manager.stop_rec()
-    #         if rec_mode in ["mode-scheduler-on", "mode-scheduler-auto"]:
-    #             await self.check_scheduler()
-    #         # Logging of changes in state.
-    #         if self.current_mode != self.last_used_mode:
-    #             mode_humans = self.user_mode_for_humans.get(
-    #                 self.current_mode, "Undefined"
-    #             )
-    #             message = "Mode: " + mode_humans
-    #             self.logger.info(message)
-    #             self.last_used_mode = self.current_mode
-    #         if self.current_scheduler_state != self.last_used_scheduler_state:
-    #             message = "Scheduler state: " + self.current_scheduler_state
-    #             self.logger.info(message)
-    #             self.last_used_scheduler_state = self.current_scheduler_state
-    #     except Exception as e:
-    #         # Logging error.
-    #         message = "Scheduler update status: " + str(e)
-    #         self.logger.error(message)
-
-    # async def check_scheduler(self):
-    #     """ """
-    #     # Start/stop time.
-    #     start_event_local, stop_event_local = await self.calculate_start_stop()
-    #     if (start_event_local is None) or (stop_event_local is None):
-    #         # Can't calculate start or stop.
-    #         self.current_scheduler_state = "Time or position is missing."
-    #         await wurb_core.rec_manager.stop_rec()
-    #         return
-
-    #     # Evaluate action.
-    #     now_local = datetime.datetime.now().astimezone()
-    #     if start_event_local == stop_event_local:
-    #         # Always off.
-    #         await wurb_core.rec_manager.stop_rec()
-    #     if start_event_local < stop_event_local:
-    #         # Same day.
-    #         if (start_event_local < now_local) and (now_local < stop_event_local):
-    #             self.current_scheduler_state = "Recording active."
-    #             await wurb_core.rec_manager.start_rec()
-    #         else:
-    #             self.current_scheduler_state = "Recording not active."
-    #             await wurb_core.rec_manager.stop_rec()
-    #     else:
-    #         # Different days.
-    #         start_local_new = start_event_local
-    #         stop_local_new = stop_event_local
-    #         # Prepare.
-    #         if now_local < stop_event_local:
-    #             start_local_new = start_event_local - datetime.timedelta(days=1)
-    #         if now_local > stop_event_local:
-    #             stop_local_new = stop_event_local + datetime.timedelta(days=1)
-    #         # Check.
-    #         if (start_local_new < now_local) and (now_local < stop_local_new):
-    #             self.current_scheduler_state = "Recording active."
-    #             await wurb_core.rec_manager.start_rec()
-    #         else:
-    #             self.current_scheduler_state = "Recording not active."
-    #             await wurb_core.rec_manager.stop_rec()
 
     def check_scheduler(self):
         """ """
@@ -224,11 +101,11 @@ class WurbScheduler(object):
             if not solartime_dict:
                 # Lat/long needed to calculate start.
                 return (None, None)
-            start_event = start_event.replace("on-", "")
+            start_event = start_event.replace("on-", "") + "_utc"
             start_event_utc = solartime_dict.get(start_event, None)
             start_event_local = start_event_utc.astimezone()
         else:
-            start_event = start_event.replace("on-", "")
+            start_event = start_event.replace("on-", "") + "_utc"
             start_event_hour = int(float(start_event))
             start_event_local = datetime.datetime.now().astimezone()
             start_event_local = start_event_local.replace(
@@ -239,11 +116,11 @@ class WurbScheduler(object):
             if not solartime_dict:
                 # Lat/long needed to calculate stop.
                 return (None, None)
-            stop_event = stop_event.replace("off-", "")
+            stop_event = stop_event.replace("off-", "") + "_utc"
             stop_event_utc = solartime_dict.get(stop_event, None)
             stop_event_local = stop_event_utc.astimezone()
         else:
-            stop_event = stop_event.replace("off-", "")
+            stop_event = stop_event.replace("off-", "") + "_utc"
             stop_event_hour = int(float(stop_event))
             stop_event_local = datetime.datetime.now().astimezone()
             stop_event_local = stop_event_local.replace(
@@ -270,18 +147,19 @@ class WurbScheduler(object):
             str(date_local) + "<->" + str(latitude_short) + "<->" + str(longitude_short)
         )
         if lookup_key in self.solartime_lookup_dict:
-            solartime_dict = self.solartime_lookup_dict.get(lookup_key, {})
+            sun_moon_dict = self.solartime_lookup_dict.get(lookup_key, {})
         else:
-            solartime_dict = self.solartime.sun_utc(date_local, latitude, longitude)
-            self.solartime_lookup_dict[lookup_key] = solartime_dict
+            # solartime_dict = self.solartime.sun_utc(date_local, latitude, longitude)
+            sun_moon_dict = wurb_core.sun_moon.get_sun_moon_info(latitude, longitude)
+            self.solartime_lookup_dict[lookup_key] = sun_moon_dict
 
         if lookup_key != self.solartime_last_used_key:
             self.solartime_last_used_key = lookup_key
             # Logging.
-            sunset_utc = solartime_dict.get("sunset", None)
-            dusk_utc = solartime_dict.get("dusk", None)
-            dawn_utc = solartime_dict.get("dawn", None)
-            sunrise_utc = solartime_dict.get("sunrise", None)
+            sunset_utc = sun_moon_dict.get("sunset", None)
+            dusk_utc = sun_moon_dict.get("dusk", None)
+            dawn_utc = sun_moon_dict.get("dawn", None)
+            sunrise_utc = sun_moon_dict.get("sunrise", None)
             if sunset_utc and dusk_utc and dawn_utc and sunrise_utc:
                 if print_new:
                     sunset_local = sunset_utc.astimezone()
@@ -297,4 +175,4 @@ class WurbScheduler(object):
             else:
                 return None
 
-        return solartime_dict
+        return sun_moon_dict

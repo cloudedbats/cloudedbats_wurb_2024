@@ -12,4 +12,4 @@ from wurb_utils.audio_playback import AudioPlayback
 from wurb_utils.pettersson_m500 import PetterssonM500
 from wurb_utils.pettersson_m500_batmic import PetterssonM500BatMic
 
-from wurb_utils.solartime import SolarTime
+from wurb_utils.sun_moon import SunMoon
