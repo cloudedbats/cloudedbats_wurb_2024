@@ -250,7 +250,7 @@ class WurbRaspberryPi(object):
             dusk = sun_moon_dict.get("dusk_local", None)
             dawn = sun_moon_dict.get("dawn_local", None)
             sunrise = sun_moon_dict.get("sunrise_local", None)
-            moon_phase = sun_moon_dict.get("moon_phase", None)
+            # moon_phase = sun_moon_dict.get("moon_phase", None)
             moon_phase_detailed = sun_moon_dict.get("moon_phase_detailed", None)
             if not sunset:
                 sunset = sun_moon_dict.get("sunset_comment", "")
@@ -260,14 +260,13 @@ class WurbRaspberryPi(object):
                 dawn = sun_moon_dict.get("dawn_comment", "")
             if not sunrise:
                 sunrise = sun_moon_dict.get("sunrise_comment", "")
-            if sunset and dusk and dawn and sunrise and moon_phase:
+            if sunset and dusk and dawn and sunrise and moon_phase_detailed:
                 message = ""
                 message += " Sunset: " + str(sunset)
                 message += " Dusk: " + str(dusk)
                 message += " Dawn: " + str(dawn)
                 message += " Sunrise: " + str(sunrise)
-                message += " Moon: " + moon_phase
-                message += " (" + moon_phase_detailed + ")."
+                message += " Moon: " + moon_phase_detailed + "."
                 self.logger.info(message)
         else:
             # Logging.

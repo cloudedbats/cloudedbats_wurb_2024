@@ -141,7 +141,7 @@ class SunMoon:
             elif (moon_phase >= 17.50 - delta) and (moon_phase < 17.50 + delta):
                 phase_name = "Wanning gibbous"
             elif (moon_phase >= 21.00 - delta) and (moon_phase < 21.00 + delta):
-                phase_name = "Third quarter"
+                phase_name = "Last quarter"
             elif (moon_phase >= 24.50 - delta) and (moon_phase < 24.5 + delta):
                 phase_name = "Wanning crescent"
             elif (moon_phase >= 28.00 - delta) and (moon_phase < 28.00):
@@ -155,7 +155,7 @@ class SunMoon:
             elif (moon_phase >= 14.00 - delta) and (moon_phase < 14.00 + delta):
                 phase_name = "Full moon"
             elif (moon_phase >= 21.00 - delta) and (moon_phase < 21.00 + delta):
-                phase_name = "Third quarter"
+                phase_name = "Last quarter"
             elif (moon_phase >= 28.00 - delta) and (moon_phase < 28.00):
                 phase_name = "New moon"
         #

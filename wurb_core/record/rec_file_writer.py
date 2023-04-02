@@ -247,6 +247,6 @@ class RecFileWriter(object):
             sun_moon_dict = wurb_core.sun_moon.get_sun_moon_info(latitude, longitude)
             recording["sunsetLocal"] = str(sun_moon_dict.get("sunset_local", ""))
             recording["sunriseLocal"] = str(sun_moon_dict.get("sunrise_local", ""))
-            recording["moonPhase"] = sun_moon_dict.get("moon_phase", "")
+            recording["moonPhase"] = sun_moon_dict.get("moon_phase_detailed", "")
         #
         wurb_core.metadata.write_metadata(self.rec_filename_path, metadata)
