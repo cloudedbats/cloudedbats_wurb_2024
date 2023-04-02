@@ -25,8 +25,8 @@ class RecManager(object):
             self.logger = logger
         #
         self.clear()
-        self.rec_event = asyncio.Event()
-        self.notification_event = asyncio.Event()
+        self.rec_event = None
+        self.notification_event = None
 
     def clear(self):
         """ """
@@ -58,7 +58,10 @@ class RecManager(object):
     def shutdown(self):
         """ """
         wurb_core.gps.shutdown()
-        self.rec_event.set()
+        if self.rec_event:
+            self.rec_event.set()
+        if self.notification_event:
+            self.notification_event.set()
         if self.gps_loop:
             self.gps_loop.cancel()
         if self.control_loop:
@@ -74,13 +77,22 @@ class RecManager(object):
             location_event = wurb_core.wurb_settings.get_location_event()
             latlong_event = wurb_core.gps.get_latlong_event()
             while True:
+                task_1 = asyncio.create_task(asyncio.sleep(self.control_loop_interval_s), name="debug-7")
+                task_2 = asyncio.create_task(settings_event.wait(), name="debug-8")
+                task_3 = asyncio.create_task(location_event.wait(), name="debug-9")
+                task_4 = asyncio.create_task(latlong_event.wait(), name="debug-10")
                 events = [
-                    asyncio.sleep(self.control_loop_interval_s),
-                    settings_event.wait(),
-                    location_event.wait(),
-                    latlong_event.wait(),
+                    task_1,
+                    task_2,
+                    task_3,
+                    task_4,
                 ]
-                await asyncio.wait(events, return_when=asyncio.FIRST_COMPLETED)
+                done, pending = await asyncio.wait(events, return_when=asyncio.FIRST_COMPLETED)
+                for task in done:
+                    task.cancel()
+                    # print("Done REC: ", task.get_name())
+                for task in pending:
+                    task.cancel()
 
                 if settings_event.is_set():
                     settings_event = wurb_core.wurb_settings.get_settings_event()
@@ -163,6 +175,15 @@ class RecManager(object):
             else:
                 wurb_core.rec_worker.stop_recording()
 
+
+
+
+            self.trigger_notification_event()
+
+
+
+
+
         except Exception as e:
             # Logging error.
             message = "Scheduler update status: " + str(e)
@@ -175,7 +196,7 @@ class RecManager(object):
             # while True:
             #     latlong_event = wurb_core.gps.get_latlong_event()
             #     events = [
-            #         latlong_event.wait(),
+            #         asyncio.create_task(latlong_event.wait(), name="debug-12"),
             #     ]
             #     await asyncio.wait(events, return_when=asyncio.FIRST_COMPLETED)
 
@@ -195,25 +216,29 @@ class RecManager(object):
 
     def get_rec_event(self):
         """Used for synchronization."""
+        if self.rec_event == None:
+            self.rec_event = asyncio.Event()
         return self.rec_event
 
     def trigger_rec_event(self):
         """Used for synchronization."""
         # Create a new event and release the old.
-        old_rec_event = self.rec_event
+        old_rec_event = self.get_rec_event()
         self.rec_event = asyncio.Event()
         old_rec_event.set()
 
     def get_notification_event(self):
         """Used for synchronization."""
+        if self.notification_event == None:
+            self.notification_event = asyncio.Event()
         return self.notification_event
 
-    def trigger_rec_event(self):
+    def trigger_notification_event(self):
         """Used for synchronization."""
         # Create a new event and release the old.
-        old_rec_event = self.rec_event
-        self.rec_event = asyncio.Event()
-        old_rec_event.set()
+        old_notification_event = self.get_notification_event()
+        self.notification_event = asyncio.Event()
+        old_notification_event.set()
 
     async def restart_rec(self):
         """ """

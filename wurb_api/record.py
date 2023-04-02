@@ -321,11 +321,11 @@ async def websocket_endpoint(websocket: fastapi.WebSocket):
         await websocket.accept()
         #
         # Get event notification objects.
-        rec_manager_notification = wurb_core.rec_manager.get_notification_event()
-        location_changed_notification = wurb_core.wurb_settings.get_location_event()
-        latlong_changed_notification = wurb_core.wurb_settings.get_latlong_event()
-        settings_changed_notification = wurb_core.wurb_settings.get_settings_event()
-        logging_changed_notification = wurb_core.wurb_logger.get_logging_event()
+        notification_event = wurb_core.rec_manager.get_notification_event()
+        location_event = wurb_core.wurb_settings.get_location_event()
+        latlong_event = wurb_core.wurb_settings.get_latlong_event()
+        settings_event = wurb_core.wurb_settings.get_settings_event()
+        logging_event = wurb_core.wurb_logger.get_logging_event()
         # Update client.
         ws_json = {}
         status_dict = await wurb_core.rec_manager.get_status_dict()
@@ -345,15 +345,26 @@ async def websocket_endpoint(websocket: fastapi.WebSocket):
         # Loop.
         while True:
             # Wait for next event to happen.
+            task_1 = asyncio.create_task(asyncio.sleep(1.0), name="debug-1")
+            task_2 = asyncio.create_task(notification_event.wait(), name="debug-2")
+            task_3 = asyncio.create_task(location_event.wait(), name="debug-3")
+            task_4 = asyncio.create_task(latlong_event.wait(), name="debug-4")
+            task_5 = asyncio.create_task(settings_event.wait(), name="debug-5")
+            task_6 = asyncio.create_task(logging_event.wait(), name="debug-6")
             events = [
-                asyncio.sleep(1.0),  # Update detector time field each second.
-                rec_manager_notification.wait(),
-                location_changed_notification.wait(),
-                latlong_changed_notification.wait(),
-                settings_changed_notification.wait(),
-                logging_changed_notification.wait(),
+                task_1,
+                task_2,
+                task_3,
+                task_4,
+                task_5,
+                task_6,
             ]
-            await asyncio.wait(events, return_when=asyncio.FIRST_COMPLETED)
+            done, pending = await asyncio.wait(events, return_when=asyncio.FIRST_COMPLETED)
+            for task in done:
+                # print("Done WS: ", task.get_name())
+                task.cancel()
+            for task in pending:
+                task.cancel()
 
             # Prepare message to client.
             ws_json = {}
@@ -365,24 +376,26 @@ async def websocket_endpoint(websocket: fastapi.WebSocket):
                 "deviceName": status_dict.get("device_name", ""),
                 "detectorTime": time.strftime("%Y-%m-%d %H:%M:%S"),
             }
-            # rec_manager_notification = wurb_core.rec_manager.get_notification_event()
-            if location_changed_notification.is_set():
-                location_changed_notification = (
+
+            notification_event = wurb_core.rec_manager.get_notification_event()
+
+            if location_event.is_set():
+                location_event = (
                     wurb_core.wurb_settings.get_location_event()
                 )
                 ws_json["location"] = await wurb_core.wurb_settings.get_location()
-            if latlong_changed_notification.is_set():
-                latlong_changed_notification = (
+            if latlong_event.is_set():
+                latlong_event = (
                     wurb_core.wurb_settings.get_latlong_event()
                 )
                 ws_json["latlong"] = await wurb_core.wurb_settings.get_location()
-            if settings_changed_notification.is_set():
-                settings_changed_notification = (
+            if settings_event.is_set():
+                settings_event = (
                     wurb_core.wurb_settings.get_settings_event()
                 )
                 ws_json["settings"] = await wurb_core.wurb_settings.get_settings()
-            if logging_changed_notification.is_set():
-                logging_changed_notification = wurb_core.wurb_logger.get_logging_event()
+            if logging_event.is_set():
+                logging_event = wurb_core.wurb_logger.get_logging_event()
                 ws_json["logRows"] = wurb_core.wurb_logger.get_client_messages()
             # Send to client.
             await websocket.send_json(ws_json)

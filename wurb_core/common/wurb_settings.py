@@ -28,10 +28,10 @@ class WurbSettings(object):
             self.logger = logger
         #
         self.clear()
-        self.settings_event = asyncio.Event()
-        self.location_event = asyncio.Event()
-        self.latlong_event = asyncio.Event()
-        self.audiofeedback_event = asyncio.Event()
+        self.settings_event = None
+        self.location_event = None
+        self.latlong_event = None
+        self.audiofeedback_event = None
 
     def clear(self):
         """ """
@@ -72,10 +72,14 @@ class WurbSettings(object):
     async def shutdown(self):
         """ """
         # Release events.
-        self.settings_event.set()
-        self.location_event.set()
-        self.latlong_event.set()
-        self.audiofeedback_event.set()
+        if self.settings_event:
+            self.settings_event.set()
+        if self.location_event:
+            self.location_event.set()
+        if self.latlong_event:
+            self.latlong_event.set()
+        if self.audiofeedback_event:
+            self.audiofeedback_event.set()
 
     # def load_settings(self, settings_dir):
     #     """ """
@@ -333,45 +337,53 @@ class WurbSettings(object):
     def trigger_settings_event(self):
         """ """
         # Event: Create a new and release the old.
-        old_event = self.settings_event
+        old_event = self.get_settings_event()
         self.settings_event = asyncio.Event()
         old_event.set()
 
     def get_settings_event(self):
         """ """
+        if self.settings_event == None:
+            self.settings_event = asyncio.Event()
         return self.settings_event
 
     def trigger_location_event(self):
         """ """
         # Event: Create a new and release the old.
-        old_event = self.location_event
+        old_event = self.get_location_event()
         self.location_event = asyncio.Event()
         old_event.set()
 
     def get_location_event(self):
         """ """
+        if self.location_event == None:
+            self.location_event = asyncio.Event()
         return self.location_event
 
     def trigger_latlong_event(self):
         """ """
         # Event: Create a new and release the old.
-        old_event = self.latlong_event
+        old_event = self.get_latlong_event()
         self.latlong_event = asyncio.Event()
         old_event.set()
 
     def get_latlong_event(self):
         """ """
+        if self.latlong_event == None:
+            self.latlong_event = asyncio.Event()
         return self.latlong_event
 
     def trigger_audiofeedback_event(self):
         """ """
         # Event: Create a new and release the old.
-        old_event = self.audiofeedback_event
+        old_event = self.get_audiofeedback_event()
         self.audiofeedback_event = asyncio.Event()
         old_event.set()
 
     def get_audiofeedback_event(self):
         """ """
+        if self.audiofeedback_event == None:
+            self.audiofeedback_event = asyncio.Event()
         return self.audiofeedback_event
 
     async def load_settings(self, settings_type):
@@ -397,8 +409,9 @@ class WurbSettings(object):
         settings_file_path = pathlib.Path(self.settings_dir, settings_file_name)
         if settings_file_path.exists():
             with open(settings_file_path) as settings_file:
-                self.loaded_settings = yaml.load(settings_file, Loader=yaml.FullLoader)
-                print(self.loaded_settings)
+                # self.loaded_settings = yaml.load(settings_file, Loader=yaml.FullLoader)
+                self.loaded_settings = yaml.safe_load(settings_file)
+                # print(self.loaded_settings)
         else:
             # Use
             self.loaded_settings["startupOption"] = "as-last-session"
@@ -418,4 +431,4 @@ class WurbSettings(object):
         settings_file_path = pathlib.Path(self.settings_dir, self.settings_file_name)
         with settings_file_path.open("w") as settings_file:
             data = self.loaded_settings
-            yaml.dump(data, settings_file)
+            yaml.safe_dump(data, settings_file)

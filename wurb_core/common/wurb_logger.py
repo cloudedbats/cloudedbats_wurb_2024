@@ -22,7 +22,7 @@ class WurbLogger(object):
         self.logger = logging.getLogger(logger_name)
         #
         self.clear()
-        self.logging_event = asyncio.Event()
+        self.logging_event = None
 
     def clear(self):
         """ """
@@ -41,7 +41,8 @@ class WurbLogger(object):
 
     def shutdown(self):
         """ """
-        self.logging_event.set()
+        if self.logging_event:
+            self.logging_event.set()
 
     def info(self, message):
         """ """
@@ -101,12 +102,14 @@ class WurbLogger(object):
     def trigger_logging_event(self):
         """ """
         # Event: Create a new and release the old.
-        old_event = self.logging_event
+        old_event = self.get_logging_event()
         self.logging_event = asyncio.Event()
         old_event.set()
 
     def get_logging_event(self):
         """ """
+        if self.logging_event == None:
+            self.logging_event = asyncio.Event()
         return self.logging_event
 
     def get_client_messages(self):
