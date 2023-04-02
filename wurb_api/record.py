@@ -279,6 +279,20 @@ async def load_settings(settingsType: str):
         logger.error(message)
 
 
+@record_router.get("/record/rec-status/", tags=["Recorder"], description="Record...")
+# @app.get("/rec-status/")
+async def rec_status():
+    try:
+        # Logging debug.
+        message = "API called: rec-status."
+        # logger.debug(message)
+        await wurb_core.rec_status.rec_status()
+    except Exception as e:
+        # Logging error.
+        message = "Called: rec-status: " + str(e)
+        logger.error(message)
+
+
 @record_router.get("/record/rpi-control/", tags=["Recorder"], description="Record...")
 # @app.get("/rpi-control/")
 async def rpi_control(command: str):
@@ -345,12 +359,18 @@ async def websocket_endpoint(websocket: fastapi.WebSocket):
         # Loop.
         while True:
             # Wait for next event to happen.
-            task_1 = asyncio.create_task(asyncio.sleep(1.0), name="debug-1")
-            task_2 = asyncio.create_task(notification_event.wait(), name="debug-2")
-            task_3 = asyncio.create_task(location_event.wait(), name="debug-3")
-            task_4 = asyncio.create_task(latlong_event.wait(), name="debug-4")
-            task_5 = asyncio.create_task(settings_event.wait(), name="debug-5")
-            task_6 = asyncio.create_task(logging_event.wait(), name="debug-6")
+            task_1 = asyncio.create_task(asyncio.sleep(1.0), name="ws-sleep-event")
+            task_2 = asyncio.create_task(
+                notification_event.wait(), name="ws-notification-event"
+            )
+            task_3 = asyncio.create_task(
+                location_event.wait(), name="ws-location-event"
+            )
+            task_4 = asyncio.create_task(latlong_event.wait(), name="ws-latlong-event")
+            task_5 = asyncio.create_task(
+                settings_event.wait(), name="ws-settings-event"
+            )
+            task_6 = asyncio.create_task(logging_event.wait(), name="ws-logging-event")
             events = [
                 task_1,
                 task_2,
@@ -359,7 +379,9 @@ async def websocket_endpoint(websocket: fastapi.WebSocket):
                 task_5,
                 task_6,
             ]
-            done, pending = await asyncio.wait(events, return_when=asyncio.FIRST_COMPLETED)
+            done, pending = await asyncio.wait(
+                events, return_when=asyncio.FIRST_COMPLETED
+            )
             for task in done:
                 # print("Done WS: ", task.get_name())
                 task.cancel()
@@ -380,19 +402,13 @@ async def websocket_endpoint(websocket: fastapi.WebSocket):
             notification_event = wurb_core.rec_manager.get_notification_event()
 
             if location_event.is_set():
-                location_event = (
-                    wurb_core.wurb_settings.get_location_event()
-                )
+                location_event = wurb_core.wurb_settings.get_location_event()
                 ws_json["location"] = await wurb_core.wurb_settings.get_location()
             if latlong_event.is_set():
-                latlong_event = (
-                    wurb_core.wurb_settings.get_latlong_event()
-                )
+                latlong_event = wurb_core.wurb_settings.get_latlong_event()
                 ws_json["latlong"] = await wurb_core.wurb_settings.get_location()
             if settings_event.is_set():
-                settings_event = (
-                    wurb_core.wurb_settings.get_settings_event()
-                )
+                settings_event = wurb_core.wurb_settings.get_settings_event()
                 ws_json["settings"] = await wurb_core.wurb_settings.get_settings()
             if logging_event.is_set():
                 logging_event = wurb_core.wurb_logger.get_logging_event()

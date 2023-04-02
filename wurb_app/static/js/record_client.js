@@ -245,6 +245,16 @@ async function raspberryPiControl(command) {
     };
 };
 
+async function recStatus() {
+    try {
+        let urlString = "/record/rec-status/";
+        await fetch(urlString);
+    } catch (err) {
+        alert("ERROR recStatus: " + err);
+        console.log(err);
+    };
+};
+
 let waitTextNr = 0
 
 function startWebsocket(wsUrl) {

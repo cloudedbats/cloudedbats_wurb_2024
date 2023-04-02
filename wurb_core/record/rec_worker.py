@@ -28,6 +28,9 @@ class RecWorker(object):
         self.source_worker = None
         self.process_worker = None
         self.target_worker = None
+        self.from_source_queue = None
+        self.to_target_queue = None
+
         self.clear()
         # self.rec_event = asyncio.Event()
 
@@ -44,15 +47,11 @@ class RecWorker(object):
             self.target_worker = None
 
         self.queue_max_size = 100
-        self.from_source_queue = asyncio.Queue(maxsize=self.queue_max_size)
-        self.to_target_queue = asyncio.Queue(maxsize=self.queue_max_size)
         self.rec_timeout_before_restart_s = 10
         self.max_adc_time_diff_s = 10
         self.restart_activated = False
         self.connected_device_name = ""
         self.connected_device_freq_hz = ""
-
-        wurb_core.audio_capture.add_out_queue(self.from_source_queue)
 
     def get_connected_device_name(self):
         """ """
@@ -67,6 +66,12 @@ class RecWorker(object):
         # if self.source_worker:
         #     if self.source_worker.done() == True:
         #         self.source_worker = None
+
+        if self.from_source_queue == None:
+            self.from_source_queue = asyncio.Queue(maxsize=self.queue_max_size)
+            wurb_core.audio_capture.add_out_queue(self.from_source_queue)
+        if self.to_target_queue == None:
+            self.to_target_queue = asyncio.Queue(maxsize=self.queue_max_size)
 
         if self.source_worker == None:
             self.source_worker = asyncio.create_task(

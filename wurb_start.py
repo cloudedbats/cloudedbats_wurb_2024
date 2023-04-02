@@ -41,7 +41,7 @@ async def main():
     )
 
     # WURB settings.
-    wurb_core.wurb_settings.startup(settings_dir=settings_dir)
+    await wurb_core.wurb_settings.startup(settings_dir=settings_dir)
 
     # WURB core startup.
     logger.debug("WURB startup.")

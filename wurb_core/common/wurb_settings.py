@@ -48,7 +48,7 @@ class WurbSettings(object):
         #     "wurb_logger.settings_dir", self.settings_dir
         # )
 
-    def startup(self, settings_dir):
+    async def startup(self, settings_dir):
         """ """
         self.configure()
         # Settings file and defaults.
@@ -67,7 +67,7 @@ class WurbSettings(object):
             self.current_settings = self.loaded_settings["currentSettings"].copy()
             self.current_location = self.loaded_settings["currentLocation"].copy()
         # GPS.
-        self.save_latlong(0.0, 0.0)
+        await self.save_latlong(0.0, 0.0)
 
     async def shutdown(self):
         """ """
@@ -108,7 +108,7 @@ class WurbSettings(object):
             "feedbackPitch": "30",
             "feedbackFilterLowKhz": "15",
             "feedbackFilterHighKhz": "150",
-            # "startupOption": "as-last-session",
+            "startupOption": "as-last-session",
             "schedulerStartEvent": "on-sunset",
             "schedulerStartAdjust": "-15",
             "schedulerStopEvent": "off-sunrise",
@@ -139,7 +139,7 @@ class WurbSettings(object):
                     value = value.replace(" ", "-")
                     value = value.replace("_", "-")
                 #
-                old_value = self.current_settings[key]
+                old_value = self.current_settings.get("key", "")
                 self.current_settings[key] = value
                 #
                 try:

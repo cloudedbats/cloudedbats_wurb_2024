@@ -1,0 +1,87 @@
+#!/usr/bin/python3
+# -*- coding:utf-8 -*-
+# Project: http://cloudedbats.org, https://github.com/cloudedbats
+# Copyright (c) 2020-present Arnold Andreasson
+# License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
+
+import asyncio
+import logging
+import os
+import datetime
+import pathlib
+import psutil
+
+import wurb_core
+
+
+class RecStatus(object):
+    """ """
+
+    def __init__(self, config=None, logger=None, logger_name="DefaultLogger"):
+        """ """
+        if config == None:
+            self.config = {}
+        else:
+            self.config = config
+        if logger == None:
+            self.logger = logging.getLogger(logger_name)
+        else:
+            self.logger = logger
+
+    async def rec_status(self):
+        """ """
+        #     # Mic.
+        #     rec_status = await wurb_core.wurb_recorder.get_rec_status()
+        #     if rec_status != "Microphone is on.":
+        #         await wurb_core.ultrasound_devices.check_devices()
+        #         device_name = wurb_core.ultrasound_devices.device_name
+        #         sampling_freq_hz = wurb_core.ultrasound_devices.sampling_freq_hz
+        #         if device_name:
+        #             # Logging.
+        #             message = "Connected microphone: "
+        #             message += device_name
+        #             message += " Frequency: "
+        #             message += str(sampling_freq_hz)
+        #             message += " Hz."
+        #             self.logger.info(message)
+        #         else:
+        #             # Logging.
+        #             message = "No microphone is found. "
+        #             self.logger.info(message)
+
+        # Solartime.
+        latitude, longitude = wurb_core.wurb_settings.get_valid_location()
+        if (latitude == 0.0) or (longitude == 0.0):
+            message = "Can't calculate solartime. Lat/long is missing."
+            self.logger.info(message)
+            return
+
+        sun_moon_dict = wurb_core.sun_moon.get_sun_moon_info(latitude, longitude)
+
+        if sun_moon_dict:
+            sunset = sun_moon_dict.get("sunset_local", None)
+            dusk = sun_moon_dict.get("dusk_local", None)
+            dawn = sun_moon_dict.get("dawn_local", None)
+            sunrise = sun_moon_dict.get("sunrise_local", None)
+            # moon_phase = sun_moon_dict.get("moon_phase", None)
+            moon_phase_detailed = sun_moon_dict.get("moon_phase_detailed", None)
+            if not sunset:
+                sunset = sun_moon_dict.get("sunset_comment", "")
+            if not dusk:
+                dusk = sun_moon_dict.get("dusk_comment", "")
+            if not dawn:
+                dawn = sun_moon_dict.get("dawn_comment", "")
+            if not sunrise:
+                sunrise = sun_moon_dict.get("sunrise_comment", "")
+            if sunset and dusk and dawn and sunrise and moon_phase_detailed:
+                message = ""
+                message += " Sunset: " + str(sunset)
+                message += " Dusk: " + str(dusk)
+                message += " Dawn: " + str(dawn)
+                message += " Sunrise: " + str(sunrise)
+                message += " Moon: " + moon_phase_detailed + "."
+                self.logger.info(message)
+        else:
+            # Logging.
+            message = "Can't calculate solartime."
+            self.logger.info(message)

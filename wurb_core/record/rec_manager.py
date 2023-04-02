@@ -47,7 +47,7 @@ class RecManager(object):
         """ """
         self.configure()
 
-        wurb_core.gps.startup()
+        wurb_core.gps_reader.startup()
         self.gps_loop = asyncio.create_task(
             self.gps_control_loop(), name="RecManager gps task"
         )
@@ -57,7 +57,8 @@ class RecManager(object):
 
     def shutdown(self):
         """ """
-        wurb_core.gps.shutdown()
+        wurb_core.rec_worker.stop_recording()
+        wurb_core.gps_reader.shutdown()
         if self.rec_event:
             self.rec_event.set()
         if self.notification_event:
@@ -75,19 +76,29 @@ class RecManager(object):
 
             settings_event = wurb_core.wurb_settings.get_settings_event()
             location_event = wurb_core.wurb_settings.get_location_event()
-            latlong_event = wurb_core.gps.get_latlong_event()
+            latlong_event = wurb_core.gps_reader.get_latlong_event()
             while True:
-                task_1 = asyncio.create_task(asyncio.sleep(self.control_loop_interval_s), name="debug-7")
-                task_2 = asyncio.create_task(settings_event.wait(), name="debug-8")
-                task_3 = asyncio.create_task(location_event.wait(), name="debug-9")
-                task_4 = asyncio.create_task(latlong_event.wait(), name="debug-10")
+                task_1 = asyncio.create_task(
+                    asyncio.sleep(self.control_loop_interval_s), name="rec-sleep"
+                )
+                task_2 = asyncio.create_task(
+                    settings_event.wait(), name="rec-settings-event"
+                )
+                task_3 = asyncio.create_task(
+                    location_event.wait(), name="rec-location-event"
+                )
+                task_4 = asyncio.create_task(
+                    latlong_event.wait(), name="rec-latlong-event"
+                )
                 events = [
                     task_1,
                     task_2,
                     task_3,
                     task_4,
                 ]
-                done, pending = await asyncio.wait(events, return_when=asyncio.FIRST_COMPLETED)
+                done, pending = await asyncio.wait(
+                    events, return_when=asyncio.FIRST_COMPLETED
+                )
                 for task in done:
                     task.cancel()
                     # print("Done REC: ", task.get_name())
@@ -99,10 +110,10 @@ class RecManager(object):
                 if location_event.is_set():
                     location_event = wurb_core.wurb_settings.get_location_event()
                 if latlong_event.is_set():
-                    latitude, longitude = wurb_core.gps.get_latitude_longitude()
+                    latitude, longitude = wurb_core.gps_reader.get_latitude_longitude()
                     print("Lat-long: ", latitude, "   ", longitude)
                     await wurb_core.wurb_settings.save_latlong(latitude, longitude)
-                    latlong_event = wurb_core.gps.get_latlong_event()
+                    latlong_event = wurb_core.gps_reader.get_latlong_event()
 
                 await self.check_status()
 
@@ -175,14 +186,7 @@ class RecManager(object):
             else:
                 wurb_core.rec_worker.stop_recording()
 
-
-
-
             self.trigger_notification_event()
-
-
-
-
 
         except Exception as e:
             # Logging error.
@@ -194,18 +198,18 @@ class RecManager(object):
         try:
             old_number_of_satellites = 0
             # while True:
-            #     latlong_event = wurb_core.gps.get_latlong_event()
+            #     latlong_event = wurb_core.gps_reader.get_latlong_event()
             #     events = [
             #         asyncio.create_task(latlong_event.wait(), name="debug-12"),
             #     ]
             #     await asyncio.wait(events, return_when=asyncio.FIRST_COMPLETED)
 
             #     if latlong_event.is_set():
-            #         latlong_event = wurb_core.gps.get_latlong_event()
+            #         latlong_event = wurb_core.gps_reader.get_latlong_event()
 
             #         # print("GPS event triggered.")
-            #         lat, long = wurb_core.gps.get_latitude_longitude()
-            #         number_of_satellites = wurb_core.gps.number_of_satellites
+            #         lat, long = wurb_core.gps_reader.get_latitude_longitude()
+            #         number_of_satellites = wurb_core.gps_reader.number_of_satellites
             #         if old_number_of_satellites != number_of_satellites:
             #             old_number_of_satellites = number_of_satellites
             #             print("GPS: ", lat, "  ", long, "   ", number_of_satellites)
