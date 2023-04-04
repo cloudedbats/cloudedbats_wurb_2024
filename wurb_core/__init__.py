@@ -5,8 +5,15 @@
 __version__ = "2023.0.0-development"
 logger_name = "WurbLogger"
 
-import pyaudio
+alsaaudio_used = True
+try:
+    import alsaaudio
+except:
+    alsaaudio_used = False
+    import pyaudio
+
 import wurb_utils
+
 
 from wurb_core.common.wurb_logger import WurbLogger
 from wurb_core.common.wurb_settings import WurbSettings
@@ -39,11 +46,15 @@ wurb_logger = WurbLogger(config, logger_name=logger_name)
 wurb_settings = WurbSettings(config, wurb_logger)
 wurb_manager = WurbManager(config, wurb_logger)
 
-# Audio.
-audio = pyaudio.PyAudio()
-audio_capture = wurb_utils.AudioCapture(audio, logger_name=logger_name)
+# Audio. Either alsaaudio or pyaudio.
 audio_pitch_shifting = wurb_utils.AudioPitchShifting(logger_name=logger_name)
-audio_playback = wurb_utils.AudioPlayback(audio, logger_name=logger_name)
+if alsaaudio_used:
+    audio_capture = wurb_utils.AlsaAudioCapture(logger_name=logger_name)
+    audio_playback = wurb_utils.AlsaAudioPlayback(logger_name=logger_name)
+else:
+    audio = pyaudio.PyAudio()
+    audio_capture = wurb_utils.AudioCapture(audio, logger_name=logger_name)
+    audio_playback = wurb_utils.AudioPlayback(audio, logger_name=logger_name)
 
 # Record and live.
 rec_manager = RecManager(config, wurb_logger)

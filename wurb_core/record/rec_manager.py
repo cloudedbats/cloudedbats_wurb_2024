@@ -30,7 +30,6 @@ class RecManager(object):
 
     def clear(self):
         """ """
-        self.gps_loop = None
         self.control_loop = None
         self.control_loop_interval_s = 10
         self.last_used_rec_mode = ""
@@ -48,9 +47,6 @@ class RecManager(object):
         self.configure()
 
         wurb_core.gps_reader.startup()
-        self.gps_loop = asyncio.create_task(
-            self.gps_control_loop(), name="RecManager gps task"
-        )
         self.control_loop = asyncio.create_task(
             self.rec_control_loop(), name="RecManager control task"
         )
@@ -63,8 +59,6 @@ class RecManager(object):
             self.rec_event.set()
         if self.notification_event:
             self.notification_event.set()
-        if self.gps_loop:
-            self.gps_loop.cancel()
         if self.control_loop:
             self.control_loop.cancel()
 
@@ -186,36 +180,11 @@ class RecManager(object):
             else:
                 wurb_core.rec_worker.stop_recording()
 
-            self.trigger_notification_event()
+            self.trigger_rec_event()
 
         except Exception as e:
             # Logging error.
             message = "Scheduler update status: " + str(e)
-            self.logger.error(message)
-
-    async def gps_control_loop(self):
-        """ """
-        try:
-            old_number_of_satellites = 0
-            # while True:
-            #     latlong_event = wurb_core.gps_reader.get_latlong_event()
-            #     events = [
-            #         asyncio.create_task(latlong_event.wait(), name="debug-12"),
-            #     ]
-            #     await asyncio.wait(events, return_when=asyncio.FIRST_COMPLETED)
-
-            #     if latlong_event.is_set():
-            #         latlong_event = wurb_core.gps_reader.get_latlong_event()
-
-            #         # print("GPS event triggered.")
-            #         lat, long = wurb_core.gps_reader.get_latitude_longitude()
-            #         number_of_satellites = wurb_core.gps_reader.number_of_satellites
-            #         if old_number_of_satellites != number_of_satellites:
-            #             old_number_of_satellites = number_of_satellites
-            #             print("GPS: ", lat, "  ", long, "   ", number_of_satellites)
-
-        except Exception as e:
-            message = "Rec manager: gps_control_loop: " + str(e)
             self.logger.error(message)
 
     def get_rec_event(self):
@@ -231,19 +200,6 @@ class RecManager(object):
         self.rec_event = asyncio.Event()
         old_rec_event.set()
 
-    def get_notification_event(self):
-        """Used for synchronization."""
-        if self.notification_event == None:
-            self.notification_event = asyncio.Event()
-        return self.notification_event
-
-    def trigger_notification_event(self):
-        """Used for synchronization."""
-        # Create a new event and release the old.
-        old_notification_event = self.get_notification_event()
-        self.notification_event = asyncio.Event()
-        old_notification_event.set()
-
     async def restart_rec(self):
         """ """
         try:
@@ -258,16 +214,10 @@ class RecManager(object):
     async def get_status_dict(self):
         """ """
         try:
-            # status_dict = {
-            #     "rec_status": "TEST-STATUS",
-            #     "device_name": "TEST-DEV",
-            #     "sample_rate": "1234556",
-            # }
-            # return(status_dict)
-
             # Avoid too long device names in the user interface.
-            device_name = wurb_core.rec_worker.get_connected_device_name()
-            device_freq_hz = wurb_core.rec_worker.get_connected_device_freq_hz()
+            device_info = wurb_core.rec_devices.get_capture_device_info()
+            device_name = device_info.get("device_name", "")
+            device_freq_hz = device_info.get("sampling_freq_hz", "")
             device_name = device_name.replace("USB Ultrasound Microphone", "")
             if len(device_name) > 25:
                 device_name = device_name[:24] + "..."
@@ -275,9 +225,6 @@ class RecManager(object):
                 "rec_status": self.status_info_text,
                 "device_name": device_name,
                 "sample_rate": str(device_freq_hz),
-                # "rec_status": self.wurb_recorder.rec_status,
-                # "device_name": device_name,
-                # "sample_rate": str(self.ultrasound_devices.sampling_freq_hz),
             }
             return status_dict
         except Exception as e:
@@ -285,37 +232,9 @@ class RecManager(object):
             message = "Manager: get_status_dict: " + str(e)
             self.logger.error(message)
 
-    # async def update_status(self):
-    #     """ """
-    #     try:
-    #         while True:
-    #             try:
-    #                 device_notification = (
-    #                     await self.ultrasound_devices.get_notification_event()
-    #                 )
-    #                 rec_notification = await self.wurb_recorder.get_notification_event()
-    #                 events = [
-    #                     device_notification.wait(),
-    #                     rec_notification.wait(),
-    #                 ]
-    #                 await asyncio.wait(events, return_when=asyncio.FIRST_COMPLETED)
-
-    #                 # Trigger event.
-    #                 self.trigger_notification_event()
-    #             except asyncio.CancelledError:
-    #                 exit
-    #     except Exception as e:
-    #         # Logging error.
-    #         message = "Manager: update_status: " + str(e)
-    #         self.logger.error(message)
-    #     finally:
-    #         # Logging error.
-    #         message = "Manager update_status terminated."
-    #         self.logger.debug(message=message)
-
     async def manual_trigger(self):
         """ """
-        # Will be checked and resetted in wurb_sound_detection.py.
+        # Will be checked and reset in wurb_sound_detection.py.
         self.manual_trigger_activated = True
         # Logging.
         message = "Manually triggered."

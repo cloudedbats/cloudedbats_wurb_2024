@@ -39,6 +39,7 @@ class SoundDetection(object):
         detection_object.config()
         return detection_object
 
+
 class SoundDetectionBase:
     """ """
 
@@ -103,13 +104,12 @@ class SoundDetectionSimple(SoundDetectionBase):
 
     def config(self):
         """ """
-
-        sampling_freq = wurb_core.rec_worker.connected_device_freq_hz
+        device_info = wurb_core.rec_devices.get_capture_device_info()
+        # device_name = device_info.get("device_name", "")
+        self.sampling_freq = float(device_info.get("sampling_freq_hz", "0"))
 
         filter_min_khz = wurb_core.wurb_settings.get_setting("detectionLimitKhz")
         threshold_dbfs = wurb_core.wurb_settings.get_setting("detectionSensitivityDbfs")
-
-        self.sampling_freq = float(sampling_freq)
         self.filter_min_hz = float(filter_min_khz) * 1000.0
         self.threshold_dbfs = float(threshold_dbfs)
         self.window_size = 2048

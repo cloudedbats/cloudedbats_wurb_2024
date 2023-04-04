@@ -98,50 +98,50 @@ class DetectorSettings(BaseModel):
     # schedulerPostActionDelay: Optional[float] = None
 
 
-@record_router.get("/record/start-rec/", tags=["Recorder"], description="Record...")
-# @app.get("/start-rec/")
-async def start_recording():
-    try:
-        # Logging debug.
-        logger.debug("API called: start-rec.")
-        # await wurb_core.rec_manager.start_rec()
-    except Exception as e:
-        # Logging error.
-        message = "Called: start_rec: " + str(e)
-        logger.error(message)
+# @record_router.get("/record/start-rec/", tags=["Recorder"], description="Record...")
+# # @app.get("/start-rec/")
+# async def start_recording():
+#     try:
+#         # Logging debug.
+#         logger.debug("API called: start-rec.")
+#         # await wurb_core.rec_manager.start_rec()
+#     except Exception as e:
+#         # Logging error.
+#         message = "Called: start_rec: " + str(e)
+#         logger.error(message)
 
 
-@record_router.get("/record/stop-rec/", tags=["Recorder"], description="Record...")
-# @app.get("/stop-rec/")
-async def stop_recording():
-    try:
-        # Logging debug.
-        logger.debug("API called: stop-rec.")
-        # await wurb_core.rec_manager.stop_rec()
-    except Exception as e:
-        # Logging error.
-        message = "Called: stop_rec: " + str(e)
-        logger.error(message)
+# @record_router.get("/record/stop-rec/", tags=["Recorder"], description="Record...")
+# # @app.get("/stop-rec/")
+# async def stop_recording():
+#     try:
+#         # Logging debug.
+#         logger.debug("API called: stop-rec.")
+#         # await wurb_core.rec_manager.stop_rec()
+#     except Exception as e:
+#         # Logging error.
+#         message = "Called: stop_rec: " + str(e)
+#         logger.error(message)
 
 
-@record_router.get("/record/get-status/", tags=["Recorder"], description="Record...")
-# @app.get("/get-status/")
-async def get_status():
-    try:
-        # Logging debug.
-        logger.debug("API called: get-status.")
-        status_dict = await wurb_core.rec_manager.get_status_dict()
-        location_status = wurb_core.wurb_settings.get_location_status()
-        return {
-            "rec_status": status_dict.get("rec_status", ""),
-            "location_status": location_status,
-            "device_name": status_dict.get("device_name", ""),
-            "detector_time": time.strftime("%Y-%m-%d %H:%M:%S"),
-        }
-    except Exception as e:
-        # Logging error.
-        message = "Called: get_status: " + str(e)
-        logger.error(message)
+# @record_router.get("/record/get-status/", tags=["Recorder"], description="Record...")
+# # @app.get("/get-status/")
+# async def get_status():
+#     try:
+#         # Logging debug.
+#         logger.debug("API called: get-status.")
+#         status_dict = await wurb_core.rec_manager.get_status_dict()
+#         location_status = wurb_core.wurb_settings.get_location_status()
+#         return {
+#             "rec_status": status_dict.get("rec_status", ""),
+#             "location_status": location_status,
+#             "device_name": status_dict.get("device_name", ""),
+#             "detector_time": time.strftime("%Y-%m-%d %H:%M:%S"),
+#         }
+#     except Exception as e:
+#         # Logging error.
+#         message = "Called: get_status: " + str(e)
+#         logger.error(message)
 
 
 @record_router.post(
@@ -180,10 +180,8 @@ async def set_time(posixtime: str):
         # Logging debug.
         message = "API called: set-time: " + str(posixtime)
         logger.debug(message)
-        # posix_time_s = int(int(posixtime) / 1000)
-        # await wurb_core.rec_manager.wurb_rpi.set_detector_time(
-        #     posix_time_s, cmd_source="by user"
-        # )
+        posix_time_s = int(int(posixtime) / 1000)
+        await wurb_core.wurb_rpi.set_detector_time(posix_time_s, cmd_source="by user")
     except Exception as e:
         # Logging error.
         message = "Called: set_time: " + str(e)
@@ -335,7 +333,7 @@ async def websocket_endpoint(websocket: fastapi.WebSocket):
         await websocket.accept()
         #
         # Get event notification objects.
-        notification_event = wurb_core.rec_manager.get_notification_event()
+        rec_event = wurb_core.rec_manager.get_rec_event()
         location_event = wurb_core.wurb_settings.get_location_event()
         latlong_event = wurb_core.wurb_settings.get_latlong_event()
         settings_event = wurb_core.wurb_settings.get_settings_event()
@@ -360,9 +358,7 @@ async def websocket_endpoint(websocket: fastapi.WebSocket):
         while True:
             # Wait for next event to happen.
             task_1 = asyncio.create_task(asyncio.sleep(1.0), name="ws-sleep-event")
-            task_2 = asyncio.create_task(
-                notification_event.wait(), name="ws-notification-event"
-            )
+            task_2 = asyncio.create_task(rec_event.wait(), name="ws-rec-event")
             task_3 = asyncio.create_task(
                 location_event.wait(), name="ws-location-event"
             )
@@ -399,7 +395,7 @@ async def websocket_endpoint(websocket: fastapi.WebSocket):
                 "detectorTime": time.strftime("%Y-%m-%d %H:%M:%S"),
             }
 
-            notification_event = wurb_core.rec_manager.get_notification_event()
+            rec_event = wurb_core.rec_manager.get_rec_event()
 
             if location_event.is_set():
                 location_event = wurb_core.wurb_settings.get_location_event()

@@ -7,14 +7,15 @@ aiofiles
 websockets
 requests
 # Audio, etc.
-pyaudio
+pyalsaaudio # For RPi.
+### pyaudio # For macOS, etc.
 numpy
-scipy
+scipy<1.9.0
 psutil
 pyusb
 # GPS and date/time.
 pyserial
-pyserial-asyncio
+pyserial-asyncio<
 pytz
 python-dateutil
 astral

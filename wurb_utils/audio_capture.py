@@ -30,9 +30,9 @@ class AudioCapture:
         self.main_loop = None
         self.capture_executor = None
 
-    def get_capture_devices(self, part_of_name=None):
+    def get_capture_devices(self):
         """ """
-        cards = []
+        devices = []
         try:
             number_of_devices = self.audio.get_device_count()
             for index in range(number_of_devices):
@@ -40,14 +40,17 @@ class AudioCapture:
                 device_name = device_info.get("name", "")
                 input_channels = device_info.get("maxInputChannels", "")
                 if int(input_channels) > 0:
-                    if part_of_name in [None, ""]:
-                        cards.append(device_info)
-                    else:
-                        if part_of_name in device_name:
-                            cards.append(device_info)
+                    info_dict = {}
+                    info_dict["device_name"] = device_name
+                    info_dict["input_channels"] = input_channels
+                    info_dict["device_index"] = device_info.get("index", "")
+                    info_dict["sampling_freq_hz"] = device_info.get(
+                        "defaultSampleRate", ""
+                    )
+                    devices.append(info_dict)
         except:
             pass
-        return cards
+        return devices
 
     def setup(
         self,
@@ -83,6 +86,7 @@ class AudioCapture:
 
     def run_capture(self):
         """ """
+        stream = None
         self.capture_active = True
         channels = 1
         if self.channels.upper() in ["STEREO", "MONO-LEFT", "MONO-RIGHT"]:
@@ -109,7 +113,7 @@ class AudioCapture:
                 # Convert from string-byte array to int16 array.
                 in_data_int16 = numpy.frombuffer(data, dtype=numpy.int16)
 
-                # print("CAPTURE: Lengt int16: ", len(in_data_int16))
+                # print("CAPTURE: Length int16: ", len(in_data_int16))
                 # print(in_data_int16[:10])
                 # print(numpy.max(in_data_int16))
 
@@ -164,6 +168,7 @@ class AudioCapture:
             self.logger.error("EXCEPTION Sound capture: " + str(e))
         finally:
             self.capture_active = False
-            stream.close()
+            if stream:
+                stream.close()
             # p.terminate()
             self.logger.debug("Sound capture ended.")

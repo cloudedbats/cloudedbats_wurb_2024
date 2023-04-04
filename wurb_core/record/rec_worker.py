@@ -51,15 +51,9 @@ class RecWorker(object):
         self.max_adc_time_diff_s = 10
         self.restart_activated = False
         self.connected_device_name = ""
-        self.connected_device_freq_hz = ""
-
-    def get_connected_device_name(self):
-        """ """
-        return self.connected_device_name
-
-    def get_connected_device_freq_hz(self):
-        """ """
-        return self.connected_device_freq_hz
+        self.connected_device_index = ""
+        self.connected_input_channels = ""
+        self.connected_sampling_freq_hz = ""
 
     def start_recording(self):
         """ """
@@ -110,35 +104,32 @@ class RecWorker(object):
     async def rec_source_worker(self):
         """ """
         # Check available microphones.
-        wurb_core.rec_devices.check_devices()
-        (
-            device_index,
-            self.connected_device_name,
-            self.connected_device_freq_hz,
-        ) = wurb_core.rec_devices.get_connected_device()
-        if device_index == None:
+        device_info = wurb_core.rec_devices.get_capture_device_info()
+        self.connected_device_name = device_info.get("device_name", "")
+        self.connected_device_index = device_info.get("device_index", "")
+        self.connected_input_channels = device_info.get("input_channels", "")
+        self.connected_sampling_freq_hz = device_info.get("sampling_freq_hz", "")
+        if self.connected_device_index == None:
             print("NO MIC.")
             return
 
         wurb_core.audio_capture.setup(
-            device_index=device_index,
+            device_index=self.connected_device_index,
             channels="MONO",
-            sampling_freq_hz=int(self.connected_device_freq_hz),
+            sampling_freq_hz=int(self.connected_sampling_freq_hz),
             frames=1024,
-            buffer_size=int(self.connected_device_freq_hz / 2),
+            buffer_size=int(self.connected_sampling_freq_hz / 2),
         )
 
         capture_coro = wurb_core.audio_capture.start()
         try:
-            # # Run it all in three parallel tasks.
             tasks = asyncio.gather(
-                # file_writer_coro,
                 capture_coro,
             )
             self.gather_result = await tasks
-            print("TEST ended: ", self.gather_result)
+            print("Sound capture ended: ", self.gather_result)
         except Exception as e:
-            print("Exception, TEST terminated: " + str(e))
+            print("Exception, Sound capture terminated: " + str(e))
 
     async def rec_process_worker(self):
         """ """
@@ -364,7 +355,7 @@ class RecWorker(object):
                                 wave_file_writer = wurb_core.RecFileWriter()
                                 wave_file_writer.prepare(
                                     self.connected_device_name,
-                                    self.connected_device_freq_hz,
+                                    self.connected_sampling_freq_hz,
                                     item["adc_time"],
                                     max_peak_freq_hz,
                                     max_peak_dbfs,

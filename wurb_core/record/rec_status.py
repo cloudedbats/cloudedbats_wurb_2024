@@ -30,24 +30,39 @@ class RecStatus(object):
 
     async def rec_status(self):
         """ """
-        #     # Mic.
-        #     rec_status = await wurb_core.wurb_recorder.get_rec_status()
-        #     if rec_status != "Microphone is on.":
-        #         await wurb_core.ultrasound_devices.check_devices()
-        #         device_name = wurb_core.ultrasound_devices.device_name
-        #         sampling_freq_hz = wurb_core.ultrasound_devices.sampling_freq_hz
-        #         if device_name:
-        #             # Logging.
-        #             message = "Connected microphone: "
-        #             message += device_name
-        #             message += " Frequency: "
-        #             message += str(sampling_freq_hz)
-        #             message += " Hz."
-        #             self.logger.info(message)
-        #         else:
-        #             # Logging.
-        #             message = "No microphone is found. "
-        #             self.logger.info(message)
+        # Available microphone.
+        device_info = wurb_core.rec_devices.get_capture_device_info()
+        device_name = device_info.get("device_name", "")
+        sampling_freq_hz = device_info.get("sampling_freq_hz", "")
+        if device_name:
+            # Logging.
+            message = "Connected microphone: "
+            message += device_name
+            message += ". Frequency: "
+            message += str(sampling_freq_hz)
+            message += " Hz."
+            self.logger.info(message)
+        else:
+            # Logging.
+            message = "No microphone is found. "
+            self.logger.info(message)
+
+        # Available speakers.
+        device_info = wurb_core.rec_devices.get_playback_device_info()
+        device_name = device_info.get("device_name", "")
+        sampling_freq_hz = device_info.get("sampling_freq_hz", "")
+        if device_name:
+            # Logging.
+            message = "Connected speaker: "
+            message += device_name
+            message += ". Frequency: "
+            message += str(sampling_freq_hz)
+            message += " Hz."
+            self.logger.info(message)
+        else:
+            # Logging.
+            message = "No speaker is found. "
+            self.logger.info(message)
 
         # Solartime.
         latitude, longitude = wurb_core.wurb_settings.get_valid_location()

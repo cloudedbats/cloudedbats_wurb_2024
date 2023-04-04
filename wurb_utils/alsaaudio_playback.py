@@ -1,58 +1,41 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
-# Main project: https://github.com/cloudedbats
-# Copyright (c) 2023-present Arnold Andreasson
-# License: MIT License (see LICENSE or http://opensource.org/licenses/mit).
+# Project: http://cloudedbats.org, https://github.com/cloudedbats
+# Copyright (c) 2021-present Arnold Andreasson
+# License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 import asyncio
 import logging
 import numpy
 
+try:
+    import alsaaudio
+except:
+    pass
 
-class AudioPlayback:
+
+class AlsaAudioPlayback:
     """ """
 
-    def __init__(self, audio, logger_name="DefaultLogger"):
+    def __init__(self, logger_name="DefaultLogger"):
         """ """
         self.logger = logging.getLogger(logger_name)
-        self.audio = audio
         self.queue = None
         self.clear()
 
     def clear(self):
         self.device_index = None
-        self.channels = None
         self.sampling_freq_hz = None
-        self.frames = None
+        self.channels = None
         self.buffer_size = None
+        self.period_size = None
         self.buffer_max_size = None
         #
         self.playback_active = False
         self.playback_queue_active = False
         self.playback_executor = None
         self.buffer_int16 = None
-
-    def get_playback_devices(self):
-        """ """
-        devices = []
-        try:
-            number_of_devices = self.audio.get_device_count()
-            for index in range(number_of_devices):
-                device_info = self.audio.get_device_info_by_index(index)
-                device_name = device_info.get("name", "")
-                output_channels = device_info.get("maxOutputChannels", "")
-                if int(output_channels) > 0:
-                    info_dict = {}
-                    info_dict["device_name"] = device_name
-                    info_dict["output_channels"] = output_channels
-                    info_dict["device_index"] = device_info.get("index", "")
-                    info_dict["sampling_freq_hz"] = device_info.get(
-                        "defaultSampleRate", ""
-                    )
-                    devices.append(info_dict)
-        except:
-            pass
-        return devices
+        self.logger = logging.getLogger(logger)
 
     def setup(
         self,
@@ -81,8 +64,8 @@ class AudioPlayback:
     async def start(self):
         """ """
         # Use executor for the IO-blocking part.
-        event_loop = asyncio.get_event_loop()
-        self.playback_executor = event_loop.run_in_executor(None, self.run_playback)
+        main_loop = asyncio.get_event_loop()
+        self.playback_executor = main_loop.run_in_executor(None, self.run_playback)
         await asyncio.sleep(0.1)
         # Clear queue.
         while not self.queue.empty():
@@ -112,7 +95,7 @@ class AudioPlayback:
 
     def add_data(self, data):
         """ """
-        # self.logger.debug("DEBUG DATA ADDED. Length: " + str(len(data)))
+        # self.logger.debug("DEBUG DATA ADDED. Length: ", len(data))
         if self.buffer_int16 is None:
             self.buffer_int16 = numpy.array([], dtype=numpy.int16)
         # Avoid to long delay.
@@ -123,23 +106,25 @@ class AudioPlayback:
 
     def run_playback(self):
         """ """
-        self.playback_active = True
+        pmc_play = None
         channels = 1
-        if self.channels.upper() in ["STEREO", "MONO-LEFT", "MONO-RIGHT"]:
+        if self.channels.upper() == "STEREO":
             channels = 2
+        self.playback_active = True
         try:
-            # p = pyaudio.PyAudio()
-            stream = self.audio.open(
-                format=self.audio.get_format_from_width(2),
+            # Setup ALSA for playback.
+            pmc_play = alsaaudio.PCM(
+                alsaaudio.PCM_PLAYBACK,
+                alsaaudio.PCM_NORMAL,
                 channels=channels,
                 rate=self.sampling_freq_hz,
-                input=False,
-                output=True,
-                output_device_index=self.device_index,
-                frames_per_buffer=self.frames,
+                format=alsaaudio.PCM_FORMAT_S16_LE,
+                periodsize=self.frames,
+                device="sysdefault",
+                cardindex=self.device_index,
             )
             # To be used when no data in buffer.
-            silent_buffer = numpy.zeros((self.frames, 1), dtype=numpy.float16)
+            silent_buffer = numpy.zeros((self.period_size, 1), dtype=numpy.float16)
             # Loop over the IO blocking part.
             while self.playback_active:
                 try:
@@ -147,12 +132,12 @@ class AudioPlayback:
                     buffer_int16 = silent_buffer
                     #
                     if (self.buffer_int16 is not None) and (
-                        self.buffer_int16.size >= self.frames
+                        self.buffer_int16.size >= self.period_size
                     ):
                         # Copy part to be used.
-                        buffer_int16 = self.buffer_int16[: self.frames]
+                        buffer_int16 = self.buffer_int16[: self.period_size]
                         # Remove used part.
-                        self.buffer_int16 = self.buffer_int16[self.frames :]
+                        self.buffer_int16 = self.buffer_int16[self.period_size :]
 
                     #     self.logger.debug("SOUND. Len: " + str(self.buffer_int16.size))
                     # else:
@@ -161,7 +146,7 @@ class AudioPlayback:
 
                     # Convert to byte buffer and write.
                     buffer_bytes = buffer_int16.tobytes()
-                    stream.write(buffer_bytes, exception_on_underflow=False)
+                    pmc_play.write(buffer_bytes)
 
                 except asyncio.CancelledError:
                     break
@@ -174,6 +159,6 @@ class AudioPlayback:
             self.logger.error("EXCEPTION PLAYBACK-2: " + str(e))
         finally:
             self.playback_active = False
-            stream.close()
-            # p.terminate()
+            if pmc_play:
+                pmc_play.close()
             self.logger.debug("PLAYBACK ENDED.")

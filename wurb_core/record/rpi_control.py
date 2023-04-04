@@ -35,9 +35,9 @@ class WurbRaspberryPi(object):
         # First check: OS Raspbian. Only valid for Raspbian and user pi.
         if self.is_os_raspbian():
             # Select command.
-            if command == "rpi_shutdown":
+            if command == "rpiShutdown":
                 await self.rpi_shutdown()
-            elif command == "rpi_reboot":
+            elif command == "rpiReboot":
                 await self.rpi_reboot()
             elif command == "rpi_sd_to_usb":
                 await self.rpi_sd_to_usb()
