@@ -15,7 +15,7 @@ psutil
 pyusb
 # GPS and date/time.
 pyserial
-pyserial-asyncio<
+pyserial-asyncio
 pytz
 python-dateutil
 astral
