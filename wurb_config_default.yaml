@@ -32,7 +32,7 @@ record:
   target:
     id: development
     name: Development
-    rec_dir: DEV_wurb_recordings
+    rec_dir: ../wurb_recordings
   # targets:
   #   - id: local
   #     name: Local
@@ -52,11 +52,11 @@ annotations:
     - id: local
       name: Local
       rec_dir: ../wurb_recordings
-      cache_dir: ..wurb_cache
-    - id: usb
-      name: USB
-      rec_dir: media/pi/wurb_recordings
-      cache_dir: media/pi/wurb_cache
+      cache_dir: ../wurb_cache
+    # - id: usb
+    #   name: USB
+    #   rec_dir: media/pi/wurb_recordings
+    #   cache_dir: media/pi/wurb_cache
     - id: ssd
       name: SSD
       rec_dir: media/ssd/wurb_recordings
@@ -73,8 +73,8 @@ gps_reader:
   gps_devices:
     - /dev/ttyACM0
     - /dev/ttyUSB0
-    - /dev/tty.usbserial-2130 # On macOS.
-    - /dev/cu.usbmodem21301 # On macOS.
-    - /dev/cu.usbmodem101 # On macOS.
+    - /dev/tty.usbserial-2130 # For test on macOS.
+    - /dev/cu.usbmodem21301 # For test on macOS.
+    - /dev/cu.usbmodem101 # For test on macOS.
   gps_control_loop_sleep_s: 20
 

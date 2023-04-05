@@ -12,11 +12,8 @@ import wurb_core
 
 async def main():
     """ """
-    # logging_dir = "../wurb_logging"
-    # settings_dir = "../wurb_settings"
-    # Used during development:
-    logging_dir = "DEV_wurb_logging"
-    settings_dir = "DEV_wurb_settings"
+    logging_dir = "../wurb_logging"
+    settings_dir = "../wurb_settings"
 
     # WURB logger.
     wurb_core.logger.setup_rotating_log(
