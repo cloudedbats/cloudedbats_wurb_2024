@@ -59,7 +59,7 @@ class RecManager(object):
             self.rec_event.set()
         if self.notification_event:
             self.notification_event.set()
-        if self.control_loop:
+        if self.control_loop != None:
             self.control_loop.cancel()
 
     async def rec_control_loop(self):
@@ -112,7 +112,7 @@ class RecManager(object):
                 await self.check_status()
 
         except asyncio.CancelledError:
-            pass
+            self.logger.debug("Rec control loop was cancelled.")
         except Exception as e:
             # Logging error.
             message = "Rec control loop: " + str(e)

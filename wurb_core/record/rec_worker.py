@@ -36,13 +36,13 @@ class RecWorker(object):
 
     def clear(self):
         """ """
-        if self.source_worker:
+        if self.source_worker != None:
             self.source_worker.cancel()
             self.source_worker = None
-        if self.process_worker:
+        if self.process_worker != None:
             self.process_worker.cancel()
             self.process_worker = None
-        if self.target_worker:
+        if self.target_worker != None:
             self.target_worker.cancel()
             self.target_worker = None
 
@@ -87,16 +87,16 @@ class RecWorker(object):
 
     def stop_recording(self):
         """ """
-        if self.source_worker:
+        if self.source_worker != None:
             wurb_core.audio_capture.stop()
             self.source_worker.cancel()
             self.source_worker = None
             print("REC SOURCE CANCELED.")
-        if self.process_worker:
+        if self.process_worker != None:
             self.process_worker.cancel()
             self.process_worker = None
             print("REC PROCESS CANCELED.")
-        if self.target_worker:
+        if self.target_worker != None:
             self.target_worker.cancel()
             self.target_worker = None
             print("REC TARGET CANCELED.")
@@ -113,12 +113,14 @@ class RecWorker(object):
             print("NO MIC.")
             return
 
+        # Process buffer 0.5 sec.
+        process_buffer = int(float(self.connected_sampling_freq_hz) / 2)
         wurb_core.audio_capture.setup(
             device_index=self.connected_device_index,
             channels="MONO",
             sampling_freq_hz=int(self.connected_sampling_freq_hz),
-            frames=1024,
-            buffer_size=int(self.connected_sampling_freq_hz / 2),
+            frames=int(1024*8),
+            buffer_size=process_buffer,
         )
 
         capture_coro = wurb_core.audio_capture.start()
@@ -312,6 +314,7 @@ class RecWorker(object):
                         self.process_deque.clear()
                         await self.to_target_queue.put(False)  # Flush.
                 except asyncio.CancelledError:
+                    self.logger.debug("Sound Sound process was cancelled.")
                     break
                 except Exception as e:
                     # Logging error.
@@ -375,6 +378,7 @@ class RecWorker(object):
                         await asyncio.sleep(0)
 
                 except asyncio.CancelledError:
+                    self.logger.debug("Sound target was cancelled.")
                     break
                 except Exception as e:
                     # Logging error.

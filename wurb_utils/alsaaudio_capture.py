@@ -39,6 +39,7 @@ class AlsaAudioCapture:
     def get_capture_devices(self):
         """ """
         devices = []
+        card_list = []
         try:
             # List cards and names.
             # Note: Results from card_indexes() and cards() must be mapped.
@@ -50,12 +51,12 @@ class AlsaAudioCapture:
                 card_name, long_name = alsaaudio.card_name(card_index)
                 card_dict["card_name"] = card_name.strip()
                 card_dict["card_long_name"] = long_name.strip()
-                self.card_list.append(card_dict)
+                card_list.append(card_dict)
             # Check card devices for capture.
             for device in alsaaudio.pcms(alsaaudio.PCM_CAPTURE):
                 if device.startswith("sysdefault:CARD="):
                     card_id = device.replace("sysdefault:CARD=", "").strip()
-                    for card_dict in self.card_list:
+                    for card_dict in card_list:
                         if card_dict.get("card_id", "") == card_id:
                             card_dict["device"] = device
                             card_index = card_dict.get("card_index", "")
@@ -73,8 +74,8 @@ class AlsaAudioCapture:
                                 print("ALSA info_dict: ", info_dict)
 
                                 devices.append(info_dict)
-        except:
-            pass
+        except Exception as e:
+            self.logger.error("EXCEPTION get_capture_devices: " + str(e))
         return devices
 
     def get_max_sampling_freq(self, card_index):
@@ -119,6 +120,9 @@ class AlsaAudioCapture:
         self.frames = frames
         self.buffer_size = buffer_size
 
+        # PyAlsaAudio need bigger read buffers.
+        self.frames = int(float(sampling_freq_hz) / 4)
+
     def add_out_queue(self, out_queue):
         """ """
         self.out_queue_list.append(out_queue)
@@ -132,7 +136,7 @@ class AlsaAudioCapture:
     async def stop(self):
         """ """
         self.capture_active = False
-        if self.capture_executor:
+        if self.capture_executor != None:
             self.capture_executor.cancel()
             self.capture_executor = None
 
@@ -144,6 +148,7 @@ class AlsaAudioCapture:
         if self.channels.upper() in ["STEREO", "MONO-LEFT", "MONO-RIGHT"]:
             channels = 2
         try:
+            self.logger.debug("PyAlsaAudio: Sound capture started.")
             pmc_capture = alsaaudio.PCM(
                 alsaaudio.PCM_CAPTURE,
                 alsaaudio.PCM_NORMAL,
@@ -220,11 +225,12 @@ class AlsaAudioCapture:
                                     break
         #
         except asyncio.CancelledError:
-            pass
+            self.logger.debug("Sound capture (ALSA) was cancelled.")
         except Exception as e:
-            self.logger.error("EXCEPTION Sound capture: " + str(e))
+            self.logger.error("EXCEPTION Sound capture (ALSA): " + str(e))
         finally:
+            self.logger.debug("PyAlsaAudio: Sound capture ended.")
             self.capture_active = False
             if pmc_capture:
                 pmc_capture.close()
-            self.logger.debug("Sound capture ended.")
+

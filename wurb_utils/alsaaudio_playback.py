@@ -7,7 +7,6 @@
 import asyncio
 import logging
 import numpy
-
 try:
     import alsaaudio
 except:
@@ -57,6 +56,7 @@ class AlsaAudioPlayback:
         # Setup queue for data in.
         self.queue = asyncio.Queue(maxsize=in_queue_length)
 
+
     def get_queue(self):
         """ """
         return self.queue
@@ -79,6 +79,7 @@ class AlsaAudioPlayback:
                 if "data" in data_dict:
                     self.add_data(data_dict["data"])
             except asyncio.CancelledError:
+                self.logger.debug("Sound playback was cancelled.")
                 break
             except Exception as e:
                 # Logging error.
@@ -89,7 +90,7 @@ class AlsaAudioPlayback:
         """ """
         self.playback_active = False
         self.playback_queue_active = False
-        if self.playback_executor:
+        if self.playback_executor != None:
             self.playback_executor.cancel()
             self.playback_executor = None
 
@@ -149,11 +150,13 @@ class AlsaAudioPlayback:
                     pmc_play.write(buffer_bytes)
 
                 except asyncio.CancelledError:
+                    self.logger.debug("Sound playback was cancelled.")
                     break
                 except Exception as e:
                     self.logger.error("EXCEPTION PLAYBACK-1: " + str(e))
         #
         except asyncio.CancelledError:
+            self.logger.debug("Sound playback was cancelled.")
             pass
         except Exception as e:
             self.logger.error("EXCEPTION PLAYBACK-2: " + str(e))

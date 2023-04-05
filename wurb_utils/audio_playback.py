@@ -96,6 +96,7 @@ class AudioPlayback:
                 if "data" in data_dict:
                     self.add_data(data_dict["data"])
             except asyncio.CancelledError:
+                self.logger.debug("Sound playback was cancelled.")
                 break
             except Exception as e:
                 # Logging error.
@@ -106,7 +107,7 @@ class AudioPlayback:
         """ """
         self.playback_active = False
         self.playback_queue_active = False
-        if self.playback_executor:
+        if self.playback_executor != None:
             self.playback_executor.cancel()
             self.playback_executor = None
 
@@ -164,11 +165,13 @@ class AudioPlayback:
                     stream.write(buffer_bytes, exception_on_underflow=False)
 
                 except asyncio.CancelledError:
+                    self.logger.debug("Sound playback was cancelled.")
                     break
                 except Exception as e:
                     self.logger.error("EXCEPTION PLAYBACK-1: " + str(e))
         #
         except asyncio.CancelledError:
+            self.logger.debug("Sound playback was cancelled.")
             pass
         except Exception as e:
             self.logger.error("EXCEPTION PLAYBACK-2: " + str(e))

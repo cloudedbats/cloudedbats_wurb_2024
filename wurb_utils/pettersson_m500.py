@@ -149,6 +149,7 @@ class PetterssonM500:
                 data_array += data
 
         except asyncio.CancelledError:
+            self.logger.debug("Sound source (M500) was cancelled.")
             pass
         except Exception as e:
             # Logging error.

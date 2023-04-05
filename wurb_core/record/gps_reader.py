@@ -81,7 +81,7 @@ class GpsReader(object):
     def shutdown(self):
         """ """
         self.stop()
-        if self.gps_control_task:
+        if self.gps_control_task != None:
             self.gps_control_task.cancel()
             self.gps_control_task = None
 
@@ -95,6 +95,7 @@ class GpsReader(object):
                     await asyncio.sleep(self.gps_loop_sleep_s)
                     self.stop()
                 except asyncio.CancelledError:
+                    self.logger.debug("GPS control was cancelled.")
                     break
         except Exception as e:
             # Logging error.

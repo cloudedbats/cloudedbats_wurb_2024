@@ -80,7 +80,7 @@ class AudioCapture:
     def stop(self):
         """ """
         self.capture_active = False
-        if self.capture_executor:
+        if self.capture_executor != None:
             self.capture_executor.cancel()
             self.capture_executor = None
 
@@ -92,6 +92,7 @@ class AudioCapture:
         if self.channels.upper() in ["STEREO", "MONO-LEFT", "MONO-RIGHT"]:
             channels = 2
         try:
+            self.logger.debug("PyAudio: Sound capture started.")
             # p = pyaudio.PyAudio()
             stream = self.audio.open(
                 format=self.audio.get_format_from_width(2),
@@ -163,12 +164,12 @@ class AudioCapture:
                                 break
         #
         except asyncio.CancelledError:
-            pass
+            self.logger.debug("Sound capture was cancelled.")
         except Exception as e:
             self.logger.error("EXCEPTION Sound capture: " + str(e))
         finally:
+            self.logger.debug("PyAudio: Sound capture ended.")
             self.capture_active = False
             if stream:
                 stream.close()
             # p.terminate()
-            self.logger.debug("Sound capture ended.")

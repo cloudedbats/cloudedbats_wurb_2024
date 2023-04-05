@@ -154,7 +154,7 @@ class AudioPitchShifting(object):
     async def stop(self):
         """ """
         self.pitchshift_active = False
-        if self.pitchshift_executor:
+        if self.pitchshift_executor != None:
             self.pitchshift_executor.cancel()
             self.pitchshift_executor = None
 
@@ -171,6 +171,7 @@ class AudioPitchShifting(object):
                 if "data" in data_dict:
                     await self.add_buffer(data_dict["data"])
             except asyncio.CancelledError:
+                self.logger.debug("Sound pitchshift was cancelled.")
                 break
             except Exception as e:
                 # Logging error.
