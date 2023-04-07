@@ -34,7 +34,45 @@ class AlsaAudioPlayback:
         self.playback_queue_active = False
         self.playback_executor = None
         self.buffer_int16 = None
-        self.logger = logging.getLogger(logger)
+
+    def get_playback_devices(self):
+        """ """
+        devices = []
+        card_list = []
+        try:
+            # List cards and names.
+            # Note: Results from card_indexes() and cards() must be mapped.
+            card_ids = alsaaudio.cards()
+            for id_index, card_index in enumerate(alsaaudio.card_indexes()):
+                card_dict = {}
+                card_dict["card_index"] = card_index
+                card_dict["card_id"] = card_ids[id_index]
+                card_name, long_name = alsaaudio.card_name(card_index)
+                card_dict["card_name"] = card_name.strip()
+                card_dict["card_long_name"] = long_name.strip()
+                card_list.append(card_dict)
+            # Check card devices for capture.
+            for device in alsaaudio.pcms(alsaaudio.PCM_PLAYBACK):
+                if device.startswith("sysdefault:CARD="):
+                    card_id = device.replace("sysdefault:CARD=", "").strip()
+                    for card_dict in card_list:
+                        if card_dict.get("card_id", "") == card_id:
+                            card_dict["device"] = device
+                            card_index = card_dict.get("card_index", "")
+                            if card_index != "":
+                                info_dict = {}
+                                info_dict["device_name"] = card_dict.get(
+                                    "card_name", ""
+                                )
+                                info_dict["output_channels"] = 1  # TODO.
+                                info_dict["device_index"] = card_index
+
+                                # print("ALSA info_dict: ", info_dict)
+
+                                devices.append(info_dict)
+        except Exception as e:
+            self.logger.error("EXCEPTION get_playback_devices: " + str(e))
+        return devices
 
     def setup(
         self,

@@ -139,7 +139,7 @@ class WurbSettings(object):
                     value = value.replace(" ", "-")
                     value = value.replace("_", "-")
                 #
-                old_value = self.current_settings.get("key", "")
+                old_value = self.current_settings.get(key, "")
                 self.current_settings[key] = value
                 #
                 try:

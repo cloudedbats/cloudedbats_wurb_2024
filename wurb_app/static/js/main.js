@@ -153,7 +153,7 @@ function fetchModuleAbout() {
 // Called from body onLoad.
 function fetchModules() {
     setTimeout(fetchAllModules, 1000);
-    setTimeout(loadWebsocket, 1500);
+    // setTimeout(loadWebsocket, 1500);
 };
 
 function fetchAllModules() {
@@ -163,6 +163,7 @@ function fetchAllModules() {
     fetchModuleAdministration();
     fetchModuleAbout();
 
+    setTimeout(loadWebsocket, 5000);
 };
 
 function loadWebsocket() {

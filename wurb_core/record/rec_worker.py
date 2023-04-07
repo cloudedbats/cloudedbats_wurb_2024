@@ -57,49 +57,61 @@ class RecWorker(object):
 
     def start_recording(self):
         """ """
-        # if self.source_worker:
-        #     if self.source_worker.done() == True:
-        #         self.source_worker = None
+        try:
+            if self.from_source_queue == None:
+                self.from_source_queue = asyncio.Queue(maxsize=self.queue_max_size)
+                wurb_core.audio_capture.add_out_queue(self.from_source_queue)
+            else:
+                # Clear queue.
+                while not self.from_source_queue.empty():
+                    self.from_source_queue.get_nowait()
+                    self.from_source_queue.task_done()
 
-        if self.from_source_queue == None:
-            self.from_source_queue = asyncio.Queue(maxsize=self.queue_max_size)
-            wurb_core.audio_capture.add_out_queue(self.from_source_queue)
-        if self.to_target_queue == None:
-            self.to_target_queue = asyncio.Queue(maxsize=self.queue_max_size)
+            if self.to_target_queue == None:
+                self.to_target_queue = asyncio.Queue(maxsize=self.queue_max_size)
+                # Clear queue.
+                while not self.to_target_queue.empty():
+                    self.to_target_queue.get_nowait()
+                    self.to_target_queue.task_done()
 
-        if self.source_worker == None:
-            self.source_worker = asyncio.create_task(
-                self.rec_source_worker(), name="RecWorker source task"
-            )
-            print("REC SOURCE STARTED.")
+            if self.source_worker == None:
+                self.source_worker = asyncio.create_task(
+                    self.rec_source_worker(), name="RecWorker source task"
+                )
+                self.logger.debug("REC SOURCE STARTED.")
 
-        if self.process_worker == None:
-            self.process_worker = asyncio.create_task(
-                self.rec_process_worker(), name="RecWorker process task"
-            )
-            print("REC PROCESS STARTED.")
+            if self.process_worker == None:
+                self.process_worker = asyncio.create_task(
+                    self.rec_process_worker(), name="RecWorker process task"
+                )
+                self.logger.debug("REC PROCESS STARTED.")
 
-        if self.target_worker == None:
-            self.target_worker = asyncio.create_task(
-                self.rec_target_worker(), name="RecWorker target task"
-            )
-            print("REC TARGET STARTED.")
+            if self.target_worker == None:
+                self.target_worker = asyncio.create_task(
+                    self.rec_target_worker(), name="RecWorker target task"
+                )
+                self.logger.debug("REC TARGET STARTED.")
+        except Exception as e:
+            self.logger.debug("RecWorker, start_recording: " + str(e))
 
     def stop_recording(self):
         """ """
-        if self.source_worker != None:
-            wurb_core.audio_capture.stop()
-            self.source_worker.cancel()
-            self.source_worker = None
-            print("REC SOURCE CANCELED.")
-        if self.process_worker != None:
-            self.process_worker.cancel()
-            self.process_worker = None
-            print("REC PROCESS CANCELED.")
-        if self.target_worker != None:
-            self.target_worker.cancel()
-            self.target_worker = None
-            print("REC TARGET CANCELED.")
+        try:
+            if self.source_worker != None:
+                wurb_core.audio_capture.stop()
+                self.source_worker.cancel()
+                self.source_worker = None
+                self.logger.debug("REC SOURCE CANCELED.")
+            if self.process_worker != None:
+                self.process_worker.cancel()
+                self.process_worker = None
+                self.logger.debug("REC PROCESS CANCELED.")
+            if self.target_worker != None:
+                self.target_worker.cancel()
+                self.target_worker = None
+                self.logger.debug("REC TARGET CANCELED.")
+        except Exception as e:
+            self.logger.debug("RecWorker, stop_recording: " + str(e))
 
     async def rec_source_worker(self):
         """ """
@@ -110,7 +122,7 @@ class RecWorker(object):
         self.connected_input_channels = device_info.get("input_channels", "")
         self.connected_sampling_freq_hz = device_info.get("sampling_freq_hz", "")
         if self.connected_device_index == None:
-            print("NO MIC.")
+            self.logger.debug("NO MIC.")
             return
 
         # Process buffer 0.5 sec.
@@ -129,9 +141,9 @@ class RecWorker(object):
                 capture_coro,
             )
             self.gather_result = await tasks
-            print("Sound capture ended: ", self.gather_result)
+            self.logger.debug("Sound capture ended: " + str(self.gather_result))
         except Exception as e:
-            print("Exception, Sound capture terminated: " + str(e))
+            self.logger.debug("RecWorker, rec_source_worker: " + str(e))
 
     async def rec_process_worker(self):
         """ """
@@ -318,7 +330,7 @@ class RecWorker(object):
                     break
                 except Exception as e:
                     # Logging error.
-                    message = "Recorder: sound_process_worker(1): " + str(e)
+                    message = "RecWorker: sound_process_worker(1): " + str(e)
                     self.logger.error(message)
 
                 await asyncio.sleep(0)
@@ -326,7 +338,7 @@ class RecWorker(object):
 
         except Exception as e:
             # Logging error.
-            message = "Recorder: sound_process_worker(2): " + str(e)
+            message = "RecWorker: sound_process_worker(2): " + str(e)
             self.logger.error(message)
         finally:
             pass
@@ -382,14 +394,14 @@ class RecWorker(object):
                     break
                 except Exception as e:
                     # Logging error.
-                    message = "Recorder: sound_target_worker: " + str(e)
+                    message = "RecWorker: sound_target_worker: " + str(e)
                     self.logger.error(message)
 
                 await asyncio.sleep(0)
 
         except Exception as e:
             # Logging error.
-            message = "Recorder: sound_target_worker: " + str(e)
+            message = "RecWorker: sound_target_worker: " + str(e)
             self.logger.error(message)
         finally:
             pass
@@ -404,4 +416,4 @@ class RecWorker(object):
                 except asyncio.QueueEmpty:
                     return
         except Exception as e:
-            print("Exception: SoundStreamManager: remove_items_from_queue:", e)
+            print("RecWorker: RecWorker: remove_items_from_queue:", e)

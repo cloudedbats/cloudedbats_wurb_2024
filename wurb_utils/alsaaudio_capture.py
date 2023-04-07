@@ -71,7 +71,7 @@ class AlsaAudioCapture:
                                 # info_dict["sampling_freq_hz"] = self.get_max_sampling_freq(card_index)
                                 info_dict["sampling_freq_hz"] = 384000.0
 
-                                print("ALSA info_dict: ", info_dict)
+                                # print("ALSA info_dict: ", info_dict)
 
                                 devices.append(info_dict)
         except Exception as e:
