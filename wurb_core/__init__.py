@@ -47,7 +47,7 @@ wurb_settings = WurbSettings(config, wurb_logger)
 wurb_manager = WurbManager(config, wurb_logger)
 
 # Audio. Either alsaaudio or pyaudio.
-audio_pitch_shifting = wurb_utils.AudioPitchShifting(logger_name=logger_name)
+sound_pitch_shifting = wurb_utils.SoundPitchShifting(logger_name=logger_name)
 if alsaaudio_used:
     audio_capture = wurb_utils.AlsaAudioCapture(logger_name=logger_name)
     audio_playback = wurb_utils.AlsaAudioPlayback(logger_name=logger_name)

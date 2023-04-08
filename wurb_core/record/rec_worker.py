@@ -61,18 +61,19 @@ class RecWorker(object):
             if self.from_source_queue == None:
                 self.from_source_queue = asyncio.Queue(maxsize=self.queue_max_size)
                 wurb_core.audio_capture.add_out_queue(self.from_source_queue)
-            else:
-                # Clear queue.
-                while not self.from_source_queue.empty():
-                    self.from_source_queue.get_nowait()
-                    self.from_source_queue.task_done()
+            # else:
+            #     # Clear queue.
+            #     while not self.from_source_queue.empty():
+            #         self.from_source_queue.get_nowait()
+            #         self.from_source_queue.task_done()
 
             if self.to_target_queue == None:
                 self.to_target_queue = asyncio.Queue(maxsize=self.queue_max_size)
-                # Clear queue.
-                while not self.to_target_queue.empty():
-                    self.to_target_queue.get_nowait()
-                    self.to_target_queue.task_done()
+            # else:
+            #     # Clear queue.
+            #     while not self.to_target_queue.empty():
+            #         self.to_target_queue.get_nowait()
+            #         self.to_target_queue.task_done()
 
             if self.source_worker == None:
                 self.source_worker = asyncio.create_task(

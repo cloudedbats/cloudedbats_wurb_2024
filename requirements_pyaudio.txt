@@ -1,0 +1,26 @@
+
+# API and web.
+fastapi
+uvicorn
+jinja2
+aiofiles
+websockets
+requests
+# Audio, etc.
+### pyalsaaudio # For RPi.
+pyaudio # For macOS, etc.
+numpy
+scipy<1.9.0
+psutil
+pyusb
+# GPS and date/time.
+pyserial
+pyserial-asyncio
+pytz
+python-dateutil
+astral
+# Config.
+pyyaml
+# VS Code.
+pylint
+black

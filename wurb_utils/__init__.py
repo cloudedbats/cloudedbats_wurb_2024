@@ -8,7 +8,7 @@ from wurb_utils.configuration import Configuration
 from wurb_utils.alsaaudio_capture import AlsaAudioCapture
 from wurb_utils.alsaaudio_playback import AlsaAudioPlayback
 from wurb_utils.audio_capture import AudioCapture
-from wurb_utils.audio_pitchshifting import AudioPitchShifting
+from wurb_utils.sound_pitchshifting import SoundPitchShifting
 from wurb_utils.audio_playback import AudioPlayback
 
 from wurb_utils.pettersson_m500 import PetterssonM500

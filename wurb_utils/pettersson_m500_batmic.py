@@ -12,29 +12,29 @@ import usb.core
 
 
 class PetterssonM500BatMic(object):
-    """ Class used for control of the Pettersson M500 USB Ultrasound Microphone. 
-        More info at http://batsound.com/
-        
-        Normally the M500 should be accessed from Windows systems, but this class 
-        makes it possible to call it from Linux.
-        
-        Installation instructions for pyusb: https://github.com/walac/pyusb
-        
-        Since pyusb access hardware directly 'udev rules' must be created. 
-        During test it is possible to run it as a 'sudo' user. Example for
-        execution of the test case at the end of this file:
-        > sudo python3 pettersson_m500_batmic.py 
-        
-        How to create an udev rule on a Raspberry Pi running Raspbian:
-          Go to: /etc/udev/rules.d/
-          and add a file called: pettersson_m500_batmic.rules
-          containing the following row:
-          SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", MODE="0664", GROUP="m500batmic"
-         
-          Then add the usergroup m500batmic to the user.
-        
-        More info about adding 'udev rules':
-        http://stackoverflow.com/questions/3738173/why-does-pyusb-libusb-require-root-sudo-permissions-on-linux 
+    """Class used for control of the Pettersson M500 USB Ultrasound Microphone.
+    More info at http://batsound.com/
+
+    Normally the M500 should be accessed from Windows systems, but this class
+    makes it possible to call it from Linux.
+
+    Installation instructions for pyusb: https://github.com/walac/pyusb
+
+    Since pyusb access hardware directly 'udev rules' must be created.
+    During test it is possible to run it as a 'sudo' user. Example for
+    execution of the test case at the end of this file:
+    > sudo python3 pettersson_m500_batmic.py
+
+    How to create an udev rule on a Raspberry Pi running Raspbian:
+      Go to: /etc/udev/rules.d/
+      and add a file called: pettersson_m500_batmic.rules
+      containing the following row:
+      SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", MODE="0664", GROUP="m500batmic"
+
+      Then add the usergroup m500batmic to the user.
+
+    More info about adding 'udev rules':
+    http://stackoverflow.com/questions/3738173/why-does-pyusb-libusb-require-root-sudo-permissions-on-linux
     """
 
     def __init__(self):
@@ -48,7 +48,7 @@ class PetterssonM500BatMic(object):
         self.endpoint_in = None
 
     def is_available(self):
-        """ Returns True if available. """
+        """Returns True if available."""
         self.clear()
         self.device = usb.core.find(idVendor=0x287D, idProduct=0x0146)
         if self.device:
@@ -58,7 +58,7 @@ class PetterssonM500BatMic(object):
             return False
 
     def reset(self):
-        """ Returns True if available. """
+        """Returns True if available."""
         self.device = usb.core.find(idVendor=0x287D, idProduct=0x0146)
         if self.device:
             self.device.reset()
@@ -69,7 +69,7 @@ class PetterssonM500BatMic(object):
             return False
 
     def start_stream(self):
-        """ Returns True if ok. """
+        """Returns True if ok."""
         return self.send_command("01")
 
     def stop_stream(self):
@@ -77,15 +77,15 @@ class PetterssonM500BatMic(object):
         self.send_command("04")
 
     def led_on(self):
-        """ Returns True if ok. """
+        """Returns True if ok."""
         return self.send_command("03")
 
     def led_flash(self):
-        """ Returns True if ok. """
+        """Returns True if ok."""
         return self.send_command("02")
 
     def init_sound_card(self):
-        """ Returns True if ok. """
+        """Returns True if ok."""
         self.clear()
         try:
             # Vendor and product number for Pettersson M500.
@@ -119,11 +119,11 @@ class PetterssonM500BatMic(object):
             else:
                 return False
         except Exception as e:
-            print("EXCEPTION: M500 init_sound_card: ", e)
+            print("PetterssonM500BatMic: Exception in init_sound_card: ", e)
             return False
 
     def read_stream(self):
-        """ Returns empty list if not ok. """
+        """Returns empty list if not ok."""
         try:
             if not self.endpoint_in:
                 self.init_sound_card()
@@ -138,12 +138,12 @@ class PetterssonM500BatMic(object):
             else:
                 return array.array("B")  # Empty array.
         except Exception as e:
-            # print("EXCEPTION: M500 read_stream: ", e)
+            # print("PetterssonM500BatMic: Exception in read_stream: ", e)
             return array.array("B")  # Empty array.
 
     def send_command(self, command):
-        """ Commands: '01': Stream on, '02': LED flash, '03': LED on, '04': Stream off. 
-            Returns True if ok. 
+        """Commands: '01': Stream on, '02': LED flash, '03': LED on, '04': Stream off.
+        Returns True if ok.
         """
         try:
             if not self.endpoint_in:
@@ -170,7 +170,7 @@ class PetterssonM500BatMic(object):
             else:
                 return False
         except Exception as e:
-            print("EXCEPTION: M500 send_command: ", e)
+            print("PetterssonM500BatMic: Exception in send_command: ", e)
             return False
 
 
@@ -247,6 +247,5 @@ if __name__ == "__main__":
         finally:
             batmic.stop_stream()
     except Exception as e:
-        print("M500 test failed: " + str(e))
+        print("PetterssonM500BatMic: M500 test failed: " + str(e))
         raise  # Raise exception again to show traceback.
-

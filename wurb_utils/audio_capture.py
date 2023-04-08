@@ -48,8 +48,8 @@ class AudioCapture:
                         "defaultSampleRate", ""
                     )
                     devices.append(info_dict)
-        except:
-            pass
+        except Exception as e:
+            self.logger.debug("AudioCapture - get_capture_devices: " + str(e))
         return devices
 
     def setup(
@@ -92,7 +92,7 @@ class AudioCapture:
         if self.channels.upper() in ["STEREO", "MONO-LEFT", "MONO-RIGHT"]:
             channels = 2
         try:
-            self.logger.debug("PyAudio: Sound capture started.")
+            self.logger.debug("AudioCapture - Sound capture started.")
             # p = pyaudio.PyAudio()
             stream = self.audio.open(
                 format=self.audio.get_format_from_width(2),
@@ -152,11 +152,11 @@ class AudioCapture:
                                     data_queue.put_nowait, data_dict
                                 )
                             else:
-                                self.logger.debug("Sound capture: Queue full.")
+                                self.logger.debug("AudioCapture - Queue full.")
                         #
                         except Exception as e:
                             # Logging error.
-                            message = "Failed to put captured sound on queue: " + str(e)
+                            message = "AudioCapture - Failed to put captured sound on queue: " + str(e)
                             self.logger.error(message)
                             if not self.main_loop.is_running():
                                 # Terminate.
@@ -164,11 +164,11 @@ class AudioCapture:
                                 break
         #
         except asyncio.CancelledError:
-            self.logger.debug("Sound capture was cancelled.")
+            self.logger.debug("AudioCapture - Sound capture was cancelled.")
         except Exception as e:
-            self.logger.error("EXCEPTION Sound capture: " + str(e))
+            self.logger.error("AudioCapture - run_capture: " + str(e))
         finally:
-            self.logger.debug("PyAudio: Sound capture ended.")
+            self.logger.debug("AudioCapture - Sound capture ended.")
             self.capture_active = False
             if stream:
                 stream.close()

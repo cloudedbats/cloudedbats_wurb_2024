@@ -45,7 +45,7 @@ class Logger(object):
             # Define rotation log files for info logger.
             log_info_name_path = pathlib.Path(logging_dir, log_name)
             log_handler = handlers.RotatingFileHandler(
-                str(log_info_name_path), maxBytes=512*1024, backupCount=10
+                str(log_info_name_path), maxBytes=512 * 1024, backupCount=10
             )
             log_handler.setFormatter(
                 logging.Formatter("%(asctime)s %(levelname)-8s : %(message)s ")
@@ -56,7 +56,7 @@ class Logger(object):
             # Define rotation log files for debug logger.
             log_info_name_path = pathlib.Path(logging_dir, debug_log_name)
             log_handler = handlers.RotatingFileHandler(
-                str(log_info_name_path), maxBytes=512*1024, backupCount=10
+                str(log_info_name_path), maxBytes=512 * 1024, backupCount=10
             )
             log_handler.setFormatter(
                 logging.Formatter("%(asctime)s %(levelname)-8s : %(message)s ")
@@ -72,4 +72,4 @@ class Logger(object):
             logger_stdio.addHandler(log_handler)
 
         except Exception as e:
-            print("Logger: Failed to setup logging: " + str(e))
+            print("Logger - Failed to setup logging: " + str(e))

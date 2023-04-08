@@ -45,6 +45,9 @@ class SunMoon:
 
         # Results.
         result_dict = {
+            "latitude_dd": latitude,
+            "longitude_dd": longitude,
+            "date": str(date.date()),
             "dawn_utc": None,
             "sunrise_utc": None,
             "sunset_utc": None,
@@ -178,6 +181,9 @@ if __name__ == "__main__":
     sun_moon = SunMoon()
     result_dict = sun_moon.get_sun_moon_info(latitude, longitude, date)
     print("")
+    print("latitude_dd :", str(result_dict.get("latitude_dd", "")))
+    print("longitude_dd :", str(result_dict.get("longitude_dd", "")))
+    print("date :", str(result_dict.get("date", "")))
     print("dawn_utc :", str(result_dict.get("dawn_utc", "")))
     print("sunrise_utc :", str(result_dict.get("sunrise_utc", "")))
     print("sunset_utc :", str(result_dict.get("sunset_utc", "")))
@@ -200,3 +206,7 @@ if __name__ == "__main__":
     print("moonrise_comment :", str(result_dict.get("moonrise_comment", "")))
     print("moonset_comment :", str(result_dict.get("moonset_comment", "")))
     print("")
+
+    # Test cache.
+    result_dict = sun_moon.get_sun_moon_info(latitude, longitude, date)
+    print("Cache-test: ", result_dict)

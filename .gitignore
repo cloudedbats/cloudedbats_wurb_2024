@@ -1,6 +1,13 @@
+
+# Python.
 venv
 __pycache__
 *.pyc
 
-DEV_*
+# For test.
+venv9
+venv10
+venv11
+
+# WURB detector.
 *_log.txt

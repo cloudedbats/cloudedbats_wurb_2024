@@ -11,7 +11,7 @@ import scipy.interpolate
 import logging
 
 
-class AudioPitchShifting(object):
+class SoundPitchShifting(object):
     """
     For audio feedback by using Pitch shifting.
     Simple time domain implementation by using overlapped
@@ -127,19 +127,31 @@ class AudioPitchShifting(object):
             self.work_out_right = None
 
             # For debug.
-            self.logger.debug("Feedback: freq_in: " + str(self.sampling_freq_in))
-            self.logger.debug("Feedback: freq_out: " + str(self.sampling_freq_out))
-            self.logger.debug("Feedback: volume: " + str(self.volume))
-            self.logger.debug("Feedback: pitch_factor: " + str(self.pitch_div_factor))
-            self.logger.debug("Feedback: time_exp_freq: " + str(self.time_exp_freq))
-            self.logger.debug("Feedback: hop_out_length: " + str(self.hop_out_length))
-            self.logger.debug("Feedback: hop_in_length: " + str(self.hop_in_length))
-            self.logger.debug("Feedback: resample_factor: " + str(self.resample_factor))
-            self.logger.debug("Feedback: kaiser_beta: " + str(kaiser_beta))
-            self.logger.debug("Feedback: window_size: " + str(self.window_size))
+            self.logger.debug("PitchShifting - freq_in: " + str(self.sampling_freq_in))
+            self.logger.debug(
+                "PitchShifting - freq_out: " + str(self.sampling_freq_out)
+            )
+            self.logger.debug("PitchShifting - volume: " + str(self.volume))
+            self.logger.debug(
+                "PitchShifting - pitch_factor: " + str(self.pitch_div_factor)
+            )
+            self.logger.debug(
+                "PitchShifting - time_exp_freq: " + str(self.time_exp_freq)
+            )
+            self.logger.debug(
+                "PitchShifting - hop_out_length: " + str(self.hop_out_length)
+            )
+            self.logger.debug(
+                "PitchShifting - hop_in_length: " + str(self.hop_in_length)
+            )
+            self.logger.debug(
+                "PitchShifting - resample_factor: " + str(self.resample_factor)
+            )
+            self.logger.debug("PitchShifting - kaiser_beta: " + str(kaiser_beta))
+            self.logger.debug("PitchShifting - window_size: " + str(self.window_size))
 
         except Exception as e:
-            self.logger.error("Exception: Pitchshifting setup: " + str(e))
+            self.logger.error("PitchShifting - calc_params: " + str(e))
 
     async def start(self):
         """ """
@@ -171,11 +183,11 @@ class AudioPitchShifting(object):
                 if "data" in data_dict:
                     await self.add_buffer(data_dict["data"])
             except asyncio.CancelledError:
-                self.logger.debug("Sound pitchshift was cancelled.")
+                self.logger.debug("PitchShifting - Was cancelled.")
                 break
             except Exception as e:
                 # Logging error.
-                message = "Pitchshift, failed to read queue: " + str(e)
+                message = "PitchShifting - Failed to read queue: " + str(e)
                 self.logger.debug(message)
 
     def create_buffers(self):
@@ -295,7 +307,7 @@ class AudioPitchShifting(object):
 
         except Exception as e:
             self.logger.debug(
-                "Exception: WurbPitchShifting: add_stereo_buffer: " + str(e)
+                "PitchShifting - Exception in calc_pithshifting_stereo: " + str(e)
             )
 
         return None
@@ -347,7 +359,7 @@ class AudioPitchShifting(object):
 
         except Exception as e:
             self.logger.debug(
-                "Exception: WurbPitchShifting: add_stereo_buffer: " + str(e)
+                "PitchShifting - Exception in calc_pithshifting_mono: " + str(e)
             )
 
         return None
@@ -372,11 +384,11 @@ class AudioPitchShifting(object):
                     if not data_queue.full():
                         data_queue.put_nowait(data_dict)
                     else:
-                        self.logger.debug("Sound pithshifting: Queue full.")
+                        self.logger.debug("PitchShifting - Queue full.")
                 #
                 except Exception as e:
                     # Logging error.
-                    message = "Failed to put data on queue: " + str(e)
+                    message = "PitchShifting - Failed to put data on queue: " + str(e)
                     self.logger.error(message)
                     if not self.main_loop.is_running():
                         # Terminate.
@@ -384,7 +396,7 @@ class AudioPitchShifting(object):
                         break
         except Exception as e:
             self.logger.debug(
-                "Exception: WurbPitchShifting: buffer_to_queues: " + str(e)
+                "PitchShifting - Exception in buffer_to_queues: " + str(e)
             )
 
     def butterworth_filter(self, buffer):
@@ -407,7 +419,9 @@ class AudioPitchShifting(object):
             filtered = scipy.signal.sosfilt(sos, buffer)
         except Exception as e:
             pass
-            self.logger.debug("EXCEPTION: Butterworth: " + str(e))
+            self.logger.debug(
+                "PitchShifting - Exception in butterworth_filter: " + str(e)
+            )
 
         return filtered
 

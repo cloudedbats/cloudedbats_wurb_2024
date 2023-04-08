@@ -113,14 +113,14 @@ class AudioPlayback:
 
     def add_data(self, data):
         """ """
-        # self.logger.debug("DEBUG DATA ADDED. Length: " + str(len(data)))
+        # self.logger.debug("AudioPlayback - DEBUG DATA ADDED. Length: " + str(len(data)))
         if self.buffer_int16 is None:
             self.buffer_int16 = numpy.array([], dtype=numpy.int16)
         # Avoid to long delay.
         if len(self.buffer_int16) <= self.buffer_max_size:
             self.buffer_int16 = numpy.concatenate((self.buffer_int16, data))
         else:
-            self.logger.debug("SKIP. Len: " + str(self.buffer_int16.size))
+            self.logger.debug("AudioPlayback - SKIP. Len: " + str(self.buffer_int16.size))
 
     def run_playback(self):
         """ """
@@ -155,28 +155,28 @@ class AudioPlayback:
                         # Remove used part.
                         self.buffer_int16 = self.buffer_int16[self.frames :]
 
-                    #     self.logger.debug("SOUND. Len: " + str(self.buffer_int16.size))
+                    #     self.logger.debug("AudioPlayback - SOUND. Len: " + str(self.buffer_int16.size))
                     # else:
                     #     if self.buffer_int16 is not None:
-                    #         self.logger.debug("SILENCE. Len: " + str(self.buffer_int16.size))
+                    #         self.logger.debug("AudioPlayback - SILENCE. Len: " + str(self.buffer_int16.size))
 
                     # Convert to byte buffer and write.
                     buffer_bytes = buffer_int16.tobytes()
                     stream.write(buffer_bytes, exception_on_underflow=False)
 
                 except asyncio.CancelledError:
-                    self.logger.debug("Sound playback was cancelled.")
+                    self.logger.debug("AudioPlayback - Sound playback was cancelled.")
                     break
                 except Exception as e:
-                    self.logger.error("EXCEPTION PLAYBACK-1: " + str(e))
+                    self.logger.error("AudioPlayback - Exception 1 in run_playback: " + str(e))
         #
         except asyncio.CancelledError:
             self.logger.debug("Sound playback was cancelled.")
             pass
         except Exception as e:
-            self.logger.error("EXCEPTION PLAYBACK-2: " + str(e))
+            self.logger.error("AudioPlayback - Exception 2 in run_playback: " + str(e))
         finally:
             self.playback_active = False
             stream.close()
             # p.terminate()
-            self.logger.debug("PLAYBACK ENDED.")
+            self.logger.debug("AudioPlayback - Playback ended.")

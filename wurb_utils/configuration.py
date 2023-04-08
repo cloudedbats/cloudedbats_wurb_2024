@@ -39,7 +39,7 @@ class Configuration:
                 config_path.parent.mkdir(parents=True)
             config_path.write_text(config_default_path.read_text())
             self.logger.debug(
-                "Config file missing. Copy of default config made: " + config_path.name
+                "Configuration - Config file missing. Copy of default config made: " + config_path.name
             )
         # Load config files.
         with open(config_default_path) as file:

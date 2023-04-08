@@ -35,6 +35,7 @@ class AlsaAudioCapture:
         self.out_queue_list = []
         self.main_loop = None
         self.capture_executor = None
+        self.alsa_capture_is_running = False
 
     def get_capture_devices(self):
         """ """
@@ -75,7 +76,7 @@ class AlsaAudioCapture:
 
                                 devices.append(info_dict)
         except Exception as e:
-            self.logger.error("EXCEPTION get_capture_devices: " + str(e))
+            self.logger.error("AlsaAudioCapture - Exception in get_capture_devices: " + str(e))
         return devices
 
     def get_max_sampling_freq(self, card_index):
@@ -99,7 +100,7 @@ class AlsaAudioCapture:
                 else:
                     max_freq = inp.getrates()
             except Exception as e:
-                self.logger.debug("Exception: " + str(e))
+                self.logger.debug("AlsaAudioCapture - Exception in get_max_sampling_freq: " + str(e))
         finally:
             if inp:
                 inp.close()
@@ -144,11 +145,14 @@ class AlsaAudioCapture:
         """ """
         pmc_capture = None
         self.capture_active = True
+        if self.alsa_capture_is_running == True:
+            time.sleep(5.0)
         channels = 1
         if self.channels.upper() in ["STEREO", "MONO-LEFT", "MONO-RIGHT"]:
             channels = 2
         try:
-            self.logger.debug("PyAlsaAudio: Sound capture started.")
+            self.alsa_capture_is_running = True
+            self.logger.debug("AlsaAudioCapture - Sound capture started.")
             pmc_capture = alsaaudio.PCM(
                 alsaaudio.PCM_CAPTURE,
                 alsaaudio.PCM_NORMAL,
@@ -168,7 +172,7 @@ class AlsaAudioCapture:
                 # Read from capture device.
                 length, data = pmc_capture.read()
                 if length < 0:
-                    self.logger.debug("Sound capture overrun: " + str(length))
+                    self.logger.debug("AlsaAudioCapture - Capture overrun: " + str(length))
                 elif len(data) > 0:
                     # Convert from string-byte array to int16 array.
                     in_data_int16 = numpy.frombuffer(data, dtype=numpy.int16)
@@ -211,12 +215,12 @@ class AlsaAudioCapture:
                                         data_queue.put_nowait, data_dict
                                     )
                                 else:
-                                    self.logger.debug("Sound capture: Queue full.")
+                                    self.logger.debug("AlsaAudioCapture - Queue full.")
                             #
                             except Exception as e:
                                 # Logging error.
                                 message = (
-                                    "Failed to put captured sound on queue: " + str(e)
+                                    "AlsaAudioCapture - Failed to put on queue: " + str(e)
                                 )
                                 self.logger.error(message)
                                 if not self.main_loop.is_running():
@@ -225,12 +229,14 @@ class AlsaAudioCapture:
                                     break
         #
         except asyncio.CancelledError:
-            self.logger.debug("Sound capture (ALSA) was cancelled.")
+            self.logger.debug("AlsaAudioCapture - Was cancelled.")
         except Exception as e:
-            self.logger.error("EXCEPTION Sound capture (ALSA): " + str(e))
+            self.logger.error("AlsaAudioCapture - Exception in run_capture: " + str(e))
         finally:
-            self.logger.debug("PyAlsaAudio: Sound capture ended.")
+            self.logger.debug("AlsaAudioCapture - Capture ended.")
             self.capture_active = False
             if pmc_capture:
                 pmc_capture.close()
+            self.alsa_capture_is_running = False
+
 

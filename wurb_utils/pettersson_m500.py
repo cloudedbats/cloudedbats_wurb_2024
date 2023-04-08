@@ -16,8 +16,11 @@ from .pettersson_m500_batmic import PetterssonM500BatMic
 class PetterssonM500:
     """ """
 
-    def __init__(self, data_queue=None, direct_target=None):
+    def __init__(
+        self, data_queue=None, direct_target=None, logger_name="DefaultLogger"
+    ):
         """ """
+        self.logger = logging.getLogger(logger_name)
         self.data_queue = data_queue
         self.direct_target = direct_target
         self.card_index = None
@@ -28,7 +31,6 @@ class PetterssonM500:
         self.pettersson_m500 = PetterssonM500BatMic()
 
         # Internal.
-        self.logger = logging.getLogger("CloudedBats-WURB")
         self.capture_active = False
 
     def is_m500_available(self):
@@ -56,9 +58,9 @@ class PetterssonM500:
 
     async def start_capture_in_executor(self):
         """Use executor for IO-blocking function."""
-        # self.logger.debug("CAPTURE-EXECUTOR STARTING.")
+        # self.logger.debug("PetterssonM500 - CAPTURE-EXECUTOR STARTING.")
         if self.is_capture_active():
-            self.logger.debug("ERROR: CAPTURE already running: ")
+            self.logger.debug("PetterssonM500 - CAPTURE already running. ")
             return
         #
         await self.main_loop.run_in_executor(None, self.start_capture)
@@ -80,7 +82,7 @@ class PetterssonM500:
             self.pettersson_m500.led_on()
         except Exception as e:
             # Logging error.
-            message = "Failed to create stream (M500): " + str(e)
+            message = "PetterssonM500 - Failed to create stream: " + str(e)
             self.logger.debug(message)
             return
         # Main loop.
@@ -123,7 +125,10 @@ class PetterssonM500:
                                 )
                         except Exception as e:
                             # Logging error.
-                            message = "Failed to put buffer on queue (M500): " + str(e)
+                            message = (
+                                "PetterssonM500 - Failed to put buffer on queue: "
+                                + str(e)
+                            )
                             self.logger.debug(message)
                             pass
 
@@ -138,7 +143,10 @@ class PetterssonM500:
                                 )
                         except Exception as e:
                             # Logging error.
-                            message = "Failed to add data to direct_target: " + str(e)
+                            message = (
+                                "PetterssonM500 - Failed to add data to direct_target: "
+                                + str(e)
+                            )
                             self.logger.debug(message)
 
                     # print("DEBUG M500 buffer: ", data_int16, "    Len: ", len(data_int16))
@@ -149,9 +157,9 @@ class PetterssonM500:
                 data_array += data
 
         except asyncio.CancelledError:
-            self.logger.debug("Sound source (M500) was cancelled.")
+            self.logger.debug("PetterssonM500 - Sound source was cancelled.")
             pass
         except Exception as e:
             # Logging error.
-            message = "Recorder: sound_source_worker (M500): " + str(e)
+            message = "PetterssonM500 - Exception in sound_source_worker: " + str(e)
             self.logger.debug(message)
