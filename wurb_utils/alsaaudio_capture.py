@@ -130,6 +130,10 @@ class AlsaAudioCapture:
 
     async def start(self):
         """ """
+        while self.alsa_capture_is_running == True:
+            self.logger.debug("AlsaAudioCapture - Start: Capture is running, waiting 3 sec... ")
+            asyncio.sleep(3.0)
+
         # Use executor for the IO-blocking part.
         self.main_loop = asyncio.get_event_loop()
         self.capture_executor = self.main_loop.run_in_executor(None, self.run_capture)
@@ -145,8 +149,6 @@ class AlsaAudioCapture:
         """ """
         pmc_capture = None
         self.capture_active = True
-        if self.alsa_capture_is_running == True:
-            time.sleep(5.0)
         channels = 1
         if self.channels.upper() in ["STEREO", "MONO-LEFT", "MONO-RIGHT"]:
             channels = 2
