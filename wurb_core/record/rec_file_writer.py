@@ -190,24 +190,23 @@ class RecFileWriter(object):
             self.wave_file.close()
             self.wave_file = None
             #
-            self.copy_settings()
+            # self.copy_settings()
             self.create_metadata()
 
-    def copy_settings(self):
-        """Copy settings to target directory."""
-        # try:
-        #     if self.rec_target_dir_path is not None:
-        #         from_dir = wurb_core.wurb_settings.settings_dir_path
-        #         log_file_name = wurb_core.wurb_settings.settings_file_name
-        #         from_file_path = pathlib.Path(from_dir, log_file_name)
-        #         to_file_path = pathlib.Path(self.rec_target_dir_path, log_file_name)
-        #         to_file_path.write_text(from_file_path.read_text())
-        #         # Logging debug.
-        #         wurb_core.wurb_logger.debug(message="File closed.")
-        # except Exception as e:
-        #     # Logging error.
-        #     message = "Recorder: Copy settings to wave file directory: " + str(e)
-        #     wurb_core.wurb_logger.error(message)
+    # def copy_settings(self):
+    #     """Copy settings to target directory."""
+    #     try:
+    #         if self.rec_target_dir_path is not None:
+    #             from_dir = wurb_core.wurb_settings.settings_dir_path
+    #             log_file_name = wurb_core.wurb_settings.settings_file_name
+    #             from_file_path = pathlib.Path(from_dir, log_file_name)
+    #             to_file_path = pathlib.Path(self.rec_target_dir_path, log_file_name)
+    #             to_file_path.write_text(from_file_path.read_text())
+    #             # Logging debug.
+    #             wurb_core.wurb_logger.debug(message="File closed.")
+    #     except Exception as e:
+    #         message = "RecFileWriter - copy_settings. Exception: " + str(e)
+    #         self.logger.debug(message)
 
     def create_metadata(self):
         """ """

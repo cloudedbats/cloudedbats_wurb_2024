@@ -38,31 +38,30 @@ async def load_record_page(request: fastapi.Request):
             },
         )
     except Exception as e:
-        logger.debug("Exception: module_record: " + str(e))
+        message = "API - load_record_page. Exception: " + str(e)
+        logger.debug(message)
 
-
-# @app.get("/")
-# async def webpage(request: fastapi.Request):
-#     try:
-#         # Logging debug.
-#         logger.debug("API called: webpage.")
-#         status_dict = await wurb_core.rec_manager.get_status_dict()
-#         location_status = wurb_core.wurb_settings.get_location_status()
-#         return templates.TemplateResponse(
-#             "wurb_rec_web.html",
-#             {
-#                 "request": request,
-#                 "rec_status": status_dict.get("rec_status", ""),
-#                 "location_status": location_status,
-#                 "device_name": status_dict.get("device_name", ""),
-#                 "detector_time": time.strftime("%Y-%m-%d %H:%M:%S"),
-#                 "wurb_version": wurb_core.__version__,
-#             },
-#         )
-#     except Exception as e:
-#         # Logging error.
-#         message = "Called: webpage: " + str(e)
-#         logger.error(message)
+    # @app.get("/")
+    # async def webpage(request: fastapi.Request):
+    #     try:
+    #         # Logging debug.
+    #         logger.debug("API called: webpage.")
+    #         status_dict = await wurb_core.rec_manager.get_status_dict()
+    #         location_status = wurb_core.wurb_settings.get_location_status()
+    #         return templates.TemplateResponse(
+    #             "wurb_rec_web.html",
+    #             {
+    #                 "request": request,
+    #                 "rec_status": status_dict.get("rec_status", ""),
+    #                 "location_status": location_status,
+    #                 "device_name": status_dict.get("device_name", ""),
+    #                 "detector_time": time.strftime("%Y-%m-%d %H:%M:%S"),
+    #                 "wurb_version": wurb_core.__version__,
+    #             },
+    #         )
+    except Exception as e:
+        message = "API - webpage. Exception: " + str(e)
+        logger.debug(message)
 
 
 # Schemas.
@@ -106,9 +105,8 @@ class DetectorSettings(BaseModel):
 #         logger.debug("API called: start-rec.")
 #         # await wurb_core.rec_manager.start_rec()
 #     except Exception as e:
-#         # Logging error.
-#         message = "Called: start_rec: " + str(e)
-#         logger.error(message)
+#         message = "API - start_recording. Exception: " + str(e)
+#         logger.debug(message)
 
 
 # @record_router.get("/record/stop-rec/", tags=["Recorder"], description="Record...")
@@ -119,9 +117,8 @@ class DetectorSettings(BaseModel):
 #         logger.debug("API called: stop-rec.")
 #         # await wurb_core.rec_manager.stop_rec()
 #     except Exception as e:
-#         # Logging error.
-#         message = "Called: stop_rec: " + str(e)
-#         logger.error(message)
+#         message = "API - stop_recording. Exception: " + str(e)
+#         logger.debug(message)
 
 
 # @record_router.get("/record/get-status/", tags=["Recorder"], description="Record...")
@@ -139,9 +136,8 @@ class DetectorSettings(BaseModel):
 #             "detector_time": time.strftime("%Y-%m-%d %H:%M:%S"),
 #         }
 #     except Exception as e:
-#         # Logging error.
-#         message = "Called: get_status: " + str(e)
-#         logger.error(message)
+#         message = "API - get_status. Exception: " + str(e)
+#         logger.debug(message)
 
 
 @record_router.post(
@@ -154,9 +150,8 @@ async def save_location(settings: LocationSettings):
         logger.debug("API called: save-location.")
         await wurb_core.wurb_settings.save_location(settings.dict())
     except Exception as e:
-        # Logging error.
-        message = "Called: save_location: " + str(e)
-        logger.error(message)
+        message = "API - save_location. Exception: " + str(e)
+        logger.debug(message)
 
 
 @record_router.get("/record/get-location/", tags=["Recorder"], description="Record...")
@@ -168,9 +163,8 @@ async def get_location(default: bool = False):
         current_location_dict = await wurb_core.wurb_settings.get_location()
         return current_location_dict
     except Exception as e:
-        # Logging error.
-        message = "Called: get_location: " + str(e)
-        logger.error(message)
+        message = "API - get_location. Exception: " + str(e)
+        logger.debug(message)
 
 
 @record_router.get("/record/set-time/", tags=["Recorder"], description="Record...")
@@ -183,22 +177,19 @@ async def set_time(posixtime: str):
         posix_time_s = int(int(posixtime) / 1000)
         await wurb_core.wurb_rpi.set_detector_time(posix_time_s, cmd_source="by user")
     except Exception as e:
-        # Logging error.
-        message = "Called: set_time: " + str(e)
-        logger.error(message)
+        message = "API - set_time. Exception: " + str(e)
+        logger.debug(message)
 
-
-# @record_router.post("/record/save-rec-mode/", tags=["Recorder"], description="Record...")
-# # @app.get("/save-rec-mode/")
-# async def save_rec_mode(recmode: str):
-#     try:
-#         # Logging debug.
-#         logger.debug("API called: save-rec-mode.")
-#         await wurb_core.wurb_settings.save_rec_mode(recmode)
-#     except Exception as e:
-#         # Logging error.
-#         message = "Called: save_rec_mode: " + str(e)
-#         logger.error(message)
+    # @record_router.post("/record/save-rec-mode/", tags=["Recorder"], description="Record...")
+    # # @app.get("/save-rec-mode/")
+    # async def save_rec_mode(recmode: str):
+    #     try:
+    #         # Logging debug.
+    #         logger.debug("API called: save-rec-mode.")
+    #         await wurb_core.wurb_settings.save_rec_mode(recmode)
+    except Exception as e:
+        message = "API - save_rec_mode. Exception: " + str(e)
+        logger.debug(message)
 
 
 @record_router.post(
@@ -211,9 +202,8 @@ async def save_settings(settings: DetectorSettings):
         logger.debug("API called: save-settings.")
         await wurb_core.wurb_settings.save_settings(settings.dict())
     except Exception as e:
-        # Logging error.
-        message = "Called: save_settings: " + str(e)
-        logger.error(message)
+        message = "API - save_settings. Exception: " + str(e)
+        logger.debug(message)
 
 
 @record_router.post(
@@ -228,9 +218,8 @@ async def save_settings_user(settings: DetectorSettings):
             settings.dict(), settings_type="user-default"
         )
     except Exception as e:
-        # Logging error.
-        message = "Called: save-settings-user: " + str(e)
-        logger.error(message)
+        message = "API - save_settings_user. Exception: " + str(e)
+        logger.debug(message)
 
 
 @record_router.post(
@@ -245,9 +234,8 @@ async def save_settings_startup(settings: DetectorSettings):
             settings.dict(), settings_type="startup"
         )
     except Exception as e:
-        # Logging error.
-        message = "Called: save-settings-startup: " + str(e)
-        logger.error(message)
+        message = "API - save_settings_startup. Exception: " + str(e)
+        logger.debug(message)
 
 
 @record_router.get("/record/get-settings/", tags=["Recorder"], description="Record...")
@@ -259,9 +247,8 @@ async def get_settings(default: bool = False):
         current_settings_dict = await wurb_core.wurb_settings.get_settings(default)
         return current_settings_dict
     except Exception as e:
-        # Logging error.
-        message = "Called: get_settings: " + str(e)
-        logger.error(message)
+        message = "API - get_settings. Exception: " + str(e)
+        logger.debug(message)
 
 
 @record_router.get("/record/load-settings/", tags=["Recorder"], description="Record...")
@@ -272,9 +259,8 @@ async def load_settings(settingsType: str):
         logger.debug("API called: load-settings.")
         await wurb_core.wurb_settings.load_settings(settingsType)
     except Exception as e:
-        # Logging error.
-        message = "Called: load_settings: " + str(e)
-        logger.error(message)
+        message = "API - load_settings. Exception: " + str(e)
+        logger.debug(message)
 
 
 @record_router.get("/record/rec-status/", tags=["Recorder"], description="Record...")
@@ -286,9 +272,8 @@ async def rec_status():
         # logger.debug(message)
         await wurb_core.rec_status.rec_status()
     except Exception as e:
-        # Logging error.
-        message = "Called: rec-status: " + str(e)
-        logger.error(message)
+        message = "API - rec_status. Exception: " + str(e)
+        logger.debug(message)
 
 
 @record_router.get("/record/rpi-control/", tags=["Recorder"], description="Record...")
@@ -300,9 +285,8 @@ async def rpi_control(command: str):
         # logger.debug(message)
         await wurb_core.wurb_rpi.rpi_control(command)
     except Exception as e:
-        # Logging error.
-        message = "Called: rpi_control: " + str(e)
-        logger.error(message)
+        message = "API - rpi_control. Exception: " + str(e)
+        logger.debug(message)
 
 
 @record_router.get(
@@ -316,9 +300,8 @@ async def rec_manual_trigger():
         logger.debug(message)
         await wurb_core.rec_manager.manual_trigger()
     except Exception as e:
-        # Logging error.
-        message = "Called: rec_manual_trigger: " + str(e)
-        logger.error(message)
+        message = "API - rec_manual_trigger. Exception: " + str(e)
+        logger.debug(message)
 
 
 @record_router.websocket("/record/ws")
@@ -415,6 +398,5 @@ async def websocket_endpoint(websocket: fastapi.WebSocket):
     except websockets.exceptions.ConnectionClosed as e:
         pass
     except Exception as e:
-        # Logging error.
-        message = "Called: websocket_endpoint: " + str(e)
-        logger.error(message)
+        message = "API - websocket_endpoint. Exception: " + str(e)
+        logger.debug(message)

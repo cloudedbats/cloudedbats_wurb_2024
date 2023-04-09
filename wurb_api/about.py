@@ -29,4 +29,9 @@ async def load_about_page(request: fastapi.Request):
             },
         )
     except Exception as e:
-        logger.debug("Exception: module_about: " + str(e))
+        message = "API - load_about_page. Exception: " + str(e)
+        logger.debug(message)
+
+    except Exception as e:
+        message = "AAAAA - BBBBB. Exception: " + str(e)
+        self.logger.debug(message)

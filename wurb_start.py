@@ -66,7 +66,8 @@ async def main():
         await wurb_core.wurb_manager.shutdown()
         logger.debug("WURB - Shutdown done.")
     except Exception as e:
-        logger.error("WURB - Exception on main level: ", e)
+        message = "WURB - main. Exception: " + str(e)
+        logger.error(message)
 
 
 if __name__ == "__main__":

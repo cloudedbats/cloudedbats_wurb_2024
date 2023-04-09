@@ -75,7 +75,7 @@ class WurbLogger(object):
             )
         except Exception as e:
             # Can't log this, must use print.
-            print("Exception: Logging: write_log: ", e)
+            print("WurbLogger - write_log. Exception: ", e)
 
     async def write_log_async(self, msg_type, datetime_local, message):
         """ """
@@ -97,7 +97,7 @@ class WurbLogger(object):
                     self.trigger_logging_event()
         except Exception as e:
             # Can't log this, must use print.
-            print("Exception: Logging: write_log_async: ", e)
+            print("WurbLogger - write_log_async. Exception: ", e)
 
     def trigger_logging_event(self):
         """ """

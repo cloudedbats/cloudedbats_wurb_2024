@@ -29,7 +29,8 @@ async def load_live_page(request: fastapi.Request):
             },
         )
     except Exception as e:
-        logger.debug("Exception: module_live: " + str(e))
+        message = "API - load_live_page. Exception: " + str(e)
+        logger.debug(message)
 
 
 @live_router.get("/live/set-audio-feedback/", tags=["Live"], description="Live...")
@@ -41,6 +42,5 @@ async def set_audio_feedback(volume: str, pitch: str):
         logger.debug(message=message)
         await wurb_core.rec_manager.wurb_settings.set_audio_feedback(volume, pitch)
     except Exception as e:
-        # Logging error.
-        message = "Called: set_audio_feedback: " + str(e)
-        logger.error(message)
+        message = "API - set_audio_feedback. Exception: " + str(e)
+        logger.debug(message)

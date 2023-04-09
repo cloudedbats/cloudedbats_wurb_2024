@@ -69,7 +69,8 @@ async def load_main_application_page(request: fastapi.Request):
             },
         )
     except Exception as e:
-        logger.debug("Exception: webpage: " + str(e))
+        message = "API - load_main_application_page. Exception: " + str(e)
+        logger.debug(message)
 
 
 @app.get("/favicon.ico", include_in_schema=False)

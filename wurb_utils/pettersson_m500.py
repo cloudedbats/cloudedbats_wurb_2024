@@ -51,26 +51,38 @@ class PetterssonM500:
 
     async def initiate_capture(self, card_index, sampling_freq, buffer_size):
         """ """
-        self.main_loop = asyncio.get_running_loop()
-        self.card_index = card_index
-        self.sampling_freq = sampling_freq
-        self.buffer_size = buffer_size
+        try:
+            self.main_loop = asyncio.get_running_loop()
+            self.card_index = card_index
+            self.sampling_freq = sampling_freq
+            self.buffer_size = buffer_size
+        except Exception as e:
+            message = "PetterssonM500 - initiate_capture. Exception: " + str(e)
+            self.logger.debug(message)
 
     async def start_capture_in_executor(self):
         """Use executor for IO-blocking function."""
-        # self.logger.debug("PetterssonM500 - CAPTURE-EXECUTOR STARTING.")
-        if self.is_capture_active():
-            self.logger.debug("PetterssonM500 - CAPTURE already running. ")
-            return
-        #
-        await self.main_loop.run_in_executor(None, self.start_capture)
+        try:
+            # self.logger.debug("PetterssonM500 - CAPTURE-EXECUTOR STARTING.")
+            if self.is_capture_active():
+                self.logger.debug("PetterssonM500 - CAPTURE already running. ")
+                return
+            #
+            await self.main_loop.run_in_executor(None, self.start_capture)
+        except Exception as e:
+            message = "PetterssonM500 - start_capture_in_executor. Exception: " + str(e)
+            self.logger.debug(message)
 
     async def stop_capture(self):
         """ """
-        # Use traditional thread termination.
-        self.capture_active = False
-        self.pettersson_m500.stop_stream()
-        self.pettersson_m500.reset()
+        try:
+            # Use traditional thread termination.
+            self.capture_active = False
+            self.pettersson_m500.stop_stream()
+            self.pettersson_m500.reset()
+        except Exception as e:
+            message = "PetterssonM500 - stop_capture. Exception: " + str(e)
+            self.logger.debug(message)
 
     def start_capture(self):
         """For the Pettersson M500 microphone."""
@@ -81,7 +93,6 @@ class PetterssonM500:
             self.pettersson_m500.start_stream()
             self.pettersson_m500.led_on()
         except Exception as e:
-            # Logging error.
             message = "PetterssonM500 - Failed to create stream: " + str(e)
             self.logger.debug(message)
             return
@@ -124,7 +135,6 @@ class PetterssonM500:
                                     self.data_queue.put_nowait, send_dict
                                 )
                         except Exception as e:
-                            # Logging error.
                             message = (
                                 "PetterssonM500 - Failed to put buffer on queue: "
                                 + str(e)
@@ -142,7 +152,6 @@ class PetterssonM500:
                                     self.direct_target.add_data, data_int16_copy
                                 )
                         except Exception as e:
-                            # Logging error.
                             message = (
                                 "PetterssonM500 - Failed to add data to direct_target: "
                                 + str(e)
@@ -160,6 +169,5 @@ class PetterssonM500:
             self.logger.debug("PetterssonM500 - Sound source was cancelled.")
             pass
         except Exception as e:
-            # Logging error.
-            message = "PetterssonM500 - Exception in sound_source_worker: " + str(e)
+            message = "PetterssonM500 - start_capture. Exception: " + str(e)
             self.logger.debug(message)

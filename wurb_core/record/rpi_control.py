@@ -77,9 +77,8 @@ class WurbRaspberryPi(object):
                 message = "Detector time update failed, not Raspbian OS."
                 self.logger.warning(message)
         except Exception as e:
-            # Logging error.
-            message = "RPi set_detector_time: " + str(e)
-            self.logger.error(message)
+            message = "WurbRaspberryPi - set_detector_time. Exception: " + str(e)
+            self.logger.debug(message)
 
     # def get_settings_dir_path(self):
     #     """ """
@@ -148,7 +147,6 @@ class WurbRaspberryPi(object):
     #         if free_disk >= 500.0:  # 500 MB.
     #             return pathlib.Path(rpi_internal_path, "wurb_recordings", file_directory)
     #         else:
-    #             # Logging error.
     #             message = "RPi Not enough space left on RPi SD card."
     #             self.logger.error(message)
     #             return None  # Not enough space left on RPi SD card.
@@ -175,9 +173,8 @@ class WurbRaspberryPi(object):
                 else:
                     self.os_raspbian = False
             except Exception as e:
-                # Logging error.
-                message = "RPi is_os_raspbian: " + str(e)
-                self.logger.error(message)
+                message = "WurbRaspberryPi - is_os_raspbian. Exception: " + str(e)
+                self.logger.debug(message)
         #
         return self.os_raspbian
 
@@ -192,21 +189,33 @@ class WurbRaspberryPi(object):
 
     async def rpi_reboot(self):
         """ """
-        # Logging.
-        message = "The Raspberry Pi command 'Reboot' is activated."
-        self.logger.info(message)
-        await asyncio.sleep(1.0)
-        #
-        os.system("cd /home/pi && sudo reboot")
+        try:
+            # Logging.
+            message = "The Raspberry Pi command 'Reboot' is activated."
+            self.logger.info(message)
+            await asyncio.sleep(1.0)
+            #
+            os.system("cd /home/pi && sudo reboot")
+        except Exception as e:
+            message = "WurbRaspberryPi - rpi_reboot. Exception: " + str(e)
+            self.logger.debug(message)
 
     async def rpi_sd_to_usb(self):
         """ """
-        # Logging.
-        message = "The Raspberry Pi command 'Copy SD to USB' is not implemented."
-        self.logger.info(message)
+        try:
+            # Logging.
+            message = "The Raspberry Pi command 'Copy SD to USB' is not implemented."
+            self.logger.info(message)
+        except Exception as e:
+            message = "WurbRaspberryPi - rpi_sd_to_usb. Exception: " + str(e)
+            self.logger.debug(message)
 
     async def rpi_clear_sd(self):
         """ """
-        # Logging.
-        message = "The Raspberry Pi command 'Clear SD card' is not implemented."
-        self.logger.info(message)
+        try:
+            # Logging.
+            message = "The Raspberry Pi command 'Clear SD card' is not implemented."
+            self.logger.info(message)
+        except Exception as e:
+            message = "WurbRaspberryPi - rpi_clear_sd. Exception: " + str(e)
+            self.logger.debug(message)

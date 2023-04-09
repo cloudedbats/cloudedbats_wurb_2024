@@ -33,7 +33,8 @@ async def load_annotations_page(request: fastapi.Request):
             },
         )
     except Exception as e:
-        logger.debug("Exception: module_annotations: " + str(e))
+        message = "API - load_annotations_page. Exception: " + str(e)
+        logger.debug(message)
 
 
 @annotations_router.get(
@@ -49,7 +50,8 @@ async def get_recording_sources(request: fastapi.Request):
         json_data = wurb_core.record_manager.get_rec_sources()
         return JSONResponse(content=json_data)
     except Exception as e:
-        logger.debug("Exception: get_source_dirs: " + str(e))
+        message = "API - get_recording_sources. Exception: " + str(e)
+        logger.debug(message)
 
 
 @annotations_router.get(
@@ -66,7 +68,8 @@ async def get_recording_nights(
         json_data = wurb_core.record_manager.get_rec_nights(source_id=sourceId)
         return JSONResponse(content=json_data)
     except Exception as e:
-        logger.debug("Exception: get_source_dirs: " + str(e))
+        message = "API - get_recording_nights. Exception: " + str(e)
+        logger.debug(message)
 
 
 @annotations_router.get(
@@ -89,7 +92,8 @@ async def get_recording_info(
         )
         return JSONResponse(content=json_data)
     except Exception as e:
-        logger.debug("Exception: get_recording_info: " + str(e))
+        message = "API - get_recording_info. Exception: " + str(e)
+        logger.debug(message)
 
 
 @annotations_router.put(
@@ -118,7 +122,7 @@ async def set_recording_info(
         )
         return JSONResponse(content=json_data)
     except Exception as e:
-        logger.debug("Exception: get_recording_info: " + str(e))
+        message = "API - set_recording_info. Exception: " + str(e)
 
 
 @annotations_router.get(
@@ -133,7 +137,6 @@ async def get_file(
 ):
     """ """
     try:
-
         file_path = wurb_core.record_manager.get_file_path(
             source_id=sourceId,
             night_id=nightId,
@@ -143,7 +146,8 @@ async def get_file(
         return FileResponse(file_path)
 
     except Exception as e:
-        logger.debug("Exception: get_recording_info: " + str(e))
+        message = "API - get_file. Exception: " + str(e)
+        logger.debug(message)
 
 
 @annotations_router.get(
@@ -158,7 +162,6 @@ async def get_spectrogram(
 ):
     """ """
     try:
-
         spectrogram_path = wurb_core.record_manager.get_spectrogram_path(
             source_id=sourceId,
             night_id=nightId,
@@ -168,4 +171,5 @@ async def get_spectrogram(
         return FileResponse(spectrogram_path)
 
     except Exception as e:
-        logger.debug("Exception: get_recording_info: " + str(e))
+        message = "API - get_spectrogram. Exception: " + str(e)
+        logger.debug(message)

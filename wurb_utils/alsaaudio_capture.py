@@ -76,7 +76,8 @@ class AlsaAudioCapture:
 
                                 devices.append(info_dict)
         except Exception as e:
-            self.logger.error("AlsaAudioCapture - Exception in get_capture_devices: " + str(e))
+            message = "AlsaAudioCapture - get_capture_devices. Exception: " + str(e)
+            self.logger.debug(message)
         return devices
 
     def get_max_sampling_freq(self, card_index):
@@ -100,7 +101,10 @@ class AlsaAudioCapture:
                 else:
                     max_freq = inp.getrates()
             except Exception as e:
-                self.logger.debug("AlsaAudioCapture - Exception in get_max_sampling_freq: " + str(e))
+                message = "AlsaAudioCapture - get_max_sampling_freq. Exception: " + str(
+                    e
+                )
+                self.logger.debug(message)
         finally:
             if inp:
                 inp.close()
@@ -130,20 +134,32 @@ class AlsaAudioCapture:
 
     async def start(self):
         """ """
-        while self.alsa_capture_is_running == True:
-            self.logger.debug("AlsaAudioCapture - Start: Capture is running, waiting 3 sec... ")
-            asyncio.sleep(3.0)
+        try:
+            while self.alsa_capture_is_running == True:
+                self.logger.debug(
+                    "AlsaAudioCapture - Start: Capture is running, waiting 2 sec... "
+                )
+                await asyncio.sleep(2.0)
 
-        # Use executor for the IO-blocking part.
-        self.main_loop = asyncio.get_event_loop()
-        self.capture_executor = self.main_loop.run_in_executor(None, self.run_capture)
+            # Use executor for the IO-blocking part.
+            self.main_loop = asyncio.get_event_loop()
+            self.capture_executor = self.main_loop.run_in_executor(
+                None, self.run_capture
+            )
+        except Exception as e:
+            message = "AlsaAudioCapture - start. Exception: " + str(e)
+            self.logger.debug(message)
 
     async def stop(self):
         """ """
-        self.capture_active = False
-        if self.capture_executor != None:
-            self.capture_executor.cancel()
-            self.capture_executor = None
+        try:
+            self.capture_active = False
+            if self.capture_executor != None:
+                self.capture_executor.cancel()
+                self.capture_executor = None
+        except Exception as e:
+            message = "AlsaAudioCapture - stop. Exception: " + str(e)
+            self.logger.debug(message)
 
     def run_capture(self):
         """ """
@@ -153,7 +169,6 @@ class AlsaAudioCapture:
         if self.channels.upper() in ["STEREO", "MONO-LEFT", "MONO-RIGHT"]:
             channels = 2
         try:
-            self.alsa_capture_is_running = True
             self.logger.debug("AlsaAudioCapture - Sound capture started.")
             pmc_capture = alsaaudio.PCM(
                 alsaaudio.PCM_CAPTURE,
@@ -165,6 +180,7 @@ class AlsaAudioCapture:
                 device="sysdefault",
                 cardindex=self.device_index,
             )
+            self.alsa_capture_is_running = True
             # Time related.
             calculated_time_s = time.time()
             time_increment_s = self.buffer_size / self.sampling_freq_hz
@@ -174,7 +190,9 @@ class AlsaAudioCapture:
                 # Read from capture device.
                 length, data = pmc_capture.read()
                 if length < 0:
-                    self.logger.debug("AlsaAudioCapture - Capture overrun: " + str(length))
+                    self.logger.debug(
+                        "AlsaAudioCapture - Capture overrun: " + str(length)
+                    )
                 elif len(data) > 0:
                     # Convert from string-byte array to int16 array.
                     in_data_int16 = numpy.frombuffer(data, dtype=numpy.int16)
@@ -220,11 +238,11 @@ class AlsaAudioCapture:
                                     self.logger.debug("AlsaAudioCapture - Queue full.")
                             #
                             except Exception as e:
-                                # Logging error.
                                 message = (
-                                    "AlsaAudioCapture - Failed to put on queue: " + str(e)
+                                    "AlsaAudioCapture - Failed to put on queue: "
+                                    + str(e)
                                 )
-                                self.logger.error(message)
+                                self.logger.debug(message)
                                 if not self.main_loop.is_running():
                                     # Terminate.
                                     self.capture_active = False
@@ -233,12 +251,11 @@ class AlsaAudioCapture:
         except asyncio.CancelledError:
             self.logger.debug("AlsaAudioCapture - Was cancelled.")
         except Exception as e:
-            self.logger.error("AlsaAudioCapture - Exception in run_capture: " + str(e))
+            message = "AlsaAudioCapture - run_capture. Exception: " + str(e)
+            self.logger.debug(message)
         finally:
             self.logger.debug("AlsaAudioCapture - Capture ended.")
             self.capture_active = False
             if pmc_capture:
                 pmc_capture.close()
             self.alsa_capture_is_running = False
-
-

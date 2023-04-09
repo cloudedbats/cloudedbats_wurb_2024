@@ -75,8 +75,9 @@ class GpsReader(object):
         self.number_of_satellites = 0
 
         # asyncio.run_coroutine_threadsafe(self.gps_control_loop(), asyncio.get_event_loop())
-        self.gps_control_task = asyncio.create_task(self.gps_control_loop(), name="GPS control loop")
-
+        self.gps_control_task = asyncio.create_task(
+            self.gps_control_loop(), name="GPS control loop"
+        )
 
     def shutdown(self):
         """ """
@@ -98,27 +99,38 @@ class GpsReader(object):
                     self.logger.debug("GPS control was cancelled.")
                     break
         except Exception as e:
-            # Logging error.
-            message = "GPS Control loop: " + str(e)
-            self.logger.error(message)
+            message = "GpsReader - gps_control_loop. Exception: " + str(e)
+            self.logger.debug(message)
 
     async def get_datetime_utc(self):
         """ """
-        if self.gps_datetime_utc:
-            utc_datetime = self.gps_datetime_utc.replace(tzinfo=datetime.timezone.utc)
-            return utc_datetime
-        #
-        return None
+        try:
+            if self.gps_datetime_utc:
+                utc_datetime = self.gps_datetime_utc.replace(
+                    tzinfo=datetime.timezone.utc
+                )
+                return utc_datetime
+            #
+            return None
+        except Exception as e:
+            message = "GpsReader - get_datetime_utc. Exception: " + str(e)
+            self.logger.debug(message)
+            return None
 
     async def get_datetime_local(self):
         """ """
-        if self.gps_datetime_utc:
-            local_datetime = self.gps_datetime_utc.replace(
-                tzinfo=datetime.timezone.utc
-            ).astimezone(tz=None)
-            return local_datetime
-        #
-        return None
+        try:
+            if self.gps_datetime_utc:
+                local_datetime = self.gps_datetime_utc.replace(
+                    tzinfo=datetime.timezone.utc
+                ).astimezone(tz=None)
+                return local_datetime
+            #
+            return None
+        except Exception as e:
+            message = "GpsReader - get_datetime_local. Exception: " + str(e)
+            self.logger.debug(message)
+            return None
 
     def get_latlong_event(self):
         """Used for synchronization."""
@@ -142,37 +154,41 @@ class GpsReader(object):
 
     async def start(self):
         """ """
-        # Check if USB GPS is connected.
-        gps_device_path_found = None
-        # for gps_device_path in ["/dev/ttyACM0", "/dev/ttyUSB0", "/dev/tty.usbserial-2130"]:
-        for gps_device_path in self.gps_devices:
-            gps_device = pathlib.Path(gps_device_path)
-            if gps_device.exists():
-                gps_device_path_found = gps_device_path
-                break
-        # Read serial, if connected.
-        if gps_device_path_found:
-            self.serial_coro = serial_asyncio.create_serial_connection(
-                asyncio.get_event_loop(),
-                ReadGpsSerialNmea,
-                gps_device_path_found,  # For example "/dev/ttyACM0".
-                baudrate=4800,  # 9600, 19200, 38400
-            )
-            # Start. Serial_protocol is instance of ReadGpsSerialNmea
-            self.serial_transport, self.serial_protocol = await self.serial_coro
-            # To be used for calls back to master.
-            self.serial_protocol.gps_manager = self
-        else:
-            # GPS device not found.
-            self.is_gps_quality_ok = False
-            self.last_used_lat_dd = 0.0
-            self.last_used_long_dd = 0.0
-            self.number_of_satellites = 0
-            # asyncio.run_coroutine_threadsafe(
-            #     wurb_core.wurb_settings.save_latlong(0.0, 0.0),
-            #     asyncio.get_event_loop(),
-            # )
-            self.trigger_latlong_event()
+        try:
+            # Check if USB GPS is connected.
+            gps_device_path_found = None
+            # for gps_device_path in ["/dev/ttyACM0", "/dev/ttyUSB0", "/dev/tty.usbserial-2130"]:
+            for gps_device_path in self.gps_devices:
+                gps_device = pathlib.Path(gps_device_path)
+                if gps_device.exists():
+                    gps_device_path_found = gps_device_path
+                    break
+            # Read serial, if connected.
+            if gps_device_path_found:
+                self.serial_coro = serial_asyncio.create_serial_connection(
+                    asyncio.get_event_loop(),
+                    ReadGpsSerialNmea,
+                    gps_device_path_found,  # For example "/dev/ttyACM0".
+                    baudrate=4800,  # 9600, 19200, 38400
+                )
+                # Start. Serial_protocol is instance of ReadGpsSerialNmea
+                self.serial_transport, self.serial_protocol = await self.serial_coro
+                # To be used for calls back to master.
+                self.serial_protocol.gps_manager = self
+            else:
+                # GPS device not found.
+                self.is_gps_quality_ok = False
+                self.last_used_lat_dd = 0.0
+                self.last_used_long_dd = 0.0
+                self.number_of_satellites = 0
+                # asyncio.run_coroutine_threadsafe(
+                #     wurb_core.wurb_settings.save_latlong(0.0, 0.0),
+                #     asyncio.get_event_loop(),
+                # )
+                self.trigger_latlong_event()
+        except Exception as e:
+            message = "GpsReader - start. Exception: " + str(e)
+            self.logger.debug(message)
 
     def stop(self):
         """ """
@@ -316,9 +332,8 @@ class GpsReader(object):
             #                 asyncio.get_event_loop(),
             #             )
             # except Exception as e:
-            #     # Logging error.
-            #     message = "GPS time: " + str(e)
-            #     self.logger.error(message)
+            #    message = "GpsReader - parse_nmea. Exception: " + str(e)
+            #    self.logger.debug(message)
 
             # Check if lat/long changed.
             lat_dd = round(self.gps_latitude, 5)
@@ -351,10 +366,9 @@ class GpsReader(object):
             else:
                 return True
         except Exception as e:
-            # Logging error.
-            message = "GPS is_time_valid: " + str(e)
-            self.logger.error(message)
-            return False
+            message = "GpsReader - is_time_valid. Exception: " + str(e)
+            self.logger.debug(message)
+        return False
 
 
 class ReadGpsSerialNmea(asyncio.Protocol):
@@ -389,10 +403,8 @@ class ReadGpsSerialNmea(asyncio.Protocol):
                         if self.gps_manager:
                             self.gps_manager.parse_nmea(row)
         except Exception as e:
-            # Logging debug.
-            if self.gps_manager:
-                message = "EXCEPTION in GPS:ReadGpsSerialNmea:data_received: " + str(e)
-                self.logger.debug(message=message)
+            message = "GpsReader - data_received. Exception: " + str(e)
+            self.logger.debug(message)
 
     def connection_lost(self, exc):
         pass

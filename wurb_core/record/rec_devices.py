@@ -120,9 +120,8 @@ class RecDevices(object):
             self.set_capture_device("", None, 0, 0)
 
         except Exception as e:
-            # Logging error.
-            message = "Devices: check_capture_devices: " + str(e)
-            self.logger.error(message)
+            message = "RecDevices - check_capture_devices. Exception: " + str(e)
+            self.logger.debug(message)
 
     def check_playback_devices(self):
         """For asyncio events."""
@@ -160,9 +159,8 @@ class RecDevices(object):
             self.set_playback_device("", None, 0, 0)
 
         except Exception as e:
-            # Logging error.
-            message = "Devices: check_playback_devices: " + str(e)
-            self.logger.error(message)
+            message = "RecDevices - check_playback_devices. Exception: " + str(e)
+            self.logger.debug(message)
 
     def set_capture_device(
         self, device_name, device_index, sampling_freq_hz, input_channels
@@ -174,9 +172,8 @@ class RecDevices(object):
             self.capture_sampling_freq_hz = sampling_freq_hz
             self.capture_channels = input_channels
         except Exception as e:
-            # Logging error.
-            message = "Recorder: set_capture_device: " + str(e)
-            self.logger.error(message)
+            message = "RecDevices - set_capture_device. Exception: " + str(e)
+            self.logger.debug(message)
 
     def set_playback_device(
         self, device_name, device_index, sampling_freq_hz, output_channels
@@ -188,6 +185,5 @@ class RecDevices(object):
             self.playback_sampling_freq_hz = sampling_freq_hz
             self.playback_channels = output_channels
         except Exception as e:
-            # Logging error.
-            message = "Recorder: set_playback_device: " + str(e)
-            self.logger.error(message)
+            message = "RecDevices - set_playback_device. Exception: " + str(e)
+            self.logger.debug(message)

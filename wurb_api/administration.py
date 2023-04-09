@@ -33,4 +33,5 @@ async def load_admin_page(request: fastapi.Request):
             },
         )
     except Exception as e:
-        logger.debug("Exception: module_admin: " + str(e))
+        message = "API - load_admin_page. Exception: " + str(e)
+        logger.debug(message)

@@ -155,40 +155,51 @@ class SoundPitchShifting(object):
 
     async def start(self):
         """ """
-        self.pitchshift_active = True
+        try:
+            self.pitchshift_active = True
 
-        await self.run_pitchshift()
+            await self.run_pitchshift()
 
-        # # Run in executor.
-        # self.main_loop = asyncio.get_event_loop()
-        # self.pitchshift_executor = self.main_loop.run_in_executor(None, self.run_pitchshift)
+            # # Run in executor.
+            # self.main_loop = asyncio.get_event_loop()
+            # self.pitchshift_executor = self.main_loop.run_in_executor(None, self.run_pitchshift)
+        except Exception as e:
+            message = "SoundPitchShifting - start. Exception: " + str(e)
+            self.logger.debug(message)
 
     async def stop(self):
         """ """
-        self.pitchshift_active = False
-        if self.pitchshift_executor != None:
-            self.pitchshift_executor.cancel()
-            self.pitchshift_executor = None
+        try:
+            self.pitchshift_active = False
+            if self.pitchshift_executor != None:
+                self.pitchshift_executor.cancel()
+                self.pitchshift_executor = None
+        except Exception as e:
+            message = "SoundPitchShifting - stop. Exception: " + str(e)
+            self.logger.debug(message)
 
     async def run_pitchshift(self):
         """ """
-        # Clear queue.
-        while not self.queue.empty():
-            self.queue.get_nowait()
-            self.queue.task_done()
-        # Copy data from queue to buffer.
-        while self.pitchshift_active:
-            try:
-                data_dict = await self.queue.get()
-                if "data" in data_dict:
-                    await self.add_buffer(data_dict["data"])
-            except asyncio.CancelledError:
-                self.logger.debug("PitchShifting - Was cancelled.")
-                break
-            except Exception as e:
-                # Logging error.
-                message = "PitchShifting - Failed to read queue: " + str(e)
-                self.logger.debug(message)
+        try:
+            # Clear queue.
+            while not self.queue.empty():
+                self.queue.get_nowait()
+                self.queue.task_done()
+            # Copy data from queue to buffer.
+            while self.pitchshift_active:
+                try:
+                    data_dict = await self.queue.get()
+                    if "data" in data_dict:
+                        await self.add_buffer(data_dict["data"])
+                except asyncio.CancelledError:
+                    self.logger.debug("PitchShifting - Was cancelled.")
+                    break
+                except Exception as e:
+                    message = "PitchShifting - Failed to read queue: " + str(e)
+                    self.logger.debug(message)
+        except Exception as e:
+            message = "SoundPitchShifting - run_pitchshift. Exception: " + str(e)
+            self.logger.debug(message)
 
     def create_buffers(self):
         """Create missing buffers."""
@@ -224,16 +235,20 @@ class SoundPitchShifting(object):
 
     async def add_buffer(self, buffer_int16):
         """ """
-        # Create missing buffers.
-        self.create_buffers()
+        try:
+            # Create missing buffers.
+            self.create_buffers()
 
-        if self.channels.upper() == "STEREO":
-            result_buffer = self.calc_pithshifting_stereo(buffer_int16)
-        else:
-            result_buffer = self.calc_pithshifting_mono(buffer_int16)
-        #
-        if len(result_buffer) > 0:
-            self.buffer_to_queues(result_buffer)
+            if self.channels.upper() == "STEREO":
+                result_buffer = self.calc_pithshifting_stereo(buffer_int16)
+            else:
+                result_buffer = self.calc_pithshifting_mono(buffer_int16)
+            #
+            if len(result_buffer) > 0:
+                self.buffer_to_queues(result_buffer)
+        except Exception as e:
+            message = "SoundPitchShifting - add_buffer. Exception: " + str(e)
+            self.logger.debug(message)
 
     def calc_pithshifting_stereo(self, buffer_int16):
         """ """
@@ -387,7 +402,6 @@ class SoundPitchShifting(object):
                         self.logger.debug("PitchShifting - Queue full.")
                 #
                 except Exception as e:
-                    # Logging error.
                     message = "PitchShifting - Failed to put data on queue: " + str(e)
                     self.logger.error(message)
                     if not self.main_loop.is_running():

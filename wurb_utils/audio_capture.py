@@ -73,16 +73,26 @@ class AudioCapture:
 
     async def start(self):
         """ """
-        # Use executor for the IO-blocking part.
-        self.main_loop = asyncio.get_event_loop()
-        self.capture_executor = self.main_loop.run_in_executor(None, self.run_capture)
+        try:
+            # Use executor for the IO-blocking part.
+            self.main_loop = asyncio.get_event_loop()
+            self.capture_executor = self.main_loop.run_in_executor(
+                None, self.run_capture
+            )
+        except Exception as e:
+            message = "AlsaAudioPlayback - start. Exception: " + str(e)
+            self.logger.debug(message)
 
-    def stop(self):
+    async def stop(self):
         """ """
-        self.capture_active = False
-        if self.capture_executor != None:
-            self.capture_executor.cancel()
-            self.capture_executor = None
+        try:
+            self.capture_active = False
+            if self.capture_executor != None:
+                self.capture_executor.cancel()
+                self.capture_executor = None
+        except Exception as e:
+            message = "AlsaAudioPlayback - stop. Exception: " + str(e)
+            self.logger.debug(message)
 
     def run_capture(self):
         """ """
@@ -155,8 +165,10 @@ class AudioCapture:
                                 self.logger.debug("AudioCapture - Queue full.")
                         #
                         except Exception as e:
-                            # Logging error.
-                            message = "AudioCapture - Failed to put captured sound on queue: " + str(e)
+                            message = (
+                                "AudioCapture - Failed to put captured sound on queue: "
+                                + str(e)
+                            )
                             self.logger.error(message)
                             if not self.main_loop.is_running():
                                 # Terminate.

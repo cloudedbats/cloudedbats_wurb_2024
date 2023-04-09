@@ -51,9 +51,9 @@ class RecManager(object):
             self.rec_control_loop(), name="RecManager control task"
         )
 
-    def shutdown(self):
+    async def shutdown(self):
         """ """
-        wurb_core.rec_worker.stop_recording()
+        await wurb_core.rec_worker.stop_recording()
         wurb_core.gps_reader.shutdown()
         if self.rec_event:
             self.rec_event.set()
@@ -114,13 +114,11 @@ class RecManager(object):
         except asyncio.CancelledError:
             self.logger.debug("Rec control loop was cancelled.")
         except Exception as e:
-            # Logging error.
-            message = "Rec control loop: " + str(e)
+            message = "RecManager - rec_control_loop. Exception: " + str(e)
             self.logger.debug(message)
         finally:
-            # Logging error.
             message = "Rec control loop terminated."
-            self.logger.error(message)
+            self.logger.debug(message)
 
     async def check_status(self):
         """ """
@@ -135,7 +133,7 @@ class RecManager(object):
 
             if rec_mode != self.last_used_rec_mode:
                 self.last_used_rec_mode = rec_mode
-                wurb_core.rec_worker.stop_recording()
+                await wurb_core.rec_worker.stop_recording()
 
             if rec_mode in ["mode-off"]:
                 is_rec_mode_on = False
@@ -178,14 +176,13 @@ class RecManager(object):
             if is_rec_to_be_activated:
                 wurb_core.rec_worker.start_recording()
             else:
-                wurb_core.rec_worker.stop_recording()
+                await wurb_core.rec_worker.stop_recording()
 
             self.trigger_rec_event()
 
         except Exception as e:
-            # Logging error.
-            message = "Scheduler update status: " + str(e)
-            self.logger.error(message)
+            message = "RecManager - check_status. Exception: " + str(e)
+            self.logger.debug(message)
 
     def get_rec_event(self):
         """Used for synchronization."""
@@ -203,13 +200,12 @@ class RecManager(object):
     async def restart_rec(self):
         """ """
         try:
-            wurb_core.rec_worker.stop_recording()
+            await wurb_core.rec_worker.stop_recording()
             await asyncio.sleep(1.0)
             await self.check_status()
         except Exception as e:
-            # Logging error.
-            message = "Manager: restart_rec: " + str(e)
-            self.logger.error(message)
+            message = "RecManager - restart_rec. Exception: " + str(e)
+            self.logger.debug(message)
 
     async def get_status_dict(self):
         """ """
@@ -228,14 +224,17 @@ class RecManager(object):
             }
             return status_dict
         except Exception as e:
-            # Logging error.
-            message = "Manager: get_status_dict: " + str(e)
-            self.logger.error(message)
+            message = "RecManager - get_status_dict. Exception: " + str(e)
+            self.logger.debug(message)
 
     async def manual_trigger(self):
         """ """
-        # Will be checked and reset in wurb_sound_detection.py.
-        self.manual_trigger_activated = True
-        # Logging.
-        message = "Manually triggered."
-        self.logger.info(message)
+        try:
+            # Will be checked and reset in wurb_sound_detection.py.
+            self.manual_trigger_activated = True
+            # Logging.
+            message = "Manually triggered."
+            self.logger.info(message)
+        except Exception as e:
+            message = "RecManager - manual_trigger. Exception: " + str(e)
+            self.logger.debug(message)

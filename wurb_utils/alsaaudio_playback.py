@@ -7,6 +7,7 @@
 import asyncio
 import logging
 import numpy
+
 try:
     import alsaaudio
 except:
@@ -71,7 +72,9 @@ class AlsaAudioPlayback:
 
                                 devices.append(info_dict)
         except Exception as e:
-            self.logger.error("AlsaAudioPlayback - Exception in get_playback_devices: " + str(e))
+            self.logger.error(
+                "AlsaAudioPlayback - get_playback_devices. Exception: " + str(e)
+            )
         return devices
 
     def setup(
@@ -94,43 +97,52 @@ class AlsaAudioPlayback:
         # Setup queue for data in.
         self.queue = asyncio.Queue(maxsize=in_queue_length)
 
-
     def get_queue(self):
         """ """
         return self.queue
 
     async def start(self):
         """ """
-        # Use executor for the IO-blocking part.
-        main_loop = asyncio.get_event_loop()
-        self.playback_executor = main_loop.run_in_executor(None, self.run_playback)
-        await asyncio.sleep(0.1)
-        # Clear queue.
-        while not self.queue.empty():
-            self.queue.get_nowait()
-            self.queue.task_done()
-        # Copy data from queue to buffer.
-        self.playback_queue_active = True
-        while self.playback_queue_active:
-            try:
-                data_dict = await self.queue.get()
-                if "data" in data_dict:
-                    self.add_data(data_dict["data"])
-            except asyncio.CancelledError:
-                self.logger.debug("AlsaAudioPlayback - Was cancelled.")
-                break
-            except Exception as e:
-                # Logging error.
-                message = "AlsaAudioPlayback - Exception when reading data queue: " + str(e)
-                self.logger.debug(message)
+        try:
+            # Use executor for the IO-blocking part.
+            main_loop = asyncio.get_event_loop()
+            self.playback_executor = main_loop.run_in_executor(None, self.run_playback)
+            await asyncio.sleep(0.1)
+            # Clear queue.
+            while not self.queue.empty():
+                self.queue.get_nowait()
+                self.queue.task_done()
+            # Copy data from queue to buffer.
+            self.playback_queue_active = True
+            while self.playback_queue_active:
+                try:
+                    data_dict = await self.queue.get()
+                    if "data" in data_dict:
+                        self.add_data(data_dict["data"])
+                except asyncio.CancelledError:
+                    self.logger.debug("AlsaAudioPlayback - Was cancelled.")
+                    break
+                except Exception as e:
+                    message = (
+                        "AlsaAudioPlayback - Exception when reading data queue: "
+                        + str(e)
+                    )
+                    self.logger.debug(message)
+        except Exception as e:
+            message = "AlsaAudioPlayback - start. Exception: " + str(e)
+            self.logger.debug(message)
 
     async def stop(self):
         """ """
-        self.playback_active = False
-        self.playback_queue_active = False
-        if self.playback_executor != None:
-            self.playback_executor.cancel()
-            self.playback_executor = None
+        try:
+            self.playback_active = False
+            self.playback_queue_active = False
+            if self.playback_executor != None:
+                self.playback_executor.cancel()
+                self.playback_executor = None
+        except Exception as e:
+            message = "AlsaAudioPlayback - stop. Exception: " + str(e)
+            self.logger.debug(message)
 
     def add_data(self, data):
         """ """
@@ -141,7 +153,9 @@ class AlsaAudioPlayback:
         if len(self.buffer_int16) <= self.buffer_max_size:
             self.buffer_int16 = numpy.concatenate((self.buffer_int16, data))
         else:
-            self.logger.debug("AlsaAudioPlayback - SKIP. Len: " + str(self.buffer_int16.size))
+            self.logger.debug(
+                "AlsaAudioPlayback - SKIP. Len: " + str(self.buffer_int16.size)
+            )
 
     def run_playback(self):
         """ """
@@ -191,13 +205,17 @@ class AlsaAudioPlayback:
                     self.logger.debug("AlsaAudioPlayback - Was cancelled.")
                     break
                 except Exception as e:
-                    self.logger.error("AlsaAudioPlayback - Exception 1 in run_playback: " + str(e))
+                    self.logger.error(
+                        "AlsaAudioPlayback - run_playback(1). Exception: " + str(e)
+                    )
         #
         except asyncio.CancelledError:
             self.logger.debug("AlsaAudioPlayback - Was cancelled.")
             pass
         except Exception as e:
-            self.logger.error("AlsaAudioPlayback - Exception 2 in run_playback: " + str(e))
+            self.logger.error(
+                "AlsaAudioPlayback - run_playback(2). Exception: " + str(e)
+            )
         finally:
             self.playback_active = False
             if pmc_play:

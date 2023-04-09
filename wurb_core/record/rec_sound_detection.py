@@ -196,7 +196,8 @@ class SoundDetectionSimple(SoundDetectionBase):
             #     self.logger.info(message)
             #
         except Exception as e:
-            print("DEBUG: Exception in check_for_sound: ", e)
+            message = "SoundDetection - check_for_sound. Exception: " + str(e)
+            self.logger.debug(message)
 
         # Check if running in manual triggering mode.
         sound_detected = self.manual_triggering_check(sound_detected)

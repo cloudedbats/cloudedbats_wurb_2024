@@ -48,29 +48,37 @@ class WurbManager(object):
 
     async def shutdown(self):
         """ """
-        wurb_core.wurb_logger.shutdown()
-        wurb_core.rec_manager.shutdown()
-        # if self.wurb_loop:
-        #     self.wurb_loop.cancel()
+        try:
+            await wurb_core.wurb_logger.shutdown()
+            await wurb_core.rec_manager.shutdown()
+            # if self.wurb_loop:
+            #     self.wurb_loop.cancel()
 
-        # Get a list of all running tasks.
-        await asyncio.sleep(0)
-        all_running_tasks = asyncio.all_tasks()
-        # Remove current task from list.
-        current_task = asyncio.current_task()
-        all_running_tasks.remove(current_task)
-        # Cancel all remaining tasks.
-        self.logger.debug(
-            "WurbManager shutdown. Number of remaining tasks: "
-            + str(len(all_running_tasks))
-        )
-        for task in all_running_tasks:
-            task_name = task.get_name()
-            self.logger.debug("- Cancel task: " + task_name)
-            task.cancel()
+            # Get a list of all running tasks.
+            await asyncio.sleep(0)
+            all_running_tasks = asyncio.all_tasks()
+            # Remove current task from list.
+            current_task = asyncio.current_task()
+            all_running_tasks.remove(current_task)
+            # Cancel all remaining tasks.
+            self.logger.debug(
+                "WurbManager shutdown. Number of remaining tasks: "
+                + str(len(all_running_tasks))
+            )
+            for task in all_running_tasks:
+                task_name = task.get_name()
+                self.logger.debug("- Cancel task: " + task_name)
+                task.cancel()
+        except Exception as e:
+            message = "WurbManager - shutdown. Exception: " + str(e)
+            self.logger.debug(message)
 
     # async def wurb_control_loop(self):
     #     """ """
-    #     while True:
-    #         print("DEBUG wurb_manager main loop.")
-    #         await asyncio.sleep(10.0)
+    #     try:
+    #         while True:
+    #             print("DEBUG wurb_manager main loop.")
+    #             await asyncio.sleep(10.0)
+    #     except Exception as e:
+    #         message = "WurbManager - wurb_control_loop. Exception: " + str(e)
+    #         self.logger.debug(message)

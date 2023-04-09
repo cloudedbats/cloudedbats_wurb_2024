@@ -95,11 +95,11 @@ class RecWorker(object):
         except Exception as e:
             self.logger.debug("RecWorker, start_recording: " + str(e))
 
-    def stop_recording(self):
+    async def stop_recording(self):
         """ """
         try:
             if self.source_worker != None:
-                wurb_core.audio_capture.stop()
+                await wurb_core.audio_capture.stop()
                 self.source_worker.cancel()
                 self.source_worker = None
                 self.logger.debug("REC SOURCE CANCELED.")
@@ -116,15 +116,19 @@ class RecWorker(object):
 
     async def rec_source_worker(self):
         """ """
-        # Check available microphones.
-        device_info = wurb_core.rec_devices.get_capture_device_info()
-        self.connected_device_name = device_info.get("device_name", "")
-        self.connected_device_index = device_info.get("device_index", "")
-        self.connected_input_channels = device_info.get("input_channels", "")
-        self.connected_sampling_freq_hz = device_info.get("sampling_freq_hz", "")
-        if self.connected_device_index == None:
-            self.logger.debug("NO MIC.")
-            return
+        try:
+            # Check available microphones.
+            device_info = wurb_core.rec_devices.get_capture_device_info()
+            self.connected_device_name = device_info.get("device_name", "")
+            self.connected_device_index = device_info.get("device_index", "")
+            self.connected_input_channels = device_info.get("input_channels", "")
+            self.connected_sampling_freq_hz = device_info.get("sampling_freq_hz", "")
+            if self.connected_device_index == None:
+                self.logger.debug("NO MIC.")
+                return
+        except Exception as e:
+            message = "RecWorker - rec_source_worker. Exception: " + str(e)
+            self.logger.debug(message)
 
         # Process buffer 0.5 sec.
         process_buffer = int(float(self.connected_sampling_freq_hz) / 2)
@@ -132,7 +136,7 @@ class RecWorker(object):
             device_index=self.connected_device_index,
             channels="MONO",
             sampling_freq_hz=int(self.connected_sampling_freq_hz),
-            frames=int(1024*8),
+            frames=int(1024 * 8),
             buffer_size=process_buffer,
         )
 
@@ -330,17 +334,15 @@ class RecWorker(object):
                     self.logger.debug("Sound Sound process was cancelled.")
                     break
                 except Exception as e:
-                    # Logging error.
-                    message = "RecWorker: sound_process_worker(1): " + str(e)
-                    self.logger.error(message)
+                    message = "RecWorker - rec_process_worker(1). Exception: " + str(e)
+                    self.logger.debug(message)
 
                 await asyncio.sleep(0)
             # While end.
 
         except Exception as e:
-            # Logging error.
-            message = "RecWorker: sound_process_worker(2): " + str(e)
-            self.logger.error(message)
+            message = "RecWorker - rec_process_worker(2). Exception: " + str(e)
+            self.logger.debug(message)
         finally:
             pass
 
@@ -394,16 +396,14 @@ class RecWorker(object):
                     self.logger.debug("Sound target was cancelled.")
                     break
                 except Exception as e:
-                    # Logging error.
-                    message = "RecWorker: sound_target_worker: " + str(e)
-                    self.logger.error(message)
+                    message = "RecWorker - rec_target_worker(1): " + str(e)
+                    self.logger.debug(message)
 
                 await asyncio.sleep(0)
 
         except Exception as e:
-            # Logging error.
-            message = "RecWorker: sound_target_worker: " + str(e)
-            self.logger.error(message)
+            message = "RecWorker - rec_target_worker(2). Exception: " + str(e)
+            self.logger.debug(message)
         finally:
             pass
 
@@ -417,4 +417,5 @@ class RecWorker(object):
                 except asyncio.QueueEmpty:
                     return
         except Exception as e:
-            print("RecWorker: RecWorker: remove_items_from_queue:", e)
+            message = "RecWorker - remove_items_from_queue. Exception: " + str(e)
+            self.logger.debug(message)

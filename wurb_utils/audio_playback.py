@@ -80,36 +80,43 @@ class AudioPlayback:
 
     async def start(self):
         """ """
-        # Use executor for the IO-blocking part.
-        event_loop = asyncio.get_event_loop()
-        self.playback_executor = event_loop.run_in_executor(None, self.run_playback)
-        await asyncio.sleep(0.1)
-        # Clear queue.
-        while not self.queue.empty():
-            self.queue.get_nowait()
-            self.queue.task_done()
-        # Copy data from queue to buffer.
-        self.playback_queue_active = True
-        while self.playback_queue_active:
-            try:
-                data_dict = await self.queue.get()
-                if "data" in data_dict:
-                    self.add_data(data_dict["data"])
-            except asyncio.CancelledError:
-                self.logger.debug("Sound playback was cancelled.")
-                break
-            except Exception as e:
-                # Logging error.
-                message = "SoundPlayback, failed to read data queue: " + str(e)
-                self.logger.debug(message)
+        try:
+            # Use executor for the IO-blocking part.
+            event_loop = asyncio.get_event_loop()
+            self.playback_executor = event_loop.run_in_executor(None, self.run_playback)
+            await asyncio.sleep(0.1)
+            # Clear queue.
+            while not self.queue.empty():
+                self.queue.get_nowait()
+                self.queue.task_done()
+            # Copy data from queue to buffer.
+            self.playback_queue_active = True
+            while self.playback_queue_active:
+                try:
+                    data_dict = await self.queue.get()
+                    if "data" in data_dict:
+                        self.add_data(data_dict["data"])
+                except asyncio.CancelledError:
+                    self.logger.debug("Sound playback was cancelled.")
+                    break
+                except Exception as e:
+                    message = "SoundPlayback, failed to read data queue: " + str(e)
+                    self.logger.debug(message)
+        except Exception as e:
+            message = "AudioPlayback - start. Exception: " + str(e)
+            self.logger.debug(message)
 
     async def stop(self):
         """ """
-        self.playback_active = False
-        self.playback_queue_active = False
-        if self.playback_executor != None:
-            self.playback_executor.cancel()
-            self.playback_executor = None
+        try:
+            self.playback_active = False
+            self.playback_queue_active = False
+            if self.playback_executor != None:
+                self.playback_executor.cancel()
+                self.playback_executor = None
+        except Exception as e:
+            message = "AudioPlayback - stop. Exception: " + str(e)
+            self.logger.debug(message)
 
     def add_data(self, data):
         """ """
@@ -120,7 +127,9 @@ class AudioPlayback:
         if len(self.buffer_int16) <= self.buffer_max_size:
             self.buffer_int16 = numpy.concatenate((self.buffer_int16, data))
         else:
-            self.logger.debug("AudioPlayback - SKIP. Len: " + str(self.buffer_int16.size))
+            self.logger.debug(
+                "AudioPlayback - SKIP. Len: " + str(self.buffer_int16.size)
+            )
 
     def run_playback(self):
         """ """
@@ -168,7 +177,9 @@ class AudioPlayback:
                     self.logger.debug("AudioPlayback - Sound playback was cancelled.")
                     break
                 except Exception as e:
-                    self.logger.error("AudioPlayback - Exception 1 in run_playback: " + str(e))
+                    self.logger.error(
+                        "AudioPlayback - Exception 1 in run_playback: " + str(e)
+                    )
         #
         except asyncio.CancelledError:
             self.logger.debug("Sound playback was cancelled.")
