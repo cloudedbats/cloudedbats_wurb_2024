@@ -201,7 +201,8 @@ class RecManager(object):
         """ """
         try:
             await wurb_core.rec_worker.stop_recording()
-            await asyncio.sleep(1.0)
+            # await asyncio.sleep(1.0)
+            await asyncio.sleep(3.0)
             await self.check_status()
         except Exception as e:
             message = "RecManager - restart_rec. Exception: " + str(e)
