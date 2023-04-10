@@ -40,12 +40,19 @@ class SpectrogramGenerator:
         # Plot.
         self.figure = None
         self.ax1 = None
+        self.spectrogram_task = None
 
     def generate_spectrogram_in_executor(self, rec_file_path):
         """ """
+        self.spectrogram_task = asyncio.create_task(
+            self.generate_in_executor(rec_file_path), name="Spectrogram generator"
+        )
+
+    async def generate_in_executor(self, rec_file_path):
+        """ """
         with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
             future = executor.submit(self.generate_spectrogram, rec_file_path)
-            print(future.result())
+            self.logger.debug(future.result())
 
     def generate_spectrogram(self, rec_file_path):
         """ """
