@@ -193,6 +193,8 @@ class RecFileWriter(object):
             # self.copy_settings()
             self.create_metadata()
 
+            self.plot_spectrogram()
+
     # def copy_settings(self):
     #     """Copy settings to target directory."""
     #     try:
@@ -249,3 +251,7 @@ class RecFileWriter(object):
             recording["moonPhase"] = sun_moon_dict.get("moon_phase_detailed", "")
         #
         wurb_core.metadata.write_metadata(self.rec_filename_path, metadata)
+
+    def plot_spectrogram(self):
+        """ """
+        wurb_core.spectrogram.generate_spectrogram_in_executor(self.rec_filename_path)

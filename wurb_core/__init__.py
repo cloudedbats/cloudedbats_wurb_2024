@@ -34,6 +34,8 @@ from wurb_core.annotations.metadata import Metadata
 from wurb_core.annotations.metadata_table import MetadataTable
 from wurb_core.annotations.record_manager import RecordManager
 
+from wurb_core.annotations.spectrogram import SpectrogramGenerator
+
 
 # Instances of objects.
 
@@ -71,6 +73,7 @@ sources_and_files = SourcesAndFiles(config, wurb_logger)
 metadata = Metadata(config, logger)
 metadata_table = MetadataTable(config, wurb_logger)
 record_manager = RecordManager(config, wurb_logger)
+spectrogram = SpectrogramGenerator(config, wurb_logger)
 
 # Sunset, sunrice, etc.
 sun_moon = wurb_utils.SunMoon()

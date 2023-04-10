@@ -229,7 +229,15 @@ class RecWorker(object):
                                         return
                                     # Logging.
                                     message = "Warning: Time diff. detected. Rec. will be restarted."
-                                    self.logger.info(message)
+                                    self.logger.warning(message)
+                                    message = (
+                                        "Warning: Time diff. ADC: "
+                                        + str(adc_time)
+                                        + " detector: "
+                                        + str(detector_time)
+                                        + "."
+                                    )
+                                    self.logger.debug(message)
                                     # Restart recording.
                                     self.restart_activated = True
                                     loop = asyncio.get_event_loop()

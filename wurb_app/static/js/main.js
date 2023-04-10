@@ -163,7 +163,7 @@ function fetchAllModules() {
     fetchModuleAdministration();
     fetchModuleAbout();
 
-    setTimeout(loadWebsocket, 5000);
+    setTimeout(loadWebsocket, 2000);
 };
 
 function loadWebsocket() {

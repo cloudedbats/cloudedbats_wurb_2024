@@ -4,12 +4,12 @@
 # Copyright (c) 2023-present Arnold Andreasson
 # License: MIT License (see LICENSE or http://opensource.org/licenses/mit).
 
-import asyncio
+# import asyncio
 import logging
 import pathlib
-import datetime
-import dateutil.parser
-import yaml
+# import datetime
+# import dateutil.parser
+# import yaml
 
 import wurb_core
 
@@ -226,12 +226,22 @@ class RecordManager(object):
         file_path = str(self.get_rec_file(source_id, night_id, record_id))
         return str(file_path)
 
+    def get_spectrogram_file_path(self, rec_file_path):
+        """ """
+        rec_path_str = str(rec_file_path)
+        rec_path_str = rec_path_str.replace(
+            "/wurb_recordings",
+            "/wurb_cache/spectrograms",
+        )
+        rec_path_str = rec_path_str.replace(".wav", "_SPECTROGRAM.jpg")
+        return str(rec_path_str)
+
     def get_spectrogram_path(self, source_id, night_id, record_id):
         """ """
         img_path = str(self.get_rec_file(source_id, night_id, record_id))
         img_path = img_path.replace(
-            "/Users/arnold/Documents/batsdev2023/wurb_recordings",
-            "/Users/arnold/Documents/batsdev2023/wurb_cache/spectrograms",
+            "/wurb_recordings",
+            "/wurb_cache/spectrograms",
         )
         img_path = img_path.replace(".wav", "_SPECTROGRAM.jpg")
         return str(img_path)
