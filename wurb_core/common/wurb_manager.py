@@ -49,7 +49,7 @@ class WurbManager(object):
     async def shutdown(self):
         """ """
         try:
-            await wurb_core.wurb_logger.shutdown()
+            # await wurb_core.wurb_logger.shutdown()
             await wurb_core.rec_manager.shutdown()
             # if self.wurb_loop:
             #     self.wurb_loop.cancel()

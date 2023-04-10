@@ -4,6 +4,8 @@
 # Copyright (c) 2023-present Arnold Andreasson
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
+import asyncio
+import concurrent.futures
 import logging
 import pathlib
 import wave
@@ -254,4 +256,25 @@ class RecFileWriter(object):
 
     def plot_spectrogram(self):
         """ """
-        wurb_core.spectrogram.generate_spectrogram_in_executor(self.rec_filename_path)
+        rec_file_path = self.rec_filename_path
+        img_file_path = wurb_core.record_manager.get_spectrogram_file_path(
+            rec_file_path
+        )
+
+        if pathlib.Path(img_file_path).exists():
+            print("Already done. Skipped.")
+            return
+
+        spectrogram_task = asyncio.create_task(
+            self.generate_in_executor(rec_file_path, img_file_path),
+            name="Spectrogram generator",
+        )
+
+    async def generate_in_executor(self, rec_file_path, img_file_path):
+        """ """
+        with concurrent.futures.ProcessPoolExecutor(max_workers=1) as executor:
+            future = executor.submit(
+                wurb_core.create_spectrogram, rec_file_path, img_file_path
+            )
+            concurrent.futures.wait([future])
+            print(future.result())
