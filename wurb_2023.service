@@ -1,0 +1,14 @@
+[Unit]
+Description=Running the CloudedBats WURB-2023 Bat detector.  
+After=network.target
+### Before=nginx.service
+
+[Service]
+Restart=always
+TimeoutStopSec=10s
+User=pi
+WorkingDirectory=/home/pi/cloudedbats_wurb_2023
+ExecStart=/home/pi/cloudedbats_wurb_2023/venv/bin/python3 /home/pi/cloudedbats_wurb_2023/wurb_main.py
+
+[Install]
+WantedBy=multi-user.target

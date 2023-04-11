@@ -265,6 +265,10 @@ class RecFileWriter(object):
             print("Already done. Skipped.")
             return
 
+        target_dir_path = pathlib.Path(img_file_path).parent
+        if not target_dir_path.exists():
+            target_dir_path.mkdir()
+
         spectrogram_task = asyncio.create_task(
             self.generate_in_executor(rec_file_path, img_file_path),
             name="Spectrogram generator",
@@ -272,9 +276,10 @@ class RecFileWriter(object):
 
     async def generate_in_executor(self, rec_file_path, img_file_path):
         """ """
-        with concurrent.futures.ProcessPoolExecutor(max_workers=1) as executor:
+        with concurrent.futures.ProcessPoolExecutor() as executor:
             future = executor.submit(
                 wurb_core.create_spectrogram, rec_file_path, img_file_path
             )
             concurrent.futures.wait([future])
-            print(future.result())
+            message = str(future.result())
+            wurb_core.wurb_logger.debug(message=message)

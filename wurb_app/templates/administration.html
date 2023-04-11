@@ -46,14 +46,14 @@
                         <div class="field is-grouped">
                             <div class="control">
                                 <div class="select is-rounded is-small has-text-weight-bold is-info">
-                                    <select id="adminSelectSourceId" onchange="adminSourceChanged()">
+                                    <select id="adminSelectSourceId" onchange="adminSourceChanged()" disabled>
                                         <option value="select">Select:</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="control">
                                 <div class="select is-rounded is-small has-text-weight-bold is-info">
-                                    <select id="adminSelectNightId" onchange="adminNightChanged()">
+                                    <select id="adminSelectNightId" onchange="adminNightChanged()" disabled>
                                         <option value="select">Select:</option>
                                     </select>
                                 </div>
@@ -69,11 +69,13 @@
                                         Data
                                     </button>
                                     <button id="adminViewSpectrogramButtonId" onclick="adminToggleViewMap()"
-                                        class="button is-rounded is-small has-text-weight-bold is-info is---inverted">
+                                        class="button is-rounded is-small has-text-weight-bold is-info is---inverted"
+                                        disabled>
                                         Map
                                     </button>
                                     <button id="adminViewSpectrogramButtonId" onclick="adminToggleViewMap()"
-                                        class="button is-rounded is-small has-text-weight-bold is-info is---inverted">
+                                        class="button is-rounded is-small has-text-weight-bold is-info is---inverted"
+                                        disabled>
                                         Sound files
                                     </button>
                                 </div>
@@ -120,12 +122,14 @@
                         <div class="container">
                             <div class="buttons is-centered">
                                 <button id="adminPreviousId" onclick="adminPrevious()"
-                                    class="button is-rounded is-small has-text-weight-bold is-info">Previous
+                                    class="button is-rounded is-small has-text-weight-bold is-info" disabled>Previous
                                     night</button>
                                 <button id="adminNextId" onclick="adminNext()"
-                                    class="button is-rounded is-small has-text-weight-bold is-info">Next night</button>
+                                    class="button is-rounded is-small has-text-weight-bold is-info" disabled>Next
+                                    night</button>
                                 <button id="adminLastId" onclick="adminUpdate()"
-                                    class="button is-rounded is-small has-text-weight-bold is-info">Update</button>
+                                    class="button is-rounded is-small has-text-weight-bold is-info"
+                                    disabled>Update</button>
                             </div>
                         </div>
 
@@ -157,11 +161,11 @@
                         <div class="container">
                             <div class="buttons">
                                 <button id="adminAutoId" onclick="fetchXXX()"
-                                    class="button is-small is-rounded has-text-weight-bold is-info">
+                                    class="button is-small is-rounded has-text-weight-bold is-info" disabled>
                                     Remove all Q0 (trash)
                                 </button>
                                 <button id="adminAutoId" onclick="fetchXXX()"
-                                    class="button is-small is-rounded has-text-weight-bold is-info">
+                                    class="button is-small is-rounded has-text-weight-bold is-info" disabled>
                                     Remove all "Not Assigned"
                                 </button>
                             </div>
@@ -175,11 +179,11 @@
                         <div class="container">
                             <div class="buttons">
                                 <button id="admin-autoId" onclick="fetchXXX()"
-                                    class="button is-small is-rounded has-text-weight-bold is-info">
+                                    class="button is-small is-rounded has-text-weight-bold is-info" disabled>
                                     Rename sound files
                                 </button>
                                 <button id="admin-autoId" onclick="fetchXXX()"
-                                    class="button is-small is-rounded has-text-weight-bold is-info">
+                                    class="button is-small is-rounded has-text-weight-bold is-info" disabled>
                                     Adjust positions
                                 </button>
                             </div>
@@ -193,15 +197,15 @@
                         <div class="container">
                             <div class="buttons">
                                 <button id="admin-autoId" onclick="fetchXXX()"
-                                    class="button is-small is-rounded has-text-weight-bold is-info">
+                                    class="button is-small is-rounded has-text-weight-bold is-info" disabled>
                                     Create report
                                 </button>
                                 <button id="admin-autoId" onclick="fetchXXX()"
-                                    class="button is-small is-rounded has-text-weight-bold is-info">
+                                    class="button is-small is-rounded has-text-weight-bold is-info" disabled>
                                     Preview report
                                 </button>
                                 <button id="admin-autoId" onclick="fetchXXX()"
-                                    class="button is-small is-rounded has-text-weight-bold is-info">
+                                    class="button is-small is-rounded has-text-weight-bold is-info" disabled>
                                     Download latest report
                                 </button>
                             </div>
@@ -215,11 +219,11 @@
                         <div class="container">
                             <div class="buttons">
                                 <button id="adminAutoId" onclick="fetchXXX()"
-                                    class="button is-small is-rounded has-text-weight-bold is-info">
+                                    class="button is-small is-rounded has-text-weight-bold is-info" disabled>
                                     Copy monitoring night
                                 </button>
                                 <button id="adminAutoId" onclick="fetchXXX()"
-                                    class="button is-small is-rounded has-text-weight-bold is-info">
+                                    class="button is-small is-rounded has-text-weight-bold is-info" disabled>
                                     Copy all monitoring nights
                                 </button>
                             </div>
@@ -233,11 +237,11 @@
                         <div class="container mb-4">
                             <div class="buttons">
                                 <button id="adminAutoId" onclick="fetchXXX()"
-                                    class="button is-small is-rounded has-text-weight-bold is-info">
+                                    class="button is-small is-rounded has-text-weight-bold is-info" disabled>
                                     Delete monitoring night
                                 </button>
                                 <button id="adminAautoId" onclick="fetchXXX()"
-                                    class="button is-small is-rounded has-text-weight-bold is-info">
+                                    class="button is-small is-rounded has-text-weight-bold is-info" disabled>
                                     Delete all monitoring nights
                                 </button>
                             </div>

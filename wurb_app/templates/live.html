@@ -84,7 +84,7 @@
                         <div class="field is-grouped">
                             <div class="control">
                                 <div class="select is-small is-rounded is-info">
-                                    <select id="liveFeedbackOnOffId">
+                                    <select id="liveFeedbackOnOffId" disabled>
                                         <option value="feedback-off">Off</option>
                                         <option value="feedback-on-pitch">On - Pitch shifting</option>
                                     </select>
@@ -98,12 +98,12 @@
                         <div class="field is-grouped">
                             <p class="control">
                                 <input id="liveFeedbackFilterLowId" class="input is-small" type="number"
-                                    placeholder="15.0" value="15.0">
+                                    placeholder="15.0" value="15.0" disabled>
                             </p>
                             <label class="label pr-3">to</label>
                             <p class="control">
                                 <input id="liveFeedbackFilterHighId" class="input is-small" type="number"
-                                    placeholder="100.0" value="100.0">
+                                    placeholder="100.0" value="100.0" disabled>
                             </p>
                             <label class="label">kHz</label>
                         </div>
@@ -113,7 +113,7 @@
             </article>
         </div>
 
-        <div class="tile is-parent px---0">
+        <div class="tile is-parent px---0 is-hidden">
             <article class="tile is-child box pt-1 pb-3">
                 <div class="content">
 
