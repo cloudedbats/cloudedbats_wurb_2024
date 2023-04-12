@@ -48,7 +48,7 @@ def create_spectrogram(source_path, target_path):
         # Fix colors, use logarithmic scale.
 
         for row in spectrogram:
-            row[row < 0.0001] = None
+            row[row < 0.0002] = None
 
         ax1.grid(False)
         ax1.pcolormesh(times, frequencies, numpy.log10(spectrogram), cmap="YlOrBr")

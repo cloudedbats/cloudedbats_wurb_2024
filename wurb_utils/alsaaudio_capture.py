@@ -35,10 +35,12 @@ class AlsaAudioCapture:
         self.out_queue_list = []
         self.main_loop = None
         self.capture_executor = None
-        self.alsa_capture_is_running = False
+        self.capture_is_running = False
 
     def get_capture_devices(self):
         """ """
+        if alsaaudio_used == False:
+            return []
         devices = []
         card_list = []
         try:
@@ -69,8 +71,16 @@ class AlsaAudioCapture:
                                 info_dict["input_channels"] = 1  # TODO.
                                 info_dict["device_index"] = card_index
 
-                                # info_dict["sampling_freq_hz"] = self.get_max_sampling_freq(card_index)
-                                info_dict["sampling_freq_hz"] = 384000.0
+
+
+
+                                info_dict[
+                                    "sampling_freq_hz"
+                                ] = self.get_max_sampling_freq(card_index)
+                                # info_dict["sampling_freq_hz"] = 384000.0
+
+
+
 
                                 # print("ALSA info_dict: ", info_dict)
 
@@ -134,8 +144,11 @@ class AlsaAudioCapture:
 
     async def start(self):
         """ """
+        if alsaaudio_used == False:
+            message = "AlsaAudioCapture - pyalsaaudio not installed: " + str(e)
+            self.logger.debug(message)
         try:
-            while self.alsa_capture_is_running == True:
+            while self.capture_is_running == True:
                 self.logger.debug(
                     "AlsaAudioCapture - Start: Capture is running, waiting 2 sec... "
                 )
@@ -180,7 +193,7 @@ class AlsaAudioCapture:
                 device="sysdefault",
                 cardindex=self.device_index,
             )
-            self.alsa_capture_is_running = True
+            self.capture_is_running = True
             # Time related.
             calculated_time_s = time.time()
             time_increment_s = self.buffer_size / self.sampling_freq_hz
@@ -258,4 +271,4 @@ class AlsaAudioCapture:
             self.capture_active = False
             if pmc_capture:
                 pmc_capture.close()
-            self.alsa_capture_is_running = False
+            self.capture_is_running = False

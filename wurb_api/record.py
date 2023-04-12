@@ -310,7 +310,7 @@ async def websocket_endpoint(websocket: fastapi.WebSocket):
     try:
         # Logging debug.
         logger.debug("API Websocket initiated.")
-        # wurb_core.wurb_logger.info("Connected to detector.")
+        wurb_core.wurb_logger.info("Connected to detector.")
         ### await asyncio.sleep(1.0)
         #
         await websocket.accept()

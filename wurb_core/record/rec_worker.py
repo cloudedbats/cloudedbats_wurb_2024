@@ -47,7 +47,7 @@ class RecWorker(object):
             self.target_worker = None
 
         self.queue_max_size = 100
-        self.rec_timeout_before_restart_s = 10
+        self.rec_timeout_before_restart_s = 30
         self.max_adc_time_diff_s = 10
         self.restart_activated = False
         self.connected_device_name = ""
@@ -140,15 +140,17 @@ class RecWorker(object):
             buffer_size=process_buffer,
         )
 
-        capture_coro = wurb_core.audio_capture.start()
-        try:
-            tasks = asyncio.gather(
-                capture_coro,
-            )
-            self.gather_result = await tasks
-            self.logger.debug("Sound capture ended: " + str(self.gather_result))
-        except Exception as e:
-            self.logger.debug("RecWorker, rec_source_worker: " + str(e))
+        await wurb_core.audio_capture.start()
+        self.logger.debug("RecWorker - Sound capture started.")
+        # capture_coro = wurb_core.audio_capture.start()
+        # try:
+        #     tasks = asyncio.gather(
+        #         capture_coro,
+        #     )
+        #     self.gather_result = await tasks
+        #     self.logger.debug("Sound capture ended: " + str(self.gather_result))
+        # except Exception as e:
+        #     self.logger.debug("RecWorker, rec_source_worker: " + str(e))
 
     async def rec_process_worker(self):
         """ """

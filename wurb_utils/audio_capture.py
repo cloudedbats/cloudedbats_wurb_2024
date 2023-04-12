@@ -29,6 +29,7 @@ class AudioCapture:
         self.out_queue_list = []
         self.main_loop = None
         self.capture_executor = None
+        self.capture_is_running = False
 
     def get_capture_devices(self):
         """ """
@@ -74,6 +75,12 @@ class AudioCapture:
     async def start(self):
         """ """
         try:
+            while self.capture_is_running == True:
+                self.logger.debug(
+                    "AudioCapture - Start: Capture is running, waiting 2 sec... "
+                )
+                await asyncio.sleep(2.0)
+
             # Use executor for the IO-blocking part.
             self.main_loop = asyncio.get_event_loop()
             self.capture_executor = self.main_loop.run_in_executor(
@@ -113,6 +120,7 @@ class AudioCapture:
                 input_device_index=self.device_index,
                 frames_per_buffer=self.frames,
             )
+            self.capture_is_running = True
             # Time related.
             calculated_time_s = time.time()
             time_increment_s = self.buffer_size / self.sampling_freq_hz
@@ -176,12 +184,14 @@ class AudioCapture:
                                 break
         #
         except asyncio.CancelledError:
-            self.logger.debug("AudioCapture - Sound capture was cancelled.")
+            self.logger.debug("AudioCapture - Was cancelled.")
         except Exception as e:
-            self.logger.error("AudioCapture - run_capture: " + str(e))
+            message = "AudioCapture - run_capture. Exception: " + str(e)
+            self.logger.debug(message)
         finally:
-            self.logger.debug("AudioCapture - Sound capture ended.")
+            self.logger.debug("AudioCapture - Capture ended.")
             self.capture_active = False
             if stream:
                 stream.close()
             # p.terminate()
+            self.capture_is_running = False
