@@ -179,7 +179,7 @@ class RecFileWriter(object):
         wurb_core.wurb_logger.info(message)
         # Logging debug.
         message = "Filename: " + filename
-        wurb_core.wurb_logger.debug(message=message)
+        wurb_core.wurb_logger.debug(message)
 
     def write(self, buffer):
         """ """
@@ -207,7 +207,8 @@ class RecFileWriter(object):
     #             to_file_path = pathlib.Path(self.rec_target_dir_path, log_file_name)
     #             to_file_path.write_text(from_file_path.read_text())
     #             # Logging debug.
-    #             wurb_core.wurb_logger.debug(message="File closed.")
+    #             message = "File closed."
+    #             wurb_core.wurb_logger.debug(message)
     #     except Exception as e:
     #         message = "RecFileWriter - copy_settings. Exception: " + str(e)
     #         self.logger.debug(message)
@@ -282,4 +283,4 @@ class RecFileWriter(object):
             )
             concurrent.futures.wait([future])
             message = str(future.result())
-            wurb_core.wurb_logger.debug(message=message)
+            wurb_core.wurb_logger.debug(message)

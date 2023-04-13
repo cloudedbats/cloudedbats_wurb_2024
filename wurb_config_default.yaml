@@ -6,11 +6,11 @@ wurb_app:
   log_level: info
 
 audio_capture:
-  device_name: Pettersson u384 USB Ultrasound Microphone
-  sampling_freq_hz: 384000
-  channels: MONO # STEREO, MONO, MONO-LEFT, MONO-RIGHT.
-  period_size: 9600
-  buffer_size: 192000
+  - device_name: Pettersson u384 USB Ultrasound Microphone
+    sampling_freq_hz: 384000
+    channels: MONO # STEREO, MONO, MONO-LEFT, MONO-RIGHT.
+    period_size: 9600
+    buffer_size: 192000
 
 audio_pitch_shifting:
   pitch_factor: 30
@@ -21,50 +21,43 @@ audio_pitch_shifting:
   overlap_factor: 1.5
 
 audio_playback:
-  device_name: Headphones # Part of device name.
-  sampling_freq_hz: 48000
-  period_size: 2048
-  buffer_size: 4800
-  buffer_max_size: 10000
-  in_queue_length: 10
+  - device_name: Headphones # Part of device name.
+    sampling_freq_hz: 48000
+    period_size: 2048
+    buffer_size: 4800
+    buffer_max_size: 10000
+    in_queue_length: 10
 
 record:
   target:
-    id: development
-    name: Development
+    id: local
+    name: Local
     rec_dir: ../wurb_recordings
   # targets:
-  #   - id: local
-  #     name: Local
-  #     rec_dir: ../wurb_recordings
   #   - id: usb
   #     name: USB
-  #     rec_dir: media/pi/wurb_recordings
+  #     rec_dir: media/pi/REPLACE-USB-NAME/wurb_recordings
   #   - id: ssd
   #     name: SSD
   #     rec_dir: media/ssd/wurb_recordings
-  #   - id: internal
-  #     name: Internal
-  #     rec_dir: /user/pi/wurb_recordings
+  #   - id: local
+  #     name: Local
+  #     rec_dir: ../wurb_recordings
 
 annotations:
   sources:
+    # - id: usb
+    #   name: USB
+    #   rec_dir: media/pi/REPLACE-USB-NAME/wurb_recordings
+    #   cache_dir: media/pi/REPLACE-USB-NAME/wurb_cache
+    # - id: ssd
+    #   name: SSD
+    #   rec_dir: media/ssd/wurb_recordings
+    #   cache_dir: media/ssd/wurb_cache
     - id: local
       name: Local
       rec_dir: ../wurb_recordings
       cache_dir: ../wurb_cache
-    # - id: usb
-    #   name: USB
-    #   rec_dir: media/pi/wurb_recordings
-    #   cache_dir: media/pi/wurb_cache
-    - id: ssd
-      name: SSD
-      rec_dir: media/ssd/wurb_recordings
-      cache_dir: media/ssd/wurb_cache
-    - id: internal
-      name: Internal
-      rec_dir: /user/pi/wurb_recordings
-      cache_dir: /user/pi/wurb_cache
 
 gps_reader:
   min_number_of_satellites: 3
@@ -78,3 +71,8 @@ gps_reader:
     - /dev/cu.usbmodem101 # For test on macOS.
   gps_control_loop_sleep_s: 20
 
+rec_manager:
+  control_loop_interval_s: 10
+
+wurb_logger:
+  max_client_messages: 20

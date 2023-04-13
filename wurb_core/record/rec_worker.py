@@ -331,7 +331,7 @@ class RecWorker(object):
                         self.process_deque.clear()
                         await self.to_target_queue.put(False)  # Flush.
                 except asyncio.CancelledError:
-                    self.logger.debug("Sound Sound process was cancelled.")
+                    self.logger.debug("RecWorker - Sound process was cancelled.")
                     break
                 except Exception as e:
                     message = "RecWorker - rec_process_worker(1). Exception: " + str(e)
@@ -344,7 +344,7 @@ class RecWorker(object):
             message = "RecWorker - rec_process_worker(2). Exception: " + str(e)
             self.logger.debug(message)
         finally:
-            pass
+            self.logger.debug("RecWorker - Sound process ended.")
 
     async def rec_target_worker(self):
         """Worker for sound targets. Mainly files or streams."""
@@ -405,7 +405,7 @@ class RecWorker(object):
             message = "RecWorker - rec_target_worker(2). Exception: " + str(e)
             self.logger.debug(message)
         finally:
-            pass
+            self.logger.debug("RecWorker - Sound target ended.")
 
     async def remove_items_from_queue(self, queue):
         """Helper method."""

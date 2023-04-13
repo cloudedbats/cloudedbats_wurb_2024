@@ -63,8 +63,6 @@ class GpsReader(object):
 
     def startup(self):
         """ """
-        self.latlong_event = asyncio.Event()
-
         self.first_gps_time_received = False
         self.first_gps_time_counter = 30
         self.last_used_lat_dd = 0.0
@@ -177,14 +175,11 @@ class GpsReader(object):
             else:
                 # GPS device not found.
                 self.is_gps_quality_ok = False
-                self.last_used_lat_dd = 0.0
-                self.last_used_long_dd = 0.0
                 self.number_of_satellites = 0
-                # asyncio.run_coroutine_threadsafe(
-                #     wurb_core.wurb_settings.save_latlong(0.0, 0.0),
-                #     asyncio.get_event_loop(),
-                # )
-                self.trigger_latlong_event()
+                if (self.last_used_lat_dd != 0.0) or (self.last_used_long_dd != 0.0):
+                    self.last_used_lat_dd = 0.0
+                    self.last_used_long_dd = 0.0
+                    self.trigger_latlong_event()
         except Exception as e:
             message = "GpsReader - start. Exception: " + str(e)
             self.logger.debug(message)
@@ -254,14 +249,12 @@ class GpsReader(object):
                 long_w_e = parts[6]
                 date = parts[9]
             else:
-                self.last_used_lat_dd = 0.0
-                self.last_used_long_dd = 0.0
+                if (self.last_used_lat_dd != 0.0) or (self.last_used_long_dd != 0.0):
+                    self.last_used_lat_dd = 0.0
+                    self.last_used_long_dd = 0.0
+                    self.trigger_latlong_event()
+                #
                 self.number_of_satellites = 0
-                # asyncio.run_coroutine_threadsafe(
-                #     wurb_core.wurb_settings.save_latlong(0.0, 0.0),
-                #     asyncio.get_event_loop(),
-                # )
-                self.trigger_latlong_event()
                 return
 
             # Extract date and time.
@@ -341,11 +334,6 @@ class GpsReader(object):
                 # Changed.
                 self.last_used_lat_dd = lat_dd
                 self.last_used_long_dd = long_dd
-                # Connect to main loop.
-                # asyncio.run_coroutine_threadsafe(
-                #     wurb_core.wurb_settings.save_latlong(lat_dd, long_dd),
-                #     asyncio.get_event_loop(),
-                # )
                 self.trigger_latlong_event()
 
             # print("GPS datetime: ", datetime_utc)
@@ -410,4 +398,4 @@ class ReadGpsSerialNmea(asyncio.Protocol):
         # # Logging debug.
         # if self.gps_manager:
         #     message = "GPS:ReadGpsSerialNmea: connection_lost."
-        #     self.logger.debug(message=message)
+        #     self.logger.debug(message)

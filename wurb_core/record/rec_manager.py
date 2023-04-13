@@ -28,7 +28,6 @@ class RecManager(object):
     def clear(self):
         """ """
         self.control_loop = None
-        self.control_loop_interval_s = 10
         self.last_used_rec_mode = ""
         self.manual_trigger_activated = False
         self.status_info_text = ""
@@ -39,7 +38,7 @@ class RecManager(object):
     def configure(self):
         """ """
         self.control_loop_interval_s = self.config.get(
-            "rec_manager.max_client_messages", self.control_loop_interval_s
+            "rec_manager.control_loop_interval_s", 10
         )
 
     def startup(self):

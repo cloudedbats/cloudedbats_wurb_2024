@@ -33,9 +33,6 @@ class WurbScheduler(object):
 
     def configure(self):
         """ """
-        # self.max_client_messages = self.config.get(
-        #     "rec_scheduler.main_loop_interval_s", self.main_loop_interval_s
-        # )
 
     def check_scheduler(self):
         """ """

@@ -39,7 +39,7 @@ async def set_audio_feedback(volume: str, pitch: str):
     try:
         # Logging debug.
         message = "API called: set-audio-feedback."
-        logger.debug(message=message)
+        logger.debug(message)
         await wurb_core.rec_manager.wurb_settings.set_audio_feedback(volume, pitch)
     except Exception as e:
         message = "API - set_audio_feedback. Exception: " + str(e)

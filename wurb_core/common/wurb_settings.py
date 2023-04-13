@@ -290,8 +290,8 @@ class WurbSettings(object):
         else:
             geo_source = self.get_location_dict().get("geoSource", "")
             if geo_source == "geo-gps":
-                if wurb_core.wurb_gps:
-                    no_of_satellites = wurb_core.wurb_gps.get_number_of_satellites()
+                if wurb_core.gps_reader:
+                    no_of_satellites = wurb_core.gps_reader.get_number_of_satellites()
                     return "Number of satellites: " + str(no_of_satellites)
             else:
                 return "Lat: " + str(lat) + " Long: " + str(long)
