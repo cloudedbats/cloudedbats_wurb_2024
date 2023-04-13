@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
 # Project: http://cloudedbats.org, https://github.com/cloudedbats
-# Copyright (c) 2020-present Arnold Andreasson
+# Copyright (c) 2023-present Arnold Andreasson
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 import asyncio
@@ -16,37 +16,19 @@ class GpsReader(object):
 
     def __init__(self, config=None, logger=None, logger_name="DefaultLogger"):
         """ """
-        if config == None:
+        self.config = config
+        self.logger = logger
+        if self.config == None:
             self.config = {}
-        else:
-            self.config = config
-        if logger == None:
+        if self.logger == None:
             self.logger = logging.getLogger(logger_name)
-        else:
-            self.logger = logger
         #
-        # self.configure()
-        # self.clear()
-        self.latlong_event = asyncio.Event()
-        # self.latlong_event.set()
-
-    def configure(self):
-        """ """
-        config = self.config
-        self.min_number_of_satellites = config.get(
-            "gps_reader.min_number_of_satellites", 3
-        )
-        self.adjust_detector_time = config.get("gps_reader.adjust_detector_time", False)
-        self.max_time_diff_s = config.get(
-            "gps_reader.accepted_detector_time_diff_s", 60
-        )
-        self.gps_loop_sleep_s = config.get("gps_reader.gps_loop_sleep_s", 20)
-        self.gps_devices = config.get(
-            "gps_reader.gps_devices", ["/dev/ttyACM0", "/dev/ttyUSB0"]
-        )
+        self.clear()
+        self.configure()
 
     def clear(self):
         """ """
+        self.latlong_event = None
         #
         self.gps_datetime_utc = None
         self.gps_latitude = 0.0
@@ -64,10 +46,25 @@ class GpsReader(object):
         self.is_gps_quality_ok = False
         self.number_of_satellites = 0
 
+    def configure(self):
+        """ """
+        config = self.config
+        self.min_number_of_satellites = config.get(
+            "gps_reader.min_number_of_satellites", 3
+        )
+        self.adjust_detector_time = config.get("gps_reader.adjust_detector_time", False)
+        self.max_time_diff_s = config.get(
+            "gps_reader.accepted_detector_time_diff_s", 60
+        )
+        self.gps_loop_sleep_s = config.get("gps_reader.gps_loop_sleep_s", 20)
+        self.gps_devices = config.get(
+            "gps_reader.gps_devices", ["/dev/ttyACM0", "/dev/ttyUSB0"]
+        )
+
     def startup(self):
         """ """
-        self.configure()
-        self.clear()
+        self.latlong_event = asyncio.Event()
+
         self.first_gps_time_received = False
         self.first_gps_time_counter = 30
         self.last_used_lat_dd = 0.0
@@ -134,12 +131,14 @@ class GpsReader(object):
 
     def get_latlong_event(self):
         """Used for synchronization."""
+        if self.latlong_event == None:
+            self.latlong_event = asyncio.Event()
         return self.latlong_event
 
     def trigger_latlong_event(self):
         """Used for synchronization."""
         # Create a new event and release the old.
-        old_event = self.latlong_event
+        old_event = self.get_latlong_event()
         self.latlong_event = asyncio.Event()
         old_event.set()
 

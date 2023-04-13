@@ -19,16 +19,22 @@ class Metadata(object):
 
     def __init__(self, config=None, logger=None, logger_name="DefaultLogger"):
         """ """
-        if config == None:
+        self.config = config
+        self.logger = logger
+        if self.config == None:
             self.config = {}
-        else:
-            self.config = config
-        if logger == None:
+        if self.logger == None:
             self.logger = logging.getLogger(logger_name)
-        else:
-            self.logger = logger
         #
-        self.metadata_header = [
+        self.clear()
+        self.configure()
+
+    def clear(self):
+        """ """
+
+    def configure(self):
+        """ """
+        self.metadata_header_rows = [
             "# Metadata for CloudedBats WURB-2023.",
             "#" "---",
         ]
@@ -136,7 +142,7 @@ class Metadata(object):
         metadata_file_path = self.get_metadata_file_path(rec_file_path)
         #
         with open(metadata_file_path, "w") as file:
-            file.writelines("\n".join(self.metadata_header) + "\n")
+            file.writelines("\n".join(self.metadata_header_rows) + "\n")
             yaml.dump(metadata, file, default_flow_style=False)
 
     # def get_metadata(self, rec_file_path, select="", quality_filter=[]):

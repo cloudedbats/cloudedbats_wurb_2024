@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
 # Project: http://cloudedbats.org, https://github.com/cloudedbats
-# Copyright (c) 2020-present Arnold Andreasson
+# Copyright (c) 2023-present Arnold Andreasson
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 import asyncio
@@ -15,29 +15,27 @@ class WurbLogger(object):
 
     def __init__(self, config=None, logger_name="DefaultLogger"):
         """ """
-        if config == None:
+        self.config = config
+        if self.config == None:
             self.config = {}
-        else:
-            self.config = config
         self.logger = logging.getLogger(logger_name)
         #
         self.clear()
-        self.logging_event = None
+        self.configure()
 
     def clear(self):
         """ """
+        self.logging_event = None
         self.client_messages = []
-        self.max_client_messages = 10
 
     def configure(self):
         """ """
         self.max_client_messages = self.config.get(
-            "wurb_logger.max_client_messages", self.max_client_messages
+            "wurb_logger.max_client_messages", 10
         )
 
     def startup(self):
         """ """
-        self.configure()
 
     def shutdown(self):
         """ """

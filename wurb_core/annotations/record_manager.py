@@ -7,6 +7,7 @@
 # import asyncio
 import logging
 import pathlib
+
 # import datetime
 # import dateutil.parser
 # import yaml
@@ -19,20 +20,22 @@ class RecordManager(object):
 
     def __init__(self, config=None, logger=None, logger_name="DefaultLogger"):
         """ """
-        if config == None:
+        self.config = config
+        self.logger = logger
+        if self.config == None:
             self.config = {}
-        else:
-            self.config = config
-        if logger == None:
+        if self.logger == None:
             self.logger = logging.getLogger(logger_name)
-        else:
-            self.logger = logger
         #
         self.clear()
+        self.configure()
 
     def clear(self):
         """ """
         self.sources_by_id = {}
+
+    def configure(self):
+        """ """
 
     def load_sources(self):
         """ """

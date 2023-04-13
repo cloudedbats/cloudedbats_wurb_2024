@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
 # Project: http://cloudedbats.org, https://github.com/cloudedbats
-# Copyright (c) 2020-present Arnold Andreasson
+# Copyright (c) 2023-present Arnold Andreasson
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 import asyncio
@@ -19,14 +19,15 @@ class RecStatus(object):
 
     def __init__(self, config=None, logger=None, logger_name="DefaultLogger"):
         """ """
-        if config == None:
+        self.config = config
+        self.logger = logger
+        if self.config == None:
             self.config = {}
-        else:
-            self.config = config
-        if logger == None:
+        if self.logger == None:
             self.logger = logging.getLogger(logger_name)
-        else:
-            self.logger = logger
+        #
+        # self.clear()
+        # self.configure()
 
     async def rec_status(self):
         """ """

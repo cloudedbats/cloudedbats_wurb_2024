@@ -16,36 +16,26 @@ class RecWorker(object):
 
     def __init__(self, config=None, logger=None, logger_name="DefaultLogger"):
         """ """
-        if config == None:
+        self.config = config
+        self.logger = logger
+        if self.config == None:
             self.config = {}
-        else:
-            self.config = config
-        if logger == None:
+        if self.logger == None:
             self.logger = logging.getLogger(logger_name)
-        else:
-            self.logger = logger
         #
+        self.clear()
+        self.configure()
+
+    def clear(self):
+        """ """
         self.source_worker = None
         self.process_worker = None
         self.target_worker = None
         self.from_source_queue = None
         self.to_target_queue = None
 
-        self.clear()
-        # self.rec_event = asyncio.Event()
-
-    def clear(self):
+    def configure(self):
         """ """
-        if self.source_worker != None:
-            self.source_worker.cancel()
-            self.source_worker = None
-        if self.process_worker != None:
-            self.process_worker.cancel()
-            self.process_worker = None
-        if self.target_worker != None:
-            self.target_worker.cancel()
-            self.target_worker = None
-
         self.queue_max_size = 100
         self.rec_timeout_before_restart_s = 30
         self.max_adc_time_diff_s = 10

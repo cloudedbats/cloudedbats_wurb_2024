@@ -15,16 +15,15 @@ class WurbManager(object):
 
     def __init__(self, config=None, logger=None, logger_name="DefaultLogger"):
         """ """
-        if config == None:
+        self.config = config
+        self.logger = logger
+        if self.config == None:
             self.config = {}
-        else:
-            self.config = config
-        if logger == None:
+        if self.logger == None:
             self.logger = logging.getLogger(logger_name)
-        else:
-            self.logger = logger
         #
         self.clear()
+        self.configure()
 
     def clear(self):
         """ """
@@ -38,8 +37,6 @@ class WurbManager(object):
 
     def startup(self):
         """ """
-        self.configure()
-
         wurb_core.wurb_logger.startup()
         wurb_core.rec_manager.startup()
         # self.wurb_loop = asyncio.create_task(

@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
 # Project: http://cloudedbats.org, https://github.com/cloudedbats
-# Copyright (c) 2020-present Arnold Andreasson
+# Copyright (c) 2023-present Arnold Andreasson
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 import asyncio
@@ -15,18 +15,15 @@ class RecManager(object):
 
     def __init__(self, config=None, logger=None, logger_name="DefaultLogger"):
         """ """
-        if config == None:
+        self.config = config
+        self.logger = logger
+        if self.config == None:
             self.config = {}
-        else:
-            self.config = config
-        if logger == None:
+        if self.logger == None:
             self.logger = logging.getLogger(logger_name)
-        else:
-            self.logger = logger
         #
         self.clear()
-        self.rec_event = None
-        self.notification_event = None
+        self.configure()
 
     def clear(self):
         """ """
@@ -35,6 +32,9 @@ class RecManager(object):
         self.last_used_rec_mode = ""
         self.manual_trigger_activated = False
         self.status_info_text = ""
+        #
+        self.rec_event = None
+        self.notification_event = None
 
     def configure(self):
         """ """
@@ -44,8 +44,6 @@ class RecManager(object):
 
     def startup(self):
         """ """
-        self.configure()
-
         wurb_core.gps_reader.startup()
         self.control_loop = asyncio.create_task(
             self.rec_control_loop(), name="RecManager control task"

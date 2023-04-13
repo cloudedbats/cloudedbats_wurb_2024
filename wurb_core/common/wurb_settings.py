@@ -1,12 +1,11 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
 # Project: http://cloudedbats.org, https://github.com/cloudedbats
-# Copyright (c) 2020-present Arnold Andreasson
+# Copyright (c) 2023-present Arnold Andreasson
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 import asyncio
 import logging
-import datetime
 import pathlib
 import yaml
 
@@ -18,20 +17,15 @@ class WurbSettings(object):
 
     def __init__(self, config=None, logger=None, logger_name="DefaultLogger"):
         """ """
-        if config == None:
+        self.config = config
+        self.logger = logger
+        if self.config == None:
             self.config = {}
-        else:
-            self.config = config
-        if logger == None:
+        if self.logger == None:
             self.logger = logging.getLogger(logger_name)
-        else:
-            self.logger = logger
         #
         self.clear()
-        self.settings_event = None
-        self.location_event = None
-        self.latlong_event = None
-        self.audiofeedback_event = None
+        self.configure()
 
     def clear(self):
         """ """
@@ -41,19 +35,20 @@ class WurbSettings(object):
         self.current_settings = None
         self.current_location = None
         self.settings_dir = ""
+        self.settings_event = None
+        self.location_event = None
+        self.latlong_event = None
+        self.audiofeedback_event = None
 
     def configure(self):
         """ """
-        # self.settings_dir = self.config.get(
-        #     "wurb_logger.settings_dir", self.settings_dir
-        # )
+        self.settings_header_rows = ["# Settings for CloudedBats WURB-2023.", "---"]
 
     async def startup(self, settings_dir):
         """ """
         try:
-            self.configure()
             # Settings file and defaults.
-            self.settings_file_name = "wurb_rec_settings.yaml"
+            self.settings_file_name = "wurb_settings.yaml"
             self.define_default_settings()
             self.define_default_location()
             # Load.
@@ -89,16 +84,6 @@ class WurbSettings(object):
             message = "WurbSettings - shutdown. Exception: " + str(e)
             self.logger.debug(message)
 
-    # def load_settings(self, settings_dir):
-    #     """ """
-    #     self.settings_dir = settings_dir
-    #     self.load_settings_from_file()
-    #     # Select settings for startup.
-    #     startup_option = self.current_settings.get("startupOption", "")
-    #     if startup_option == "startup-settings":
-    #         self.current_settings = self.loaded_settings["startup"]
-    #         self.current_location = self.loaded_settings["startup_location"]
-
     def define_default_settings(self):
         """ """
         self.default_settings = {
@@ -106,35 +91,35 @@ class WurbSettings(object):
             "fileDirectory": "Station-1",
             "fileDirectoryDateOption": "date-post-before",
             "filenamePrefix": "wurb",
-            "detectionLimitKhz": "17.0",
-            "detectionSensitivityDbfs": "-50",
+            "detectionLimitKhz": 17.0,
+            "detectionSensitivityDbfs": -50,
             "detectionAlgorithm": "detection-simple",
-            "recLengthS": "5",
+            "recLengthS": 5,
             "recType": "FS",
             "feedbackOnOff": "feedback-off",
-            "feedbackVolume": "50",
-            "feedbackPitch": "30",
-            "feedbackFilterLowKhz": "15",
-            "feedbackFilterHighKhz": "150",
+            "feedbackVolume": 50,
+            "feedbackPitch": 30,
+            "feedbackFilterLowKhz": 15,
+            "feedbackFilterHighKhz": 150,
             "startupOption": "as-last-session",
             "schedulerStartEvent": "on-sunset",
-            "schedulerStartAdjust": "-15",
+            "schedulerStartAdjust": -15,
             "schedulerStopEvent": "off-sunrise",
-            "schedulerStopAdjust": "15",
+            "schedulerStopAdjust": 15,
             "schedulerPostAction": "post-none",
-            "schedulerPostActionDelay": "5",
+            "schedulerPostActionDelay": 5,
         }
 
     def define_default_location(self):
         """ """
         self.default_location = {
             "geoSource": "geo-not-used",
-            "latitudeDd": "0.0",
-            "longitudeDd": "0.0",
-            "manualLatitudeDd": "0.0",
-            "manualLongitudeDd": "0.0",
-            "lastGpsLatitudeDd": "0.0",
-            "lastGpsLongitudeDd": "0.0",
+            "latitudeDd": 0.0,
+            "longitudeDd": 0.0,
+            "manualLatitudeDd": 0.0,
+            "manualLongitudeDd": 0.0,
+            "lastGpsLatitudeDd": 0.0,
+            "lastGpsLongitudeDd": 0.0,
         }
 
     async def save_settings(self, settings_dict={}, settings_type=None):
@@ -169,6 +154,7 @@ class WurbSettings(object):
                         message = "Error when comparing saved settings. " + str(e)
                         self.logger.debug(message)
 
+            # Copy startupOption to top level.
             startupOption = settings_dict.get("startupOption", "")
             self.loaded_settings["startupOption"] = startupOption
 
@@ -194,33 +180,6 @@ class WurbSettings(object):
                         "startupLocation"
                     ] = self.current_location.copy()
                     self.save_settings_to_file()
-
-            # # Active modes.
-            # rec_mode = self.current_settings["recMode"]
-            # # if rec_mode in ["mode-on", "mode-auto", "mode-manual"]:
-            # #     await wurb_core.wurb_manager.start_rec()
-            # # if rec_mode in ["mode-off"]:
-            # #     await wurb_core.stop_rec()
-            # # Passive modes, and monitoring active.
-            # if rec_mode in [
-            #     "mode-off",
-            #     "mode-on",
-            #     "mode-auto",
-            #     "mode-manual",
-            #     "mode-scheduler-on",
-            #     "mode-scheduler-auto",
-            # ]:
-            #     await wurb_core.wurb_scheduler.startup()
-            # else:
-            #     await wurb_core.wurb_scheduler.shutdown()
-
-            # # Trigger an event.
-            # self.trigger_settings_event()
-
-            # # Logging.
-            # if is_changed:
-            #     message = "Settings saved."
-            #     self.logger.info(message)
         except Exception as e:
             message = "WurbSettings - save_settings. Exception: " + str(e)
             self.logger.debug(message)
@@ -268,16 +227,10 @@ class WurbSettings(object):
                 self.current_location["longitudeDd"] = 0.0
 
             self.loaded_settings["currentLocation"] = self.current_location.copy()
-            self.save_settings_to_file()
 
+            self.save_settings_to_file()
             # Trigger an event.
             self.trigger_location_event()
-
-            # # GPS.
-            # if geo_source in ["geo-gps", "geo-gps-or-manual", "geo-last-gps-or-manual"]:
-            #     await wurb_core.wurb_gps.startup()
-            # else:
-            #     await wurb_core.wurb_gps.shutdown()
         except Exception as e:
             message = "WurbSettings - save_location. Exception: " + str(e)
             self.logger.debug(message)
@@ -435,6 +388,10 @@ class WurbSettings(object):
                 self.current_settings = self.default_settings.copy()
                 self.current_location = self.default_location.copy()
 
+            # Copy startupOption to top level.
+            startupOption = self.current_settings.get("startupOption", "")
+            self.loaded_settings["startupOption"] = startupOption
+
             # Trigger an event.
             self.trigger_settings_event()
             self.trigger_location_event()
@@ -449,9 +406,7 @@ class WurbSettings(object):
         settings_file_path = pathlib.Path(self.settings_dir, settings_file_name)
         if settings_file_path.exists():
             with open(settings_file_path) as settings_file:
-                # self.loaded_settings = yaml.load(settings_file, Loader=yaml.FullLoader)
                 self.loaded_settings = yaml.safe_load(settings_file)
-                # print(self.loaded_settings)
         else:
             # Use
             self.loaded_settings["startupOption"] = "as-last-session"
@@ -465,10 +420,8 @@ class WurbSettings(object):
 
     def save_settings_to_file(self):
         """Save to file."""
-        # settings_file.write("# CloudedBats, http://cloudedbats.org" + "\n")
-        # settings_file.write("# Settings for the WURB bat detector." + "\n")
-
         settings_file_path = pathlib.Path(self.settings_dir, self.settings_file_name)
         with settings_file_path.open("w") as settings_file:
+            settings_file.writelines("\n".join(self.settings_header_rows) + "\n")
             data = self.loaded_settings
             yaml.safe_dump(data, settings_file)
