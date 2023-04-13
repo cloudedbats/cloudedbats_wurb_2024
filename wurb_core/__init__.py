@@ -4,7 +4,17 @@
 
 __version__ = "2023.0.0-development"
 logger_name = "WurbLogger"
+logging_dir = "../wurb_logging"
+log_file_name = "wurb2023_info_log.txt"
+debug_log_file_name = "wurb2023_debug_log.txt"
+settings_dir = "../wurb_settings"
+config_dir = "../wurb_settings"
+config_file = "wurb_config.yaml"
+config_default_dir = ""
+config_default_file = "wurb_config_default.yaml"
 
+
+# Use either pyalsaaudio or pyaudio.
 alsaaudio_used = True
 try:
     import alsaaudio
@@ -41,6 +51,12 @@ from wurb_core.annotations.spectrogram import create_spectrogram
 
 # Configuration and logging.
 config = wurb_utils.Configuration(logger_name=logger_name)
+config.load_config(
+    config_dir=config_dir,
+    config_file=config_file,
+    config_default_dir=config_default_dir,
+    config_default_file=config_default_file,
+)
 logger = wurb_utils.Logger(logger_name=logger_name)
 
 # Basic WURB.
