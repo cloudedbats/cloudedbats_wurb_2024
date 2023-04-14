@@ -98,6 +98,8 @@ class RecManager(object):
 
                 if settings_event.is_set():
                     settings_event = wurb_core.wurb_settings.get_settings_event()
+                    # Settings changed, rec restart needed.
+                    await self.restart_rec()
                 if location_event.is_set():
                     location_event = wurb_core.wurb_settings.get_location_event()
                 if latlong_event.is_set():
@@ -198,8 +200,8 @@ class RecManager(object):
         """ """
         try:
             await wurb_core.rec_worker.stop_recording()
-            # await asyncio.sleep(1.0)
-            await asyncio.sleep(3.0)
+            await asyncio.sleep(1.0)
+            # await asyncio.sleep(3.0)
             await self.check_status()
         except Exception as e:
             message = "RecManager - restart_rec. Exception: " + str(e)

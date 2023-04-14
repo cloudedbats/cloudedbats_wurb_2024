@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
 # Project: http://cloudedbats.org, https://github.com/cloudedbats
-# Copyright (c) 2021-present Arnold Andreasson
+# Copyright (c) 2023-present Arnold Andreasson
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 import asyncio
@@ -10,11 +10,11 @@ import numpy
 import time
 
 #
-alsaaudio_used = True
+alsaaudio_installed = True
 try:
     import alsaaudio
 except:
-    alsaaudio_used = False
+    alsaaudio_installed = False
 
 
 class AlsaAudioCapture:
@@ -27,20 +27,38 @@ class AlsaAudioCapture:
 
     def clear(self):
         self.device_index = None
+        self.device_name = ""
         self.channels = None
         self.sampling_freq_hz = None
-        self.buffer_size = None
         self.frames = None
+        self.buffer_size = None
         #
         self.out_queue_list = []
         self.main_loop = None
         self.capture_executor = None
         self.capture_is_running = False
+        self.capture_is_active = False
+
+    def is_capture_running(self):
+        """ """
+        return self.capture_is_running
+
+    def get_selected_capture_device(self):
+        """ """
+        info_dict = {}
+        info_dict["device_index"] = self.device_index
+        info_dict["device_name"] = self.device_name
+        info_dict["input_channels"] = self.channels
+        info_dict["sampling_freq_hz"] = self.sampling_freq_hz
+        return info_dict
 
     def get_capture_devices(self):
         """ """
-        if alsaaudio_used == False:
+        if alsaaudio_installed == False:
             return []
+        if self.capture_is_active == True:
+            info_dict = self.get_selected_capture_device()
+            return [info_dict]
         devices = []
         card_list = []
         try:
@@ -71,16 +89,10 @@ class AlsaAudioCapture:
                                 info_dict["input_channels"] = 1  # TODO.
                                 info_dict["device_index"] = card_index
 
-
-
-
                                 info_dict[
                                     "sampling_freq_hz"
                                 ] = self.get_max_sampling_freq(card_index)
                                 # info_dict["sampling_freq_hz"] = 384000.0
-
-
-
 
                                 # print("ALSA info_dict: ", info_dict)
 
@@ -123,6 +135,7 @@ class AlsaAudioCapture:
     def setup(
         self,
         device_index,
+        device_name,
         channels,
         sampling_freq_hz,
         frames,
@@ -130,6 +143,7 @@ class AlsaAudioCapture:
     ):
         """ """
         self.device_index = device_index
+        self.device_name = device_name
         self.channels = channels
         self.sampling_freq_hz = sampling_freq_hz
         self.frames = frames
@@ -144,7 +158,7 @@ class AlsaAudioCapture:
 
     async def start(self):
         """ """
-        if alsaaudio_used == False:
+        if alsaaudio_installed == False:
             message = "AlsaAudioCapture - pyalsaaudio not installed: " + str(e)
             self.logger.debug(message)
         try:
@@ -166,7 +180,7 @@ class AlsaAudioCapture:
     async def stop(self):
         """ """
         try:
-            self.capture_active = False
+            self.capture_is_active = False
             if self.capture_executor != None:
                 self.capture_executor.cancel()
                 self.capture_executor = None
@@ -177,7 +191,7 @@ class AlsaAudioCapture:
     def run_capture(self):
         """ """
         pmc_capture = None
-        self.capture_active = True
+        self.capture_is_active = True
         channels = 1
         if self.channels.upper() in ["STEREO", "MONO-LEFT", "MONO-RIGHT"]:
             channels = 2
@@ -199,7 +213,7 @@ class AlsaAudioCapture:
             time_increment_s = self.buffer_size / self.sampling_freq_hz
             # Empty numpy buffer.
             in_buffer_int16 = numpy.array([], dtype=numpy.int16)
-            while self.capture_active:
+            while self.capture_is_active:
                 # Read from capture device.
                 length, data = pmc_capture.read()
                 if length < 0:
@@ -258,7 +272,7 @@ class AlsaAudioCapture:
                                 self.logger.debug(message)
                                 if not self.main_loop.is_running():
                                     # Terminate.
-                                    self.capture_active = False
+                                    self.capture_is_active = False
                                     break
         #
         except asyncio.CancelledError:
@@ -268,7 +282,7 @@ class AlsaAudioCapture:
             self.logger.debug(message)
         finally:
             self.logger.debug("AlsaAudioCapture - Capture ended.")
-            self.capture_active = False
+            self.capture_is_active = False
             if pmc_capture:
                 pmc_capture.close()
             self.capture_is_running = False

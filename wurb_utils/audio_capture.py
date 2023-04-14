@@ -21,6 +21,7 @@ class AudioCapture:
 
     def clear(self):
         self.device_index = None
+        self.device_name = ""
         self.channels = None
         self.sampling_freq_hz = None
         self.frames = None
@@ -30,9 +31,26 @@ class AudioCapture:
         self.main_loop = None
         self.capture_executor = None
         self.capture_is_running = False
+        self.capture_is_active = False
+
+    def is_capture_running(self):
+        """ """
+        return self.capture_is_running
+
+    def get_selected_capture_device(self):
+        """ """
+        info_dict = {}
+        info_dict["device_index"] = self.device_index
+        info_dict["device_name"] = self.device_name
+        info_dict["input_channels"] = self.channels
+        info_dict["sampling_freq_hz"] = self.sampling_freq_hz
+        return info_dict
 
     def get_capture_devices(self):
         """ """
+        if self.capture_is_active == True:
+            info_dict = self.get_selected_capture_device()
+            return [info_dict]
         devices = []
         try:
             number_of_devices = self.audio.get_device_count()
@@ -56,6 +74,7 @@ class AudioCapture:
     def setup(
         self,
         device_index,
+        device_name,
         channels,
         sampling_freq_hz,
         frames,
@@ -63,6 +82,7 @@ class AudioCapture:
     ):
         """ """
         self.device_index = device_index
+        self.device_name = device_name
         self.channels = channels
         self.sampling_freq_hz = sampling_freq_hz
         self.frames = frames
@@ -75,11 +95,16 @@ class AudioCapture:
     async def start(self):
         """ """
         try:
-            while self.capture_is_running == True:
+            if self.capture_is_running == True:
                 self.logger.debug(
                     "AudioCapture - Start: Capture is running, waiting 2 sec... "
                 )
                 await asyncio.sleep(2.0)
+                if self.capture_is_running == True:
+                    self.logger.debug(
+                        "AudioCapture - Start: Capture is still running, will be stopped... "
+                    )
+                    self.stop()
 
             # Use executor for the IO-blocking part.
             self.main_loop = asyncio.get_event_loop()
@@ -93,7 +118,7 @@ class AudioCapture:
     async def stop(self):
         """ """
         try:
-            self.capture_active = False
+            self.capture_is_active = False
             if self.capture_executor != None:
                 self.capture_executor.cancel()
                 self.capture_executor = None
@@ -104,7 +129,7 @@ class AudioCapture:
     def run_capture(self):
         """ """
         stream = None
-        self.capture_active = True
+        self.capture_is_active = True
         channels = 1
         if self.channels.upper() in ["STEREO", "MONO-LEFT", "MONO-RIGHT"]:
             channels = 2
@@ -126,7 +151,7 @@ class AudioCapture:
             time_increment_s = self.buffer_size / self.sampling_freq_hz
             # Empty numpy buffer.
             in_buffer_int16 = numpy.array([], dtype=numpy.int16)
-            while self.capture_active:
+            while self.capture_is_active:
                 # Read from capture device.
                 data = stream.read(self.frames, exception_on_overflow=False)
                 # Convert from string-byte array to int16 array.
@@ -180,7 +205,7 @@ class AudioCapture:
                             self.logger.error(message)
                             if not self.main_loop.is_running():
                                 # Terminate.
-                                self.capture_active = False
+                                self.capture_is_active = False
                                 break
         #
         except asyncio.CancelledError:
@@ -190,7 +215,7 @@ class AudioCapture:
             self.logger.debug(message)
         finally:
             self.logger.debug("AudioCapture - Capture ended.")
-            self.capture_active = False
+            self.capture_is_active = False
             if stream:
                 stream.close()
             # p.terminate()

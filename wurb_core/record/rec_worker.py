@@ -48,35 +48,28 @@ class RecWorker(object):
     def start_recording(self):
         """ """
         try:
+            # Create queues.
             if self.from_source_queue == None:
                 self.from_source_queue = asyncio.Queue(maxsize=self.queue_max_size)
                 wurb_core.audio_capture.add_out_queue(self.from_source_queue)
-            # else:
-            #     # Clear queue.
-            #     while not self.from_source_queue.empty():
-            #         self.from_source_queue.get_nowait()
-            #         self.from_source_queue.task_done()
-
             if self.to_target_queue == None:
                 self.to_target_queue = asyncio.Queue(maxsize=self.queue_max_size)
-            # else:
-            #     # Clear queue.
-            #     while not self.to_target_queue.empty():
-            #         self.to_target_queue.get_nowait()
-            #         self.to_target_queue.task_done()
-
+            # Clear queues.
+            self.remove_items_from_queue(self.from_source_queue)
+            self.remove_items_from_queue(self.to_target_queue)
+            # Sound capture task.
             if self.source_worker == None:
                 self.source_worker = asyncio.create_task(
                     self.rec_source_worker(), name="RecWorker source task"
                 )
                 self.logger.debug("REC SOURCE STARTED.")
-
+            # Sound process task.
             if self.process_worker == None:
                 self.process_worker = asyncio.create_task(
                     self.rec_process_worker(), name="RecWorker process task"
                 )
                 self.logger.debug("REC PROCESS STARTED.")
-
+            # Sound target task.
             if self.target_worker == None:
                 self.target_worker = asyncio.create_task(
                     self.rec_target_worker(), name="RecWorker target task"
@@ -88,19 +81,25 @@ class RecWorker(object):
     async def stop_recording(self):
         """ """
         try:
+            # Sound capture task.
             if self.source_worker != None:
                 await wurb_core.audio_capture.stop()
                 self.source_worker.cancel()
                 self.source_worker = None
                 self.logger.debug("REC SOURCE CANCELED.")
+            # Sound process task.
             if self.process_worker != None:
                 self.process_worker.cancel()
                 self.process_worker = None
                 self.logger.debug("REC PROCESS CANCELED.")
+            # Sound target task.
             if self.target_worker != None:
                 self.target_worker.cancel()
                 self.target_worker = None
                 self.logger.debug("REC TARGET CANCELED.")
+            # Clear queues.
+            self.remove_items_from_queue(self.from_source_queue)
+            self.remove_items_from_queue(self.to_target_queue)
         except Exception as e:
             self.logger.debug("RecWorker, stop_recording: " + str(e))
 
@@ -116,44 +115,39 @@ class RecWorker(object):
             if self.connected_device_index == None:
                 self.logger.debug("NO MIC.")
                 return
+
+            # Process buffer 0.5 sec.
+            # process_buffer = int(float(self.connected_sampling_freq_hz) / 2)
+            process_buffer = int(float(self.connected_sampling_freq_hz) / 4)
+            wurb_core.audio_capture.setup(
+                device_index=self.connected_device_index,
+                device_name=self.connected_device_name,
+                channels="MONO",
+                sampling_freq_hz=int(self.connected_sampling_freq_hz),
+                frames=int(1024 * 8),
+                buffer_size=process_buffer,
+            )
+
+            await wurb_core.audio_capture.start()
+            self.logger.debug("RecWorker - Sound capture started.")
         except Exception as e:
             message = "RecWorker - rec_source_worker. Exception: " + str(e)
             self.logger.debug(message)
-
-        # Process buffer 0.5 sec.
-        process_buffer = int(float(self.connected_sampling_freq_hz) / 2)
-        wurb_core.audio_capture.setup(
-            device_index=self.connected_device_index,
-            channels="MONO",
-            sampling_freq_hz=int(self.connected_sampling_freq_hz),
-            frames=int(1024 * 8),
-            buffer_size=process_buffer,
-        )
-
-        await wurb_core.audio_capture.start()
-        self.logger.debug("RecWorker - Sound capture started.")
-        # capture_coro = wurb_core.audio_capture.start()
-        # try:
-        #     tasks = asyncio.gather(
-        #         capture_coro,
-        #     )
-        #     self.gather_result = await tasks
-        #     self.logger.debug("Sound capture ended: " + str(self.gather_result))
-        # except Exception as e:
-        #     self.logger.debug("RecWorker, rec_source_worker: " + str(e))
+            return
 
     async def rec_process_worker(self):
         """ """
-
+        self.restart_activated = False
         try:
             # Get rec length from settings.
             self.rec_length_s = int(wurb_core.wurb_settings.get_setting("recLengthS"))
             #
             self.process_deque = deque()  # Double ended queue.
             self.process_deque.clear()
-            self.process_deque_length = self.rec_length_s * 2
-            # self.detection_counter_max = self.process_deque_length - 3  # 1.5 s before.
-            self.detection_counter_max = self.process_deque_length - 2  # 1.0 s before.
+            # self.process_deque_length = self.rec_length_s * 2
+            self.process_deque_length = self.rec_length_s * 4
+            # self.detection_counter_max = self.process_deque_length - 2  # 1.0 s before.
+            self.detection_counter_max = self.process_deque_length - 4  # 1.0 s before.
             #
             first_sound_detected = False
             sound_detected = False
@@ -167,7 +161,6 @@ class RecWorker(object):
             while True:
                 try:
                     try:
-                        # item = await self.from_source_queue.get()
                         try:
                             item = await asyncio.wait_for(
                                 self.from_source_queue.get(),
@@ -189,7 +182,7 @@ class RecWorker(object):
                                 wurb_core.rec_manager.restart_rec(),
                                 loop,
                             )
-                            await self.remove_items_from_queue(self.from_source_queue)
+                            self.remove_items_from_queue(self.from_source_queue)
                             await self.from_source_queue.put(False)  # Flush.
                             return
                         #
@@ -205,7 +198,7 @@ class RecWorker(object):
                                 first_sound_detected == False
                                 sound_detected_counter = 0
                                 self.process_deque.clear()
-                                await self.remove_items_from_queue(self.to_target_queue)
+                                self.remove_items_from_queue(self.to_target_queue)
                                 await self.to_target_queue.put(False)  # Flush.
                             else:
                                 # Compare real time and stream time.
@@ -237,9 +230,7 @@ class RecWorker(object):
                                         wurb_core.rec_manager.restart_rec(),
                                         loop,
                                     )
-                                    await self.remove_items_from_queue(
-                                        self.from_source_queue
-                                    )
+                                    self.remove_items_from_queue(self.from_source_queue)
                                     await self.from_source_queue.put(False)  # Flush.
                                     return
 
@@ -327,7 +318,7 @@ class RecWorker(object):
                             await asyncio.sleep(0)
 
                     except asyncio.QueueFull:
-                        await self.remove_items_from_queue(self.to_target_queue)
+                        self.remove_items_from_queue(self.to_target_queue)
                         self.process_deque.clear()
                         await self.to_target_queue.put(False)  # Flush.
                 except asyncio.CancelledError:
@@ -358,7 +349,7 @@ class RecWorker(object):
                             # Terminated by process.
                             break
                         elif item == False:
-                            await self.remove_items_from_queue(self.to_target_queue)
+                            self.remove_items_from_queue(self.to_target_queue)
                             if wave_file_writer:
                                 wave_file_writer.close()
                                 wave_file_writer = None
@@ -407,15 +398,16 @@ class RecWorker(object):
         finally:
             self.logger.debug("RecWorker - Sound target ended.")
 
-    async def remove_items_from_queue(self, queue):
+    def remove_items_from_queue(self, queue):
         """Helper method."""
         try:
-            while True:
-                try:
-                    queue.get_nowait()
-                    queue.task_done()
-                except asyncio.QueueEmpty:
-                    return
+            if queue:
+                while True:
+                    try:
+                        queue.get_nowait()
+                        queue.task_done()
+                    except asyncio.QueueEmpty:
+                        return
         except Exception as e:
             message = "RecWorker - remove_items_from_queue. Exception: " + str(e)
             self.logger.debug(message)
