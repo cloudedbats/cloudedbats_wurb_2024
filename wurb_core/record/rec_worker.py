@@ -318,6 +318,7 @@ class RecWorker(object):
                             await asyncio.sleep(0)
 
                     except asyncio.QueueFull:
+                        self.logger.debug("RecWorker - Queue full, items removed.")
                         self.remove_items_from_queue(self.to_target_queue)
                         self.process_deque.clear()
                         await self.to_target_queue.put(False)  # Flush.

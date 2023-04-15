@@ -31,6 +31,7 @@ class RecManager(object):
         self.last_used_rec_mode = ""
         self.manual_trigger_activated = False
         self.status_info_text = ""
+        self.status_info_text_old = ""
         #
         self.rec_event = None
         self.notification_event = None
@@ -43,6 +44,9 @@ class RecManager(object):
 
     def startup(self):
         """ """
+        # Load microphone info.
+        wurb_core.rec_devices.get_capture_device_info()
+
         wurb_core.gps_reader.startup()
         self.control_loop = asyncio.create_task(
             self.rec_control_loop(), name="RecManager control task"
@@ -170,7 +174,10 @@ class RecManager(object):
                 self.status_info_text = "Recording off."
                 # await wurb_core.rec_manager.stop_rec()
 
-            print("REC MANAGER: ", self.status_info_text)
+            # print("REC MANAGER: ", self.status_info_text)
+            if self.status_info_text != self.status_info_text_old:
+                self.status_info_text_old = self.status_info_text
+                self.logger.info("Recording status: " + self.status_info_text)
 
             if is_rec_to_be_activated:
                 wurb_core.rec_worker.start_recording()
