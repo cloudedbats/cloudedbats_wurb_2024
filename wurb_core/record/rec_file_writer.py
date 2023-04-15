@@ -5,7 +5,8 @@
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 import asyncio
-import concurrent.futures
+
+# import concurrent.futures
 import logging
 import pathlib
 import wave
@@ -188,6 +189,9 @@ class RecFileWriter(object):
 
     def close(self):
         """ """
+
+        print("--- DEBUG: plot_spectrogram - 0.")
+
         if self.wave_file is not None:
             self.wave_file.close()
             self.wave_file = None
@@ -262,25 +266,34 @@ class RecFileWriter(object):
             rec_file_path
         )
 
-        if pathlib.Path(img_file_path).exists():
-            print("Already done. Skipped.")
-            return
-
         target_dir_path = pathlib.Path(img_file_path).parent
         if not target_dir_path.exists():
             target_dir_path.mkdir()
+
+        print("--- DEBUG: plot_spectrogram - 1.")
 
         spectrogram_task = asyncio.create_task(
             self.generate_in_executor(rec_file_path, img_file_path),
             name="Spectrogram generator",
         )
 
+        print("--- DEBUG: plot_spectrogram - 2.")
+
     async def generate_in_executor(self, rec_file_path, img_file_path):
         """ """
-        with concurrent.futures.ProcessPoolExecutor() as executor:
-            future = executor.submit(
-                wurb_core.create_spectrogram, rec_file_path, img_file_path
-            )
-            concurrent.futures.wait([future])
-            message = str(future.result())
-            wurb_core.wurb_logger.debug(message)
+
+        print("--- DEBUG: plot_spectrogram - 3.")
+
+        main_loop = asyncio.get_event_loop()
+        main_loop.run_in_executor(
+            None, wurb_core.create_spectrogram, rec_file_path, img_file_path
+        )
+
+        # # with concurrent.futures.ProcessPoolExecutor() as executor:
+        # with concurrent.futures.ThreadPoolExecutor() as executor:
+        #     future = executor.submit(wurb_core.create_spectrogram, rec_file_path, img_file_path)
+        #     concurrent.futures.wait([future])
+        #     message = str(future.result())
+        #     wurb_core.wurb_logger.debug(message)
+
+        print("--- DEBUG: plot_spectrogram - 4.")
