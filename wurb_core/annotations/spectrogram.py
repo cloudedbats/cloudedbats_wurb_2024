@@ -15,8 +15,8 @@ def create_spectrogram(source_path, target_path):
     matplotlib.rcParams.update({"font.size": 6})
     figure = matplotlib.figure.Figure(
         figsize=(10, 3),
-        # dpi=500,
-        dpi=400,
+        # dpi=400,
+        dpi=200,
         # Plot figure.
     )
     ax1 = figure.add_subplot(111)
