@@ -203,7 +203,8 @@ class AlsaAudioCapture:
                 channels=channels,
                 rate=self.sampling_freq_hz,
                 format=alsaaudio.PCM_FORMAT_S16_LE,
-                periodsize=self.frames,
+                # periodsize=self.frames,
+                periodsize=int(1024 * 8),
                 device="sysdefault",
                 cardindex=self.device_index,
             )

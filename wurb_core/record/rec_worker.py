@@ -38,7 +38,7 @@ class RecWorker(object):
         """ """
         self.queue_max_size = 100
         self.rec_timeout_before_restart_s = 30
-        self.max_adc_time_diff_s = 10
+        self.max_adc_time_diff_s = 60
         self.restart_activated = False
         self.connected_device_name = ""
         self.connected_device_index = ""
@@ -116,16 +116,17 @@ class RecWorker(object):
                 self.logger.debug("NO MIC.")
                 return
 
-            # Process buffer 0.5 sec.
-            # process_buffer = int(float(self.connected_sampling_freq_hz) / 2)
-            process_buffer = int(float(self.connected_sampling_freq_hz) / 4)
+            # Set up microphone.
+            # Process buffer 0.25 sec.
+            process_buffer_size = int(float(self.connected_sampling_freq_hz) / 4)
+            frames_in_buffer = int(float(self.connected_sampling_freq_hz) / 8)
             wurb_core.audio_capture.setup(
                 device_index=self.connected_device_index,
                 device_name=self.connected_device_name,
                 channels="MONO",
                 sampling_freq_hz=int(self.connected_sampling_freq_hz),
-                frames=int(1024 * 8),
-                buffer_size=process_buffer,
+                frames=frames_in_buffer,
+                buffer_size=process_buffer_size,
             )
 
             await wurb_core.audio_capture.start()
