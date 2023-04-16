@@ -7,6 +7,7 @@
 import asyncio
 import logging
 import datetime
+import zoneinfo
 
 import wurb_core
 
@@ -41,8 +42,6 @@ class WurbScheduler(object):
         start_event_local, stop_event_local = self.calculate_start_stop()
         if (start_event_local is None) or (stop_event_local is None):
             # Can't calculate start or stop.
-            self.current_scheduler_state = "Time or position is missing."
-            # await wurb_core.rec_manager.stop_rec()
             is_rec_active = False
             return is_rec_active
 
@@ -55,12 +54,8 @@ class WurbScheduler(object):
         elif start_event_local < stop_event_local:
             # Same day.
             if (start_event_local < now_local) and (now_local < stop_event_local):
-                self.current_scheduler_state = "Recording active."
-                # await wurb_core.rec_manager.start_rec()
                 is_rec_active = True
             else:
-                self.current_scheduler_state = "Recording not active."
-                # await wurb_core.rec_manager.stop_rec()
                 is_rec_active = False
         else:
             # Different days.
@@ -77,8 +72,6 @@ class WurbScheduler(object):
                 # await wurb_core.rec_manager.start_rec()
                 is_rec_active = True
             else:
-                self.current_scheduler_state = "Recording not active."
-                # await wurb_core.rec_manager.stop_rec()
                 is_rec_active = False
 
         return is_rec_active
@@ -99,9 +92,9 @@ class WurbScheduler(object):
                 return (None, None)
             start_event = start_event.replace("on-", "") + "_utc"
             start_event_utc = solartime_dict.get(start_event, None)
-            start_event_local = start_event_utc.astimezone()
+            start_event_local = self.utc_to_local(start_event_utc)
         else:
-            start_event = start_event.replace("on-", "") + "_utc"
+            start_event = start_event.replace("on-", "")
             start_event_hour = int(float(start_event))
             start_event_local = datetime.datetime.now().astimezone()
             start_event_local = start_event_local.replace(
@@ -114,9 +107,9 @@ class WurbScheduler(object):
                 return (None, None)
             stop_event = stop_event.replace("off-", "") + "_utc"
             stop_event_utc = solartime_dict.get(stop_event, None)
-            stop_event_local = stop_event_utc.astimezone()
+            stop_event_local = self.utc_to_local(stop_event_utc)
         else:
-            stop_event = stop_event.replace("off-", "") + "_utc"
+            stop_event = stop_event.replace("off-", "")
             stop_event_hour = int(float(stop_event))
             stop_event_local = datetime.datetime.now().astimezone()
             stop_event_local = stop_event_local.replace(
@@ -145,24 +138,26 @@ class WurbScheduler(object):
         if lookup_key in self.solartime_lookup_dict:
             sun_moon_dict = self.solartime_lookup_dict.get(lookup_key, {})
         else:
-            # solartime_dict = self.solartime.sun_utc(date_local, latitude, longitude)
             sun_moon_dict = wurb_core.sun_moon.get_sun_moon_info(latitude, longitude)
             self.solartime_lookup_dict[lookup_key] = sun_moon_dict
 
         if lookup_key != self.solartime_last_used_key:
             self.solartime_last_used_key = lookup_key
             # Logging.
-            sunset_utc = sun_moon_dict.get("sunset", None)
-            dusk_utc = sun_moon_dict.get("dusk", None)
-            dawn_utc = sun_moon_dict.get("dawn", None)
-            sunrise_utc = sun_moon_dict.get("sunrise", None)
+            sunset_utc = sun_moon_dict.get("sunset_utc", None)
+            dusk_utc = sun_moon_dict.get("dusk_utc", None)
+            dawn_utc = sun_moon_dict.get("dawn_utc", None)
+            sunrise_utc = sun_moon_dict.get("sunrise_utc", None)
             if sunset_utc and dusk_utc and dawn_utc and sunrise_utc:
                 if print_new:
-                    sunset_local = sunset_utc.astimezone()
-                    dusk_local = dusk_utc.astimezone()
-                    dawn_local = dawn_utc.astimezone()
-                    sunrise_local = sunrise_utc.astimezone()
+                    sunset_local = self.utc_to_local(sunset_utc)
+                    dusk_local = self.utc_to_local(dusk_utc)
+                    dawn_local = self.utc_to_local(dawn_utc)
+                    sunrise_local = self.utc_to_local(sunrise_utc)
                     message = "Solartime recalculated: "
+                    # message += " Date: " + str(date_local)
+                    message += " Latitude: " + str(latitude_short)
+                    message += " Longitude: " + str(longitude_short)
                     message += " Sunset: " + sunset_local.strftime("%H:%M:%S")
                     message += " Dusk: " + dusk_local.strftime("%H:%M:%S")
                     message += " Dawn: " + dawn_local.strftime("%H:%M:%S")
@@ -172,3 +167,9 @@ class WurbScheduler(object):
                 return None
 
         return sun_moon_dict
+
+    def utc_to_local(self, datetime_in_utc):
+        """ """
+        datetime_utc = datetime_in_utc.replace(tzinfo=zoneinfo.ZoneInfo("UTC"))
+        datetime_local = datetime_utc.astimezone()
+        return datetime_local
