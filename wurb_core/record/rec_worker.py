@@ -119,13 +119,14 @@ class RecWorker(object):
             # Set up microphone.
             # Process buffer 0.25 sec.
             process_buffer_size = int(float(self.connected_sampling_freq_hz) / 4)
-            frames_in_buffer = int(float(self.connected_sampling_freq_hz) / 8)
+            # frames_per_buffer = int(float(self.connected_sampling_freq_hz) / 8)
+            frames_per_buffer = int(1024.0 * 4)
             wurb_core.audio_capture.setup(
                 device_index=self.connected_device_index,
                 device_name=self.connected_device_name,
                 channels="MONO",
                 sampling_freq_hz=int(self.connected_sampling_freq_hz),
-                frames=frames_in_buffer,
+                frames_per_buffer=frames_per_buffer,
                 buffer_size=process_buffer_size,
             )
 

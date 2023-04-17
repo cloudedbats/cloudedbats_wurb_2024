@@ -82,7 +82,7 @@ class AlsaAudioPlayback:
         device_index,
         channels,
         sampling_freq_hz,
-        frames,
+        frames_per_buffer,
         buffer_size,
         buffer_max_size,
         in_queue_length=10,
@@ -91,7 +91,7 @@ class AlsaAudioPlayback:
         self.device_index = device_index
         self.channels = channels
         self.sampling_freq_hz = sampling_freq_hz
-        self.frames = frames
+        self.frames_per_buffer = frames_per_buffer
         self.buffer_size = buffer_size
         self.buffer_max_size = buffer_max_size
         # Setup queue for data in.
@@ -172,7 +172,8 @@ class AlsaAudioPlayback:
                 channels=channels,
                 rate=self.sampling_freq_hz,
                 format=alsaaudio.PCM_FORMAT_S16_LE,
-                periodsize=self.frames,
+                periodsize=self.frames_per_buffer,
+                # periodsize=int(1024 * 8),
                 device="sysdefault",
                 cardindex=self.device_index,
             )

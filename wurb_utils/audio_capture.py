@@ -24,7 +24,7 @@ class AudioCapture:
         self.device_name = ""
         self.channels = None
         self.sampling_freq_hz = None
-        self.frames = None
+        self.frames_per_buffer = None
         self.buffer_size = None
         #
         self.out_queue_list = []
@@ -77,7 +77,7 @@ class AudioCapture:
         device_name,
         channels,
         sampling_freq_hz,
-        frames,
+        frames_per_buffer,
         buffer_size,
     ):
         """ """
@@ -85,7 +85,7 @@ class AudioCapture:
         self.device_name = device_name
         self.channels = channels
         self.sampling_freq_hz = sampling_freq_hz
-        self.frames = frames
+        self.frames_per_buffer = frames_per_buffer
         self.buffer_size = buffer_size
 
     def add_out_queue(self, out_queue):
@@ -143,7 +143,8 @@ class AudioCapture:
                 input=True,
                 output=False,
                 input_device_index=self.device_index,
-                frames_per_buffer=self.frames,
+                # Number of frames not needed here.
+                # frames_per_buffer=self.frames_per_buffer,
             )
             self.capture_is_running = True
             # Time related.
@@ -153,7 +154,7 @@ class AudioCapture:
             in_buffer_int16 = numpy.array([], dtype=numpy.int16)
             while self.capture_is_active:
                 # Read from capture device.
-                data = stream.read(self.frames, exception_on_overflow=False)
+                data = stream.read(self.frames_per_buffer, exception_on_overflow=False)
                 # Convert from string-byte array to int16 array.
                 in_data_int16 = numpy.frombuffer(data, dtype=numpy.int16)
 

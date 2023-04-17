@@ -30,7 +30,7 @@ class AlsaAudioCapture:
         self.device_name = ""
         self.channels = None
         self.sampling_freq_hz = None
-        self.frames = None
+        self.frames_per_buffer = None
         self.buffer_size = None
         #
         self.out_queue_list = []
@@ -138,7 +138,7 @@ class AlsaAudioCapture:
         device_name,
         channels,
         sampling_freq_hz,
-        frames,
+        frames_per_buffer,
         buffer_size,
     ):
         """ """
@@ -146,11 +146,8 @@ class AlsaAudioCapture:
         self.device_name = device_name
         self.channels = channels
         self.sampling_freq_hz = sampling_freq_hz
-        self.frames = frames
+        self.frames_per_buffer = frames_per_buffer
         self.buffer_size = buffer_size
-
-        # PyAlsaAudio need bigger read buffers.
-        self.frames = int(float(sampling_freq_hz) / 4)
 
     def add_out_queue(self, out_queue):
         """ """
@@ -203,8 +200,8 @@ class AlsaAudioCapture:
                 channels=channels,
                 rate=self.sampling_freq_hz,
                 format=alsaaudio.PCM_FORMAT_S16_LE,
-                # periodsize=self.frames,
-                periodsize=int(1024 * 8),
+                periodsize=self.frames_per_buffer,
+                # periodsize=int(1024 * 4),
                 device="sysdefault",
                 cardindex=self.device_index,
             )

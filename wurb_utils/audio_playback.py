@@ -23,7 +23,7 @@ class AudioPlayback:
         self.device_index = None
         self.channels = None
         self.sampling_freq_hz = None
-        self.frames = None
+        self.frames_per_buffer = None
         self.buffer_size = None
         self.buffer_max_size = None
         #
@@ -59,7 +59,7 @@ class AudioPlayback:
         device_index,
         channels,
         sampling_freq_hz,
-        frames,
+        frames_per_buffer,
         buffer_size,
         buffer_max_size,
         in_queue_length=10,
@@ -68,7 +68,7 @@ class AudioPlayback:
         self.device_index = device_index
         self.channels = channels
         self.sampling_freq_hz = sampling_freq_hz
-        self.frames = frames
+        self.frames_per_buffer = frames_per_buffer
         self.buffer_size = buffer_size
         self.buffer_max_size = buffer_max_size
         # Setup queue for data in.
@@ -146,10 +146,10 @@ class AudioPlayback:
                 input=False,
                 output=True,
                 output_device_index=self.device_index,
-                frames_per_buffer=self.frames,
+                frames_per_buffer=self.frames_per_buffer,
             )
             # To be used when no data in buffer.
-            silent_buffer = numpy.zeros((self.frames, 1), dtype=numpy.float16)
+            silent_buffer = numpy.zeros((self.frames_per_buffer, 1), dtype=numpy.float16)
             # Loop over the IO blocking part.
             while self.playback_active:
                 try:
@@ -157,12 +157,12 @@ class AudioPlayback:
                     buffer_int16 = silent_buffer
                     #
                     if (self.buffer_int16 is not None) and (
-                        self.buffer_int16.size >= self.frames
+                        self.buffer_int16.size >= self.frames_per_buffer
                     ):
                         # Copy part to be used.
-                        buffer_int16 = self.buffer_int16[: self.frames]
+                        buffer_int16 = self.buffer_int16[: self.frames_per_buffer]
                         # Remove used part.
-                        self.buffer_int16 = self.buffer_int16[self.frames :]
+                        self.buffer_int16 = self.buffer_int16[self.frames_per_buffer :]
 
                     #     self.logger.debug("AudioPlayback - SOUND. Len: " + str(self.buffer_int16.size))
                     # else:
