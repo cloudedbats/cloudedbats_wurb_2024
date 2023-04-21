@@ -6,6 +6,7 @@
 
 import asyncio
 import pathlib
+import time
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
@@ -39,7 +40,8 @@ async def main():
 class FileCreateHandler(FileSystemEventHandler):
     def on_created(self, event):
         print("Created: " + event.src_path)
-        self.plot_spectrogram(event.src_path)
+        ### May be called too early, use on_modified.
+        ### self.plot_spectrogram(event.src_path)
 
     def on_deleted(self, event):
         print("Deleted: " + event.src_path)
@@ -47,15 +49,45 @@ class FileCreateHandler(FileSystemEventHandler):
 
     def on_modified(self, event):
         print("Modified: " + event.src_path)
+        self.plot_spectrogram(event.src_path)
 
     def delete_spectrogram(self, rec_file_path):
         """ """
-        rec_path = pathlib.Path(self.get_spectrogram_file_path(rec_file_path))
-        if rec_path.exists():
-            print("Spectrogram deleted: ", rec_path.name)
-            rec_path.unlink()
-        else:
-            print("Spectrogram not found for deletion.")
+        rec_path = pathlib.Path(rec_file_path)
+        if rec_path.suffix == ".wav":
+            spectrogram_path = self.get_spectrogram_file_path(rec_file_path)
+            if spectrogram_path.exists():
+                print("Spectrogram deleted: ", spectrogram_path.name)
+                spectrogram_path.unlink()
+            else:
+                print("Spectrogram not found for deletion.")
+
+    def plot_spectrogram(self, rec_file_path):
+        """ """
+        rec_path = pathlib.Path(rec_file_path)
+        if rec_path.suffix == ".wav":
+            spectrogram_path = self.get_spectrogram_file_path(rec_file_path)
+            # Create dir.
+            target_dir_path = spectrogram_path.parent
+            if not target_dir_path.exists():
+                target_dir_path.mkdir()
+            # Check if already done.
+            if not spectrogram_path.exists():
+                print("--- DEBUG: Plot-1: ", spectrogram_path.name)
+                # Wait to avoid multiple on_modified calls,
+                # similar events in queue will be merged by watchdog.
+                # Also to avoid reading wave file too early.
+                time.sleep(2.0)
+                print("--- DEBUG: Plot-2: ", spectrogram_path.name)
+                with concurrent.futures.ProcessPoolExecutor() as executor:
+                    # with concurrent.futures.ThreadPoolExecutor() as executor:
+                    future = executor.submit(
+                        create_spectrogram, str(rec_file_path), str(spectrogram_path)
+                    )
+                    concurrent.futures.wait([future])
+                    message = str(future.result())
+                    print("--- DEBUG: Future-3: ", message)
+                print("--- DEBUG: Plot-4: ", spectrogram_path.name)
 
     def get_spectrogram_file_path(self, rec_file_path):
         """ """
@@ -65,28 +97,7 @@ class FileCreateHandler(FileSystemEventHandler):
             "/wurb_cache/spectrograms",
         )
         rec_path_str = rec_path_str.replace(".wav", "_SPECTROGRAM.jpg")
-        return str(rec_path_str)
-
-    def plot_spectrogram(self, rec_file_path):
-        """ """
-        img_file_path = self.get_spectrogram_file_path(
-            rec_file_path
-        )
-
-        target_dir_path = pathlib.Path(img_file_path).parent
-        if not target_dir_path.exists():
-            target_dir_path.mkdir()
-
-        print("--- DEBUG: plot_spectrogram - 1.")
-
-        with concurrent.futures.ProcessPoolExecutor() as executor:
-        # with concurrent.futures.ThreadPoolExecutor() as executor:
-            future = executor.submit(create_spectrogram, rec_file_path, img_file_path)
-            concurrent.futures.wait([future])
-            message = str(future.result())
-            print("Future: ", message)
-
-        print("--- DEBUG: plot_spectrogram - 2.")
+        return pathlib.Path(rec_path_str)
 
 
 if __name__ == "__main__":

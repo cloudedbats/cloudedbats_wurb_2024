@@ -198,8 +198,7 @@ class RecFileWriter(object):
             #
             # self.copy_settings()
             self.create_metadata()
-
-            self.plot_spectrogram()
+            # self.plot_spectrogram()
 
     # def copy_settings(self):
     #     """Copy settings to target directory."""
@@ -259,41 +258,41 @@ class RecFileWriter(object):
         #
         wurb_core.metadata.write_metadata(self.rec_filename_path, metadata)
 
-    def plot_spectrogram(self):
-        """ """
-        rec_file_path = self.rec_filename_path
-        img_file_path = wurb_core.record_manager.get_spectrogram_file_path(
-            rec_file_path
-        )
+    # def plot_spectrogram(self):
+    #     """ """
+    #     rec_file_path = self.rec_filename_path
+    #     img_file_path = wurb_core.record_manager.get_spectrogram_file_path(
+    #         rec_file_path
+    #     )
 
-        target_dir_path = pathlib.Path(img_file_path).parent
-        if not target_dir_path.exists():
-            target_dir_path.mkdir()
+    #     target_dir_path = pathlib.Path(img_file_path).parent
+    #     if not target_dir_path.exists():
+    #         target_dir_path.mkdir()
 
-        print("--- DEBUG: plot_spectrogram - 1.")
+    #     print("--- DEBUG: plot_spectrogram - 1.")
 
-        spectrogram_task = asyncio.create_task(
-            self.generate_in_executor(rec_file_path, img_file_path),
-            name="Spectrogram generator",
-        )
+    #     spectrogram_task = asyncio.create_task(
+    #         self.generate_in_executor(rec_file_path, img_file_path),
+    #         name="Spectrogram generator",
+    #     )
 
-        print("--- DEBUG: plot_spectrogram - 2.")
+    #     print("--- DEBUG: plot_spectrogram - 2.")
 
-    async def generate_in_executor(self, rec_file_path, img_file_path):
-        """ """
+    # async def generate_in_executor(self, rec_file_path, img_file_path):
+    #     """ """
 
-        print("--- DEBUG: plot_spectrogram - 3.")
+    #     print("--- DEBUG: plot_spectrogram - 3.")
 
-        main_loop = asyncio.get_event_loop()
-        main_loop.run_in_executor(
-            None, wurb_core.create_spectrogram, rec_file_path, img_file_path
-        )
+    #     main_loop = asyncio.get_event_loop()
+    #     main_loop.run_in_executor(
+    #         None, wurb_core.create_spectrogram, rec_file_path, img_file_path
+    #     )
 
-        # # with concurrent.futures.ProcessPoolExecutor() as executor:
-        # with concurrent.futures.ThreadPoolExecutor() as executor:
-        #     future = executor.submit(wurb_core.create_spectrogram, rec_file_path, img_file_path)
-        #     concurrent.futures.wait([future])
-        #     message = str(future.result())
-        #     wurb_core.wurb_logger.debug(message)
+    #     # # with concurrent.futures.ProcessPoolExecutor() as executor:
+    #     # with concurrent.futures.ThreadPoolExecutor() as executor:
+    #     #     future = executor.submit(wurb_core.create_spectrogram, rec_file_path, img_file_path)
+    #     #     concurrent.futures.wait([future])
+    #     #     message = str(future.result())
+    #     #     wurb_core.wurb_logger.debug(message)
 
-        print("--- DEBUG: plot_spectrogram - 4.")
+    #     print("--- DEBUG: plot_spectrogram - 4.")

@@ -15,6 +15,7 @@ psutil
 pyusb
 # Plotting.
 matplotlib
+watchdog
 # GPS and date/time.
 pyserial
 pyserial-asyncio
