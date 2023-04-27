@@ -55,7 +55,7 @@ class FileCreateHandler(FileSystemEventHandler):
         """ """
         rec_path = pathlib.Path(rec_file_path)
         if rec_path.suffix == ".wav":
-            spectrogram_path = self.get_spectrogram_file_path(rec_file_path)
+            spectrogram_path = self.get_spectrogram_path_by_rec(rec_file_path)
             if spectrogram_path.exists():
                 print("Spectrogram deleted: ", spectrogram_path.name)
                 spectrogram_path.unlink()
@@ -66,11 +66,11 @@ class FileCreateHandler(FileSystemEventHandler):
         """ """
         rec_path = pathlib.Path(rec_file_path)
         if rec_path.suffix == ".wav":
-            spectrogram_path = self.get_spectrogram_file_path(rec_file_path)
+            spectrogram_path = self.get_spectrogram_path_by_rec(rec_file_path)
             # Create dir.
             target_dir_path = spectrogram_path.parent
             if not target_dir_path.exists():
-                target_dir_path.mkdir()
+                target_dir_path.mkdir(parents=True)
             # Check if already done.
             if not spectrogram_path.exists():
                 print("--- DEBUG: Plot-1: ", spectrogram_path.name)
@@ -89,7 +89,7 @@ class FileCreateHandler(FileSystemEventHandler):
                     print("--- DEBUG: Future-3: ", message)
                 print("--- DEBUG: Plot-4: ", spectrogram_path.name)
 
-    def get_spectrogram_file_path(self, rec_file_path):
+    def get_spectrogram_path_by_rec(self, rec_file_path):
         """ """
         rec_path_str = str(rec_file_path)
         rec_path_str = rec_path_str.replace(
