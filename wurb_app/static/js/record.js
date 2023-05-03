@@ -24,25 +24,6 @@ function geoToggleSettings() {
     };
 }
 
-// Generic functions.
-function hideDivision(divId) {
-    if (divId != 'undefined') {
-        divId.style.visibility = "hidden";
-        divId.style.overflow = "hidden";
-        divId.style.height = "0";
-        divId.style.width = "0";
-    }
-};
-
-function showDivision(divId) {
-    if (divId != 'undefined') {
-        divId.style.visibility = null;
-        divId.style.overflow = null;
-        divId.style.height = null;
-        divId.style.width = null;
-    }
-};
-
 // For detector mode.
 function modeSelectOnChange(updateDetector) {
     let selectedValue = byId("recModeSelectId").options[byId("recModeSelectId").selectedIndex].value

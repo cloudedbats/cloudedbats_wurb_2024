@@ -137,7 +137,7 @@ async def get_file(
 ):
     """ """
     try:
-        file_path = wurb_core.record_manager.get_file_path(
+        file_path = wurb_core.record_manager.get_rec_file_path(
             source_id=sourceId,
             night_id=nightId,
             record_id=recordId,

@@ -1,5 +1,4 @@
 
-
 async function getSourceDirs() {
     // fetch("/module-admin/get-rec-sources", { method: "GET" })
     fetch("/annotations/sources", { method: "GET" })
@@ -30,16 +29,6 @@ async function getSourceDirs() {
                 option.value = content.id;
                 select.appendChild(option);
             }
-
-
-            // // During development.
-            // byId("annoSelectSourceId").value = "local";
-            // var sourceId = byId("annoSelectSourceId").value;
-            // getNights(sourceId);
-
-
-
-
         })
         .catch(function (err) {
             console.warn("Something went wrong.", err);
@@ -77,17 +66,6 @@ async function getNights(sourceId) {
                 option.value = content.id;
                 select.appendChild(option);
             }
-
-
-            // // During development.
-            // byId("annoSelectNightId").value = "Taberg-1_2022-12-21";
-            // var sourceId = byId("annoSelectSourceId").value;
-            // var nightId = byId("annoSelectNightId").value;
-            // getRecordInfo(sourceId, nightId, "");
-
-
-
-
         })
         .catch(function (err) {
             console.warn("Something went wrong.", err);

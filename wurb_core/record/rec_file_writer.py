@@ -261,13 +261,13 @@ class RecFileWriter(object):
     # def plot_spectrogram(self):
     #     """ """
     #     rec_file_path = self.rec_filename_path
-    #     img_file_path = wurb_core.record_manager.get_spectrogram_file_path(
+    #     img_file_path = wurb_core.record_manager.get_spectrogram_path_by_rec(
     #         rec_file_path
     #     )
 
     #     target_dir_path = pathlib.Path(img_file_path).parent
     #     if not target_dir_path.exists():
-    #         target_dir_path.mkdir()
+    #         target_dir_path.mkdir(parents=True)
 
     #     print("--- DEBUG: plot_spectrogram - 1.")
 

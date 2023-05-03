@@ -3,6 +3,25 @@ function byId(id) {
     return document.getElementById(id);
 };
 
+// Generic functions.
+function hideDivision(divId) {
+    if (divId != 'undefined') {
+        divId.style.visibility = "hidden";
+        divId.style.overflow = "hidden";
+        divId.style.height = "0";
+        divId.style.width = "0";
+    }
+};
+
+function showDivision(divId) {
+    if (divId != 'undefined') {
+        divId.style.visibility = null;
+        divId.style.overflow = null;
+        divId.style.height = null;
+        divId.style.width = null;
+    }
+};
+
 function hideModules() {
     byId("moduleRecordId").classList.remove("is-inverted");
     byId("moduleLiveId").classList.remove("is-inverted");
@@ -106,6 +125,7 @@ function fetchModuleAnnotations() {
             byId("moduleAnnotationsId").classList.remove("is-inverted");
 
             annoSourceLoad()
+            adminSourceLoad()
 
         })
         .catch(function (err) {

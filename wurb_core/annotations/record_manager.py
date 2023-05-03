@@ -32,61 +32,42 @@ class RecordManager(object):
 
     def clear(self):
         """ """
-        self.sources_by_id = {}
+        self.rec_sources = []
+        self.rec_sources_by_id = {}
 
     def configure(self):
         """ """
+        sources = wurb_core.config.get("annotations.sources")
+        for source in sources:
+            id = source.get("id", "")
+            if id:
+                # For rec_sources.
+                source_dict = {}
+                source_dict["id"] = source.get("id", "")
+                source_dict["name"] = source.get("name", "")
+                self.rec_sources.append(source_dict)
+                # For rec_sources_by_id.
+                self.rec_sources_by_id[id] = source
 
-    def load_sources(self):
+    def get_rec_sources(self):
         """ """
-        # Needs only be loaded once.
-        if not self.sources_by_id:
-            self.sources_by_id = {}
-            sources = wurb_core.config.get("annotations.sources")
-            for source in sources:
-                id = source.get("id", "")
-                if id:
-                    self.sources_by_id[id] = source
+        return self.rec_sources
 
     def get_source_dir(self, source_id):
         """ """
-        self.load_sources()
         result = ""
-        source = self.sources_by_id.get(source_id, "")
+        source = self.rec_sources_by_id.get(source_id, "")
         if source:
             result = source.get("rec_dir", "")
         return result
 
     def get_cache_dir(self, source_id):
         """ """
-        self.load_sources()
         result = ""
-        source = self.sources_by_id.get(source_id, "")
+        source = self.rec_sources_by_id.get(source_id, "")
         if source:
             result = source.get("cache_dir", "")
         return result
-
-    def get_rec_sources(self):
-        """ """
-        result = []
-        sources = wurb_core.config.get("annotations.sources")
-        for source in sources:
-            new_dict = {}
-            new_dict["id"] = source.get("id", "")
-            new_dict["name"] = source.get("name", "")
-            result.append(new_dict)
-        return result
-
-    #     for dir in dirs:
-    #         source_dir = dir.get("source", "")
-    #         cache_dir = dir.get("cache", "")
-    #         if source_dir:
-    #             source_dir_path = pathlib.Path(source_dir).resolve()
-    #             cache_dir_path = pathlib.Path(cache_dir).resolve()
-    #             result.append(str(source_dir_path))
-    #             self.cache_by_source[str(source_dir_path)] = str(cache_dir_path)
-    #     #
-    #     return sorted(result)
 
     def get_rec_nights(self, source_id):
         """ """
@@ -103,7 +84,7 @@ class RecordManager(object):
         #
         return result
 
-    def get_rec_files(self, source_id, night_id, record_id):
+    def get_rec_files(self, source_id, night_id):
         """ """
         result = []
         source_dir = pathlib.Path(self.get_source_dir(source_id)).resolve()
@@ -112,7 +93,7 @@ class RecordManager(object):
             for record_file in sorted(night_dir.glob("*.wav")):
                 result.append(record_file)
         #
-        return result
+        return sorted(result)
 
     def get_rec_file(self, source_id, night_id, record_id):
         """ """
@@ -132,7 +113,7 @@ class RecordManager(object):
     def get_rec_info(self, source_id, night_id, record_id):
         """ """
         rec_file = self.get_rec_file(source_id, night_id, record_id)
-        rec_files = self.get_rec_files(source_id, night_id, record_id)
+        rec_files = self.get_rec_files(source_id, night_id)
         prefix, utc_datetime, local_date, local_time = wurb_core.metadata.get_rec_keys(
             rec_file
         )
@@ -224,12 +205,18 @@ class RecordManager(object):
         }
         return record_data
 
-    def get_file_path(self, source_id, night_id, record_id):
+    def get_rec_file_path(self, source_id, night_id, record_id):
         """ """
         file_path = str(self.get_rec_file(source_id, night_id, record_id))
         return str(file_path)
 
-    def get_spectrogram_file_path(self, rec_file_path):
+    def get_spectrogram_path(self, source_id, night_id, record_id):
+        """ """
+        rec_path = str(self.get_rec_file(source_id, night_id, record_id))
+        img_path = self.get_spectrogram_path_by_rec(rec_path)
+        return str(img_path)
+
+    def get_spectrogram_path_by_rec(self, rec_file_path):
         """ """
         rec_path_str = str(rec_file_path)
         rec_path_str = rec_path_str.replace(
@@ -238,13 +225,3 @@ class RecordManager(object):
         )
         rec_path_str = rec_path_str.replace(".wav", "_SPECTROGRAM.jpg")
         return str(rec_path_str)
-
-    def get_spectrogram_path(self, source_id, night_id, record_id):
-        """ """
-        img_path = str(self.get_rec_file(source_id, night_id, record_id))
-        img_path = img_path.replace(
-            "/wurb_recordings",
-            "/wurb_cache/spectrograms",
-        )
-        img_path = img_path.replace(".wav", "_SPECTROGRAM.jpg")
-        return str(img_path)

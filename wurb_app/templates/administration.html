@@ -46,14 +46,14 @@
                         <div class="field is-grouped">
                             <div class="control">
                                 <div class="select is-rounded is-small has-text-weight-bold is-info">
-                                    <select id="adminSelectSourceId" onchange="adminSourceChanged()" disabled>
+                                    <select id="adminSelectSourceId" onchange="adminSourceChanged()">
                                         <option value="select">Select:</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="control">
                                 <div class="select is-rounded is-small has-text-weight-bold is-info">
-                                    <select id="adminSelectNightId" onchange="adminNightChanged()" disabled>
+                                    <select id="adminSelectNightId" onchange="adminNightChanged()">
                                         <option value="select">Select:</option>
                                     </select>
                                 </div>
@@ -64,8 +64,9 @@
                             <!-- <label class="label">Select</label> -->
                             <div class="container is-fluid m-2">
                                 <div class="buttons is-centered">
-                                    <button id="adminViewMetadataButtonId" onclick="adminToggleViewMetadata()"
-                                        class="button is-rounded is-small has-text-weight-bold is-info is-inverted">
+                                    <button id="adminViewMetadataButtonId" onclick="adminToggleViewData()"
+                                        class="button is-rounded is-small has-text-weight-bold is-info is-inverted"
+                                        disabled>
                                         Data
                                     </button>
                                     <button id="adminViewSpectrogramButtonId" onclick="adminToggleViewMap()"
@@ -122,18 +123,17 @@
                         <div class="container">
                             <div class="buttons is-centered">
                                 <button id="adminPreviousId" onclick="adminPrevious()"
-                                    class="button is-rounded is-small has-text-weight-bold is-info" disabled>Previous
+                                    class="button is-rounded is-small has-text-weight-bold is-info">Previous
                                     night</button>
                                 <button id="adminNextId" onclick="adminNext()"
-                                    class="button is-rounded is-small has-text-weight-bold is-info" disabled>Next
+                                    class="button is-rounded is-small has-text-weight-bold is-info">Next
                                     night</button>
                                 <button id="adminLastId" onclick="adminUpdate()"
-                                    class="button is-rounded is-small has-text-weight-bold is-info"
-                                    disabled>Update</button>
+                                    class="button is-rounded is-small has-text-weight-bold is-info">Update</button>
                             </div>
                         </div>
 
-                        <div class="field pt-2">
+                        <!-- <div class="field pt-2">
                             <div class="label">
                                 <label class="label">
                                     Comments on monitoring night
@@ -141,39 +141,121 @@
                                 </label>
                             </div>
                         </div>
-
-
-                        <!-- <div class="field">
-                            <label class="label">Comments</label>
-                        </div> -->
-                        <div class="field">
+                        <div class="field mx-2">
                             <p class="control">
                                 <input class="input" type="text" id="adminCommentsId"
                                     placeholder="Comments on monitoring night" onchange="adminSaveComments();">
                             </p>
-                        </div>
-
-
+                        </div> -->
 
                         <div class="field mt-4">
-                            <label class="label">Cleanup commands</label>
+                            <label class="label">Cleanup</label>
                         </div>
-                        <div class="container">
+                        <div class="container mt-4 ml-2">
                             <div class="buttons">
-                                <button id="adminAutoId" onclick="fetchXXX()"
-                                    class="button is-small is-rounded has-text-weight-bold is-info" disabled>
+                                <button id="adminAutoId" onclick="adminCommand('confirmRemoveQ0')"
+                                    class="button is-small is-rounded has-text-weight-bold is-info">
                                     Remove all Q0 (trash)
                                 </button>
-                                <button id="adminAutoId" onclick="fetchXXX()"
-                                    class="button is-small is-rounded has-text-weight-bold is-info" disabled>
+                                <button id="adminAutoId" onclick="adminCommand('confirmRemoveNa')"
+                                    class="button is-small is-rounded has-text-weight-bold is-info">
                                     Remove all "Not Assigned"
                                 </button>
                             </div>
                         </div>
 
+                        <div id="confirmRemoveQ0Id" style="visibility:hidden; overflow:hidden; height:0; width:0;">
+                            <div style="border:1px solid white; margin: 0px; padding: 25px;" class="p-2 m-2">
+                                <label class="label m-0">
+                                    Do you really want to remove all Q0 (trash)?
+                                </label>
+                                <div class="field is-grouped is-grouped-centered">
+                                    <button style="margin:5px;"
+                                        class="button is-small is-rounded has-text-weight-bold is-danger"
+                                        onclick="adminCommand('removeQ0')">
+                                        Remove all Q0 (trash)
+                                    </button>
+                                    <button style="margin:5px;"
+                                        class="button is-small is-rounded has-text-weight-bold is-info"
+                                        onclick="adminCommand('cancel')">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
 
+                        <div id="confirmRemoveNaId" style="visibility:hidden; overflow:hidden; height:0; width:0;">
+                            <div style="border:1px solid white; margin: 0px; padding: 25px;" class="p-2 m-2">
+                                <label class="label m-0">
+                                    Do you really want to remove all "Not Assigned"?
+                                </label>
+                                <div class="field is-grouped is-grouped-centered">
+                                    <button style="margin:5px;"
+                                        class="button is-small is-rounded has-text-weight-bold is-danger"
+                                        onclick="adminCommand('removeNa')">
+                                        Remove all "Not Assigned"
+                                    </button>
+                                    <button style="margin:5px;"
+                                        class="button is-small is-rounded has-text-weight-bold is-info"
+                                        onclick="adminCommand('cancel')">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="container ml-2 mt-4">
+                            <div class="buttons">
+                                <button id="adminAutoId" onclick="adminCommand('confirmDeleteNight')"
+                                    class="button is-small is-rounded has-text-weight-bold is-info">
+                                    Delete monitoring night
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="confirmDeleteNightId" style="visibility:hidden; overflow:hidden; height:0; width:0;"
+                            class="m-2">
+                            <div style="border:1px solid white; margin: 0px; padding: 25px;" class="p-2">
+                                <label class="label m-0">
+                                    Do you really want to remove all recorded files in this monitoring night?
+                                </label>
+                                <div class="field is-grouped is-grouped-centered">
+                                    <button style="margin:5px;"
+                                        class="button is-small is-rounded has-text-weight-bold is-danger"
+                                        onclick="adminCommand('deleteMonitoringNight')">
+                                        Delete monitoring event/night
+                                    </button>
+                                    <button style="margin:5px;"
+                                        class="button is-small is-rounded has-text-weight-bold is-info"
+                                        onclick="adminCommand('cancel')">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="field mt-4">
+                            <label class="label">Reports</label>
+                        </div>
+                        <div class="container my-4 ml-2">
+                            <div class="buttons">
+                                <button id="admin-autoId" onclick="adminCommand('createReport')"
+                                    class="button is-small is-rounded has-text-weight-bold is-info">
+                                    Create report
+                                </button>
+                                <!-- <button id="admin-autoId" onclick="fetchXXX()"
+                                    class="button is-small is-rounded has-text-weight-bold is-info" disabled>
+                                    Preview report
+                                </button>
+                                <button id="admin-autoId" onclick="fetchXXX()"
+                                    class="button is-small is-rounded has-text-weight-bold is-info" disabled>
+                                    Download latest report
+                                </button> -->
+                            </div>
+                        </div>
+
+
+                        <!-- <div class="field mt-4">
                             <label class="label">Rename commands</label>
                         </div>
                         <div class="container">
@@ -187,33 +269,9 @@
                                     Adjust positions
                                 </button>
                             </div>
-                        </div>
+                        </div> -->
 
-
-
-                        <div class="field mt-4">
-                            <label class="label">Report commands</label>
-                        </div>
-                        <div class="container">
-                            <div class="buttons">
-                                <button id="admin-autoId" onclick="fetchXXX()"
-                                    class="button is-small is-rounded has-text-weight-bold is-info" disabled>
-                                    Create report
-                                </button>
-                                <button id="admin-autoId" onclick="fetchXXX()"
-                                    class="button is-small is-rounded has-text-weight-bold is-info" disabled>
-                                    Preview report
-                                </button>
-                                <button id="admin-autoId" onclick="fetchXXX()"
-                                    class="button is-small is-rounded has-text-weight-bold is-info" disabled>
-                                    Download latest report
-                                </button>
-                            </div>
-                        </div>
-
-
-
-                        <div class="field mt-4">
+                        <!-- <div class="field mt-4">
                             <label class="label">Copy commands</label>
                         </div>
                         <div class="container">
@@ -227,27 +285,7 @@
                                     Copy all monitoring nights
                                 </button>
                             </div>
-                        </div>
-
-
-
-                        <div class="field mt-4">
-                            <label class="label">Delete commands</label>
-                        </div>
-                        <div class="container mb-4">
-                            <div class="buttons">
-                                <button id="adminAutoId" onclick="fetchXXX()"
-                                    class="button is-small is-rounded has-text-weight-bold is-info" disabled>
-                                    Delete monitoring night
-                                </button>
-                                <button id="adminAautoId" onclick="fetchXXX()"
-                                    class="button is-small is-rounded has-text-weight-bold is-info" disabled>
-                                    Delete all monitoring nights
-                                </button>
-                            </div>
-                        </div>
-
-
+                        </div> -->
 
                     </section>
 
@@ -268,8 +306,6 @@
                         </div>
 
                     </section>
-
-
 
                 </div>
             </article>

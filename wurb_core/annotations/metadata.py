@@ -145,34 +145,19 @@ class Metadata(object):
             file.writelines("\n".join(self.metadata_header_rows) + "\n")
             yaml.dump(metadata, file, default_flow_style=False)
 
-    # def get_metadata(self, rec_file_path, select="", quality_filter=[]):
     def get_metadata(self, rec_file_path):
         """ """
         metadata = {}
         rec_file_path = pathlib.Path(rec_file_path).resolve()
-        # rec_file_str = str(rec_file_path)
-        # night_dir_path = rec_file_path.parent
-        # rec_files = wurb_core.sources_and_files.get_rec_files(night_dir_path)
-        # for rec_file in rec_files:
-        #     print("File: ", str(rec_file))
-        # Get first, last, previous or next if asked for.
-        selected_rec = rec_file_path
-        # if select == "first":
-        #     selected_rec = rec_files[0]
-        # elif select == "last":
-        #     selected_rec = rec_files[-1]
-        # elif select == "previous":
-        #     for rec_file in rec_files:
-        #         if rec_file < rec_file_str:
-        #             selected_rec = rec_file
-        #         else:
-        #             break
-        # elif select == "next":
-        #     for rec_file in rec_files:
-        #         if rec_file > rec_file_str:
-        #             selected_rec = rec_file
-        #             break
         # Read metadata from file.
-        metadata = self.read_metadata(selected_rec)
+        metadata = self.read_metadata(rec_file_path)
         #
         return metadata
+
+    def delete_metadata(self, rec_file_path):
+        """ """
+        rec_file_path = pathlib.Path(rec_file_path)
+        metadata_file_path = self.get_metadata_file_path(rec_file_path)
+        if metadata_file_path.exists():
+            metadata_file_path.unlink()
+            print("METADATA DELETED: ", str(metadata_file_path))

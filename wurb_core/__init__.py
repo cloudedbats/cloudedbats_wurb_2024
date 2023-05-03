@@ -43,8 +43,11 @@ from wurb_core.administration.sources_and_files import SourcesAndFiles
 from wurb_core.annotations.metadata import Metadata
 from wurb_core.annotations.metadata_table import MetadataTable
 from wurb_core.annotations.record_manager import RecordManager
-
 from wurb_core.annotations.spectrogram import create_spectrogram
+
+from wurb_core.administration.admin_info import AdminInfo
+from wurb_core.administration.cleanup import AdminCleanup
+from wurb_core.administration.report_excel import ReportExcel
 
 
 # Instances of objects.
@@ -89,6 +92,10 @@ sources_and_files = SourcesAndFiles(config, wurb_logger)
 metadata = Metadata(config, logger)
 metadata_table = MetadataTable(config, wurb_logger)
 record_manager = RecordManager(config, wurb_logger)
+
+admin_info = AdminInfo(config, wurb_logger)
+cleanup = AdminCleanup(config, wurb_logger)
+report_excel = ReportExcel(config, wurb_logger)
 
 # Sunset, sunrise, etc.
 sun_moon = wurb_utils.SunMoon()

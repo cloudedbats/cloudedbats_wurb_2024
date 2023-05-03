@@ -11,7 +11,7 @@ import pathlib
 import wurb_core
 
 
-class SourcesAndFiles(object):
+class AdminInfo(object):
     """ """
 
     def __init__(self, config=None, logger=None, logger_name="DefaultLogger"):
@@ -31,3 +31,8 @@ class SourcesAndFiles(object):
 
     def configure(self):
         """ """
+
+    async def extract_info(self, source_id, night_id):
+        """ """
+        print("TEST: extract_info")
+        return {}

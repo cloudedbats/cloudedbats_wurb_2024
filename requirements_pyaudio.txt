@@ -24,6 +24,8 @@ python-dateutil
 astral
 # Config.
 pyyaml
+# Reports.
+xlsxwriter
 # VS Code.
 pylint
 black
