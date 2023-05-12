@@ -118,6 +118,7 @@ class RecordManager(object):
             rec_file
         )
         metadata = wurb_core.metadata.get_metadata(rec_file)
+        metadata_recording = metadata.get("recording", [])
         annotations = metadata.get("annotations", [])
         annotation = annotations[0]
 
@@ -175,8 +176,8 @@ class RecordManager(object):
             "localDate": str(local_date),
             "localTime": str(local_time),
             "dateTimeUtc": str(utc_datetime),
-            "latitude": "N56.7890",
-            "longitude": "E12.3456",
+            "latitude": metadata_recording.get("latitude", ""),
+            "longitude": metadata_recording.get("longitude", ""),
             "quality": annotation.get("quality", ""),
             "tags": annotation.get("tags", ""),
             "comments": annotation.get("comments", ""),

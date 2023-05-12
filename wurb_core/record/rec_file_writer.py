@@ -251,48 +251,11 @@ class RecFileWriter(object):
         if (latitude == 0.0) or (longitude == 0.0):
             pass
         else:
+            recording["latitude"] = str(latitude)
+            recording["longitude"] = str(longitude)
             sun_moon_dict = wurb_core.sun_moon.get_sun_moon_info(latitude, longitude)
             recording["sunsetLocal"] = str(sun_moon_dict.get("sunset_local", ""))
             recording["sunriseLocal"] = str(sun_moon_dict.get("sunrise_local", ""))
             recording["moonPhase"] = sun_moon_dict.get("moon_phase_detailed", "")
         #
         wurb_core.metadata.write_metadata(self.rec_filename_path, metadata)
-
-    # def plot_spectrogram(self):
-    #     """ """
-    #     rec_file_path = self.rec_filename_path
-    #     img_file_path = wurb_core.record_manager.get_spectrogram_path_by_rec(
-    #         rec_file_path
-    #     )
-
-    #     target_dir_path = pathlib.Path(img_file_path).parent
-    #     if not target_dir_path.exists():
-    #         target_dir_path.mkdir(parents=True)
-
-    #     print("--- DEBUG: plot_spectrogram - 1.")
-
-    #     spectrogram_task = asyncio.create_task(
-    #         self.generate_in_executor(rec_file_path, img_file_path),
-    #         name="Spectrogram generator",
-    #     )
-
-    #     print("--- DEBUG: plot_spectrogram - 2.")
-
-    # async def generate_in_executor(self, rec_file_path, img_file_path):
-    #     """ """
-
-    #     print("--- DEBUG: plot_spectrogram - 3.")
-
-    #     main_loop = asyncio.get_event_loop()
-    #     main_loop.run_in_executor(
-    #         None, wurb_core.create_spectrogram, rec_file_path, img_file_path
-    #     )
-
-    #     # # with concurrent.futures.ProcessPoolExecutor() as executor:
-    #     # with concurrent.futures.ThreadPoolExecutor() as executor:
-    #     #     future = executor.submit(wurb_core.create_spectrogram, rec_file_path, img_file_path)
-    #     #     concurrent.futures.wait([future])
-    #     #     message = str(future.result())
-    #     #     wurb_core.wurb_logger.debug(message)
-
-    #     print("--- DEBUG: plot_spectrogram - 4.")
