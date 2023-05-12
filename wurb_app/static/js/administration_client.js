@@ -182,6 +182,20 @@ async function adminExecuteCommand(sourceId, nightId, command) {
             }
         })
         .then(function (json) {
+            if (json.command == "createReport") {
+                reportSrc = "/administration/downloads/report?";
+                reportSrc += "sourceId=";
+                reportSrc += json.sourceId;
+                reportSrc += "&nightId=";
+                reportSrc += json.nightId;
+                // Create temporary element.
+                let hidden_a = document.createElement('a');
+                hidden_a.setAttribute('href', reportSrc);
+                hidden_a.setAttribute('download', json.report_name);
+                document.body.appendChild(hidden_a);
+                hidden_a.click();
+                document.body.removeChild(hidden_a);
+            }
         })
         .catch(function (err) {
             console.warn("Something went wrong.", err);

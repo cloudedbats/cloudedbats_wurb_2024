@@ -7,7 +7,7 @@
 import logging
 import fastapi
 import fastapi.templating
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
 from typing import Union
 import wurb_core
 
@@ -106,6 +106,10 @@ async def administration_command(
     try:
         logger.debug("API called: administration_command: " + command)
 
+        json_data = {}
+        json_data["sourceId"] = sourceId
+        json_data["nightId"] = nightId
+        json_data["command"] = command
         if command == "removeQ0":
             await wurb_core.cleanup.remove_q0(source_id=sourceId, night_id=nightId)
         elif command == "removeNa":
@@ -117,9 +121,34 @@ async def administration_command(
                 source_id=sourceId, night_id=nightId
             )
         elif command == "createReport":
-            await wurb_core.report_excel.create_report(
+            report_path = wurb_core.report_excel.get_report_path(
                 source_id=sourceId, night_id=nightId
             )
+            await wurb_core.report_excel.create_report(
+                source_id=sourceId, night_id=nightId, report_path=report_path
+            )
+            json_data["report_name"] = str(report_path.name)
+        return JSONResponse(content=json_data)
     except Exception as e:
         message = "API - administration_command. Exception: " + str(e)
+        logger.debug(message)
+
+@admin_router.get(
+    "/administration/downloads/report",
+    tags=["Administration"],
+    description="Get a report for download.",
+)
+async def get_report(
+    sourceId: str,
+    nightId: str,
+):
+    """ """
+    try:
+        report_path = wurb_core.report_excel.get_report_path(
+            source_id=sourceId,
+            night_id=nightId,
+        )
+        return FileResponse(report_path)
+    except Exception as e:
+        message = "API - get_report. Exception: " + str(e)
         logger.debug(message)
