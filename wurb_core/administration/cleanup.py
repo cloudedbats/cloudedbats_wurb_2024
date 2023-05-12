@@ -7,6 +7,7 @@
 import asyncio
 import logging
 import pathlib
+import shutil
 
 import wurb_core
 
@@ -43,6 +44,12 @@ class AdminCleanup(object):
                     print("WAV-FILE DELETED (Q0): ", str(rec_file_path))
                 wurb_core.metadata.delete_metadata(rec_file_path)
 
+        # TODO: Event trigger here...
+
+        # Check if there are files left. If not, remove directory.
+        rec_files = wurb_core.record_manager.get_rec_files(source_id, night_id)
+        if len(rec_files) == 0:
+            self.delete_monitoring_night(source_id, night_id)
         return {}
 
     async def remove_not_assigned(self, source_id, night_id):
@@ -56,11 +63,25 @@ class AdminCleanup(object):
                     print("WAV-FILE DELETED (NA): ", str(rec_file_path))
                 wurb_core.metadata.delete_metadata(rec_file_path)
 
+        # TODO: Event trigger here...
+
+        # Check if there are files left. If not, remove directory.
+        rec_files = wurb_core.record_manager.get_rec_files(source_id, night_id)
+        if len(rec_files) == 0:
+            await self.delete_monitoring_night(source_id, night_id)
         return {}
 
     async def delete_monitoring_night(self, source_id, night_id):
         """ """
-        print("TEST: delete_monitoring_night")
+        source_dir = pathlib.Path(
+            wurb_core.record_manager.get_source_dir(source_id)
+        ).resolve()
+        night_dir = pathlib.Path(source_dir, night_id).resolve()
+        if night_dir.exists():
+            shutil.rmtree(night_dir)
+            self.logger.info("Monitoring night deleted: " + night_id)
+
+        # TODO: Event trigger here...
         return {}
 
     def extract_quality(self, source_id, night_id):
