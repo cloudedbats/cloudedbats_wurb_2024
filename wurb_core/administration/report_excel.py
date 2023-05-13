@@ -98,7 +98,7 @@ class ReportExcel(object):
                 "columnWidth": 30,
             },
             {
-                "header": "recFileName",
+                "header": "File name",
                 "sourceKey": "recording.recFileName",
                 # "sourceKeyList": [""],
                 # "text": "",
@@ -172,7 +172,7 @@ class ReportExcel(object):
                 "columnWidth": 30,
             },
             {
-                "header": "recFileName",
+                "header": "File name",
                 "sourceKey": "recording.recFileName",
                 # "sourceKeyList": [""],
                 # "text": "",
@@ -196,7 +196,7 @@ class ReportExcel(object):
                 "columnWidth": 20,
             },
             {
-                "header": "detectionAlgorithm",
+                "header": "Detection algorithm",
                 "sourceKey": "recording.detectionAlgorithm",
                 # "sourceKeyList": [""],
                 # "text": "",
@@ -220,7 +220,7 @@ class ReportExcel(object):
                 "columnWidth": 15,
             },
             {
-                "header": "deviceName",
+                "header": "Device name",
                 "sourceKey": "recording.deviceName",
                 # "sourceKeyList": [""],
                 # "text": "",
@@ -228,7 +228,7 @@ class ReportExcel(object):
                 "columnWidth": 40,
             },
             {
-                "header": "geoSource",
+                "header": "Geo source",
                 "sourceKey": "recording.geoSource",
                 # "sourceKeyList": [""],
                 # "text": "",
@@ -236,7 +236,7 @@ class ReportExcel(object):
                 "columnWidth": 10,
             },
             {
-                "header": "maxPeakDbfs",
+                "header": "Max peak dBFS",
                 "sourceKey": "recording.maxPeakDbfs",
                 # "sourceKeyList": [""],
                 # "text": "",
@@ -244,7 +244,7 @@ class ReportExcel(object):
                 "columnWidth": 10,
             },
             {
-                "header": "maxPeakFreqHz",
+                "header": "Max peak freq Hz",
                 "sourceKey": "recording.maxPeakFreqHz",
                 # "sourceKeyList": [""],
                 # "text": "",
@@ -252,7 +252,7 @@ class ReportExcel(object):
                 "columnWidth": 10,
             },
             {
-                "header": "moonPhase",
+                "header": "Moon phase",
                 "sourceKey": "recording.moonPhase",
                 # "sourceKeyList": [""],
                 # "text": "",
@@ -260,7 +260,7 @@ class ReportExcel(object):
                 "columnWidth": 10,
             },
             {
-                "header": "schedulerStartEvent",
+                "header": "Scheduler start event",
                 "sourceKey": "recording.schedulerStartEvent",
                 # "sourceKeyList": [""],
                 # "text": "",
@@ -268,7 +268,7 @@ class ReportExcel(object):
                 "columnWidth": 10,
             },
             {
-                "header": "schedulerStartAdjust",
+                "header": "Scheduler start adjust",
                 "sourceKey": "recording.schedulerStartAdjust",
                 # "sourceKeyList": [""],
                 # "text": "",
@@ -276,15 +276,7 @@ class ReportExcel(object):
                 "columnWidth": 10,
             },
             {
-                "header": "schedulerStopEvent",
-                "sourceKey": "recording.schedulerStopEvent",
-                # "sourceKeyList": [""],
-                # "text": "",
-                "format": "text",
-                "columnWidth": 10,
-            },
-            {
-                "header": "schedulerStopAdjust",
+                "header": "Scheduler stop adjust",
                 "sourceKey": "recording.schedulerStopAdjust",
                 # "sourceKeyList": [""],
                 # "text": "",
@@ -292,7 +284,7 @@ class ReportExcel(object):
                 "columnWidth": 10,
             },
             {
-                "header": "sunriseLocal",
+                "header": "Sunrise local",
                 "sourceKey": "recording.sunriseLocal",
                 # "sourceKeyList": [""],
                 # "text": "",
@@ -300,7 +292,7 @@ class ReportExcel(object):
                 "columnWidth": 10,
             },
             {
-                "header": "sunsetLocal",
+                "header": "Sunset local",
                 "sourceKey": "recording.sunsetLocal",
                 # "sourceKeyList": [""],
                 # "text": "",
@@ -327,12 +319,17 @@ class ReportExcel(object):
 
     def get_report_path(self, source_id, night_id):
         """ """
-        source_dir = pathlib.Path(wurb_core.record_manager.get_source_dir(source_id))
-        data_dir = pathlib.Path(source_dir, night_id, "data")
-        if not data_dir.exists():
-            data_dir.mkdir(parents == True)
-        report_name = night_id + "_report.xlsx"
-        report_path = pathlib.Path(data_dir, report_name)
+        report_path = ""
+        if (source_id) and (night_id):
+            source_dir = pathlib.Path(
+                wurb_core.record_manager.get_source_dir(source_id)
+            )
+            data_dir = pathlib.Path(source_dir, night_id, "data")
+            if not data_dir.exists():
+                data_dir.mkdir(parents == True)
+            report_name = night_id + "_report.xlsx"
+            report_path = pathlib.Path(data_dir, report_name)
+
         return report_path
 
     async def create_report(

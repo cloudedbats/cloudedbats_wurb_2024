@@ -78,42 +78,48 @@ class RecordManager(object):
             if source_dir_path.exists():
                 for dir2 in sorted(source_dir_path.iterdir()):
                     if dir2.is_dir():
-                        night = {}
-                        night["id"] = dir2.name
-                        result.append(night)
+                        if str(dir2.name) != "data":
+                            night = {}
+                            night["id"] = dir2.name
+                            result.append(night)
         #
         return result
 
     def get_rec_files(self, source_id, night_id):
         """ """
         result = []
-        source_dir = pathlib.Path(self.get_source_dir(source_id)).resolve()
-        night_dir = pathlib.Path(source_dir, night_id).resolve()
-        if night_dir.exists():
-            for record_file in sorted(night_dir.glob("*.wav")):
-                result.append(record_file)
+        if (source_id) and (night_id):
+            source_dir = pathlib.Path(self.get_source_dir(source_id)).resolve()
+            night_dir = pathlib.Path(source_dir, night_id).resolve()
+            if night_dir.exists():
+                for record_file in sorted(night_dir.glob("*.wav")):
+                    result.append(record_file)
         #
         return sorted(result)
 
     def get_rec_file(self, source_id, night_id, record_id):
         """ """
         result = ""
-        source_dir = pathlib.Path(self.get_source_dir(source_id)).resolve()
-        night_dir = pathlib.Path(source_dir, night_id).resolve()
-        if night_dir.exists():
-            recorded_files = sorted(night_dir.glob(record_id + "*.wav"))
-            # if len(recorded_files) == 1:
-            if len(recorded_files) > 0:
-                result = recorded_files[0]
-            else:
-                print("ERROR...")
+        if (source_id) and (night_id):  # and (record_id):
+            source_dir = pathlib.Path(self.get_source_dir(source_id)).resolve()
+            night_dir = pathlib.Path(source_dir, night_id).resolve()
+            if night_dir.exists():
+                recorded_files = sorted(night_dir.glob(record_id + "*.wav"))
+                # if len(recorded_files) == 1:
+                if len(recorded_files) > 0:
+                    result = recorded_files[0]
+                else:
+                    print("ERROR...")
         #
         return result
 
-    def get_rec_info(self, source_id, night_id, record_id):
+    async def get_rec_info(self, source_id, night_id, record_id):
         """ """
         rec_file = self.get_rec_file(source_id, night_id, record_id)
         rec_files = self.get_rec_files(source_id, night_id)
+        if rec_file == "":
+            if len(rec_files) > 0:
+                rec_file = rec_files[0]
         prefix, utc_datetime, local_date, local_time = wurb_core.metadata.get_rec_keys(
             rec_file
         )
@@ -186,15 +192,16 @@ class RecordManager(object):
 
     def set_rec_info(self, source_id, night_id, record_id, quality, tags, comments):
         """ """
-        rec_file = self.get_rec_file(source_id, night_id, record_id)
-        metadata = wurb_core.metadata.get_metadata(rec_file)
-        annotations = metadata.get("annotations", [])
-        annotation = annotations[0]
-        annotation["quality"] = quality
-        annotation["tags"] = tags
-        annotation["comments"] = comments
+        if (source_id) and (night_id) and (record_id):
+            rec_file = self.get_rec_file(source_id, night_id, record_id)
+            metadata = wurb_core.metadata.get_metadata(rec_file)
+            annotations = metadata.get("annotations", [])
+            annotation = annotations[0]
+            annotation["quality"] = quality
+            annotation["tags"] = tags
+            annotation["comments"] = comments
 
-        wurb_core.metadata.write_metadata(rec_file, metadata)
+            wurb_core.metadata.write_metadata(rec_file, metadata)
 
         record_data = {
             "sourceId": source_id,
@@ -208,13 +215,17 @@ class RecordManager(object):
 
     def get_rec_file_path(self, source_id, night_id, record_id):
         """ """
-        file_path = str(self.get_rec_file(source_id, night_id, record_id))
+        file_path = ""
+        if (source_id) and (night_id) and (record_id):
+            file_path = str(self.get_rec_file(source_id, night_id, record_id))
         return str(file_path)
 
     def get_spectrogram_path(self, source_id, night_id, record_id):
         """ """
-        rec_path = str(self.get_rec_file(source_id, night_id, record_id))
-        img_path = self.get_spectrogram_path_by_rec(rec_path)
+        img_path = ""
+        if (source_id) and (night_id) and (record_id):
+            rec_path = str(self.get_rec_file(source_id, night_id, record_id))
+            img_path = self.get_spectrogram_path_by_rec(rec_path)
         return str(img_path)
 
     def get_spectrogram_path_by_rec(self, rec_file_path):

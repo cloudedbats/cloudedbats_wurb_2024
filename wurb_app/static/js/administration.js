@@ -29,7 +29,9 @@ function adminCommand(command) {
         var sourceId = byId("adminSelectSourceId").value;
         var nightId = byId("adminSelectNightId").value;
         adminExecuteCommand(sourceId, nightId, command);
+        adminUpdate()
     }
+
 }
 
 function adminSourceLoad() {
@@ -60,14 +62,18 @@ function adminNightChanged() {
 function adminPrevious() {
     optionList = byId("adminSelectNightId");
     optionIndex = optionList.selectedIndex;
-    optionList.selectedIndex = optionIndex - 1;
+    if (optionIndex > 1) {
+        optionList.selectedIndex = optionIndex - 1;
+    }
     adminUpdate()
 }
 
 function adminNext() {
     optionList = byId("adminSelectNightId");
     optionIndex = optionList.selectedIndex;
-    optionList.selectedIndex = optionIndex + 1;
+    if (optionIndex < optionList.options.length - 1) {
+        optionList.selectedIndex = optionIndex + 1;
+    }
     adminUpdate()
 }
 

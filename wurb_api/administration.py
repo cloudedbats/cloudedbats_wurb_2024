@@ -83,7 +83,7 @@ async def get_administration_info(
     """ """
     try:
         logger.debug("API called: get_administration_info.")
-        json_data = await wurb_core.admin_info.extract_info(
+        json_data = await wurb_core.admin_manager.get_admin_info(
             source_id=sourceId, night_id=nightId
         )
         return JSONResponse(content=json_data)
@@ -132,6 +132,7 @@ async def administration_command(
     except Exception as e:
         message = "API - administration_command. Exception: " + str(e)
         logger.debug(message)
+
 
 @admin_router.get(
     "/administration/downloads/report",

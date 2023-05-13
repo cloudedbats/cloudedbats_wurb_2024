@@ -31,7 +31,7 @@ async function getAdminSourceDirs() {
             }
         })
         .catch(function (err) {
-            console.warn("Something went wrong.", err);
+            console.warn("Error in javascript fetch: ", err);
         })
 };
 
@@ -68,11 +68,22 @@ async function getAdminNights(sourceId) {
             }
         })
         .catch(function (err) {
-            console.warn("Something went wrong.", err);
+            console.warn("Error in javascript fetch: ", err);
         })
 };
 
 async function getAdminNightInfo(sourceId, nightId) {
+
+    byId("adminMonitoringNightId").textContent = ""
+    byId("adminDirPathId").textContent = ""
+    byId("adminNumberOfSoundFilesId").textContent = ""
+    byId("adminNumberOfQ0Id").textContent = ""
+    byId("adminNumberOfNoAssignedId").textContent = ""
+
+    byId("adminPreviousId").disabled = true;
+    byId("adminNextId").disabled = true;
+    byId("adminUpdateId").disabled = true;
+
     fetch("/administration/info?" + new URLSearchParams({
         sourceId: sourceId,
         nightId: nightId,
@@ -85,86 +96,19 @@ async function getAdminNightInfo(sourceId, nightId) {
             }
         })
         .then(function (json) {
-            //             var shortInfo = " for file " + json.index + " of " + json.maxIndex
-            //             byId("annoRecordingShortInfoId").textContent = shortInfo;
 
-            //             byId("annoMetadataRecordFileId").textContent = json.recordFile
-            //             byId("annoMetadataQualityId").textContent = json.quality
-            //             byId("annoMetadataTagsId").textContent = json.tags
-            //             byId("annoMetadataCommentsId").textContent = json.comments
-            //             // byId("annoMetadataPrefixId").textContent = json.prefix
-            //             byId("annoMetadataLocalDateId").textContent = json.localDate
-            //             byId("annoMetadataLocalTimeId").textContent = json.localTime
-            //             // byId("annoMetadataDatetimeUtcId").textContent = json.dateTimeUtc
-            //             byId("annoMetadataLatitudeId").textContent = json.latitude
-            //             byId("annoMetadataLongitudeId").textContent = json.longitude
+            byId("adminMonitoringNightId").textContent = json.monitoringNight
+            byId("adminDirPathId").textContent = json.dirPath
+            byId("adminNumberOfSoundFilesId").textContent = json.numberOfSoundFiles
+            byId("adminNumberOfQ0Id").textContent = json.numberOfQ0
+            byId("adminNumberOfNoAssignedId").textContent = json.numberOfNoAssigned
 
-            //             // Save all received data in client.
-            //             currentRecord = json
-            //             annoSetQuality(json.quality);
-            //             annoSetTags(json.tags);
-            //             annoSetComments(json.comments);
-
-            //             // imageSrc = "http://localhost:8001/annotations/spectrogram?"
-            //             imageSrc = "/annotations/spectrogram?"
-            //             imageSrc += "sourceId="
-            //             imageSrc += sourceId
-            //             imageSrc += "&nightId="
-            //             imageSrc += nightId
-            //             imageSrc += "&recordId="
-            //             imageSrc += recordId
-            //             byId("annoSpectrogramSrcId").src = imageSrc;
-
-            //             //  fileSrc = "http://localhost:8001/annotations/file?"
-            //             fileSrc = "/annotations/file?"
-            //             fileSrc += "sourceId="
-            //             fileSrc += sourceId
-            //             fileSrc += "&nightId="
-            //             fileSrc += nightId
-            //             fileSrc += "&recordId="
-            //             fileSrc += recordId
-            //             byId("annoDownloadId").href = fileSrc;
-            //             byId("annoDownloadId").download = json.recordFile;
-
-            //             byId("annoFirstTextId").textContent = "First"
-            //             byId("annoLastTextId").textContent = "Last"
-            //             byId("annoFirstId").disabled = false;
-            //             byId("annoPreviousId").disabled = false;
-            //             byId("annoNextId").disabled = false;
-            //             byId("annoLastId").disabled = false;
-            //             var optionList = byId("annoSelectNightId");
-            //             var optionIndex = optionList.selectedIndex;
-            //             if (json.maxIndex <= 1) {
-            //                 byId("annoPreviousId").disabled = true;
-            //                 byId("annoNextId").disabled = true;
-            //                 if (optionIndex > 1) {
-            //                     byId("annoFirstTextId").textContent = "Previous night"
-            //                     byId("annoFirstId").disabled = false;
-            //                 }
-            //                 if (optionIndex < optionList.options.length - 1) {
-            //                     byId("annoLastTextId").textContent = "Next night"
-            //                     byId("annoLastId").disabled = false;
-            //                 }
-            //             }
-            //             else if (json.index == 1) {
-            //                 byId("annoPreviousId").disabled = true;
-            //                 byId("annoFirstId").disabled = true;
-            //                 if (optionIndex > 1) {
-            //                     byId("annoFirstTextId").textContent = "Previous night"
-            //                     byId("annoFirstId").disabled = false;
-            //                 }
-            //             }
-            //             else if (json.index == json.maxIndex) {
-            //                 byId("annoNextId").disabled = true;
-            //                 byId("annoLastId").disabled = true;
-            //                 if (optionIndex < optionList.options.length - 1) {
-            //                     byId("annoLastTextId").textContent = "Next night"
-            //                     byId("annoLastId").disabled = false;
-            //                 }
-            //             }
+            byId("adminPreviousId").disabled = false;
+            byId("adminNextId").disabled = false;
+            byId("adminUpdateId").disabled = false;
         })
         .catch(function (err) {
-            console.warn("Something went wrong.", err);
+            console.warn("Error in javascript fetch: ", err);
         })
 };
 
@@ -198,6 +142,6 @@ async function adminExecuteCommand(sourceId, nightId, command) {
             }
         })
         .catch(function (err) {
-            console.warn("Something went wrong.", err);
+            console.warn("Error in javascript fetch: ", err);
         })
 };

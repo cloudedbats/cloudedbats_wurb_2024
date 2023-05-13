@@ -92,27 +92,27 @@
                                                 <td class="has-text-right" style="white-space: nowrap;">Monitoring night
                                                 </td>
                                                 <th colspan="3" style="width: 90%;"><span
-                                                        id="adminMetadataRecordFile"></span></th>
+                                                        id="adminMonitoringNightId"></span></th>
                                             </tr>
                                             <tr>
                                                 <td class="has-text-right" style="white-space: nowrap;">Directory path
                                                 </td>
-                                                <th colspan="3"><span id="adminMetadataRecordFileId"></span></th>
+                                                <th colspan="3"><span id="adminDirPathId"></span></th>
                                             </tr>
                                             <tr>
                                                 <td class="has-text-right" style="white-space: nowrap;">Number of sound
                                                     files</td>
-                                                <th colspan="3"><span id="adminMetadataRecordFileId"></span></th>
+                                                <th colspan="3"><span id="adminNumberOfSoundFilesId"></span></th>
                                             </tr>
                                             <tr>
                                                 <td class="has-text-right" style="white-space: nowrap;">Number of Q0
                                                     (trash)</td>
-                                                <th colspan="3"><span id="adminMetadataQualityId"></span></th>
+                                                <th colspan="3"><span id="adminNumberOfQ0Id"></span></th>
                                             </tr>
                                             <tr>
                                                 <td class="has-text-right" style="white-space: nowrap;">Number of "Not
                                                     Assigned"</td>
-                                                <th colspan="3"><span id="adminNetadataTagsId"></span></th>
+                                                <th colspan="3"><span id="adminNumberOfNoAssignedId"></span></th>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -128,7 +128,7 @@
                                 <button id="adminNextId" onclick="adminNext()"
                                     class="button is-rounded is-small has-text-weight-bold is-info">Next
                                     night</button>
-                                <button id="adminLastId" onclick="adminUpdate()"
+                                <button id="adminUpdateId" onclick="adminUpdate()"
                                     class="button is-rounded is-small has-text-weight-bold is-info">Update</button>
                             </div>
                         </div>
@@ -159,7 +159,7 @@
                                 </button>
                                 <button id="adminAutoId" onclick="adminCommand('confirmRemoveNa')"
                                     class="button is-small is-rounded has-text-weight-bold is-info">
-                                    Remove all "Not Assigned"
+                                    Remove all "Not assigned"
                                 </button>
                             </div>
                         </div>
@@ -187,13 +187,13 @@
                         <div id="confirmRemoveNaId" style="visibility:hidden; overflow:hidden; height:0; width:0;">
                             <div style="border:1px solid white; margin: 0px; padding: 25px;" class="p-2 m-2">
                                 <label class="label m-0">
-                                    Do you really want to remove all "Not Assigned"?
+                                    Do you really want to remove all "Not assigned"?
                                 </label>
                                 <div class="field is-grouped is-grouped-centered">
                                     <button style="margin:5px;"
                                         class="button is-small is-rounded has-text-weight-bold is-danger"
                                         onclick="adminCommand('removeNa')">
-                                        Remove all "Not Assigned"
+                                        Remove all "Not assigned"
                                     </button>
                                     <button style="margin:5px;"
                                         class="button is-small is-rounded has-text-weight-bold is-info"

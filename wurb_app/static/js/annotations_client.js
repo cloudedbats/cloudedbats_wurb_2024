@@ -31,7 +31,7 @@ async function getSourceDirs() {
             }
         })
         .catch(function (err) {
-            console.warn("Something went wrong.", err);
+            console.warn("Error in javascript fetch: ", err);
         })
 };
 
@@ -68,12 +68,24 @@ async function getNights(sourceId) {
             }
         })
         .catch(function (err) {
-            console.warn("Something went wrong.", err);
+            console.warn("Error in javascript fetch: ", err);
         })
 };
 
 
 async function getRecordInfo(sourceId, nightId, recordId) {
+    byId("annoRecordingShortInfoId").textContent = "";
+    byId("annoMetadataRecordFileId").textContent = "";
+    byId("annoMetadataQualityId").textContent = "";
+    byId("annoMetadataTagsId").textContent = "";
+    byId("annoMetadataCommentsId").textContent = "";
+    // byId("annoMetadataPrefixId").textContent = "";
+    byId("annoMetadataLocalDateId").textContent = "";
+    byId("annoMetadataLocalTimeId").textContent = "";
+    // byId("annoMetadataDatetimeUtcId").textContent = "";
+    byId("annoMetadataLatitudeId").textContent = "";
+    byId("annoMetadataLongitudeId").textContent = "";
+
     fetch("/annotations/metadata?" + new URLSearchParams({
         sourceId: sourceId,
         nightId: nightId,
@@ -100,6 +112,10 @@ async function getRecordInfo(sourceId, nightId, recordId) {
             // byId("annoMetadataDatetimeUtcId").textContent = json.dateTimeUtc
             byId("annoMetadataLatitudeId").textContent = json.latitude
             byId("annoMetadataLongitudeId").textContent = json.longitude
+            byId("annoFirstId").disabled = true;
+            byId("annoPreviousId").disabled = true;
+            byId("annoNextId").disabled = true;
+            byId("annoLastId").disabled = true;
 
             // Save all received data in client.
             currentRecord = json
@@ -107,24 +123,24 @@ async function getRecordInfo(sourceId, nightId, recordId) {
             annoSetTags(json.tags);
             annoSetComments(json.comments);
 
-            // imageSrc = "http://localhost:8001/annotations/spectrogram?"
+            // imageSrc = "http://localhost:8080/annotations/spectrogram?"
             imageSrc = "/annotations/spectrogram?"
             imageSrc += "sourceId="
-            imageSrc += sourceId
+            imageSrc += json.sourceId
             imageSrc += "&nightId="
-            imageSrc += nightId
+            imageSrc += json.nightId
             imageSrc += "&recordId="
-            imageSrc += recordId
+            imageSrc += json.recordId
             byId("annoSpectrogramSrcId").src = imageSrc;
 
-            //  fileSrc = "http://localhost:8001/annotations/file?"
+            //  fileSrc = "http://localhost:8080/annotations/file?"
             fileSrc = "/annotations/file?"
             fileSrc += "sourceId="
-            fileSrc += sourceId
+            fileSrc += json.sourceId
             fileSrc += "&nightId="
-            fileSrc += nightId
+            fileSrc += json.nightId
             fileSrc += "&recordId="
-            fileSrc += recordId
+            fileSrc += json.recordId
             byId("annoDownloadId").href = fileSrc;
             byId("annoDownloadId").download = json.recordFile;
 
@@ -166,7 +182,7 @@ async function getRecordInfo(sourceId, nightId, recordId) {
             }
         })
         .catch(function (err) {
-            console.warn("Something went wrong.", err);
+            console.warn("Error in javascript fetch: ", err);
         })
 };
 
@@ -194,6 +210,6 @@ async function saveRecordInfo(sourceId, nightId, recordId, quality, tags, commen
             }
         })
         .catch(function (err) {
-            console.warn("Something went wrong.", err);
+            console.warn("Error in javascript fetch: ", err);
         })
 };

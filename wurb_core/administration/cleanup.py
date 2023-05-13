@@ -35,80 +35,71 @@ class AdminCleanup(object):
 
     async def remove_q0(self, source_id, night_id):
         """ """
-        quality_by_file = self.extract_quality(source_id, night_id)
-        for file, quality in quality_by_file.items():
-            if quality == "Q0":
-                rec_file_path = pathlib.Path(file)
-                if rec_file_path.exists():
-                    rec_file_path.unlink()
-                    print("WAV-FILE DELETED (Q0): ", str(rec_file_path))
-                wurb_core.metadata.delete_metadata(rec_file_path)
+        if (source_id) and (night_id):
+            quality_by_file = self.extract_quality(source_id, night_id)
+            for file, quality in quality_by_file.items():
+                if quality == "Q0":
+                    rec_file_path = pathlib.Path(file)
+                    if rec_file_path.exists():
+                        rec_file_path.unlink()
+                        print("WAV-FILE DELETED (Q0): ", str(rec_file_path))
+                    wurb_core.metadata.delete_metadata(rec_file_path)
 
-        # TODO: Event trigger here...
+            # TODO: Event trigger here...
 
-        # Check if there are files left. If not, remove directory.
-        rec_files = wurb_core.record_manager.get_rec_files(source_id, night_id)
-        if len(rec_files) == 0:
-            self.delete_monitoring_night(source_id, night_id)
+            # Check if there are files left. If not, remove directory.
+            rec_files = wurb_core.record_manager.get_rec_files(source_id, night_id)
+            if len(rec_files) == 0:
+                self.delete_monitoring_night(source_id, night_id)
+
         return {}
 
     async def remove_not_assigned(self, source_id, night_id):
         """ """
-        quality_by_file = self.extract_quality(source_id, night_id)
-        for file, quality in quality_by_file.items():
-            if quality == "Not assigned":
-                rec_file_path = pathlib.Path(file)
-                if rec_file_path.exists():
-                    rec_file_path.unlink()
-                    print("WAV-FILE DELETED (NA): ", str(rec_file_path))
-                wurb_core.metadata.delete_metadata(rec_file_path)
+        if (source_id) and (night_id):
+            quality_by_file = self.extract_quality(source_id, night_id)
+            for file, quality in quality_by_file.items():
+                if quality == "Not assigned":
+                    rec_file_path = pathlib.Path(file)
+                    if rec_file_path.exists():
+                        rec_file_path.unlink()
+                        print("WAV-FILE DELETED (NA): ", str(rec_file_path))
+                    wurb_core.metadata.delete_metadata(rec_file_path)
 
-        # TODO: Event trigger here...
+            # TODO: Event trigger here...
 
-        # Check if there are files left. If not, remove directory.
-        rec_files = wurb_core.record_manager.get_rec_files(source_id, night_id)
-        if len(rec_files) == 0:
-            await self.delete_monitoring_night(source_id, night_id)
+            # Check if there are files left. If not, remove directory.
+            rec_files = wurb_core.record_manager.get_rec_files(source_id, night_id)
+            if len(rec_files) == 0:
+                await self.delete_monitoring_night(source_id, night_id)
+
         return {}
 
     async def delete_monitoring_night(self, source_id, night_id):
         """ """
-        source_dir = pathlib.Path(
-            wurb_core.record_manager.get_source_dir(source_id)
-        ).resolve()
-        night_dir = pathlib.Path(source_dir, night_id).resolve()
-        if night_dir.exists():
-            shutil.rmtree(night_dir)
-            self.logger.info("Monitoring night deleted: " + night_id)
+        if (source_id) and (night_id):
+            source_dir = pathlib.Path(
+                wurb_core.record_manager.get_source_dir(source_id)
+            ).resolve()
+            night_dir = pathlib.Path(source_dir, night_id).resolve()
+            if night_dir.exists():
+                shutil.rmtree(night_dir)
+                self.logger.info("Monitoring night deleted: " + night_id)
 
-        # TODO: Event trigger here...
+            # TODO: Event trigger here...
+
         return {}
 
     def extract_quality(self, source_id, night_id):
         """ """
         quality_by_file = {}
-        # Get files for night.
-        for rec_file in wurb_core.record_manager.get_rec_files(source_id, night_id):
-            print("FILE: ", str(rec_file))
-            # Get metadata for recording.
-            metadata = wurb_core.metadata.get_metadata(rec_file)
-            flat_metadata = self.flatten_metadata(metadata)
-            quality = flat_metadata.get("annotations.wurb-user.quality", "")
-            quality_by_file[str(rec_file)] = quality
+        if (source_id) and (night_id):
+            # Get files for night.
+            for rec_file in wurb_core.record_manager.get_rec_files(source_id, night_id):
+                print("FILE: ", str(rec_file))
+                # Get metadata for recording.
+                metadata = wurb_core.metadata.get_metadata(rec_file)
+                flat_metadata = wurb_core.metadata.flatten_metadata(metadata)
+                quality = flat_metadata.get("annotations.wurb-user.quality", "")
+                quality_by_file[str(rec_file)] = quality
         return quality_by_file
-
-    def flatten_metadata(self, metadata):
-        """ """
-        flat_metadata = {}
-        # Recording.
-        recording_dict = metadata.get("recording", {})
-        for key, value in recording_dict.items():
-            flat_metadata["recording." + key] = value
-        # Annotations.
-        annotations = metadata.get("annotations", {})
-        for annotation in annotations:
-            user = annotation.get("user", "no-user")
-            for key, value in annotation.items():
-                flat_metadata["annotations." + user + "." + key] = value
-        #
-        return flat_metadata

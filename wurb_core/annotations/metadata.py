@@ -161,3 +161,19 @@ class Metadata(object):
         if metadata_file_path.exists():
             metadata_file_path.unlink()
             print("METADATA DELETED: ", str(metadata_file_path))
+
+    def flatten_metadata(self, metadata):
+        """ """
+        flat_metadata = {}
+        # Recording.
+        recording_dict = metadata.get("recording", {})
+        for key, value in recording_dict.items():
+            flat_metadata["recording." + key] = value
+        # Annotations.
+        annotations = metadata.get("annotations", {})
+        for annotation in annotations:
+            user = annotation.get("user", "no-user")
+            for key, value in annotation.items():
+                flat_metadata["annotations." + user + "." + key] = value
+        #
+        return flat_metadata

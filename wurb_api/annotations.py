@@ -85,7 +85,7 @@ async def get_recording_info(
     """ """
     try:
         logger.debug("API called: get_recording_info.")
-        json_data = wurb_core.record_manager.get_rec_info(
+        json_data = await wurb_core.record_manager.get_rec_info(
             source_id=sourceId,
             night_id=nightId,
             record_id=recordId,

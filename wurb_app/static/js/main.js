@@ -87,7 +87,7 @@ function fetchModuleRecord() {
 
         })
         .catch(function (err) {
-            console.warn("Something went wrong.", err);
+            console.warn("Error in javascript fetch: ", err);
         })
 };
 
@@ -106,7 +106,7 @@ function fetchModuleLive() {
             byId("moduleLiveId").classList.remove("is-inverted");
         })
         .catch(function (err) {
-            console.warn("Something went wrong.", err);
+            console.warn("Error in javascript fetch: ", err);
         })
 };
 
@@ -129,7 +129,7 @@ function fetchModuleAnnotations() {
 
         })
         .catch(function (err) {
-            console.warn("Something went wrong.", err);
+            console.warn("Error in javascript fetch: ", err);
         })
 };
 
@@ -148,7 +148,7 @@ function fetchModuleAdministration() {
             byId("moduleAdminId").classList.remove("is-inverted");
         })
         .catch(function (err) {
-            console.warn("Something went wrong.", err);
+            console.warn("Error in javascript fetch: ", err);
         })
 };
 
@@ -166,7 +166,7 @@ function fetchModuleAbout() {
             byId("heroBodyAboutId").innerHTML = html;
         })
         .catch(function (err) {
-            console.warn("Something went wrong.", err);
+            console.warn("Error in javascript fetch: ", err);
         })
 };
 
