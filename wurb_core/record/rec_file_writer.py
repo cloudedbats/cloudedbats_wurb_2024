@@ -233,6 +233,7 @@ class RecFileWriter(object):
 
         metadata = wurb_core.metadata.read_metadata(self.rec_filename_path)
         recording = metadata.get("recording", {})
+        recording["monitoringNight"] = self.rec_target_dir_path.name
         recording["deviceName"] = self.device_name
         recording["geoSource"] = geoSource
         recording["detectionLimitKhz"] = detectionLimitKhz

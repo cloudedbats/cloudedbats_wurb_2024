@@ -34,12 +34,12 @@ class ReportExcel(object):
         """ """
         self.summary_columns = [
             {
-                "header": "Night",
-                "sourceKey": "recording.night",
+                "header": "Monitoring night",
+                "sourceKey": "recording.monitoringNight",
                 # "sourceKeyList": [""],
                 # "text": "",
                 "format": "text",
-                "columnWidth": 25,
+                "columnWidth": 30,
             },
             {
                 "header": "Date",
