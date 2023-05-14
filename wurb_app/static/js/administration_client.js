@@ -78,6 +78,9 @@ async function getAdminNightInfo(sourceId, nightId) {
     byId("adminDirPathId").textContent = ""
     byId("adminNumberOfSoundFilesId").textContent = ""
     byId("adminNumberOfQ0Id").textContent = ""
+    byId("adminNumberOfQ1Id").textContent = ""
+    byId("adminNumberOfQ2Id").textContent = ""
+    byId("adminNumberOfQ3Id").textContent = ""
     byId("adminNumberOfNoAssignedId").textContent = ""
 
     byId("adminPreviousId").disabled = true;
@@ -101,6 +104,9 @@ async function getAdminNightInfo(sourceId, nightId) {
             byId("adminDirPathId").textContent = json.dirPath
             byId("adminNumberOfSoundFilesId").textContent = json.numberOfSoundFiles
             byId("adminNumberOfQ0Id").textContent = json.numberOfQ0
+            byId("adminNumberOfQ1Id").textContent = json.numberOfQ1
+            byId("adminNumberOfQ2Id").textContent = json.numberOfQ2
+            byId("adminNumberOfQ3Id").textContent = json.numberOfQ3
             byId("adminNumberOfNoAssignedId").textContent = json.numberOfNoAssigned
 
             byId("adminPreviousId").disabled = false;

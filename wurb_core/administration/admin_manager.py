@@ -38,6 +38,9 @@ class AdminManager(object):
         directory_path = ""
         number_of_sound_files = 0
         number_of_q0 = 0
+        number_of_q1 = 0
+        number_of_q2 = 0
+        number_of_q3 = 0
         number_of_not_assigned = 0
 
         if night_id not in ["", "select"]:
@@ -55,7 +58,13 @@ class AdminManager(object):
                     quality = flat_metadata.get("annotations.wurb-user.quality", "")
                     if quality == "Q0":
                         number_of_q0 += 1
-                    if quality == "Not assigned":
+                    elif quality == "Q1":
+                        number_of_q1 += 1
+                    elif quality == "Q2":
+                        number_of_q2 += 1
+                    elif quality == "Q3":
+                        number_of_q3 += 1
+                    else:
                         number_of_not_assigned += 1
                     await asyncio.sleep(0)
 
@@ -64,6 +73,9 @@ class AdminManager(object):
             "dirPath": directory_path,
             "numberOfSoundFiles": number_of_sound_files,
             "numberOfQ0": number_of_q0,
+            "numberOfQ1": number_of_q1,
+            "numberOfQ2": number_of_q2,
+            "numberOfQ3": number_of_q3,
             "numberOfNoAssigned": number_of_not_assigned,
         }
         return admin_info
