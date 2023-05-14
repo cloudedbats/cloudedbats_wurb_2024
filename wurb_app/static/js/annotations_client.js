@@ -133,16 +133,16 @@ async function getRecordInfo(sourceId, nightId, recordId) {
             imageSrc += json.recordId
             byId("annoSpectrogramSrcId").src = imageSrc;
 
-            //  fileSrc = "http://localhost:8080/annotations/file?"
-            fileSrc = "/annotations/file?"
-            fileSrc += "sourceId="
-            fileSrc += json.sourceId
-            fileSrc += "&nightId="
-            fileSrc += json.nightId
-            fileSrc += "&recordId="
-            fileSrc += json.recordId
-            byId("annoDownloadId").href = fileSrc;
-            byId("annoDownloadId").download = json.recordFile;
+            // //  fileSrc = "http://localhost:8080/annotations/file?"
+            // fileSrc = "/annotations/file?"
+            // fileSrc += "sourceId="
+            // fileSrc += json.sourceId
+            // fileSrc += "&nightId="
+            // fileSrc += json.nightId
+            // fileSrc += "&recordId="
+            // fileSrc += json.recordId
+            // byId("annoDownloadId").href = fileSrc;
+            // byId("annoDownloadId").download = json.recordFile;
 
             byId("annoFirstTextId").textContent = "First"
             byId("annoLastTextId").textContent = "Last"
@@ -212,4 +212,21 @@ async function saveRecordInfo(sourceId, nightId, recordId, quality, tags, commen
         .catch(function (err) {
             console.warn("Error in javascript fetch: ", err);
         })
+};
+
+async function downloadRecFile(sourceId, nightId, recordId, recordFile) {
+    fileSrc = "/annotations/file?"
+    fileSrc += "sourceId="
+    fileSrc += sourceId
+    fileSrc += "&nightId="
+    fileSrc += nightId
+    fileSrc += "&recordId="
+    fileSrc += recordId
+    // Create temporary element.
+    let hidden_a = document.createElement('a');
+    hidden_a.setAttribute('href', fileSrc);
+    hidden_a.setAttribute('download', recordFile);
+    document.body.appendChild(hidden_a);
+    hidden_a.click();
+    document.body.removeChild(hidden_a);
 };

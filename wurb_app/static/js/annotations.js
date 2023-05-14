@@ -213,6 +213,14 @@ function annoQuickPasteNext() {
     annoNext();
 }
 
+function annoQuickDownload() {
+    var sourceId = currentRecord.sourceId;
+    var nightId = currentRecord.nightId;
+    var recordId = currentRecord.recordId;
+    var recordFile = currentRecord.recordFile;
+    downloadRecFile(sourceId, nightId, recordId, recordFile)
+}
+
 function annoSaveAnnotations() {
     var sourceId = currentRecord.sourceId;
     var nightId = currentRecord.nightId;
