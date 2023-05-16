@@ -36,286 +36,216 @@ class ReportExcel(object):
             {
                 "header": "Monitoring night",
                 "sourceKey": "recording.monitoringNight",
-                # "sourceKeyList": [""],
-                # "text": "",
                 "format": "text",
                 "columnWidth": 30,
             },
             {
                 "header": "Date",
                 "sourceKey": "recording.dateLocal",
-                # "sourceKeyList": [""],
-                # "text": "",
-                "format": "text",
+                "format": "date",
                 "columnWidth": 10,
             },
             {
                 "header": "Time",
                 "sourceKey": "recording.timeLocal",
-                # "sourceKeyList": [""],
-                # "text": "",
-                "format": "text",
+                "format": "time",
                 "columnWidth": 10,
             },
             {
                 "header": "Quality",
                 "sourceKey": "annotations.wurb-user.quality",
-                # "sourceKeyList": [""],
-                # "text": "",
                 "format": "text",
-                "columnWidth": 10,
+                "columnWidth": 15,
             },
             {
                 "header": "Tags",
                 "sourceKey": "annotations.wurb-user.tags",
-                # "sourceKeyList": [""],
-                # "text": "",
                 "format": "text",
                 "columnWidth": 20,
             },
             {
                 "header": "Comments",
                 "sourceKey": "annotations.wurb-user.comments",
-                # "sourceKeyList": [""],
-                # "text": "",
                 "format": "text",
-                "columnWidth": 30,
+                "columnWidth": 40,
             },
             {
-                "header": "Latitude",
+                "header": "Peak (kHz)",
+                "sourceKey": "recording.peakKhz",
+                "format": "decimal",
+                "columnWidth": 10,
+            },
+            {
+                "header": "Peak (dBFS)",
+                "sourceKey": "recording.peakDbfs",
+                "format": "decimal",
+                "columnWidth": 10,
+            },
+            {
+                "header": "Latitude (DD)",
                 "sourceKey": "recording.latitude",
-                # "sourceKeyList": [""],
-                # "text": "",
-                "format": "text",
-                "columnWidth": 30,
+                "format": "decimal_4",
+                "columnWidth": 12,
             },
             {
-                "header": "Longitude",
+                "header": "Longitude (DD)",
                 "sourceKey": "recording.longitude",
-                # "sourceKeyList": [""],
-                # "text": "",
-                "format": "text",
-                "columnWidth": 30,
+                "format": "decimal_4",
+                "columnWidth": 12,
             },
             {
                 "header": "File name",
                 "sourceKey": "recording.recFileName",
-                # "sourceKeyList": [""],
-                # "text": "",
                 "format": "text",
-                "columnWidth": 10,
+                "columnWidth": 60,
             },
         ]
         self.detailed_columns = [
             {
-                "header": "Night",
-                "sourceKey": "recording.night",
-                # "sourceKeyList": [""],
-                # "text": "",
+                "header": "Monitoring night",
+                "sourceKey": "recording.monitoringNight",
                 "format": "text",
-                "columnWidth": 25,
+                "columnWidth": 30,
             },
             {
                 "header": "Date",
                 "sourceKey": "recording.dateLocal",
-                # "sourceKeyList": [""],
-                # "text": "",
-                "format": "text",
+                "format": "date",
                 "columnWidth": 10,
             },
             {
                 "header": "Time",
                 "sourceKey": "recording.timeLocal",
-                # "sourceKeyList": [""],
-                # "text": "",
-                "format": "text",
+                "format": "time",
                 "columnWidth": 10,
             },
             {
                 "header": "Quality",
                 "sourceKey": "annotations.wurb-user.quality",
-                # "sourceKeyList": [""],
-                # "text": "",
                 "format": "text",
-                "columnWidth": 10,
+                "columnWidth": 15,
             },
             {
                 "header": "Tags",
                 "sourceKey": "annotations.wurb-user.tags",
-                # "sourceKeyList": [""],
-                # "text": "",
                 "format": "text",
                 "columnWidth": 20,
             },
             {
                 "header": "Comments",
                 "sourceKey": "annotations.wurb-user.comments",
-                # "sourceKeyList": [""],
-                # "text": "",
                 "format": "text",
-                "columnWidth": 30,
+                "columnWidth": 40,
             },
             {
-                "header": "Latitude",
+                "header": "Peak (kHz)",
+                "sourceKey": "recording.peakKhz",
+                "format": "decimal",
+                "columnWidth": 10,
+            },
+            {
+                "header": "Peak (dBFS)",
+                "sourceKey": "recording.peakDbfs",
+                "format": "decimal",
+                "columnWidth": 10,
+            },
+            {
+                "header": "Latitude (DD)",
                 "sourceKey": "recording.latitude",
-                # "sourceKeyList": [""],
-                # "text": "",
-                "format": "text",
-                "columnWidth": 30,
+                "format": "decimal_4",
+                "columnWidth": 12,
             },
             {
-                "header": "Longitude",
+                "header": "Longitude (DD)",
                 "sourceKey": "recording.longitude",
-                # "sourceKeyList": [""],
-                # "text": "",
-                "format": "text",
-                "columnWidth": 30,
+                "format": "decimal_4",
+                "columnWidth": 12,
             },
             {
                 "header": "File name",
                 "sourceKey": "recording.recFileName",
-                # "sourceKeyList": [""],
-                # "text": "",
                 "format": "text",
-                "columnWidth": 10,
+                "columnWidth": 60,
             },
             {
-                "header": "User",
-                "sourceKey": "annotations.wurb-user.user",
-                # "sourceKeyList": [""],
-                # "text": "",
+                "header": "Device name",
+                "sourceKey": "recording.deviceName",
                 "format": "text",
-                "columnWidth": 10,
-            },
-            {
-                "header": "Datetime UTC",
-                "sourceKey": "recording.dateTimeUtc",
-                # "sourceKeyList": [""],
-                # "text": "",
-                "format": "text",
-                "columnWidth": 20,
+                "columnWidth": 40,
             },
             {
                 "header": "Detection algorithm",
                 "sourceKey": "recording.detectionAlgorithm",
-                # "sourceKeyList": [""],
-                # "text": "",
                 "format": "text",
-                "columnWidth": 10,
+                "columnWidth": 15,
             },
             {
                 "header": "Limit kHz",
                 "sourceKey": "recording.detectionLimitKhz",
-                # "sourceKeyList": [""],
-                # "text": "",
-                "format": "text",
+                "format": "decimal",
                 "columnWidth": 15,
             },
             {
                 "header": "Sensitivity dBFS",
                 "sourceKey": "recording.detectionSensitivityDbfs",
-                # "sourceKeyList": [""],
-                # "text": "",
-                "format": "text",
+                "format": "decimal",
                 "columnWidth": 15,
             },
             {
-                "header": "Device name",
-                "sourceKey": "recording.deviceName",
-                # "sourceKeyList": [""],
-                # "text": "",
+                "header": "Datetime UTC",
+                "sourceKey": "recording.dateTimeUtc",
                 "format": "text",
-                "columnWidth": 40,
+                "columnWidth": 25,
             },
             {
                 "header": "Geo source",
                 "sourceKey": "recording.geoSource",
-                # "sourceKeyList": [""],
-                # "text": "",
                 "format": "text",
-                "columnWidth": 10,
-            },
-            {
-                "header": "Max peak dBFS",
-                "sourceKey": "recording.maxPeakDbfs",
-                # "sourceKeyList": [""],
-                # "text": "",
-                "format": "text",
-                "columnWidth": 10,
-            },
-            {
-                "header": "Max peak freq Hz",
-                "sourceKey": "recording.maxPeakFreqHz",
-                # "sourceKeyList": [""],
-                # "text": "",
-                "format": "text",
-                "columnWidth": 10,
-            },
-            {
-                "header": "Moon phase",
-                "sourceKey": "recording.moonPhase",
-                # "sourceKeyList": [""],
-                # "text": "",
-                "format": "text",
-                "columnWidth": 10,
+                "columnWidth": 15,
             },
             {
                 "header": "Scheduler start event",
                 "sourceKey": "recording.schedulerStartEvent",
-                # "sourceKeyList": [""],
-                # "text": "",
                 "format": "text",
-                "columnWidth": 10,
+                "columnWidth": 15,
             },
             {
                 "header": "Scheduler start adjust",
                 "sourceKey": "recording.schedulerStartAdjust",
-                # "sourceKeyList": [""],
-                # "text": "",
+                "format": "decimal",
+                "columnWidth": 15,
+            },
+            {
+                "header": "Scheduler stop event",
+                "sourceKey": "recording.schedulerStopEvent",
                 "format": "text",
-                "columnWidth": 10,
+                "columnWidth": 15,
             },
             {
                 "header": "Scheduler stop adjust",
                 "sourceKey": "recording.schedulerStopAdjust",
-                # "sourceKeyList": [""],
-                # "text": "",
-                "format": "text",
-                "columnWidth": 10,
-            },
-            {
-                "header": "Sunrise local",
-                "sourceKey": "recording.sunriseLocal",
-                # "sourceKeyList": [""],
-                # "text": "",
-                "format": "text",
-                "columnWidth": 10,
+                "format": "decimal",
+                "columnWidth": 15,
             },
             {
                 "header": "Sunset local",
                 "sourceKey": "recording.sunsetLocal",
-                # "sourceKeyList": [""],
-                # "text": "",
+                "format": "time",
+                "columnWidth": 15,
+            },
+            {
+                "header": "Sunrise local",
+                "sourceKey": "recording.sunriseLocal",
+                "format": "time",
+                "columnWidth": 15,
+            },
+            {
+                "header": "Moon phase",
+                "sourceKey": "recording.moonPhase",
                 "format": "text",
-                "columnWidth": 10,
+                "columnWidth": 15,
             },
         ]
-
-    def flatten_metadata(self, metadata):
-        """ """
-        flat_metadata = {}
-        # Recording.
-        recording_dict = metadata.get("recording", {})
-        for key, value in recording_dict.items():
-            flat_metadata["recording." + key] = value
-        # Annotations.
-        annotations = metadata.get("annotations", {})
-        for annotation in annotations:
-            user = annotation.get("user", "no-user")
-            for key, value in annotation.items():
-                flat_metadata["annotations." + user + "." + key] = value
-        #
-        return flat_metadata
 
     def get_report_path(self, source_id, night_id):
         """ """
@@ -326,7 +256,7 @@ class ReportExcel(object):
             )
             data_dir = pathlib.Path(source_dir, night_id, "data")
             if not data_dir.exists():
-                data_dir.mkdir(parents == True)
+                data_dir.mkdir(parents = True)
             report_name = night_id + "_report.xlsx"
             report_path = pathlib.Path(data_dir, report_name)
 
@@ -342,96 +272,125 @@ class ReportExcel(object):
         metadata_rows = []
         # Get files for night.
         for rec_file in wurb_core.record_manager.get_rec_files(source_id, night_id):
-            print("FILE: ", str(rec_file))
             # Get metadata for recording.
             metadata = wurb_core.metadata.get_metadata(rec_file)
-
-            flat_metadata = self.flatten_metadata(metadata)
-
+            flat_metadata = wurb_core.metadata.flatten_metadata(metadata)
             metadata_rows.append(flat_metadata)
 
+        # Create Excel workbook.
         await asyncio.sleep(0.0)
-
-        # Create Excel document.
         workbook = xlsxwriter.Workbook(str(report_path))
+        self.define_cell_formats(workbook)
 
-        # Add worksheets.
+        # Summary worksheets.
         summary_worksheet = workbook.add_worksheet("Summary")
+        self.add_content(summary_worksheet, metadata_rows, self.summary_columns)
+        # Detailed worksheets.
         detailed_worksheet = workbook.add_worksheet("Detailed")
+        self.add_content(detailed_worksheet, metadata_rows, self.detailed_columns)
+        # About worksheets.
         about_worksheet = workbook.add_worksheet("About")
+        self.add_about_content(about_worksheet)
 
-        # Create cell formats.
-        self.bold_format = workbook.add_format({"bold": True})
-        #         self.bold_format = workbook.add_format({"bold": True})
-        #         self.bold_right_format = workbook.add_format({"bold": True, "align": "right"})
-        #         self.integer_format = workbook.add_format()
-        #         self.integer_format.set_num_format("0")
-        #         self.decimal_format = workbook.add_format()
-        #         self.decimal_format.set_num_format("0.00")
-        #         self.decimal_6_format = workbook.add_format()
-        #         self.decimal_6_format.set_num_format("0.000000")
-        #         self.latlong_dd_format = workbook.add_format()
-        #         self.latlong_dd_format.set_num_format("0.0000")
+        # === Done. Close workbook. ===
+        await asyncio.sleep(0.0)
+        workbook.close()
 
-        # === Sheet: Summary. ===
+    def add_content(self, worksheet, metadata_rows, columns):
+        """ """
         # Header.
         headers = []
-        for column_dict in self.summary_columns:
+        for column_dict in columns:
             header = column_dict.get("header", "")
             headers.append(header)
-        summary_worksheet.write_row(0, 0, headers, self.bold_format)
+        #
+        worksheet.write_row(0, 0, headers, self.format_bold)
         # Rows.
-        row_nr = 1
-        for metadata_row in metadata_rows:
-            row = []
-            for column_dict in self.summary_columns:
+        for row_nr, metadata_row in enumerate(metadata_rows):
+            for column_nr, column_dict in enumerate(columns):
                 source_key = column_dict.get("sourceKey", "")
-                format = column_dict.get("format", "")
                 value = metadata_row.get(source_key, "")
-                #
-                row.append(value)
-            #
-            summary_worksheet.write_row(row_nr, 0, row)
-            row_nr += 1
+                format = column_dict.get("format", "")
+                if format == "integer":
+                    try:
+                        value_int = int(round(float(value), 0))
+                        worksheet.write_number(
+                            row_nr + 1, column_nr, value_int, self.format_integer
+                        )
+                    except:
+                        worksheet.write_blank(
+                            row_nr + 1, column_nr, "", self.format_integer
+                        )
+                elif format == "decimal":
+                    try:
+                        value_float = float(value)
+                        worksheet.write_number(
+                            row_nr + 1, column_nr, value_float, self.format_decimal
+                        )
+                    except:
+                        worksheet.write_blank(
+                            row_nr + 1, column_nr, "", self.format_decimal
+                        )
+                elif format == "decimal_2":
+                    try:
+                        value_float = float(value)
+                        worksheet.write_number(
+                            row_nr + 1, column_nr, value_float, self.format_decimal_2
+                        )
+                    except:
+                        worksheet.write_blank(
+                            row_nr + 1, column_nr, "", self.format_decimal_2
+                        )
+                elif format == "decimal_4":
+                    try:
+                        value_float = float(value)
+                        worksheet.write_number(
+                            row_nr + 1, column_nr, value_float, self.format_decimal_4
+                        )
+                    except:
+                        worksheet.write_blank(
+                            row_nr + 1, column_nr, "", self.format_decimal_4
+                        )
+                elif format == "decimal_6":
+                    try:
+                        value_float = float(value)
+                        worksheet.write_number(
+                            row_nr + 1, column_nr, value_float, self.format_decimal_6
+                        )
+                    except:
+                        worksheet.write_blank(
+                            row_nr + 1, column_nr, "", self.format_decimal_6
+                        )
+                elif format == "date":
+                    try:
+                        worksheet.write(row_nr + 1, column_nr, value, self.format_date)
+                    except:
+                        worksheet.write_blank(
+                            row_nr + 1, column_nr, "", self.format_date
+                        )
+                elif format == "time":
+                    try:
+                        worksheet.write(row_nr + 1, column_nr, value, self.format_time)
+                    except:
+                        worksheet.write_blank(
+                            row_nr + 1, column_nr, "", self.format_time
+                        )
+                else:
+                    value_str = str(value)
+                    worksheet.write_string(row_nr + 1, column_nr, value_str)
 
         # === Adjust column width. ===
         index = 0
-        for column_dict in self.summary_columns:
+        for column_dict in columns:
             width = column_dict.get("columnWidth", 10)
-            detailed_worksheet.set_column(index, index, int(width))
+            worksheet.set_column(index, index, int(width))
             index += 1
 
-        # === Sheet: Detailed. ===
-        # Header.
-        headers = []
-        for column_dict in self.detailed_columns:
-            header = column_dict.get("header", "")
-            headers.append(header)
-        detailed_worksheet.write_row(0, 0, headers, self.bold_format)
-        # Rows.
-        row_nr = 1
-        for metadata_row in metadata_rows:
-            row = []
-            for column_dict in self.detailed_columns:
-                source_key = column_dict.get("sourceKey", "")
-                format = column_dict.get("format", "")
-                value = metadata_row.get(source_key, "")
-                #
-                row.append(value)
-            #
-            detailed_worksheet.write_row(row_nr, 0, row)
-            row_nr += 1
-
-        # === Adjust column width. ===
-        index = 0
-        for column_dict in self.detailed_columns:
-            width = column_dict.get("columnWidth", 10)
-            detailed_worksheet.set_column(index, index, int(width))
-            index += 1
-
+    def add_about_content(self, worksheet):
+        """ """
         # === Sheet: About. ===
         # Header.
-        about_worksheet.write_row(0, 0, ["About"], self.bold_format)
+        worksheet.write_row(0, 0, ["About"], self.format_bold)
         # Rows.
         readme_text = [
             [""],
@@ -446,13 +405,35 @@ class ReportExcel(object):
         #
         row_nr = 1
         for row in readme_text:
-            about_worksheet.write_row(row_nr, 0, row)
+            worksheet.write_row(row_nr, 0, row)
             row_nr += 1
 
         # === Adjust column width. ===
-        about_worksheet.set_column("A:A", 100)
+        worksheet.set_column("A:A", 100)
 
-        # === Done. Close the Excel document. ===
-        await asyncio.sleep(0.0)
-
-        workbook.close()
+    def define_cell_formats(self, workbook):
+        """ """
+        self.format_bold = workbook.add_format({"bold": True})
+        #
+        self.format_bold_right = workbook.add_format({"bold": True, "align": "right"})
+        #
+        self.format_date = workbook.add_format()
+        self.format_date.set_num_format("yyyy-mm-dd")
+        #
+        self.format_time = workbook.add_format()
+        self.format_time.set_num_format("hh:mm:ss")
+        #
+        self.format_integer = workbook.add_format()
+        self.format_integer.set_num_format("0")
+        #
+        self.format_decimal = workbook.add_format()
+        self.format_decimal.set_num_format("0.0")
+        #
+        self.format_decimal_2 = workbook.add_format()
+        self.format_decimal_2.set_num_format("0.00")
+        #
+        self.format_decimal_4 = workbook.add_format()
+        self.format_decimal_4.set_num_format("0.0000")
+        #
+        self.format_decimal_6 = workbook.add_format()
+        self.format_decimal_6.set_num_format("0.000000")
