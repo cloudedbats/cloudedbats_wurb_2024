@@ -124,9 +124,7 @@ class RecordManager(object):
             rec_file
         )
         metadata = wurb_core.metadata.get_metadata(rec_file)
-        metadata_recording = metadata.get("recording", [])
-        annotations = metadata.get("annotations", [])
-        annotation = annotations[0]
+        flat_metadata = wurb_core.metadata.flatten_metadata(metadata)
 
         rec_ids = []
         for rec in sorted(rec_files):
@@ -182,11 +180,13 @@ class RecordManager(object):
             "localDate": str(local_date),
             "localTime": str(local_time),
             "dateTimeUtc": str(utc_datetime),
-            "latitude": metadata_recording.get("latitude", ""),
-            "longitude": metadata_recording.get("longitude", ""),
-            "quality": annotation.get("quality", ""),
-            "tags": annotation.get("tags", ""),
-            "comments": annotation.get("comments", ""),
+            "latitude": flat_metadata.get("recording.latitude", ""),
+            "longitude": flat_metadata.get("recording.longitude", ""),
+            "quality": flat_metadata.get("annotations.wurb-user.quality", ""),
+            "tags": flat_metadata.get("annotations.wurb-user.tags", ""),
+            "comments": flat_metadata.get("annotations.wurb-user.comments", ""),
+            "peakKhz": flat_metadata.get("recording.peakKhz", ""),
+            "peakDbfs": flat_metadata.get("recording.peakDbfs", ""),
         }
         return record_data
 

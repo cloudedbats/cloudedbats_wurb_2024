@@ -38,12 +38,10 @@ class RecFileWriter(object):
         self.rec_type_str = None
         self.peak_info_str = None
         self.rec_filename_path = None
-        self.max_peak_freq_hz = None
-        self.max_peak_dbfs = None
+        self.peak_hz = None
+        self.peak_dbfs = None
 
-    def prepare(
-        self, device_name, sampling_freq_hz, start_time, max_peak_freq_hz, max_peak_dbfs
-    ):
+    def prepare(self, device_name, sampling_freq_hz, start_time, peak_hz, peak_dbfs):
         """ """
         self.clear()
         self.device_name = device_name
@@ -56,9 +54,9 @@ class RecFileWriter(object):
         self.prepare_datetime(start_time)
         self.prepare_location()
         self.prepare_rec_type_str(self.sampling_freq_hz, self.rec_type)
-        self.prepare_peak_info(max_peak_freq_hz, max_peak_dbfs)
-        self.max_peak_freq_hz = max_peak_freq_hz
-        self.max_peak_dbfs = max_peak_dbfs
+        self.prepare_peak_info(peak_hz, peak_dbfs)
+        self.peak_hz = peak_hz
+        self.peak_dbfs = peak_dbfs
 
     def prepare_rec_target_dir(self):
         """ """
@@ -131,14 +129,14 @@ class RecFileWriter(object):
 
         self.rec_type_str = rec_type + str(sampling_freq_khz)
 
-    def prepare_peak_info(self, max_peak_freq_hz, max_peak_dbfs):
+    def prepare_peak_info(self, peak_hz, peak_dbfs):
         """ """
         peak_info_str = ""
-        if max_peak_freq_hz and max_peak_dbfs:
+        if peak_hz and peak_dbfs:
             peak_info_str += "_"  # "_Peak"
-            peak_info_str += str(int(round(max_peak_freq_hz / 1000.0, 0)))
+            peak_info_str += str(int(round(peak_hz / 1000.0, 0)))
             peak_info_str += "kHz"
-            peak_info_str += str(int(round(max_peak_dbfs, 0)))
+            peak_info_str += str(int(round(peak_dbfs, 0)))
             peak_info_str += "dB"
         self.peak_info_str = peak_info_str
 
@@ -243,11 +241,13 @@ class RecFileWriter(object):
         recording["schedulerStartAdjust"] = schedulerStartAdjust
         recording["schedulerStopEvent"] = schedulerStopEvent
         recording["schedulerStopAdjust"] = schedulerStopAdjust
-        if self.max_peak_freq_hz:
-            recording["maxPeakFreqHz"] = str(round(self.max_peak_freq_hz))
-        if self.max_peak_dbfs:
-            recording["maxPeakDbfs"] = str(round(self.max_peak_dbfs, 1))
-
+        #
+        if self.peak_hz:
+            recording["peakHz"] = str(round(float(self.peak_hz)))
+            recording["peakKhz"] = str(round(float(self.peak_hz) / 1000.0, 1))
+        if self.peak_dbfs:
+            recording["peakDbfs"] = str(round(float(self.peak_dbfs), 1))
+        #
         latitude, longitude = wurb_core.wurb_settings.get_valid_location()
         if (latitude == 0.0) or (longitude == 0.0):
             pass

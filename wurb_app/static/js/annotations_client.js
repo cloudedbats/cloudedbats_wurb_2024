@@ -85,6 +85,8 @@ async function getRecordInfo(sourceId, nightId, recordId) {
     // byId("annoMetadataDatetimeUtcId").textContent = "";
     byId("annoMetadataLatitudeId").textContent = "";
     byId("annoMetadataLongitudeId").textContent = "";
+    byId("annoMetadataPeakKhzId").textContent = "";
+    byId("annoMetadataPeakDbfsId").textContent = "";
 
     fetch("/annotations/metadata?" + new URLSearchParams({
         sourceId: sourceId,
@@ -102,16 +104,18 @@ async function getRecordInfo(sourceId, nightId, recordId) {
             var shortInfo = " for file " + json.index + " of " + json.maxIndex
             byId("annoRecordingShortInfoId").textContent = shortInfo;
 
-            byId("annoMetadataRecordFileId").textContent = json.recordFile
-            byId("annoMetadataQualityId").textContent = json.quality
-            byId("annoMetadataTagsId").textContent = json.tags
-            byId("annoMetadataCommentsId").textContent = json.comments
-            // byId("annoMetadataPrefixId").textContent = json.prefix
-            byId("annoMetadataLocalDateId").textContent = json.localDate
-            byId("annoMetadataLocalTimeId").textContent = json.localTime
-            // byId("annoMetadataDatetimeUtcId").textContent = json.dateTimeUtc
-            byId("annoMetadataLatitudeId").textContent = json.latitude
-            byId("annoMetadataLongitudeId").textContent = json.longitude
+            byId("annoMetadataRecordFileId").textContent = json.recordFile;
+            byId("annoMetadataQualityId").textContent = json.quality;
+            byId("annoMetadataTagsId").textContent = json.tags;
+            byId("annoMetadataCommentsId").textContent = json.comments;
+            // byId("annoMetadataPrefixId").textContent = json.prefix;
+            byId("annoMetadataLocalDateId").textContent = json.localDate;
+            byId("annoMetadataLocalTimeId").textContent = json.localTime;
+            // byId("annoMetadataDatetimeUtcId").textContent = json.dateTimeUtc;
+            byId("annoMetadataLatitudeId").textContent = json.latitude;
+            byId("annoMetadataLongitudeId").textContent = json.longitude;
+            byId("annoMetadataPeakKhzId").textContent = json.peakKhz;
+            byId("annoMetadataPeakDbfsId").textContent = json.peakDbfs;
             byId("annoFirstId").disabled = true;
             byId("annoPreviousId").disabled = true;
             byId("annoNextId").disabled = true;

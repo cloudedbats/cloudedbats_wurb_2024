@@ -157,7 +157,7 @@ class RecWorker(object):
 
             sound_detector = wurb_core.sound_detection.get_detection()
 
-            max_peak_freq_hz = None
+            max_peak_hz = None
             max_peak_dbfs = None
 
             while True:
@@ -257,23 +257,23 @@ class RecWorker(object):
                                 )
                                 (
                                     sound_detected,
-                                    peak_freq_hz,
-                                    peak_dbfs,
+                                    detected_peak_hz,
+                                    detected_peak_dbfs,
                                 ) = detection_result
 
                                 if (not first_sound_detected) and sound_detected:
                                     first_sound_detected = True
                                     sound_detected_counter = 0
-                                    max_peak_freq_hz = peak_freq_hz
-                                    max_peak_dbfs = peak_dbfs
+                                    max_peak_hz = detected_peak_hz
+                                    max_peak_dbfs = detected_peak_dbfs
                                     # Log first detected sound.
-                                    if max_peak_dbfs and peak_dbfs:
+                                    if detected_peak_dbfs and detected_peak_dbfs:
                                         # Logging.
                                         message = (
                                             "Sound peak: "
-                                            + str(round(peak_freq_hz / 1000.0, 1))
+                                            + str(round(detected_peak_hz / 1000.0, 1))
                                             + " kHz / "
-                                            + str(round(peak_dbfs, 1))
+                                            + str(round(detected_peak_dbfs, 1))
                                             + " dBFS."
                                         )
                                         self.logger.info(message)
@@ -281,10 +281,10 @@ class RecWorker(object):
                                 # Accumulate in file queue.
                                 if first_sound_detected == True:
                                     sound_detected_counter += 1
-                                    if max_peak_dbfs and peak_dbfs:
-                                        if peak_dbfs > max_peak_dbfs:
-                                            max_peak_freq_hz = peak_freq_hz
-                                            max_peak_dbfs = peak_dbfs
+                                    if detected_peak_dbfs and detected_peak_dbfs:
+                                        if detected_peak_dbfs > max_peak_dbfs:
+                                            max_peak_hz = detected_peak_hz
+                                            max_peak_dbfs = detected_peak_dbfs
                                     if (
                                         sound_detected_counter
                                         >= self.detection_counter_max
@@ -302,11 +302,9 @@ class RecWorker(object):
                                             #
                                             if index == 0:
                                                 to_file_item["status"] = "new_file"
+                                                to_file_item["peak_hz"] = max_peak_hz
                                                 to_file_item[
-                                                    "max_peak_freq_hz"
-                                                ] = max_peak_freq_hz
-                                                to_file_item[
-                                                    "max_peak_dbfs"
+                                                    "peak_dbfs"
                                                 ] = max_peak_dbfs
                                             if index == (self.process_deque_length - 1):
                                                 to_file_item["status"] = "close_file"
@@ -354,23 +352,26 @@ class RecWorker(object):
                         elif item == False:
                             self.remove_items_from_queue(self.to_target_queue)
                             if wave_file_writer:
-                                wave_file_writer.close()
+                                old_file_writer = wave_file_writer
                                 wave_file_writer = None
+                                old_file_writer.close()
                         else:
                             # New.
                             if item["status"] == "new_file":
                                 if wave_file_writer:
-                                    wave_file_writer.close()
+                                    old_file_writer = wave_file_writer
+                                    wave_file_writer = None
+                                    old_file_writer.close()
                                 # Create new file writer.
-                                max_peak_freq_hz = item.get("max_peak_freq_hz", None)
-                                max_peak_dbfs = item.get("max_peak_dbfs", None)
+                                peak_hz = item.get("peak_hz", None)
+                                peak_dbfs = item.get("peak_dbfs", None)
                                 wave_file_writer = wurb_core.RecFileWriter()
                                 wave_file_writer.prepare(
                                     self.connected_device_name,
                                     self.connected_sampling_freq_hz,
                                     item["adc_time"],
-                                    max_peak_freq_hz,
-                                    max_peak_dbfs,
+                                    peak_hz,
+                                    peak_dbfs,
                                 )
                                 wave_file_writer.open()
                             # Data.
@@ -380,8 +381,9 @@ class RecWorker(object):
                             # File.
                             if item["status"] == "close_file":
                                 if wave_file_writer:
-                                    wave_file_writer.close()
+                                    old_file_writer = wave_file_writer
                                     wave_file_writer = None
+                                    old_file_writer.close()
                     finally:
                         self.to_target_queue.task_done()
                         await asyncio.sleep(0)
