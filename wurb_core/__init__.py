@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
-# Cloudedbats WURB-2023.
+# Cloudedbats WURB-2024.
 
-__version__ = "2023.0.0-development"
+__version__ = "2024.0.0-development"
 logger_name = "WurbLogger"
 logging_dir = "../wurb_logging"
-log_file_name = "wurb2023_info_log.txt"
-debug_log_file_name = "wurb2023_debug_log.txt"
+log_file_name = "wurb2024_info_log.txt"
+debug_log_file_name = "wurb2024_debug_log.txt"
 settings_dir = "../wurb_settings"
 config_dir = "../wurb_settings"
 config_file = "wurb_config.yaml"

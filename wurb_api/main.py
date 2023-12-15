@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
-# Project: http://cloudedbats.org, https://github.com/cloudedbats
-# Copyright (c) 2023-present Arnold Andreasson
+# Project: https://cloudedbats.github.io
+# Author: Arnold Andreasson, info@cloudedbats.org
 # License: MIT License (see LICENSE or http://opensource.org/licenses/mit).
 
 import time
@@ -23,8 +23,8 @@ import wurb_api
 logger = logging.getLogger(wurb_core.logger_name)
 
 app = fastapi.FastAPI(
-    title="CloudedBats WURB-2023",
-    description="CloudedBats WURB-2023, the DIY bat detector.",
+    title="CloudedBats WURB-2024",
+    description="CloudedBats WURB-2024, the DIY bat detector.",
     version=wurb_core.__version__,
 )
 

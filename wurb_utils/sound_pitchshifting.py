@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
 # Main project: https://github.com/cloudedbats
-# Copyright (c) 2023-present Arnold Andreasson
+# Author: Arnold Andreasson, info@cloudedbats.org
 # License: MIT License (see LICENSE or http://opensource.org/licenses/mit).
 
 import asyncio

@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
 # Project: http://cloudedbats.org
-# Copyright (c) 2023-present Arnold Andreasson
-# License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
+# Author: Arnold Andreasson, info@cloudedbats.org
+# License: MIT License (see LICENSE or http://opensource.org/licenses/mit).
 
 import logging
 import numpy as np

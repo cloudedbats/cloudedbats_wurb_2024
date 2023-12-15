@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
-# Project: http://cloudedbats.org, https://github.com/cloudedbats
-# Copyright (c) 2023-present Arnold Andreasson
+# Project: https://cloudedbats.github.io
+# Author: Arnold Andreasson, info@cloudedbats.org
 # License: MIT License (see LICENSE or http://opensource.org/licenses/mit).
 
 import asyncio
@@ -399,7 +399,7 @@ class ReportExcel(object):
             [""],
             ["Source code to generate the Excel file can be "],
             ["found in this GitHub repository: "],
-            ["- https://github.com/cloudedbats/cloudedbats_wurb_2023"],
+            ["- https://github.com/cloudedbats/cloudedbats_wurb_2024"],
             [""],
         ]
         #

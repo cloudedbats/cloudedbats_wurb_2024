@@ -1,4 +1,4 @@
-# Configurations for CloudedBats WURB-2023.
+# Configurations for CloudedBats WURB-2024.
 ---
 wurb_app:
   port: 8080

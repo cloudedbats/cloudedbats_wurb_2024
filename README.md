@@ -1,4 +1,4 @@
-# CloudedBats WURB-2023
+# CloudedBats WURB-2024
 
 Next major release - work in progress...
 
@@ -27,29 +27,21 @@ or to generate an Excel report containing field notes, etc.
 ## For developers
 
 The code is reorganized and some parts are completely rewritten.
-Settings are now stored in the YAML format, and there is a new configuration file,
-also using YAML.
+Settings are now stored in a sqlite database, and there is a new configuration file 
+using YAML.
 
-There is a new service used to generate the spectrograms. That was needed to separate since
-that process disturbed the sound data stream when it was running in the same process.
-
-It is possible to run WURB-2020 and WURB-2023 on the same Raspberry Pi, just stop or
+It is possible to run WURB-2020 and WURB-2024 on the same Raspberry Pi, just stop or
 start the services used for each version. The old version uses txt-files for setting and
 the new one uses YAML, therefore there will be no clashes.
 
-Note that WURB-2023 uses port 8080 for the web page where WURB-2020 uses port 8000 as default.
+Note that WURB-2024 uses port 8080 for the web page where WURB-2020 uses port 8000 as default.
 
-The same installation process as for WURB-2020 can be used, but check out WURB-2023 instead
-and install the two services called "wurb_2023.service" and "wurb_2023_cache.service".
-
-To be able to generate the spectrograms as jpeg this one must be installed.
-
-    sudo apt install libopenjp2-7
+The same installation process as for WURB-2020 can be used, but check out WURB-2024 instead.
 
 There are two files for pip install and "requirements.txt" should be used when using Raspberry Pi.
 The other one "requirements_pyaudio.txt" uses another python library on top of ALSA. I use that
-one for development on macos since pyalsaaudio was not possible to install there. That may
-also be useful for others who want to run the WURB detector on other hardware platforms.
+one for development on macOS or Windows. That makes it possible to run the WURB detector on other 
+hardware platforms.
 
 The YAML-based configuration is not implemented yet, and the main directories to be used when
 running the detector have fix locations. They are "../wurb_settings", "../wurb_recordings",

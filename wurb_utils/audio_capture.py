@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
 # Main project: https://github.com/cloudedbats
-# Copyright (c) 2023-present Arnold Andreasson
+# Author: Arnold Andreasson, info@cloudedbats.org
 # License: MIT License (see LICENSE or http://opensource.org/licenses/mit).
 
 import asyncio
@@ -63,9 +63,17 @@ class AudioCapture:
                     info_dict["device_name"] = device_name
                     info_dict["input_channels"] = input_channels
                     info_dict["device_index"] = device_info.get("index", "")
-                    info_dict["sampling_freq_hz"] = device_info.get(
-                        "defaultSampleRate", ""
-                    )
+                    # info_dict["sampling_freq_hz"] = device_info.get(
+                    #     "defaultSampleRate", ""
+                    # )
+
+
+
+                    info_dict["sampling_freq_hz"] = "384000"
+
+
+
+
                     devices.append(info_dict)
         except Exception as e:
             self.logger.debug("AudioCapture - get_capture_devices: " + str(e))

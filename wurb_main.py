@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
 # Project: https://cloudedbats.github.io
-# Copyright (c) 2023-present Arnold Andreasson
+# Author: Arnold Andreasson, info@cloudedbats.org
 # License: MIT License (see LICENSE or http://opensource.org/licenses/mit).
 
 import asyncio
@@ -22,7 +22,7 @@ async def main():
     logger_name = wurb_core.logger.get_logger_name()
     logger = logging.getLogger(logger_name)
     logger.info("\n\n")
-    logger.info("Welcome to CloudedBats WURB-2023")
+    logger.info("Welcome to CloudedBats WURB-2024")
     logger.info("Project: https://cloudedbats.github.io")
     logger.info("================ ^ö^ =================")
     logger.info("")

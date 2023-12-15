@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
 # Main project: https://github.com/cloudedbats
-# Copyright (c) 2023-present Arnold Andreasson
+# Author: Arnold Andreasson, info@cloudedbats.org
 # License: MIT License (see LICENSE or http://opensource.org/licenses/mit).
 
 import astral
@@ -173,10 +173,10 @@ if __name__ == "__main__":
     # latitude = -80.0
     latitude = 50.0
     longitude = 15.0
-    # date = datetime.date(2023, 1, 1)
-    date = datetime.date(2023, 4, 15)
-    # date = datetime.date(2023, 6, 1)
-    # date = datetime.date(2023, 9, 1)
+    # date = datetime.date(2024, 1, 1)
+    date = datetime.date(2024, 4, 15)
+    # date = datetime.date(2024, 6, 1)
+    # date = datetime.date(2024, 9, 1)
 
     sun_moon = SunMoon()
     result_dict = sun_moon.get_sun_moon_info(latitude, longitude, date)
