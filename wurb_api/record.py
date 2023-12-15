@@ -82,7 +82,7 @@ class DetectorSettings(BaseModel):
     detectionSensitivityDbfs: Optional[float] = None
     detectionAlgorithm: Optional[str] = None
     recLengthS: Optional[str] = None
-    rec_type: Optional[str] = None
+    recType: Optional[str] = None
     feedbackOnOff: Optional[str] = None
     feedbackVolume: Optional[float] = None
     feedbackPitch: Optional[float] = None
@@ -240,11 +240,11 @@ async def save_settings_startup(settings: DetectorSettings):
 
 @record_router.get("/record/get-settings/", tags=["Recorder"], description="Record...")
 # @app.get("/get-settings/")
-async def get_settings(default: bool = False):
+async def get_settings():
     try:
         # Logging debug.
         logger.debug("API called: get-settings.")
-        current_settings_dict = await wurb_core.wurb_settings.get_settings(default)
+        current_settings_dict = await wurb_core.wurb_settings.get_settings()
         return current_settings_dict
     except Exception as e:
         message = "API - get_settings. Exception: " + str(e)

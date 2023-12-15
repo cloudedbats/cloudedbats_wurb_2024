@@ -197,17 +197,6 @@ async function getSettings() {
     };
 };
 
-async function getDefaultSettings() {
-    try {
-        let response = await fetch("/record/get-settings/?default=true");
-        let data = await response.json();
-        updateSettings(data);
-    } catch (err) {
-        alert("ERROR getDefaultSettings: " + err);
-        console.log(err);
-    };
-};
-
 async function loadSettings(settingsType) {
     try {
         let response = await fetch("/record/load-settings/?settingsType=" + settingsType);
