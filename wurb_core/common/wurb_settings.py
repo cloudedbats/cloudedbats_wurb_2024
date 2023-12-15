@@ -7,7 +7,6 @@
 import asyncio
 import logging
 import pathlib
-import yaml
 
 import wurb_core
 
@@ -19,6 +18,7 @@ class WurbSettings(object):
         """ """
         self.config = config
         self.logger = logger
+        self.logger_name = logger_name
         if self.config == None:
             self.config = {}
         if self.logger == None:
@@ -29,12 +29,6 @@ class WurbSettings(object):
 
     def clear(self):
         """ """
-        self.loaded_settings = {}
-        self.default_settings = None
-        self.default_location = None
-        self.current_settings = None
-        self.current_location = None
-        self.settings_dir = ""
         self.settings_event = None
         self.location_event = None
         self.latlong_event = None
@@ -42,26 +36,63 @@ class WurbSettings(object):
 
     def configure(self):
         """ """
-        self.settings_header_rows = ["# Settings for CloudedBats WURB-2023.", "---"]
 
     async def startup(self, settings_dir):
         """ """
         try:
-            # Settings file and defaults.
-            self.settings_file_name = "wurb_settings.yaml"
+            # Connect to database.
+            settings_db_path = pathlib.Path(settings_dir, "wurb_settings.db")
+            self.settings_db = wurb_core.SqliteDb(
+                db_file_path=settings_db_path, logger_name=self.logger_name
+            )
+            # Settings defaults.
             self.define_default_settings()
             self.define_default_location()
-            # Load.
-            self.settings_dir = settings_dir
-            self.load_settings_from_file()
+            # Load or populate database.
+            globals = self.settings_db.get_values(identity="globals")
+            if not globals:
+                self.settings_db.set_values(
+                    identity="globals", data_dict=self.default_globals
+                )
+            settings = self.settings_db.get_values(identity="settings")
+            if not settings:
+                self.settings_db.set_values(
+                    identity="settings", data_dict=self.default_settings
+                )
+            location = self.settings_db.get_values(identity="location")
+            if not location:
+                self.settings_db.set_values(
+                    identity="location", data_dict=self.default_location
+                )
+            startup_settings = self.settings_db.get_values(identity="startupSettings")
+            if not startup_settings:
+                self.settings_db.set_values(
+                    identity="startupSettings", data_dict=self.default_settings
+                )
+            startup_location = self.settings_db.get_values(identity="startupLocation")
+            if not startup_location:
+                self.settings_db.set_values(
+                    identity="startupLocation", data_dict=self.default_location
+                )
+            user_settings = self.settings_db.get_values(identity="userSettings")
+            if not user_settings:
+                self.settings_db.set_values(
+                    identity="userSettings", data_dict=self.default_settings
+                )
+            user_location = self.settings_db.get_values(identity="userLocation")
+            if not user_location:
+                self.settings_db.set_values(
+                    identity="userLocation", data_dict=self.default_location
+                )
             # Select settings for startup.
-            startup_option = self.loaded_settings.get("startupOption", "")
+            startup_option = self.settings_db.get_value(
+                identity="globals", key="startupOption"
+            )
             if startup_option == "startup-settings":
-                self.current_settings = self.loaded_settings["startupSettings"].copy()
-                self.current_location = self.loaded_settings["startupLocation"].copy()
-            else:
-                self.current_settings = self.loaded_settings["currentSettings"].copy()
-                self.current_location = self.loaded_settings["currentLocation"].copy()
+                settings = self.settings_db.get_values(identity="startupSettings")
+                self.settings_db.set_values(identity="settings", data_dict=settings)
+                location = self.settings_db.get_values(identity="startupLocation")
+                self.settings_db.set_values(identity="location", data_dict=location)
             # GPS.
             await self.save_latlong(0.0, 0.0)
         except Exception as e:
@@ -86,6 +117,9 @@ class WurbSettings(object):
 
     def define_default_settings(self):
         """ """
+        self.default_globals = {
+            "startupOption": "as-last-session",
+        }
         self.default_settings = {
             "recMode": "mode-off",
             "fileDirectory": "Station-1",
@@ -101,7 +135,6 @@ class WurbSettings(object):
             "feedbackPitch": 30,
             "feedbackFilterLowKhz": 15,
             "feedbackFilterHighKhz": 150,
-            "startupOption": "as-last-session",
             "schedulerStartEvent": "on-sunset",
             "schedulerStartAdjust": -15,
             "schedulerStopEvent": "off-sunrise",
@@ -125,61 +158,74 @@ class WurbSettings(object):
     async def save_settings(self, settings_dict={}, settings_type=None):
         """ """
         try:
-            is_changed = False
-            for key, value in settings_dict.items():
-                if value is not None:
-                    # Clean up filename_prefix.
-                    if key == "filenamePrefix":
-                        value = value.replace(" ", "-")
-                        value = value.replace("_", "-")
-                    #
-                    old_value = self.current_settings.get(key, "")
-                    self.current_settings[key] = value
-                    #
-                    try:
-                        if str(old_value) != str(value):
-                            is_changed = True
+            settings_db_dict = self.settings_db.get_values(identity="settings")
+            location_db_dict = self.settings_db.get_values(identity="location")
+
+            if settings_type == "user-default":
+                self.settings_db.set_values(
+                    identity="userSettings", data_dict=settings_dict
+                )
+                self.settings_db.set_values(
+                    identity="userLocation", data_dict=location_db_dict
+                )
+            if settings_type == "startup":
+                self.settings_db.set_values(
+                    identity="startupSettings", data_dict=settings_dict
+                )
+                self.settings_db.set_values(
+                    identity="startupLocation", data_dict=location_db_dict
+                )
+            else:
+                is_changed = False
+                for key, value in settings_dict.items():
+                    if value is not None:
+                        # Clean up filename_prefix.
+                        if key == "filenamePrefix":
+                            value = value.replace(" ", "-")
+                            value = value.replace("_", "-")
+                        #
+                        old_value = settings_db_dict.get(key, "")
+                        settings_db_dict[key] = value
+                        #
+                        try:
+                            if str(old_value) != str(value):
+                                is_changed = True
+                                # Logging.
+                                message = (
+                                    "Settings changed: "
+                                    + str(key)
+                                    + " from: "
+                                    + str(old_value)
+                                    + " to: "
+                                    + str(value)
+                                )
+                                self.logger.debug(message)
+                        except Exception as e:
                             # Logging.
-                            message = (
-                                "Settings changed: "
-                                + str(key)
-                                + " from: "
-                                + str(old_value)
-                                + " to: "
-                                + str(value)
-                            )
+                            message = "Error when comparing saved settings. " + str(e)
                             self.logger.debug(message)
-                    except Exception as e:
-                        # Logging.
-                        message = "Error when comparing saved settings. " + str(e)
-                        self.logger.debug(message)
 
-            # Copy startupOption to top level.
-            startupOption = settings_dict.get("startupOption", "")
-            self.loaded_settings["startupOption"] = startupOption
+                # Copy startupOption to global level.
+                old_option = self.settings_db.get_value(
+                    identity="globals", key="startupOption"
+                )
+                startup_option = settings_dict.get("startupOption", "")
+                if startup_option != old_option:
+                    is_changed = True
+                    self.settings_db.set_value(
+                        identity="globals", key="startupOption", value=startup_option
+                    )
+                # Save if changed and trigger events.
+                if is_changed:
+                    self.settings_db.set_values(
+                        identity="settings", data_dict=settings_db_dict
+                    )
+                    # Trigger an event.
+                    self.trigger_settings_event()
+                    #
+                    message = "Settings saved."
+                    self.logger.info(message)
 
-            if is_changed:
-                self.loaded_settings["currentSettings"] = self.current_settings.copy()
-                self.save_settings_to_file()
-                # Trigger an event.
-                self.trigger_settings_event()
-                #
-                message = "Settings saved."
-                self.logger.info(message)
-
-            if settings_type is not None:
-                if settings_type == "user-default":
-                    self.loaded_settings["userSettings"] = self.current_settings.copy()
-                    self.loaded_settings["userLocation"] = self.current_location.copy()
-                    self.save_settings_to_file()
-                if settings_type == "startup":
-                    self.loaded_settings[
-                        "startupSettings"
-                    ] = self.current_settings.copy()
-                    self.loaded_settings[
-                        "startupLocation"
-                    ] = self.current_location.copy()
-                    self.save_settings_to_file()
         except Exception as e:
             message = "WurbSettings - save_settings. Exception: " + str(e)
             self.logger.debug(message)
@@ -187,48 +233,70 @@ class WurbSettings(object):
     def get_setting(self, key=None):
         """ """
         if key:
-            return self.current_settings.get(key, "")
+            return self.settings_db.get_value(identity="settings", key=key)
         return ""
 
-    def set_setting_without_saving(self, key=None, value=""):
-        """ """
-        if key:
-            self.current_settings[key] = value
-
-    async def get_settings(self, default=False):
+    async def get_settings(self):
         """ """
         try:
-            if default:
-                return self.default_settings
-            return self.current_settings
+            settings = self.settings_db.get_values(identity="settings")
+            globals = self.settings_db.get_values(identity="globals")
+            settings.update(globals)
+            return settings
         except Exception as e:
             message = "WurbSettings - get_settings. Exception: " + str(e)
+            self.logger.debug(message)
+
+    async def load_settings(self, settings_type):
+        """ """
+        try:
+            if settings_type == "user-default":
+                settings = self.settings_db.get_values(identity="userSettings")
+                self.settings_db.set_values(identity="settings", data_dict=settings)
+                location = self.settings_db.get_values(identity="userLocation")
+                self.settings_db.set_values(identity="location", data_dict=location)
+            elif settings_type == "start-up":
+                settings = self.settings_db.get_values(identity="startupSettings")
+                self.settings_db.set_values(identity="settings", data_dict=settings)
+                location = self.settings_db.get_values(identity="startupLocation")
+                self.settings_db.set_values(identity="location", data_dict=location)
+            elif settings_type == "factory-default":
+                self.settings_db.set_values(
+                    identity="globals", data_dict=self.default_globals
+                )
+                self.settings_db.set_values(
+                    identity="settings", data_dict=self.default_settings
+                )
+                self.settings_db.set_values(
+                    identity="location", data_dict=self.default_location
+                )
+
+            # Trigger events.
+            self.trigger_settings_event()
+            self.trigger_location_event()
+        except Exception as e:
+            message = "WurbSettings - load_settings. Exception: " + str(e)
             self.logger.debug(message)
 
     async def save_location(self, location_dict={}):
         """ """
         try:
+            location_db_dict = self.get_location_dict()
             for key, value in location_dict.items():
                 if value is not None:
-                    self.current_location[key] = value
+                    location_db_dict[key] = value
 
-            geo_source = self.current_location["geoSource"]
+            geo_source = location_db_dict["geoSource"]
             # Manual.
             if geo_source == "geo-manual":
-                self.current_location["latitudeDd"] = self.current_location[
-                    "manualLatitudeDd"
-                ]
-                self.current_location["longitudeDd"] = self.current_location[
-                    "manualLongitudeDd"
-                ]
+                location_db_dict["latitudeDd"] = location_db_dict["manualLatitudeDd"]
+                location_db_dict["longitudeDd"] = location_db_dict["manualLongitudeDd"]
             # GPS.
             if geo_source in ["geo-gps", "geo-gps-or-manual", "geo-last-gps-or-manual"]:
-                self.current_location["latitudeDd"] = 0.0
-                self.current_location["longitudeDd"] = 0.0
-
-            self.loaded_settings["currentLocation"] = self.current_location.copy()
-
-            self.save_settings_to_file()
+                location_db_dict["latitudeDd"] = 0.0
+                location_db_dict["longitudeDd"] = 0.0
+            # Save.
+            self.settings_db.set_values(identity="location", data_dict=location_db_dict)
             # Trigger an event.
             self.trigger_location_event()
         except Exception as e:
@@ -238,18 +306,17 @@ class WurbSettings(object):
     async def save_latlong(self, latitude_dd, longitude_dd):
         """ """
         try:
-            geo_source = self.current_location["geoSource"]
-            # Manual.
+            location_db_dict = self.get_location_dict()
+            geo_source = location_db_dict.get("geoSource", "")
+            # If GPS.
             if geo_source in ["geo-gps", "geo-gps-or-manual", "geo-last-gps-or-manual"]:
-                self.current_location["latitudeDd"] = latitude_dd
-                self.current_location["longitudeDd"] = longitude_dd
+                location_db_dict["latitudeDd"] = latitude_dd
+                location_db_dict["longitudeDd"] = longitude_dd
                 if (latitude_dd > 0.0) and (longitude_dd > 0.0):
-                    self.current_location["lastGpsLongitudeDd"] = latitude_dd
-                    self.current_location["lastGpsLongitudeDd"] = longitude_dd
-
-            self.loaded_settings["currentLocation"] = self.current_location.copy()
-            self.save_settings_to_file()
-
+                    location_db_dict["lastGpsLatitudeDd"] = latitude_dd
+                    location_db_dict["lastGpsLongitudeDd"] = longitude_dd
+            # Save.
+            self.settings_db.set_values(identity="location", data_dict=location_db_dict)
             # Trigger an event.
             self.trigger_latlong_event()
         except Exception as e:
@@ -265,7 +332,7 @@ class WurbSettings(object):
         longitude = float(location_dict.get("longitudeDd", "0.0"))
         manual_latitude = float(location_dict.get("manualLatitudeDd", "0.0"))
         manual_longitude = float(location_dict.get("manualLongitudeDd", "0.0"))
-        last_gps_latitude = float(location_dict.get("lastGpsLongitudeDd", "0.0"))
+        last_gps_latitude = float(location_dict.get("lastGpsLatitudeDd", "0.0"))
         last_gps_longitude = float(location_dict.get("lastGpsLongitudeDd", "0.0"))
         geo_source = location_dict.get("geoSource", "")
         if (latitude == 0.0) or (longitude == 0.0):
@@ -298,12 +365,16 @@ class WurbSettings(object):
 
     def get_location_dict(self):
         """ """
-        return self.current_location
+        try:
+            return self.settings_db.get_values(identity="location")
+        except Exception as e:
+            message = "WurbSettings - get_location_dict. Exception: " + str(e)
+            self.logger.debug(message)
 
     async def get_location(self):
         """ """
         try:
-            return self.current_location
+            return self.settings_db.get_values(identity="location")
         except Exception as e:
             message = "WurbSettings - get_location. Exception: " + str(e)
             self.logger.debug(message)
@@ -311,8 +382,12 @@ class WurbSettings(object):
     async def set_audio_feedback(self, volume, pitch):
         """ """
         try:
-            self.current_settings["feedbackVolume"] = volume
-            self.current_settings["feedbackPitch"] = pitch
+            self.settings_db.set_value(
+                identity="settings", key="feedbackVolume", value=volume
+            )
+            self.settings_db.set_value(
+                identity="settings", key="feedbackPitch", value=pitch
+            )
             # audiofeedback = wurb_core.wurb_audiofeedback
             # if audiofeedback:
             #     await audiofeedback.set_volume(volume)
@@ -374,54 +449,3 @@ class WurbSettings(object):
         if self.audiofeedback_event == None:
             self.audiofeedback_event = asyncio.Event()
         return self.audiofeedback_event
-
-    async def load_settings(self, settings_type):
-        """ """
-        try:
-            if settings_type == "user-default":
-                self.current_settings = self.loaded_settings["userSettings"].copy()
-                self.current_location = self.loaded_settings["userLocation"].copy()
-            elif settings_type == "start-up":
-                self.current_settings = self.loaded_settings["startupSettings"].copy()
-                self.current_location = self.loaded_settings["startupLocation"].copy()
-            elif settings_type == "factory-default":
-                self.current_settings = self.default_settings.copy()
-                self.current_location = self.default_location.copy()
-
-            # Copy startupOption to top level.
-            startupOption = self.current_settings.get("startupOption", "")
-            self.loaded_settings["startupOption"] = startupOption
-
-            # Trigger an event.
-            self.trigger_settings_event()
-            self.trigger_location_event()
-        except Exception as e:
-            message = "WurbSettings - load_settings. Exception: " + str(e)
-            self.logger.debug(message)
-
-    def load_settings_from_file(self, settings_file_name=None):
-        """Load from file."""
-        if settings_file_name is None:
-            settings_file_name = self.settings_file_name
-        settings_file_path = pathlib.Path(self.settings_dir, settings_file_name)
-        if settings_file_path.exists():
-            with open(settings_file_path) as settings_file:
-                self.loaded_settings = yaml.safe_load(settings_file)
-        else:
-            # Use
-            self.loaded_settings["startupOption"] = "as-last-session"
-            self.loaded_settings["currentSettings"] = self.default_settings.copy()
-            self.loaded_settings["startupSettings"] = self.default_settings.copy()
-            self.loaded_settings["userSettings"] = self.default_settings.copy()
-            self.loaded_settings["currentLocation"] = self.default_location.copy()
-            self.loaded_settings["startupLocation"] = self.default_location.copy()
-            self.loaded_settings["userLocation"] = self.default_location.copy()
-            self.save_settings_to_file()
-
-    def save_settings_to_file(self):
-        """Save to file."""
-        settings_file_path = pathlib.Path(self.settings_dir, self.settings_file_name)
-        with settings_file_path.open("w") as settings_file:
-            settings_file.writelines("\n".join(self.settings_header_rows) + "\n")
-            data = self.loaded_settings
-            yaml.safe_dump(data, settings_file)
