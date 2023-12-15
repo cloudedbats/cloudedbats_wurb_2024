@@ -45,7 +45,6 @@ from wurb_core.annotations.metadata import Metadata
 from wurb_core.annotations.metadata_table import MetadataTable
 from wurb_core.annotations.record_manager import RecordManager
 from wurb_core.annotations.spectrogram import create_spectrogram
-# from wurb_core.annotations.spectrogram_html import create_spectrogram_html
 
 from wurb_core.administration.admin_manager import AdminManager
 from wurb_core.administration.cleanup import AdminCleanup

@@ -85,6 +85,13 @@ function annoToggleViewSpectrogram() {
     if (byId("annoViewSpectrogramId").classList.contains("is-hidden")) {
         byId("annoViewSpectrogramButtonId").classList.add("is-inverted");
         byId("annoViewSpectrogramId").classList.remove("is-hidden");
+
+        var sourceId = currentRecord.sourceId;
+        var nightId = currentRecord.nightId;
+        var recordId = currentRecord.recordId;
+        getSpectrogramAsBuffer(sourceId, nightId, recordId);
+
+
     } else {
         byId("annoViewSpectrogramButtonId").classList.remove("is-inverted");
         byId("annoViewSpectrogramId").classList.add("is-hidden");

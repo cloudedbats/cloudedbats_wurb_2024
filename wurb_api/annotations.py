@@ -7,7 +7,7 @@
 import logging
 import fastapi
 import fastapi.templating
-from fastapi.responses import JSONResponse, FileResponse
+from fastapi.responses import JSONResponse, Response, FileResponse
 from typing import Union
 import wurb_core
 
@@ -153,7 +153,7 @@ async def get_file(
 @annotations_router.get(
     "/annotations/spectrogram",
     tags=["Annotations"],
-    description="Get spectrogram as jpeg for one sound recording.",
+    description="Get spectrogram as a base64 encoded buffer.",
 )
 async def get_spectrogram(
     sourceId: str,
@@ -162,13 +162,19 @@ async def get_spectrogram(
 ):
     """ """
     try:
-        spectrogram_path = wurb_core.record_manager.get_spectrogram_path(
+        spectrogram_path = wurb_core.record_manager.get_rec_file_path(
             source_id=sourceId,
             night_id=nightId,
             record_id=recordId,
         )
-
-        return FileResponse(spectrogram_path)
+        # Example: "<img src='data:image/png;base64,{buffer}'/>"
+        buffer = await wurb_core.create_spectrogram(spectrogram_path)
+        buffer_src = "data:image/png;base64,"
+        buffer_src += buffer
+        json_data = {
+            "imageBufferSrc": buffer_src,
+        }
+        return JSONResponse(content=json_data)
 
     except Exception as e:
         message = "API - get_spectrogram. Exception: " + str(e)

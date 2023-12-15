@@ -127,15 +127,43 @@ async function getRecordInfo(sourceId, nightId, recordId) {
             annoSetTags(json.tags);
             annoSetComments(json.comments);
 
-            // imageSrc = "http://localhost:8080/annotations/spectrogram?"
-            imageSrc = "/annotations/spectrogram?"
-            imageSrc += "sourceId="
-            imageSrc += json.sourceId
-            imageSrc += "&nightId="
-            imageSrc += json.nightId
-            imageSrc += "&recordId="
-            imageSrc += json.recordId
-            byId("annoSpectrogramSrcId").src = imageSrc;
+
+
+
+
+            // // // imageSrc = "http://localhost:8080/annotations/spectrogram?"
+            // // imageSrc = "/annotations/spectrogram?"
+            // // imageSrc += "sourceId="
+            // // imageSrc += json.sourceId
+            // // imageSrc += "&nightId="
+            // // imageSrc += json.nightId
+            // // imageSrc += "&recordId="
+            // // imageSrc += json.recordId
+            // // byId("annoSpectrogramSrcId").src = imageSrc;
+
+            // // imageBuffer = "http://localhost:8080/annotations/spectrogram-html?"
+            // imageBuffer = "/annotations/spectrogram-html?"
+            // imageBuffer += "sourceId="
+            // imageBuffer += json.sourceId
+            // imageBuffer += "&nightId="
+            // imageBuffer += json.nightId
+            // imageBuffer += "&recordId="
+            // imageBuffer += json.recordId
+            // byId("annoSpectrogramBufferId").src = imageBufferSrc;
+
+            // // // Create temporary element.
+            // // // <img src='data:image/png;base64,{data}'/>"
+            // // let hidden_a = document.createElement('a');
+            // // hidden_a.setAttribute('href', reportSrc);
+            // // hidden_a.setAttribute('download', json.report_name);
+            // // document.body.appendChild(hidden_a);
+            // // hidden_a.click();
+            // // document.body.removeChild(hidden_a);
+            
+
+
+
+
 
             // //  fileSrc = "http://localhost:8080/annotations/file?"
             // fileSrc = "/annotations/file?"
@@ -219,18 +247,37 @@ async function saveRecordInfo(sourceId, nightId, recordId, quality, tags, commen
 };
 
 async function downloadRecFile(sourceId, nightId, recordId, recordFile) {
-    fileSrc = "/annotations/file?"
-    fileSrc += "sourceId="
-    fileSrc += sourceId
-    fileSrc += "&nightId="
-    fileSrc += nightId
-    fileSrc += "&recordId="
-    fileSrc += recordId
-    // Create temporary element.
-    let hidden_a = document.createElement('a');
-    hidden_a.setAttribute('href', fileSrc);
-    hidden_a.setAttribute('download', recordFile);
-    document.body.appendChild(hidden_a);
-    hidden_a.click();
-    document.body.removeChild(hidden_a);
+
 };
+
+
+ 
+
+async function getSpectrogramAsBuffer(sourceId, nightId, recordId) {
+
+    byId("annoSpectrogramBufferId").src = ""
+
+    fetch("/annotations/spectrogram?" + new URLSearchParams({
+        sourceId: sourceId,
+        nightId: nightId,
+        recordId: recordId,
+    }), { method: "GET" })
+        .then(function (response) {
+            if (response.ok) {
+                return response.json();
+            } else {
+                return Promise.reject(response);
+            }
+        })
+        .then(function (json) {
+
+            byId("annoSpectrogramBufferId").src = json.imageBufferSrc;
+
+        })
+        .catch(function (err) {
+            console.warn("Error in javascript fetch: ", err);
+        })
+};
+
+
+ 

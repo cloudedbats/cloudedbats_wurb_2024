@@ -1,23 +1,26 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
+# Project: https://github.com/cloudedbats
+# Author: Arnold Andreasson, info@cloudedbats.org
+# License: MIT License (see LICENSE or http://opensource.org/licenses/mit).
 
+import asyncio
 import pathlib
 import matplotlib
 import matplotlib.figure
 from scipy import signal
 from scipy.io import wavfile
 import numpy
-import gc
+import base64
+from io import BytesIO
 
 
-def create_spectrogram(source_path, target_path):
+async def create_spectrogram(source_path):
     """ """
     matplotlib.rcParams.update({"font.size": 6})
     figure = matplotlib.figure.Figure(
-        figsize=(10, 3),
-        # dpi=400,
-        dpi=200,
-        # Plot figure.
+        figsize=(12, 4),
+        dpi=100,
     )
     ax1 = figure.add_subplot(111)
 
@@ -31,6 +34,8 @@ def create_spectrogram(source_path, target_path):
         # end_ix = int(sample_rate * 4.9)
         # start_ix = int(sample_rate * 2.0)
         # end_ix = int(sample_rate * 2.5)
+
+        await asyncio.sleep(0)
 
         # Calculate spectrogram.
         frequencies, times, spectrogram = signal.spectrogram(
@@ -46,6 +51,8 @@ def create_spectrogram(source_path, target_path):
         # From Hz to kHz.
         frequencies = frequencies / 1000.0
         # Fix colors, use logarithmic scale.
+
+        await asyncio.sleep(0)
 
         for row in spectrogram:
             row[row < 0.0002] = None
@@ -65,22 +72,22 @@ def create_spectrogram(source_path, target_path):
         ax1.grid(which="major", linestyle="-", linewidth="0.5", alpha=0.7)
         ax1.grid(which="minor", linestyle="-", linewidth="0.5", alpha=0.3)
         ax1.tick_params(which="both", top="off", left="off", right="off", bottom="off")
-        # Save.
+
+        await asyncio.sleep(0)
+
+        # Save to a temporary buffer. Usage example:
+        # "<img src='data:image/png;base64,{buffer}'/>"
         figure.tight_layout()
-        figure.savefig(target_path)
-        ax1.cla()
+        buf = BytesIO()
+        figure.savefig(buf, format="png")
+        buffer = base64.b64encode(buf.getbuffer()).decode("ascii")
 
-        # Run garbage collector to avoid memory overload.
-        gc.collect()
-
-        message = "Spectrogram created for: " + plot_title
-        # print(message)
-        return message
+        return buffer
 
     except Exception as e:
         message = "Spectrogram - Exception: " + e
-        # print(message)
-        return message
+        print(message)
+        return None
 
 
 ### Available color maps. ###
