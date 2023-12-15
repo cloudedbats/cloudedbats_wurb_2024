@@ -10,7 +10,7 @@ requests
 ### pyalsaaudio # For RPi.
 pyaudio # For macOS, etc.
 numpy
-scipy<1.9.0
+scipy
 psutil
 pyusb
 # Plotting.
