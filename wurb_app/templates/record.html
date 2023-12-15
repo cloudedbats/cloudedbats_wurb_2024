@@ -182,90 +182,6 @@
                             </table>
                         </div>
 
-
-
-                        <div class="table-container m-0">
-                            <table class="table has-background-grey-lighter">
-                                <tbody>
-                                    <tr>
-                                        <td class="p-1 pt-3">
-                                            <div class="label has-text-left" style="white-space: nowrap;">
-                                                Directory name
-                                            </div>
-                                        </td>
-                                        <td colspan="1" style="width: 30%;" class="p-1">
-                                            <div class="control">
-                                                <input id="recFileDirectoryId" class="input" value="Station-1">
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <!-- <tr>
-                                        <td class="p-1">
-                                            <div class="label has-text-left pt-3" style="white-space: nowrap;">
-                                                Automatic date
-                                            </div>
-                                        </td>
-                                        <td colspan="1" style="width: 30%;">
-                                            <div class="select is-rounded is-info is-size-6">
-                                                <select id="recFileDirectoryDateOptionId">
-                                                    <option value="date-not-used">Not used</option>
-                                                    <option value="date-pre-true">Add before - Use date
-                                                    </option>
-                                                    <option value="date-pre-before">Add before - Use date before
-                                                        midnight
-                                                    </option>
-                                                    <option value="date-pre-after">Add before - Use date after
-                                                        midnight
-                                                    </option>
-                                                    <option value="date-post-true">Add after - Use date
-                                                    </option>
-                                                    <option value="date-post-before">Add after - Use date before
-                                                        midnight
-                                                    </option>
-                                                    <option value="date-post-after">Add after - Use date after
-                                                        midnight
-                                                    </option>
-                                                    </option>
-                                                </select>
-                                            </div>
-                                        </td>
-                                    </tr> -->
-                                    <tr>
-                                        <td class="p-1 pt-3">
-                                            <div class="label has-text-left" style="white-space: nowrap;">
-                                                Sound file prefix
-                                            </div>
-                                        </td>
-                                        <td colspan="1" style="width: 30%;" class="p-1">
-                                            <div class="field">
-                                                <div class="control">
-                                                    <input id="recFilenamePrefixId" class="input" value="wurb">
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td colspan="1" style="width: 100%;" class="p-1">
-
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="p-1 pt-3">
-                                            <div class="label has-text-left" style="white-space: nowrap;">
-                                                Comments
-                                            </div>
-                                        </td>
-                                        <td colspan="2" style="width: 30%;" class="p-1">
-                                            <div class="field">
-                                                <div class="control">
-                                                    <input id="recFilenamePrefixId" class="input"
-                                                        placeholder="Comments on monitoring night">
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
                         <div class="field is-grouped is-grouped-centered pt-2">
                             <button style="margin:5px;" class="button is-small is-rounded is-info has-text-weight-bold"
                                 onclick="recStatus()">
@@ -274,10 +190,6 @@
                             <button style="margin:5px;" class="button is-small is-rounded is-info has-text-weight-bold"
                                 onclick="setDetectorTime()">
                                 Set time
-                            </button>
-                            <button style="margin:5px;" class="button is-small is-rounded is-info has-text-weight-bold"
-                                onclick="saveSettings()">
-                                Save settings
                             </button>
                         </div>
 
@@ -320,20 +232,16 @@
 
                         <!-- Settings: Tab - Basic. -->
                         <div id="divSettingsBasicId">
-                            <!-- <div class="field">
-                                <label class="label">Directory&nbsp;name&nbsp;for&nbsp;sound&nbsp;files</label>
+                            <div class="field">
+                                <label class="label">Directory&nbsp;name</label>
                                 <div class="control">
-                                    <input id="settings_file_directory_id" class="input"
-                                        placeholder="recorded_files" value="recorded_files">
+                                    <input id="recFileDirectoryId" class="input" value="Station-1">
                                 </div>
-                                <p class="help is-info">
-                                    Stored on USB memory if available, otherwise stored internally.
-                                </p>
-                            </div> -->
-                            <div class="field is-narrow">
+                            </div>
+                            <div class="field is---narrow">
                                 <label class="label">Automatic&nbsp;date&nbsp;in&nbsp;directory&nbsp;name</label>
-                                <div class="control is-narrow">
-                                    <div class="select is-narrow">
+                                <div class="control is---narrow">
+                                    <div class="select is---narrow">
                                         <select id="recFileDirectoryDateOptionId">
                                             <option value="date-not-used">Not used</option>
                                             <option value="date-pre-true">Add before - Use date
@@ -357,13 +265,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- <div class="field">
+                            <div class="field">
                                 <label class="label">Sound&nbsp;file&nbsp;name&nbsp;prefix</label>
                                 <div class="control">
-                                    <input id="settings_filename_prefix_id" class="input" placeholder="wurb"
+                                    <input id="recFilenamePrefixId" class="input" placeholder="wurb"
                                         value="wurb">
                                 </div>
-                            </div> -->
+                            </div>
                             <div class="field">
                                 <div class="field-label label is-normal has-text-left">
                                     Automatic&nbsp;detection:&nbsp;Low&nbsp;limit&nbsp;(kHz)
@@ -672,10 +580,6 @@
                                         Cancel
                                         <!-- Last saved -->
                                     </button>
-                                    <!-- <button style="margin:5px;" id="settings_default_button_id" -->
-                                    <!-- class="button is-info is-rounded" onclick="getDefaultSettings()"> -->
-                                    <!-- User default -->
-                                    <!-- </button> -->
                                 </div>
                             </div>
                         </div>
