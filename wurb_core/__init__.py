@@ -42,7 +42,6 @@ from wurb_core.record.rec_file_writer import RecFileWriter
 
 from wurb_core.administration.sources_and_files import SourcesAndFiles
 from wurb_core.annotations.metadata import Metadata
-from wurb_core.annotations.metadata_table import MetadataTable
 from wurb_core.annotations.record_manager import RecordManager
 from wurb_core.annotations.spectrogram import create_spectrogram
 
@@ -91,7 +90,6 @@ gps_reader = GpsReader(config, wurb_logger)
 # Annotations and administration.
 sources_and_files = SourcesAndFiles(config, wurb_logger)
 metadata = Metadata(config, logger)
-metadata_table = MetadataTable(config, wurb_logger)
 record_manager = RecordManager(config, wurb_logger)
 
 # Administration.
