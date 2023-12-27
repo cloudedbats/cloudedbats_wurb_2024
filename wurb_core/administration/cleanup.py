@@ -35,6 +35,7 @@ class AdminCleanup(object):
 
     async def remove_q0(self, source_id, night_id):
         """ """
+        wurb_core.admin_manager.update_db(source_id, night_id)
         if (source_id) and (night_id):
             quality_by_file = self.extract_quality(source_id, night_id)
             for file, quality in quality_by_file.items():
@@ -43,19 +44,20 @@ class AdminCleanup(object):
                     if rec_file_path.exists():
                         rec_file_path.unlink()
                         print("WAV-FILE DELETED (Q0): ", str(rec_file_path))
-                    wurb_core.metadata.delete_metadata(rec_file_path)
-
-            # TODO: Event trigger here...
 
             # Check if there are files left. If not, remove directory.
             rec_files = wurb_core.record_manager.get_rec_files(source_id, night_id)
             if len(rec_files) == 0:
                 self.delete_monitoring_night(source_id, night_id)
+            else:
+                wurb_core.admin_manager.update_db(source_id, night_id)
 
+            # TODO: Event trigger here...
         return {}
 
     async def remove_not_assigned(self, source_id, night_id):
         """ """
+        wurb_core.admin_manager.update_db(source_id, night_id)
         if (source_id) and (night_id):
             quality_by_file = self.extract_quality(source_id, night_id)
             for file, quality in quality_by_file.items():
@@ -64,15 +66,18 @@ class AdminCleanup(object):
                     if rec_file_path.exists():
                         rec_file_path.unlink()
                         print("WAV-FILE DELETED (NA): ", str(rec_file_path))
-                    wurb_core.metadata.delete_metadata(rec_file_path)
 
+            wurb_core.admin_manager.update_db(source_id, night_id)
             # TODO: Event trigger here...
 
             # Check if there are files left. If not, remove directory.
             rec_files = wurb_core.record_manager.get_rec_files(source_id, night_id)
             if len(rec_files) == 0:
                 await self.delete_monitoring_night(source_id, night_id)
+            else:
+                wurb_core.admin_manager.update_db(source_id, night_id)
 
+            # TODO: Event trigger here...
         return {}
 
     async def delete_monitoring_night(self, source_id, night_id):
@@ -99,7 +104,6 @@ class AdminCleanup(object):
                 print("FILE: ", str(rec_file))
                 # Get metadata for recording.
                 metadata = wurb_core.metadata.get_metadata(rec_file)
-                flat_metadata = wurb_core.metadata.flatten_metadata(metadata)
-                quality = flat_metadata.get("annotations.wurb-user.quality", "")
+                quality = metadata.get("annotationQuality", "")
                 quality_by_file[str(rec_file)] = quality
         return quality_by_file

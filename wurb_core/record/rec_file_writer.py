@@ -188,7 +188,7 @@ class RecFileWriter(object):
     def close(self):
         """ """
 
-        print("--- DEBUG: plot_spectrogram - 0.")
+        # print("--- DEBUG: plot_spectrogram - 0.")
 
         if self.wave_file is not None:
             self.wave_file.close()
@@ -230,33 +230,32 @@ class RecFileWriter(object):
         schedulerStopAdjust = wurb_core.wurb_settings.get_setting("schedulerStopAdjust")
 
         metadata = wurb_core.metadata.read_metadata(self.rec_filename_path)
-        recording = metadata.get("recording", {})
-        recording["monitoringNight"] = self.rec_target_dir_path.name
-        recording["deviceName"] = self.device_name
-        recording["geoSource"] = geoSource
-        recording["detectionLimitKhz"] = detectionLimitKhz
-        recording["detectionSensitivityDbfs"] = detectionSensitivityDbfs
-        recording["detectionAlgorithm"] = detectionAlgorithm
-        recording["schedulerStartEvent"] = schedulerStartEvent
-        recording["schedulerStartAdjust"] = schedulerStartAdjust
-        recording["schedulerStopEvent"] = schedulerStopEvent
-        recording["schedulerStopAdjust"] = schedulerStopAdjust
+        metadata["monitoringNight"] = self.rec_target_dir_path.name
+        metadata["deviceName"] = self.device_name
+        metadata["geoSource"] = geoSource
+        metadata["detectionLimitKhz"] = detectionLimitKhz
+        metadata["detectionSensitivityDbfs"] = detectionSensitivityDbfs
+        metadata["detectionAlgorithm"] = detectionAlgorithm
+        metadata["schedulerStartEvent"] = schedulerStartEvent
+        metadata["schedulerStartAdjust"] = schedulerStartAdjust
+        metadata["schedulerStopEvent"] = schedulerStopEvent
+        metadata["schedulerStopAdjust"] = schedulerStopAdjust
         #
         if self.peak_hz:
-            recording["peakHz"] = str(round(float(self.peak_hz)))
-            recording["peakKhz"] = str(round(float(self.peak_hz) / 1000.0, 1))
+            metadata["peakHz"] = str(round(float(self.peak_hz)))
+            metadata["peakKhz"] = str(round(float(self.peak_hz) / 1000.0, 1))
         if self.peak_dbfs:
-            recording["peakDbfs"] = str(round(float(self.peak_dbfs), 1))
+            metadata["peakDbfs"] = str(round(float(self.peak_dbfs), 1))
         #
         latitude, longitude = wurb_core.wurb_settings.get_valid_location()
         if (latitude == 0.0) or (longitude == 0.0):
             pass
         else:
-            recording["latitude"] = str(latitude)
-            recording["longitude"] = str(longitude)
+            metadata["latitude"] = str(latitude)
+            metadata["longitude"] = str(longitude)
             sun_moon_dict = wurb_core.sun_moon.get_sun_moon_info(latitude, longitude)
-            recording["sunsetLocal"] = str(sun_moon_dict.get("sunset_local", ""))
-            recording["sunriseLocal"] = str(sun_moon_dict.get("sunrise_local", ""))
-            recording["moonPhase"] = sun_moon_dict.get("moon_phase_detailed", "")
+            metadata["sunsetLocal"] = str(sun_moon_dict.get("sunset_local", ""))
+            metadata["sunriseLocal"] = str(sun_moon_dict.get("sunrise_local", ""))
+            metadata["moonPhase"] = sun_moon_dict.get("moon_phase_detailed", "")
         #
         wurb_core.metadata.write_metadata(self.rec_filename_path, metadata)

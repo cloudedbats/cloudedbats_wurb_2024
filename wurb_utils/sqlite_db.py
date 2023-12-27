@@ -146,27 +146,15 @@ class SqliteDb(object):
         finally:
             c.close()
 
-
-# # MAIN.
-# if __name__ == "__main__":
-#     """For test."""
-
-#     db = SqliteDb()
-#     db.set_value("A", "a")
-#     db.set_value("A", "a2")
-#     db.set_value("B", "b")
-#     result = db.get_value("A")
-#     print("TEST: ", result)
-#     result = db.get_value("C")
-#     print("TEST: ", result)
-#     result = db.get_value("E")
-#     print("TEST: ", result)
-#     test_dict = {
-#         "A": "a3",
-#         "C": "c",
-#         "D": "d",
-#         "C": "c2",
-#     }
-#     db.set_values(test_dict)
-#     result = db.get_values()
-#     print("TEST: ", result)
+    def delete_rows(self, identity_list):
+        """ """
+        self.connect()
+        try:
+            c = self.db_conn.cursor()
+            command = "DELETE FROM key_value_data "
+            command += "WHERE identity = ? "
+            for identity in identity_list:
+                c.execute(command, (identity,))
+            self.db_conn.commit()
+        finally:
+            c.close()

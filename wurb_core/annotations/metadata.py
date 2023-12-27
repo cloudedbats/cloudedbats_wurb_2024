@@ -21,6 +21,7 @@ class Metadata(object):
         """ """
         self.config = config
         self.logger = logger
+        self.logger_name = logger_name
         if self.config == None:
             self.config = {}
         if self.logger == None:
@@ -34,16 +35,16 @@ class Metadata(object):
 
     def configure(self):
         """ """
-        self.metadata_header_rows = [
-            "# Metadata for CloudedBats WURB-2024.",
-            "#" "---",
-        ]
+        # self.metadata_header_rows = [
+        #     "# Metadata for CloudedBats WURB-2024.",
+        #     "#" "---",
+        # ]
 
     def get_data_dir(self, rec_file_path):
         """ """
         file_path = pathlib.Path(rec_file_path)
         parent_dir = file_path.parent
-        data_dir_path = pathlib.Path(parent_dir, "data", "rec_metadata").resolve()
+        data_dir_path = pathlib.Path(parent_dir, "data").resolve()
         if not data_dir_path.exists():
             data_dir_path.mkdir(parents=True)
         #
@@ -88,12 +89,10 @@ class Metadata(object):
     def add_basic_metadata(self, rec_file_path):
         """ """
         rec_file_path = pathlib.Path(rec_file_path)
-        metadata_file_path = self.get_metadata_file_path(rec_file_path)
+        # metadata_file_path = self.get_metadata_file_path(rec_file_path)
         prefix, utc_datetime, local_date, local_time = self.get_rec_keys(rec_file_path)
         metadata = {}
-        recording = {}
-        metadata["recording"] = recording
-        recording["recFileName"] = rec_file_path.name
+        metadata["recFileName"] = rec_file_path.name
         # recording["rec_file_path"] = str(rec_file_path.resolve())
         # recording["metadata_file_name"] = metadata_file_path.name
         # recording["metadata_file_path"] = str(metadata_file_path.resolve())
@@ -107,43 +106,60 @@ class Metadata(object):
         #     .replace(".wav", "_SPECTROGRAM.jpg")
         # )
 
-        recording["prefix"] = prefix
-        recording["dateTimeUtc"] = str(utc_datetime)
-        recording["dateLocal"] = str(local_date)
-        recording["timeLocal"] = str(local_time)
-        metadata["annotations"] = [
-            {
-                "user": "wurb-user",
-                "quality": "Not assigned",
-                "tags": "",
-                "comments": "",
-            },
-        ]
+        metadata["prefix"] = prefix
+        metadata["dateTimeUtc"] = str(utc_datetime)
+        metadata["dateLocal"] = str(local_date)
+        metadata["timeLocal"] = str(local_time)
+        metadata["annotationQuality"] = "Not assigned"
+        metadata["annotationTags"] = ""
+        metadata["annotationComments"] = ""
         #
         self.write_metadata(rec_file_path, metadata)
 
     def read_metadata(self, rec_file_path):
         """ """
-        metadata = {}
-        rec_file_path = pathlib.Path(rec_file_path)
-        metadata_file_path = self.get_metadata_file_path(rec_file_path)
-        if not metadata_file_path.exists():
+        data_dir = self.get_data_dir(rec_file_path)
+        rec_id = self.get_rec_id(rec_file_path)
+        db_path = pathlib.Path(data_dir, "metadata.db")
+        metadata_db = MetadataSqliteDb(
+            db_file_path=db_path, logger_name=self.logger_name
+        )
+        metadata = metadata_db.get_values(identity=rec_id)
+        if not metadata:
             self.add_basic_metadata(rec_file_path)
-        #
-        with open(metadata_file_path, "r") as file:
-            # metadata = yaml.load(file, Loader=yaml.Loader)
-            metadata = yaml.safe_load(file)
+            metadata = metadata_db.get_values(identity=rec_id)
         #
         return metadata
 
+        # metadata = {}
+        # rec_file_path = pathlib.Path(rec_file_path)
+        # metadata_file_path = self.get_metadata_file_path(rec_file_path)
+        # if not metadata_file_path.exists():
+        #     self.add_basic_metadata(rec_file_path)
+        # #
+        # with open(metadata_file_path, "r") as file:
+        #     # metadata = yaml.load(file, Loader=yaml.Loader)
+        #     metadata = yaml.safe_load(file)
+        # #
+        # return metadata
+
     def write_metadata(self, rec_file_path, metadata):
         """ """
-        rec_file_path = pathlib.Path(rec_file_path)
-        metadata_file_path = self.get_metadata_file_path(rec_file_path)
-        #
-        with open(metadata_file_path, "w") as file:
-            file.writelines("\n".join(self.metadata_header_rows) + "\n")
-            yaml.dump(metadata, file, default_flow_style=False)
+        data_dir = self.get_data_dir(rec_file_path)
+        rec_id = self.get_rec_id(rec_file_path)
+        db_path = pathlib.Path(data_dir, "metadata.db")
+        metadata_db = MetadataSqliteDb(
+            db_file_path=db_path, logger_name=self.logger_name
+        )
+        # flat_metadata = self.flatten_metadata(metadata)
+        metadata_db.set_values(metadata, identity=rec_id)
+
+        # rec_file_path = pathlib.Path(rec_file_path)
+        # metadata_file_path = self.get_metadata_file_path(rec_file_path)
+        # #
+        # with open(metadata_file_path, "w") as file:
+        #     file.writelines("\n".join(self.metadata_header_rows) + "\n")
+        #     yaml.dump(metadata, file, default_flow_style=False)
 
     def get_metadata(self, rec_file_path):
         """ """
@@ -154,26 +170,87 @@ class Metadata(object):
         #
         return metadata
 
-    def delete_metadata(self, rec_file_path):
+    def get_annotation_counts(self, night_dir):
         """ """
-        rec_file_path = pathlib.Path(rec_file_path)
-        metadata_file_path = self.get_metadata_file_path(rec_file_path)
-        if metadata_file_path.exists():
-            metadata_file_path.unlink()
-            print("METADATA DELETED: ", str(metadata_file_path))
-
-    def flatten_metadata(self, metadata):
-        """ """
-        flat_metadata = {}
-        # Recording.
-        recording_dict = metadata.get("recording", {})
-        for key, value in recording_dict.items():
-            flat_metadata["recording." + key] = value
-        # Annotations.
-        annotations = metadata.get("annotations", {})
-        for annotation in annotations:
-            user = annotation.get("user", "no-user")
-            for key, value in annotation.items():
-                flat_metadata["annotations." + user + "." + key] = value
+        db_path = pathlib.Path(night_dir, "data", "metadata.db")
+        metadata_db = MetadataSqliteDb(
+            db_file_path=db_path, logger_name=self.logger_name
+        )
+        metadata = metadata_db.get_annotation_counts()
         #
-        return flat_metadata
+        return metadata
+
+    def get_unique_ids(self, night_dir):
+        """ """
+        db_path = pathlib.Path(night_dir, "data", "metadata.db")
+        metadata_db = MetadataSqliteDb(
+            db_file_path=db_path, logger_name=self.logger_name
+        )
+        unique_ids = metadata_db.get_unique_ids()
+        #
+        return unique_ids
+
+    def delete_metadata(self, night_dir, remove_id_list):
+        """ """
+        db_path = pathlib.Path(night_dir, "data", "metadata.db")
+        metadata_db = MetadataSqliteDb(
+            db_file_path=db_path, logger_name=self.logger_name
+        )
+        metadata_db.delete_rows(identity_list=remove_id_list)
+
+
+class MetadataSqliteDb(wurb_core.SqliteDb):
+    """ """
+
+    def __init__(self, db_file_path, logger_name="DefaultLogger"):
+        """ """
+        super().__init__(db_file_path, logger_name)
+
+    def get_unique_ids(self):
+        """ """
+        self.connect()
+        try:
+            c = self.db_conn.cursor()
+            command = "SELECT DISTINCT identity FROM key_value_data "
+            command += "ORDER BY identity "
+            c.execute(command)
+            results = c.fetchall()
+            result_list = []
+            for result in results:
+                result_list.append(result[0])
+            return result_list
+        finally:
+            c.close()
+
+    def get_annotation_counts(self):
+        """ """
+        self.connect()
+        try:
+            c = self.db_conn.cursor()
+            command = "SELECT "
+            command += "( "
+            command += "SELECT COUNT(*) FROM key_value_data "
+            command += "WHERE key = 'annotationQuality' AND value = 'Q0'"
+            command += ") count_q0, "
+            command += "( "
+            command += "SELECT COUNT(*) FROM key_value_data "
+            command += "WHERE key = 'annotationQuality' AND value = 'Q1'"
+            command += ") count_q1, "
+            command += "( "
+            command += "SELECT COUNT(*) FROM key_value_data "
+            command += "WHERE key = 'annotationQuality' AND value = 'Q2'"
+            command += ") count_q2, "
+            command += "( "
+            command += "SELECT COUNT(*) FROM key_value_data "
+            command += "WHERE key = 'annotationQuality' AND value = 'Q3'"
+            command += ") count_q3, "
+            command += "( "
+            command += "SELECT COUNT(*) FROM key_value_data "
+            command += "WHERE key = 'annotationQuality' AND value = 'Not assigned'"
+            command += ") count_na "
+
+            c.execute(command)
+            result = c.fetchone()
+            return result
+        finally:
+            c.close()

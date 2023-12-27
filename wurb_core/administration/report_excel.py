@@ -35,67 +35,67 @@ class ReportExcel(object):
         self.summary_columns = [
             {
                 "header": "Monitoring night",
-                "sourceKey": "recording.monitoringNight",
+                "sourceKey": "monitoringNight",
                 "format": "text",
                 "columnWidth": 30,
             },
             {
                 "header": "Date",
-                "sourceKey": "recording.dateLocal",
+                "sourceKey": "dateLocal",
                 "format": "date",
                 "columnWidth": 10,
             },
             {
                 "header": "Time",
-                "sourceKey": "recording.timeLocal",
+                "sourceKey": "timeLocal",
                 "format": "time",
                 "columnWidth": 10,
             },
             {
                 "header": "Quality",
-                "sourceKey": "annotations.wurb-user.quality",
+                "sourceKey": "annotationQuality",
                 "format": "text",
                 "columnWidth": 15,
             },
             {
                 "header": "Tags",
-                "sourceKey": "annotations.wurb-user.tags",
+                "sourceKey": "annotationTags",
                 "format": "text",
                 "columnWidth": 20,
             },
             {
                 "header": "Comments",
-                "sourceKey": "annotations.wurb-user.comments",
+                "sourceKey": "annotationComments",
                 "format": "text",
                 "columnWidth": 40,
             },
             {
                 "header": "Peak (kHz)",
-                "sourceKey": "recording.peakKhz",
+                "sourceKey": "peakKhz",
                 "format": "decimal",
                 "columnWidth": 10,
             },
             {
                 "header": "Peak (dBFS)",
-                "sourceKey": "recording.peakDbfs",
+                "sourceKey": "peakDbfs",
                 "format": "decimal",
                 "columnWidth": 10,
             },
             {
                 "header": "Latitude (DD)",
-                "sourceKey": "recording.latitude",
+                "sourceKey": "latitude",
                 "format": "decimal_4",
                 "columnWidth": 12,
             },
             {
                 "header": "Longitude (DD)",
-                "sourceKey": "recording.longitude",
+                "sourceKey": "longitude",
                 "format": "decimal_4",
                 "columnWidth": 12,
             },
             {
                 "header": "File name",
-                "sourceKey": "recording.recFileName",
+                "sourceKey": "recFileName",
                 "format": "text",
                 "columnWidth": 60,
             },
@@ -103,145 +103,145 @@ class ReportExcel(object):
         self.detailed_columns = [
             {
                 "header": "Monitoring night",
-                "sourceKey": "recording.monitoringNight",
+                "sourceKey": "monitoringNight",
                 "format": "text",
                 "columnWidth": 30,
             },
             {
                 "header": "Date",
-                "sourceKey": "recording.dateLocal",
+                "sourceKey": "dateLocal",
                 "format": "date",
                 "columnWidth": 10,
             },
             {
                 "header": "Time",
-                "sourceKey": "recording.timeLocal",
+                "sourceKey": "timeLocal",
                 "format": "time",
                 "columnWidth": 10,
             },
             {
                 "header": "Quality",
-                "sourceKey": "annotations.wurb-user.quality",
+                "sourceKey": "annotationQuality",
                 "format": "text",
                 "columnWidth": 15,
             },
             {
                 "header": "Tags",
-                "sourceKey": "annotations.wurb-user.tags",
+                "sourceKey": "annotationTags",
                 "format": "text",
                 "columnWidth": 20,
             },
             {
                 "header": "Comments",
-                "sourceKey": "annotations.wurb-user.comments",
+                "sourceKey": "annotationComments",
                 "format": "text",
                 "columnWidth": 40,
             },
             {
                 "header": "Peak (kHz)",
-                "sourceKey": "recording.peakKhz",
+                "sourceKey": "peakKhz",
                 "format": "decimal",
                 "columnWidth": 10,
             },
             {
                 "header": "Peak (dBFS)",
-                "sourceKey": "recording.peakDbfs",
+                "sourceKey": "peakDbfs",
                 "format": "decimal",
                 "columnWidth": 10,
             },
             {
                 "header": "Latitude (DD)",
-                "sourceKey": "recording.latitude",
+                "sourceKey": "latitude",
                 "format": "decimal_4",
                 "columnWidth": 12,
             },
             {
                 "header": "Longitude (DD)",
-                "sourceKey": "recording.longitude",
+                "sourceKey": "longitude",
                 "format": "decimal_4",
                 "columnWidth": 12,
             },
             {
                 "header": "File name",
-                "sourceKey": "recording.recFileName",
+                "sourceKey": "recFileName",
                 "format": "text",
                 "columnWidth": 60,
             },
             {
                 "header": "Device name",
-                "sourceKey": "recording.deviceName",
+                "sourceKey": "deviceName",
                 "format": "text",
                 "columnWidth": 40,
             },
             {
                 "header": "Detection algorithm",
-                "sourceKey": "recording.detectionAlgorithm",
+                "sourceKey": "detectionAlgorithm",
                 "format": "text",
                 "columnWidth": 15,
             },
             {
                 "header": "Limit kHz",
-                "sourceKey": "recording.detectionLimitKhz",
+                "sourceKey": "detectionLimitKhz",
                 "format": "decimal",
                 "columnWidth": 15,
             },
             {
                 "header": "Sensitivity dBFS",
-                "sourceKey": "recording.detectionSensitivityDbfs",
+                "sourceKey": "detectionSensitivityDbfs",
                 "format": "decimal",
                 "columnWidth": 15,
             },
             {
                 "header": "Datetime UTC",
-                "sourceKey": "recording.dateTimeUtc",
+                "sourceKey": "dateTimeUtc",
                 "format": "text",
                 "columnWidth": 25,
             },
             {
                 "header": "Geo source",
-                "sourceKey": "recording.geoSource",
+                "sourceKey": "geoSource",
                 "format": "text",
                 "columnWidth": 15,
             },
             {
                 "header": "Scheduler start event",
-                "sourceKey": "recording.schedulerStartEvent",
+                "sourceKey": "schedulerStartEvent",
                 "format": "text",
                 "columnWidth": 15,
             },
             {
                 "header": "Scheduler start adjust",
-                "sourceKey": "recording.schedulerStartAdjust",
+                "sourceKey": "schedulerStartAdjust",
                 "format": "decimal",
                 "columnWidth": 15,
             },
             {
                 "header": "Scheduler stop event",
-                "sourceKey": "recording.schedulerStopEvent",
+                "sourceKey": "schedulerStopEvent",
                 "format": "text",
                 "columnWidth": 15,
             },
             {
                 "header": "Scheduler stop adjust",
-                "sourceKey": "recording.schedulerStopAdjust",
+                "sourceKey": "schedulerStopAdjust",
                 "format": "decimal",
                 "columnWidth": 15,
             },
             {
                 "header": "Sunset local",
-                "sourceKey": "recording.sunsetLocal",
+                "sourceKey": "sunsetLocal",
                 "format": "time",
                 "columnWidth": 15,
             },
             {
                 "header": "Sunrise local",
-                "sourceKey": "recording.sunriseLocal",
+                "sourceKey": "sunriseLocal",
                 "format": "time",
                 "columnWidth": 15,
             },
             {
                 "header": "Moon phase",
-                "sourceKey": "recording.moonPhase",
+                "sourceKey": "moonPhase",
                 "format": "text",
                 "columnWidth": 15,
             },
@@ -256,7 +256,7 @@ class ReportExcel(object):
             )
             data_dir = pathlib.Path(source_dir, night_id, "data")
             if not data_dir.exists():
-                data_dir.mkdir(parents = True)
+                data_dir.mkdir(parents=True)
             report_name = night_id + "_report.xlsx"
             report_path = pathlib.Path(data_dir, report_name)
 
@@ -274,8 +274,7 @@ class ReportExcel(object):
         for rec_file in wurb_core.record_manager.get_rec_files(source_id, night_id):
             # Get metadata for recording.
             metadata = wurb_core.metadata.get_metadata(rec_file)
-            flat_metadata = wurb_core.metadata.flatten_metadata(metadata)
-            metadata_rows.append(flat_metadata)
+            metadata_rows.append(metadata)
 
         # Create Excel workbook.
         await asyncio.sleep(0.0)

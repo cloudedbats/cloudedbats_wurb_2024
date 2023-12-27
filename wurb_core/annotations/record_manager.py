@@ -124,8 +124,6 @@ class RecordManager(object):
             rec_file
         )
         metadata = wurb_core.metadata.get_metadata(rec_file)
-        flat_metadata = wurb_core.metadata.flatten_metadata(metadata)
-
         rec_ids = []
         for rec in sorted(rec_files):
             rec_ids.append(wurb_core.metadata.get_rec_id(rec))
@@ -180,13 +178,13 @@ class RecordManager(object):
             "localDate": str(local_date),
             "localTime": str(local_time),
             "dateTimeUtc": str(utc_datetime),
-            "latitude": flat_metadata.get("recording.latitude", ""),
-            "longitude": flat_metadata.get("recording.longitude", ""),
-            "quality": flat_metadata.get("annotations.wurb-user.quality", ""),
-            "tags": flat_metadata.get("annotations.wurb-user.tags", ""),
-            "comments": flat_metadata.get("annotations.wurb-user.comments", ""),
-            "peakKhz": flat_metadata.get("recording.peakKhz", ""),
-            "peakDbfs": flat_metadata.get("recording.peakDbfs", ""),
+            "latitude": metadata.get("latitude", ""),
+            "longitude": metadata.get("longitude", ""),
+            "quality": metadata.get("annotationQuality", ""),
+            "tags": metadata.get("annotationTags", ""),
+            "comments": metadata.get("annotationComments", ""),
+            "peakKhz": metadata.get("peakKhz", ""),
+            "peakDbfs": metadata.get("peakDbfs", ""),
         }
         return record_data
 
@@ -195,11 +193,9 @@ class RecordManager(object):
         if (source_id) and (night_id) and (record_id):
             rec_file = self.get_rec_file(source_id, night_id, record_id)
             metadata = wurb_core.metadata.get_metadata(rec_file)
-            annotations = metadata.get("annotations", [])
-            annotation = annotations[0]
-            annotation["quality"] = quality
-            annotation["tags"] = tags
-            annotation["comments"] = comments
+            metadata["annotationQuality"] = quality
+            metadata["annotationTags"] = tags
+            metadata["annotationComments"] = comments
 
             wurb_core.metadata.write_metadata(rec_file, metadata)
 
