@@ -30,7 +30,6 @@ function modeSelectOnChange(updateDetector) {
     hideDivision(byId("recManualTriggeringId"));
     hideDivision(byId("recDetectorPowerOffId"));
     if (selectedValue == "mode-off") {
-        // stopRecording()
         if (updateDetector) {
             saveSettings()
         }
@@ -39,43 +38,35 @@ function modeSelectOnChange(updateDetector) {
         if (updateDetector) {
             saveSettings()
         }
-        // startRecording()
     }
     else if (selectedValue == "mode-auto") {
         if (updateDetector) {
             saveSettings()
         }
-        // startRecording()
     }
     else if (selectedValue == "mode-manual") {
         showDivision(byId("recManualTriggeringId"));
         if (updateDetector) {
             saveSettings()
         }
-        // startRecording()
     }
     else if (selectedValue == "mode-scheduler-on") {
-        // stopRecording()
         if (updateDetector) {
             saveSettings()
         }
     }
     else if (selectedValue == "mode-scheduler-auto") {
-        // stopRecording()
         if (updateDetector) {
             saveSettings()
         }
     }
     else if (selectedValue == "load-user-default") {
-        stopRecording()
         loadSettings(settingsType = "user-default")
     }
     else if (selectedValue == "load-start-up") {
-        stopRecording()
         loadSettings(settingsType = "start-up")
     }
     else if (selectedValue == "load-factory-default") {
-        stopRecording()
         loadSettings(settingsType = "factory-default")
     }
     else if (selectedValue == "detector-power-off") {

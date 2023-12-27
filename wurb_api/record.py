@@ -97,49 +97,6 @@ class DetectorSettings(BaseModel):
     # schedulerPostActionDelay: Optional[float] = None
 
 
-# @record_router.get("/record/start-rec/", tags=["Recorder"], description="Record...")
-# # @app.get("/start-rec/")
-# async def start_recording():
-#     try:
-#         # Logging debug.
-#         logger.debug("API called: start-rec.")
-#         # await wurb_core.rec_manager.start_rec()
-#     except Exception as e:
-#         message = "API - start_recording. Exception: " + str(e)
-#         logger.debug(message)
-
-
-# @record_router.get("/record/stop-rec/", tags=["Recorder"], description="Record...")
-# # @app.get("/stop-rec/")
-# async def stop_recording():
-#     try:
-#         # Logging debug.
-#         logger.debug("API called: stop-rec.")
-#         # await wurb_core.rec_manager.stop_rec()
-#     except Exception as e:
-#         message = "API - stop_recording. Exception: " + str(e)
-#         logger.debug(message)
-
-
-# @record_router.get("/record/get-status/", tags=["Recorder"], description="Record...")
-# # @app.get("/get-status/")
-# async def get_status():
-#     try:
-#         # Logging debug.
-#         logger.debug("API called: get-status.")
-#         status_dict = await wurb_core.rec_manager.get_status_dict()
-#         location_status = wurb_core.wurb_settings.get_location_status()
-#         return {
-#             "rec_status": status_dict.get("rec_status", ""),
-#             "location_status": location_status,
-#             "device_name": status_dict.get("device_name", ""),
-#             "detector_time": time.strftime("%Y-%m-%d %H:%M:%S"),
-#         }
-#     except Exception as e:
-#         message = "API - get_status. Exception: " + str(e)
-#         logger.debug(message)
-
-
 @record_router.post(
     "/record/save-location/", tags=["Recorder"], description="Record..."
 )
@@ -179,14 +136,6 @@ async def set_time(posixtime: str):
     except Exception as e:
         message = "API - set_time. Exception: " + str(e)
         logger.debug(message)
-
-    # @record_router.post("/record/save-rec-mode/", tags=["Recorder"], description="Record...")
-    # # @app.get("/save-rec-mode/")
-    # async def save_rec_mode(recmode: str):
-    #     try:
-    #         # Logging debug.
-    #         logger.debug("API called: save-rec-mode.")
-    #         await wurb_core.wurb_settings.save_rec_mode(recmode)
     except Exception as e:
         message = "API - save_rec_mode. Exception: " + str(e)
         logger.debug(message)

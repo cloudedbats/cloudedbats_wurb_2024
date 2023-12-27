@@ -161,18 +161,15 @@ class RecManager(object):
                         else:
                             is_rec_to_be_activated = False
                             self.status_info_text = "Recording OFF by scheduler."
-                            # await wurb_core.rec_manager.stop_rec()
                     else:
                         is_rec_to_be_activated = True
                         self.status_info_text = "Recording ON."
                 else:
                     is_rec_to_be_activated = False
                     self.status_info_text = "No microphone available."
-                    # await wurb_core.rec_manager.stop_rec()
             else:
                 is_rec_to_be_activated = False
                 self.status_info_text = "Recording OFF."
-                # await wurb_core.rec_manager.stop_rec()
 
             # print("REC MANAGER: ", self.status_info_text)
             if self.status_info_text != self.status_info_text_old:

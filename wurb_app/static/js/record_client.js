@@ -1,27 +1,5 @@
 
 
-async function startRecording() {
-    try {
-        byId("recStatusId").innerHTML = "Waiting...";
-        // // Save settings before recording starts.
-        // saveSettings()
-        await fetch("/record/start-rec/");
-    } catch (err) {
-        alert("ERROR startRecording: " + err);
-        console.log(err);
-    };
-};
-
-async function stopRecording() {
-    try {
-        byId("recStatusId").innerHTML = "Waiting...";
-        await fetch("/record/stop-rec/");
-    } catch (err) {
-        alert("ERROR stopRecording: " + err);
-        console.log(err);
-    };
-};
-
 // async function recModeOnChange() {
 //     try {
 //         // let recmode = byId("recModeSelectId").value;
