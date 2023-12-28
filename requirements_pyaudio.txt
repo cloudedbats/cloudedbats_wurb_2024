@@ -6,19 +6,22 @@ jinja2
 aiofiles
 websockets
 requests
-# Audio, etc.
-### pyalsaaudio # For RPi.
-pyaudio # For macOS, etc.
+# Audio.
+### pyalsaaudio # For Raspberry Pi.
+pyaudio # For macOS, Windows, etc.
+# Calculations.
 numpy
 scipy
+# Files.
 psutil
 pyusb
 # Plotting.
 matplotlib
 watchdog
-# GPS and date/time.
+# GPS.
 pyserial
 pyserial-asyncio
+# Date/time and sun/moon..
 pytz
 python-dateutil
 astral

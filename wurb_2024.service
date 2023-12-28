@@ -1,5 +1,5 @@
 [Unit]
-Description=Running the CloudedBats WURB-2024 Bat detector.  
+Description=CloudedBats WURB-2024 Bat detector.  
 After=network.target
 ### Before=nginx.service
 

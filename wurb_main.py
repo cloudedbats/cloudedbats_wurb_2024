@@ -52,6 +52,7 @@ async def main():
         server = uvicorn.Server(config)
         await server.serve()
 
+        # Shutdown actions.
         logger.debug("WURB - main. Shutdown started.")
         await wurb_core.wurb_settings.shutdown()
         await wurb_core.wurb_manager.shutdown()

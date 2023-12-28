@@ -6,19 +6,22 @@ jinja2
 aiofiles
 websockets
 requests
-# Audio, etc.
+# Audio.
 pyalsaaudio # For RPi.
-### pyaudio # For macOS, etc.
-numpy
-scipy
+### pyaudio # For macOS, Windows, etc.
+# Calculations.
+### numpy # Use "sudo apt install python3-numpy".
+### scipy # Use "sudo apt install python3-scipy".
+# Files.
 psutil
 pyusb
 # Plotting.
 matplotlib
 watchdog
-# GPS and date/time.
+# GPS.
 pyserial
 pyserial-asyncio
+# Date/time and sun/moon..
 pytz
 python-dateutil
 astral

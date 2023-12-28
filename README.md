@@ -5,7 +5,7 @@ Next major release - work in progress...
 ## For ordinary users
 
 Please use the older version called CloudedBats WURB-2020.
-That one is well tested by many users and works well both as a mobile detector
+That version is well tested by many users and works well both as a mobile detector
 as well as for stationary use.
 
 More info here:
@@ -32,7 +32,7 @@ using YAML.
 
 It is possible to run WURB-2020 and WURB-2024 on the same Raspberry Pi, just stop or
 start the services used for each version. The old version uses txt-files for setting and
-the new one uses YAML, therefore there will be no clashes.
+the new one uses sqlite, therefore there will be no clashes.
 
 Note that WURB-2024 uses port 8080 for the web page where WURB-2020 uses port 8000 as default.
 
@@ -44,15 +44,16 @@ one for development on macOS or Windows. That makes it possible to run the WURB 
 hardware platforms.
 
 The YAML-based configuration is not implemented yet, and the main directories to be used when
-running the detector have fix locations. They are "../wurb_settings", "../wurb_recordings",
-"../wurb_logging" and "../wurb_cache".
+running the detector have fix locations. They are "../wurb_settings", "../wurb_recordings" and
+"../wurb_logging".
 
 And a final note:
 
 There is still a huge amount of programming/testing to be done and I'm working directly
 into the main branch. Something that works one day may be broken the next day.
 
-And since it is a spare time hobby project there are no deadlines...
+And since it is a spare time hobby project there are no deadlines (and thats the reason
+why it recently was renamed from wurb_2023 to wurb_2024)...
 
 ## Contact
 
