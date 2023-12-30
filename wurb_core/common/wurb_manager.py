@@ -6,6 +6,9 @@
 
 import asyncio
 import logging
+import pathlib
+import datetime
+import time
 
 import wurb_core
 
@@ -39,9 +42,9 @@ class WurbManager(object):
         """ """
         wurb_core.wurb_logger.startup()
         wurb_core.rec_manager.startup()
-        # self.wurb_loop = asyncio.create_task(
-        #     self.wurb_control_loop(), name="Wurb manager control loop"
-        # )
+        self.wurb_loop = asyncio.create_task(
+            self.wurb_control_loop(), name="Wurb manager control loop"
+        )
 
     async def shutdown(self):
         """ """
@@ -70,12 +73,47 @@ class WurbManager(object):
             message = "WurbManager - shutdown. Exception: " + str(e)
             self.logger.debug(message)
 
-    # async def wurb_control_loop(self):
-    #     """ """
-    #     try:
-    #         while True:
-    #             print("DEBUG wurb_manager main loop.")
-    #             await asyncio.sleep(10.0)
-    #     except Exception as e:
-    #         message = "WurbManager - wurb_control_loop. Exception: " + str(e)
-    #         self.logger.debug(message)
+    async def wurb_control_loop(self):
+        """ """
+        try:
+            while True:
+                print("DEBUG wurb_manager main loop.")
+
+                # Create activity log.
+                rec_file_writer = wurb_core.RecFileWriter()
+                target_path = rec_file_writer.prepare_rec_target_dir()
+                data_dir_path = pathlib.Path(target_path, "data")
+                if not data_dir_path.exists():
+                    data_dir_path.mkdir(parents=True)
+                activity_log_path = pathlib.Path(data_dir_path, "wurb_activity.csv")
+                if not activity_log_path.exists():
+                    with activity_log_path.open("w") as log_file:
+                        # Write header.
+                        log_file.write("UTC-datetime,Date,Time,Rec-status,Location\n")
+                # Add row.
+                utc_datetime_str = time.strftime("%Y%m%dT%H%M%S%z", time.localtime())
+                date_str = time.strftime("%Y-%m-%d")
+                time_str = time.strftime("%H:%M:%S")
+                status_dict = await wurb_core.rec_manager.get_status_dict()
+                rec_status = status_dict.get("rec_status", "")
+                location = wurb_core.wurb_settings.get_location_status()
+                with activity_log_path.open("a") as log_file:
+                    # Write row.
+                    log_file.write(
+                        utc_datetime_str
+                        + ","
+                        + date_str
+                        + ","
+                        + time_str
+                        + ","
+                        + rec_status
+                        + ","
+                        + location
+                        + "\n"
+                    )
+                # Sleep until next minute.
+                sleep_time = 61.5 - (time.time() % 60)
+                await asyncio.sleep(sleep_time)
+        except Exception as e:
+            message = "WurbManager - wurb_control_loop. Exception: " + str(e)
+            self.logger.debug(message)

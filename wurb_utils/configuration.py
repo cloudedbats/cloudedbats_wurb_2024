@@ -26,13 +26,12 @@ class Configuration:
         self,
         config_dir="",
         config_file="config.yaml",
-        config_default_dir="",
         config_default_file="config_default.yaml",
     ):
         """ """
         self.clear()
         # Check if config file exists.
-        config_default_path = pathlib.Path(config_default_dir, config_default_file)
+        config_default_path = pathlib.Path(config_default_file)
         config_path = pathlib.Path(config_dir, config_file)
         if not config_path.exists():
             if not config_path.parent.exists():

@@ -60,9 +60,10 @@ class RecFileWriter(object):
 
     def prepare_rec_target_dir(self):
         """ """
-        target_directory = wurb_core.config.get(
-            "record.target.rec_dir", default="../wurb_recordings"
-        )
+        target_directory = pathlib.Path(wurb_core.executable_path.parent, "wurb_recordings")
+        # target_directory = wurb_core.config.get(
+        #     "record.target.rec_dir", default="../wurb_recordings"
+        # )
         file_directory = wurb_core.wurb_settings.get_setting("fileDirectory")
         # Add date to file directory.
         # date_option = wurb_core.config.get(
@@ -90,6 +91,8 @@ class RecFileWriter(object):
         self.rec_target_dir_path = pathlib.Path(target_directory, rec_target_dir)
         if not self.rec_target_dir_path.exists():
             self.rec_target_dir_path.mkdir(parents=True)
+
+        return self.rec_target_dir_path
 
     def prepare_datetime(self, start_time):
         """ """

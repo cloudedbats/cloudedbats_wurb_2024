@@ -5,12 +5,14 @@
 # License: MIT License (see LICENSE or http://opensource.org/licenses/mit).
 
 import logging
+import pathlib
 import fastapi
 import fastapi.templating
 import wurb_core
 
 logger = logging.getLogger(wurb_core.logger_name)
-templates = fastapi.templating.Jinja2Templates(directory="wurb_app/templates")
+templates_path = pathlib.Path(wurb_core.workdir_path, "wurb_app/templates")
+templates = fastapi.templating.Jinja2Templates(directory=templates_path)
 about_router = fastapi.APIRouter()
 
 

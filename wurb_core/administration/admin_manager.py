@@ -38,23 +38,28 @@ class AdminManager(object):
         directory_path = ""
         number_of_sound_files = 0
         result_array = (0, 0, 0, 0, 0)
-        if night_id not in ["", "select"]:
-            # Sync files and db content.
-            await self.update_db(source_id, night_id)
-            # Collect info.
-            monitoring_night = night_id
-            if (source_id) and (night_id):
-                dir_path = pathlib.Path(
-                    wurb_core.record_manager.get_source_dir(source_id)
-                ).resolve()
-                directory_path = str(dir_path)
-                rec_files = wurb_core.record_manager.get_rec_files(source_id, night_id)
-                number_of_sound_files = len(rec_files)
-                # Get info from db.
-                night_dir = pathlib.Path(dir_path, night_id).resolve()
-                result_array = wurb_core.metadata.get_annotation_counts(
-                    night_dir=night_dir
-                )
+        try:
+            if night_id not in ["", "select"]:
+                # Sync files and db content.
+                await self.update_db(source_id, night_id)
+                # Collect info.
+                monitoring_night = night_id
+                if (source_id) and (night_id):
+                    dir_path = pathlib.Path(
+                        wurb_core.record_manager.get_source_dir(source_id)
+                    ).resolve()
+                    directory_path = str(dir_path)
+                    rec_files = wurb_core.record_manager.get_rec_files(source_id, night_id)
+                    number_of_sound_files = len(rec_files)
+                    # Get info from db.
+                    night_dir = pathlib.Path(dir_path, night_id).resolve()
+                    result_array = wurb_core.metadata.get_annotation_counts(
+                        night_dir=night_dir
+                    )
+        except Exception as e:
+            message = "AdminManager - get_admin_info. Exception: " + str(e)
+            self.logger.debug(message)
+
         # Result dictionary.
         admin_info = {
             "monitoringNight": monitoring_night,

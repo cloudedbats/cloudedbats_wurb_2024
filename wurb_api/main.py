@@ -4,17 +4,14 @@
 # Author: Arnold Andreasson, info@cloudedbats.org
 # License: MIT License (see LICENSE or http://opensource.org/licenses/mit).
 
-import time
-import datetime
-import asyncio
 import logging
+import pathlib
 import fastapi
 import fastapi.staticfiles
 import fastapi.templating
 import fastapi.responses
 from pydantic import BaseModel
 from typing import Optional
-import websockets.exceptions
 
 # CloudedBats WURB.
 import wurb_core
@@ -28,12 +25,16 @@ app = fastapi.FastAPI(
     version=wurb_core.__version__,
 )
 
+# Relative paths.
+static_path = pathlib.Path(wurb_core.workdir_path, "wurb_app/static")
+templates_path = pathlib.Path(wurb_core.workdir_path, "wurb_app/templates")
+
 app.mount(
     "/static",
-    fastapi.staticfiles.StaticFiles(directory="wurb_app/static"),
+    fastapi.staticfiles.StaticFiles(directory=static_path),
     name="static",
 )
-templates = fastapi.templating.Jinja2Templates(directory="wurb_app/templates")
+templates = fastapi.templating.Jinja2Templates(directory=templates_path)
 
 
 @app.on_event("startup")
@@ -75,4 +76,5 @@ async def load_main_application_page(request: fastapi.Request):
 
 @app.get("/favicon.ico", include_in_schema=False)
 async def favicon():
-    return fastapi.responses.FileResponse("wurb_app/static/favicon.ico")
+    favicon_path = pathlib.Path(wurb_core.workdir_path, "wurb_app/static/images/favicon.ico")
+    return fastapi.responses.FileResponse(favicon_path)

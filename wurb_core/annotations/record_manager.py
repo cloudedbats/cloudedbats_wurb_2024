@@ -58,7 +58,9 @@ class RecordManager(object):
         result = ""
         source = self.rec_sources_by_id.get(source_id, "")
         if source:
-            result = source.get("rec_dir", "")
+            source_dir = source.get("rec_dir", "")
+            if source_dir:
+                result = pathlib.Path(wurb_core.executable_path, source_dir).resolve()
         return result
 
     def get_cache_dir(self, source_id):
@@ -72,9 +74,8 @@ class RecordManager(object):
     def get_rec_nights(self, source_id):
         """ """
         result = []
-        source_dir = self.get_source_dir(source_id)
-        if source_dir:
-            source_dir_path = pathlib.Path(source_dir).resolve()
+        source_dir_path = self.get_source_dir(source_id)
+        if source_dir_path:
             if source_dir_path.exists():
                 for dir2 in sorted(source_dir_path.iterdir()):
                     if dir2.is_dir():

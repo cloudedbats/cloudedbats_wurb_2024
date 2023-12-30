@@ -5,6 +5,7 @@
 # License: MIT License (see LICENSE or http://opensource.org/licenses/mit).
 
 import logging
+import pathlib
 import fastapi
 import fastapi.templating
 from fastapi.responses import JSONResponse, Response, FileResponse
@@ -12,7 +13,8 @@ from typing import Union
 import wurb_core
 
 logger = logging.getLogger(wurb_core.logger_name)
-templates = fastapi.templating.Jinja2Templates(directory="wurb_app/templates")
+templates_path = pathlib.Path(wurb_core.workdir_path, "wurb_app/templates")
+templates = fastapi.templating.Jinja2Templates(directory=templates_path)
 annotations_router = fastapi.APIRouter()
 
 
@@ -45,7 +47,7 @@ async def load_annotations_page(request: fastapi.Request):
 async def get_recording_sources(request: fastapi.Request):
     """ """
     try:
-        logger.debug("API called: get_source_dirs.")
+        logger.debug("API called: get_recording_sources.")
         # json_data = {"source_dirs": ["../wurb_recordings", "../../wurb_recordings"]}
         json_data = wurb_core.record_manager.get_rec_sources()
         return JSONResponse(content=json_data)
@@ -64,7 +66,7 @@ async def get_recording_nights(
 ):
     """ """
     try:
-        logger.debug("API called: get_source_dirs.")
+        logger.debug("API called: get_recording_nights.")
         json_data = wurb_core.record_manager.get_rec_nights(source_id=sourceId)
         return JSONResponse(content=json_data)
     except Exception as e:

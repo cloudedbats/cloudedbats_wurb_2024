@@ -2,16 +2,38 @@
 # -*- coding:utf-8 -*-
 # Cloudedbats WURB-2024.
 
+import os
+import sys
+import pathlib
+
 __version__ = "2024.0.0-development"
+
+# Absolute paths to working directory and executable.
+workdir_path = pathlib.Path(__file__).parent.parent.resolve()
+executable_path = pathlib.Path(os.path.dirname(sys.argv[0]))
+print()
+print("DEBUG: Working directory path: ", str(workdir_path))
+print("DEBUG: Executable path: ", str(executable_path))
+
 logger_name = "WurbLogger"
-logging_dir = "../wurb_logging"
-log_file_name = "wurb2024_info_log.txt"
-debug_log_file_name = "wurb2024_debug_log.txt"
-settings_dir = "../wurb_settings"
-config_dir = "../wurb_settings"
+# logging_dir = pathlib.Path(workdir_path.parent, "wurb_logging")
+logging_dir = pathlib.Path(executable_path.parent, "wurb_logging")
+log_file_name = "wurb_info_log.txt"
+debug_log_file_name = "wurb_debug_log.txt"
+settings_dir = pathlib.Path(executable_path.parent, "wurb_settings")
+config_dir = pathlib.Path(executable_path.parent, "wurb_settings")
 config_file = "wurb_config.yaml"
-config_default_dir = ""
-config_default_file = "wurb_config_default.yaml"
+config_default_file = pathlib.Path(workdir_path, "wurb_config_default.yaml")
+
+# logger_name = "WurbLogger"
+# logging_dir = "../wurb_logging"
+# log_file_name = "wurb_info_log.txt"
+# debug_log_file_name = "wurb_debug_log.txt"
+# settings_dir = "../wurb_settings"
+# config_dir = "../wurb_settings"
+# config_file = "wurb_config.yaml"
+# config_default_dir = workdir_path
+# config_default_file = "wurb_config_default.yaml"
 
 
 # Use either pyalsaaudio or pyaudio.
@@ -57,7 +79,6 @@ config = wurb_utils.Configuration(logger_name=logger_name)
 config.load_config(
     config_dir=config_dir,
     config_file=config_file,
-    config_default_dir=config_default_dir,
     config_default_file=config_default_file,
 )
 logger = wurb_utils.Logger(logger_name=logger_name)
@@ -73,7 +94,7 @@ if alsaaudio_used:
     audio_capture = wurb_utils.AlsaAudioCapture(logger_name=logger_name)
     audio_playback = wurb_utils.AlsaAudioPlayback(logger_name=logger_name)
 else:
-    audio = pyaudio.PyAudio()
+    audio = pyaudio.PyAudio() # Only one instance allowed.
     audio_capture = wurb_utils.AudioCapture(audio, logger_name=logger_name)
     audio_playback = wurb_utils.AudioPlayback(audio, logger_name=logger_name)
 
