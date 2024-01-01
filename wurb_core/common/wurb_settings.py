@@ -9,6 +9,7 @@ import logging
 import pathlib
 
 import wurb_core
+from wurb_utils import SqliteDb
 
 
 class WurbSettings(object):
@@ -42,7 +43,7 @@ class WurbSettings(object):
         try:
             # Connect to database.
             settings_db_path = pathlib.Path(settings_dir, "wurb_settings.db")
-            self.settings_db = wurb_core.SqliteDb(
+            self.settings_db = SqliteDb(
                 db_file_path=settings_db_path, logger_name=self.logger_name
             )
             # Settings defaults.

@@ -16,7 +16,6 @@ print("DEBUG: Working directory path: ", str(workdir_path))
 print("DEBUG: Executable path: ", str(executable_path))
 
 logger_name = "WurbLogger"
-# logging_dir = pathlib.Path(workdir_path.parent, "wurb_logging")
 logging_dir = pathlib.Path(executable_path.parent, "wurb_logging")
 log_file_name = "wurb_info_log.txt"
 debug_log_file_name = "wurb_debug_log.txt"
@@ -25,18 +24,9 @@ config_dir = pathlib.Path(executable_path.parent, "wurb_settings")
 config_file = "wurb_config.yaml"
 config_default_file = pathlib.Path(workdir_path, "wurb_config_default.yaml")
 
-# logger_name = "WurbLogger"
-# logging_dir = "../wurb_logging"
-# log_file_name = "wurb_info_log.txt"
-# debug_log_file_name = "wurb_debug_log.txt"
-# settings_dir = "../wurb_settings"
-# config_dir = "../wurb_settings"
-# config_file = "wurb_config.yaml"
-# config_default_dir = workdir_path
-# config_default_file = "wurb_config_default.yaml"
-
 
 # Use either pyalsaaudio or pyaudio.
+# Use either "requrements.txt" or "requrements_pyaudio.txt".
 alsaaudio_used = True
 try:
     import alsaaudio
@@ -45,8 +35,6 @@ except:
     import pyaudio
 
 import wurb_utils
-from wurb_utils.sqlite_db import SqliteDb
-
 
 from wurb_core.common.wurb_logger import WurbLogger
 from wurb_core.common.wurb_settings import WurbSettings
@@ -94,7 +82,7 @@ if alsaaudio_used:
     audio_capture = wurb_utils.AlsaAudioCapture(logger_name=logger_name)
     audio_playback = wurb_utils.AlsaAudioPlayback(logger_name=logger_name)
 else:
-    audio = pyaudio.PyAudio() # Only one instance allowed.
+    audio = pyaudio.PyAudio()  # Only one instance allowed.
     audio_capture = wurb_utils.AudioCapture(audio, logger_name=logger_name)
     audio_playback = wurb_utils.AudioPlayback(audio, logger_name=logger_name)
 

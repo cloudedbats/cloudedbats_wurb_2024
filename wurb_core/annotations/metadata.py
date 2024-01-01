@@ -12,6 +12,7 @@ import dateutil.parser
 import yaml
 
 import wurb_core
+from wurb_utils import SqliteDb
 
 
 class Metadata(object):
@@ -199,7 +200,7 @@ class Metadata(object):
         metadata_db.delete_rows(identity_list=remove_id_list)
 
 
-class MetadataSqliteDb(wurb_core.SqliteDb):
+class MetadataSqliteDb(SqliteDb):
     """ """
 
     def __init__(self, db_file_path, logger_name="DefaultLogger"):
