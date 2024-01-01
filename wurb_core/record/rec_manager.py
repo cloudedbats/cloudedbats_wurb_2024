@@ -157,19 +157,19 @@ class RecManager(object):
                         scheduler_on = wurb_core.rec_scheduler.check_scheduler()
                         if scheduler_on:
                             is_rec_to_be_activated = True
-                            self.status_info_text = "Recording ON by scheduler."
+                            self.status_info_text = "Recording ON by scheduler"
                         else:
                             is_rec_to_be_activated = False
-                            self.status_info_text = "Recording OFF by scheduler."
+                            self.status_info_text = "Recording OFF by scheduler"
                     else:
                         is_rec_to_be_activated = True
-                        self.status_info_text = "Recording ON."
+                        self.status_info_text = "Recording ON"
                 else:
                     is_rec_to_be_activated = False
-                    self.status_info_text = "No microphone available."
+                    self.status_info_text = "No microphone available"
             else:
                 is_rec_to_be_activated = False
-                self.status_info_text = "Recording OFF."
+                self.status_info_text = "Recording OFF"
 
             # print("REC MANAGER: ", self.status_info_text)
             if self.status_info_text != self.status_info_text_old:

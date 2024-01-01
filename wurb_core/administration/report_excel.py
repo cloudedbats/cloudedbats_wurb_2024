@@ -70,6 +70,24 @@ class ReportExcel(object):
                 "columnWidth": 40,
             },
             {
+                "header": "Species",
+                # "sourceKey": "",
+                "format": "text",
+                "columnWidth": 20,
+            },
+            {
+                "header": "Checked",
+                # "sourceKey": "",
+                "format": "text",
+                "columnWidth": 10,
+            },
+            {
+                "header": "Checked by",
+                # "sourceKey": "",
+                "format": "text",
+                "columnWidth": 10,
+            },
+            {
                 "header": "Peak (kHz)",
                 "sourceKey": "peakKhz",
                 "format": "decimal",
@@ -246,6 +264,44 @@ class ReportExcel(object):
                 "columnWidth": 15,
             },
         ]
+        self.wurb_activity_columns = [
+            {
+                "header": "Datetime UTC",
+                "sourceKey": "Datetime UTC",
+                "format": "text",
+                "columnWidth": 30,
+            },
+            {
+                "header": "Local date",
+                "sourceKey": "Local date",
+                "format": "date",
+                "columnWidth": 10,
+            },
+            {
+                "header": "Local time",
+                "sourceKey": "Local time",
+                "format": "time",
+                "columnWidth": 10,
+            },
+            {
+                "header": "Latitude",
+                "sourceKey": "Latitude",
+                "format": "decimal_4",
+                "columnWidth": 12,
+            },
+            {
+                "header": "Longitude",
+                "sourceKey": "Longitude",
+                "format": "decimal_4",
+                "columnWidth": 12,
+            },
+            {
+                "header": "Recording status",
+                "sourceKey": "Recording status",
+                "format": "text",
+                "columnWidth": 40,
+            },
+        ]
 
     def get_report_path(self, source_id, night_id):
         """ """
@@ -276,6 +332,26 @@ class ReportExcel(object):
             metadata = wurb_core.metadata.get_metadata(rec_file)
             metadata_rows.append(metadata)
 
+        # Get wurb avtivity data.
+        rec_dir_path = pathlib.Path(wurb_core.record_manager.get_source_dir(source_id))
+        night_dir = pathlib.Path(rec_dir_path, night_id).resolve()
+        wurb_activity_path = pathlib.Path(
+            night_dir,
+            "data",
+            "wurb_activity.csv",
+        )
+        wurb_activity_content = []
+        if wurb_activity_path.exists:
+            with wurb_activity_path.open("r") as file:
+                header = None
+                for row in file.readlines():
+                    row_parts = [x.strip() for x in row.split(",")]
+                    if header == None:
+                        header = row_parts
+                    else:
+                        row_dict = dict(zip(header, row_parts))
+                        wurb_activity_content.append(row_dict)
+
         # Create Excel workbook.
         await asyncio.sleep(0.0)
         workbook = xlsxwriter.Workbook(str(report_path))
@@ -287,6 +363,11 @@ class ReportExcel(object):
         # Detailed worksheets.
         detailed_worksheet = workbook.add_worksheet("Detailed")
         self.add_content(detailed_worksheet, metadata_rows, self.detailed_columns)
+        # WURB activity worksheets.
+        wurb_activity_worksheet = workbook.add_worksheet("WURB activity")
+        self.add_content(
+            wurb_activity_worksheet, wurb_activity_content, self.wurb_activity_columns
+        )
         # About worksheets.
         about_worksheet = workbook.add_worksheet("About")
         self.add_about_content(about_worksheet)
@@ -295,7 +376,7 @@ class ReportExcel(object):
         await asyncio.sleep(0.0)
         workbook.close()
 
-    def add_content(self, worksheet, metadata_rows, columns):
+    def add_content(self, worksheet, content_rows, columns):
         """ """
         # Header.
         headers = []
@@ -305,7 +386,7 @@ class ReportExcel(object):
         #
         worksheet.write_row(0, 0, headers, self.format_bold)
         # Rows.
-        for row_nr, metadata_row in enumerate(metadata_rows):
+        for row_nr, metadata_row in enumerate(content_rows):
             for column_nr, column_dict in enumerate(columns):
                 source_key = column_dict.get("sourceKey", "")
                 value = metadata_row.get(source_key, "")

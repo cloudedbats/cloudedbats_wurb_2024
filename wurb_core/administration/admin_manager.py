@@ -49,7 +49,9 @@ class AdminManager(object):
                         wurb_core.record_manager.get_source_dir(source_id)
                     ).resolve()
                     directory_path = str(dir_path)
-                    rec_files = wurb_core.record_manager.get_rec_files(source_id, night_id)
+                    rec_files = wurb_core.record_manager.get_rec_files(
+                        source_id, night_id
+                    )
                     number_of_sound_files = len(rec_files)
                     # Get info from db.
                     night_dir = pathlib.Path(dir_path, night_id).resolve()
@@ -88,7 +90,7 @@ class AdminManager(object):
                 rec_id_dict[rec_id] = str(rec_file)
             # Get unique id list from database.
             unique_ids = wurb_core.metadata.get_unique_ids(night_dir)
-            # Remove from db if  file is not present.
+            # Remove from db if file is not present.
             remove_id_list = []
             for unique_id in unique_ids:
                 if unique_id not in rec_id_dict:

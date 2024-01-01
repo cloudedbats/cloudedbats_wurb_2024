@@ -77,8 +77,6 @@ class WurbManager(object):
         """ """
         try:
             while True:
-                print("DEBUG wurb_manager main loop.")
-
                 # Create activity log.
                 rec_file_writer = wurb_core.RecFileWriter()
                 target_path = rec_file_writer.prepare_rec_target_dir()
@@ -89,14 +87,16 @@ class WurbManager(object):
                 if not activity_log_path.exists():
                     with activity_log_path.open("w") as log_file:
                         # Write header.
-                        log_file.write("UTC-datetime,Date,Time,Rec-status,Location\n")
+                        log_file.write(
+                            "Datetime UTC,Local date,Local time,Latitude,Longitude,Recording status\n"
+                        )
                 # Add row.
                 utc_datetime_str = time.strftime("%Y%m%dT%H%M%S%z", time.localtime())
                 date_str = time.strftime("%Y-%m-%d")
                 time_str = time.strftime("%H:%M:%S")
                 status_dict = await wurb_core.rec_manager.get_status_dict()
                 rec_status = status_dict.get("rec_status", "")
-                location = wurb_core.wurb_settings.get_location_status()
+                latitude, longitude = wurb_core.wurb_settings.get_valid_location()
                 with activity_log_path.open("a") as log_file:
                     # Write row.
                     log_file.write(
@@ -106,13 +106,15 @@ class WurbManager(object):
                         + ","
                         + time_str
                         + ","
-                        + rec_status
+                        + str(latitude)
                         + ","
-                        + location
+                        + str(longitude)
+                        + ","
+                        + rec_status
                         + "\n"
                     )
-                # Sleep until next minute.
-                sleep_time = 61.5 - (time.time() % 60)
+                # Sleep until after next minute.
+                sleep_time = 60.5 - (time.time() % 60)
                 await asyncio.sleep(sleep_time)
         except Exception as e:
             message = "WurbManager - wurb_control_loop. Exception: " + str(e)
