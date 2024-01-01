@@ -17,7 +17,7 @@ psutil
 pyusb
 # Plotting.
 matplotlib
-watchdog
+pybase64
 # GPS.
 pyserial
 pyserial-asyncio

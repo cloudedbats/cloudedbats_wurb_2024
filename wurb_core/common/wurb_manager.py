@@ -51,8 +51,8 @@ class WurbManager(object):
         try:
             # await wurb_core.wurb_logger.shutdown()
             await wurb_core.rec_manager.shutdown()
-            # if self.wurb_loop:
-            #     self.wurb_loop.cancel()
+            if self.wurb_loop:
+                self.wurb_loop.cancel()
 
             # Get a list of all running tasks.
             await asyncio.sleep(0)
@@ -116,6 +116,8 @@ class WurbManager(object):
                 # Sleep until after next minute.
                 sleep_time = 60.5 - (time.time() % 60)
                 await asyncio.sleep(sleep_time)
+        except asyncio.CancelledError:
+            self.logger.debug("Wurb control loop was cancelled.")
         except Exception as e:
             message = "WurbManager - wurb_control_loop. Exception: " + str(e)
             self.logger.debug(message)

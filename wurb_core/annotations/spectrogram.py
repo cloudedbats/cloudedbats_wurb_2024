@@ -11,7 +11,8 @@ import matplotlib.figure
 from scipy import signal
 from scipy.io import wavfile
 import numpy
-import base64
+# import base64
+import pybase64
 from io import BytesIO
 
 
@@ -19,7 +20,8 @@ async def create_spectrogram(source_path):
     """ """
     matplotlib.rcParams.update({"font.size": 6})
     figure = matplotlib.figure.Figure(
-        figsize=(12, 4),
+        # figsize=(12, 4),
+        figsize=(9, 3),
         dpi=100,
     )
     ax1 = figure.add_subplot(111)
@@ -35,7 +37,7 @@ async def create_spectrogram(source_path):
         # start_ix = int(sample_rate * 2.0)
         # end_ix = int(sample_rate * 2.5)
 
-        await asyncio.sleep(0)
+        # await asyncio.sleep(0)
 
         # Calculate spectrogram.
         frequencies, times, spectrogram = signal.spectrogram(
@@ -44,21 +46,22 @@ async def create_spectrogram(source_path):
             sample_rate,
             window="blackmanharris",
             nperseg=1024,
-            noverlap=768,
+            noverlap=512, #768,
             # nperseg=512,
             # noverlap=400,
         )
         # From Hz to kHz.
         frequencies = frequencies / 1000.0
-        # Fix colors, use logarithmic scale.
 
         await asyncio.sleep(0)
 
+        # Fix colors, use logarithmic scale.
         for row in spectrogram:
             row[row < 0.0002] = None
 
         ax1.grid(False)
-        ax1.pcolormesh(times, frequencies, numpy.log10(spectrogram), cmap="YlOrBr")
+        spectrogram_log10 = numpy.log10(spectrogram)
+        ax1.pcolormesh(times, frequencies, spectrogram_log10, cmap="YlOrBr")
 
         # Title and labels.
         plot_title = str(pathlib.Path(source_path).name)
@@ -80,7 +83,8 @@ async def create_spectrogram(source_path):
         figure.tight_layout()
         buf = BytesIO()
         figure.savefig(buf, format="png")
-        buffer = base64.b64encode(buf.getbuffer()).decode("ascii")
+        # buffer = base64.b64encode(buf.getbuffer()).decode("ascii")
+        buffer = pybase64.b64encode(buf.getbuffer()).decode("ascii")
 
         return buffer
 
