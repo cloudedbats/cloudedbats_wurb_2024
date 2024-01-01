@@ -35,6 +35,7 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon='wurb_app/static/images/cloudedbats_logo.png',
 )
 coll = COLLECT(
     exe,
