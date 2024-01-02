@@ -305,16 +305,16 @@ class ReportExcel(object):
 
     def get_report_path(self, source_id, night_id):
         """ """
-        report_path = ""
+        report_path = "Report.xlsx"
         if (source_id) and (night_id):
             source_dir = pathlib.Path(
                 wurb_core.record_manager.get_source_dir(source_id)
             )
-            data_dir = pathlib.Path(source_dir, night_id, "data")
-            if not data_dir.exists():
-                data_dir.mkdir(parents=True)
+            night_dir = pathlib.Path(source_dir, night_id)
+            if not night_dir.exists():
+                night_dir.mkdir(parents=True)
             report_name = night_id + "_report.xlsx"
-            report_path = pathlib.Path(data_dir, report_name)
+            report_path = pathlib.Path(night_dir, report_name)
 
         return report_path
 
@@ -474,11 +474,13 @@ class ReportExcel(object):
         # Rows.
         readme_text = [
             [""],
-            ["This Excel file is a part of the open source "],
-            ["project CloudedBats.org: http://cloudedbats.org "],
+            ["CloudedBats WURB-2024, version " + wurb_core.__version__ + "."],
             [""],
-            ["Source code to generate the Excel file can be "],
-            ["found in this GitHub repository: "],
+            ["This Excel file is a part of the CloudedBats open source project:"],
+            ["- https://cloudedbats.github.io"],
+            [""],
+            ["For developers: "],
+            ["Source code to generate the Excel file can be found here:"],
             ["- https://github.com/cloudedbats/cloudedbats_wurb_2024"],
             [""],
         ]
