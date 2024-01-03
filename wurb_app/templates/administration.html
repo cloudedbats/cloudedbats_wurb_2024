@@ -1,328 +1,247 @@
-<!-- <!DOCTYPE html>
-<html>
+<div class="tile is-ancestor is-vertical m-0">
+    <div class="tile is-parent">
+        <article class="tile is-child box pt-1 pb-3">
+            <div class="content">
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>CloudedBats - WURB</title>
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
+                <div class="field">
+                    <div class="container is-fluid">
+                        <div class="is-pulled-right">
+                            <button class="button is-rounded is-small has-text-weight-bold"
+                                onclick="adminToggleSettings()">
+                                <span id="adminShowSettingsTextId">Show settings</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+                <p class="title is-4">
+                    Administration
+                </p>
 
-    <link rel="stylesheet" href="../static/css/wurb_slider.css">
-    <link rel="stylesheet" href="{{ url_for('static', path='css/wurb_slider.css') }}">
-    <script src="../static/js/main.js"></script>
-</head> -->
-
-<body>
-
-    <div class="tile is-ancestor is-vertical m-0">
-        <div class="tile is-parent">
-            <article class="tile is-child box pt-1 pb-3">
-                <div class="content">
+                <section id="adminBodyId" class="section has-background-grey-lighter p-2">
 
                     <div class="field">
-                        <div class="container is-fluid">
-                            <div class="is-pulled-right">
-                                <button class="button is-rounded is-small has-text-weight-bold"
-                                    onclick="adminToggleSettings()">
-                                    <span id="adminShowSettingsTextId">Show settings</span>
+                        <label class="label">Source&nbsp;folder&nbsp;/&nbsp;monitoring&nbsp;night</label>
+                    </div>
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <div class="select is-rounded is-small has-text-weight-bold is-info">
+                                <select id="adminSelectSourceId" onchange="adminSourceChanged()">
+                                    <option value="select">Select:</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control">
+                            <div class="select is-rounded is-small has-text-weight-bold is-info">
+                                <select id="adminSelectNightId" onchange="adminNightChanged()">
+                                    <option value="select">Select:</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button id="adminUpdateId" onclick="adminUpdate()"
+                            class="button is-rounded is-small has-text-weight-bold is-info">Update</button>
+                    </div>
+
+                    <div class="field">
+                        <!-- <label class="label">Select</label> -->
+                        <div class="container is-fluid m-2">
+                            <div class="buttons is-centered">
+                                <button id="adminViewMetadataButtonId" onclick="adminToggleViewData()"
+                                    class="button is-rounded is-small has-text-weight-bold is-info is-inverted"
+                                    disabled>
+                                    Data
+                                </button>
+                                <button id="adminViewMapButtonId" onclick="adminToggleViewMap()"
+                                    class="button is-rounded is-small has-text-weight-bold is-info is---inverted"
+                                    disabled>
+                                    Map
                                 </button>
                             </div>
                         </div>
                     </div>
 
-                    <p class="title is-4">
-                        Administration
-                    </p>
-
-                    <section id="adminBodyId" class="section has-background-grey-lighter p-2">
-
-                        <div class="field">
-                            <label class="label">Source&nbsp;folder&nbsp;/&nbsp;monitoring&nbsp;night</label>
-                        </div>
-                        <div class="field is-grouped">
-                            <div class="control">
-                                <div class="select is-rounded is-small has-text-weight-bold is-info">
-                                    <select id="adminSelectSourceId" onchange="adminSourceChanged()">
-                                        <option value="select">Select:</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="control">
-                                <div class="select is-rounded is-small has-text-weight-bold is-info">
-                                    <select id="adminSelectNightId" onchange="adminNightChanged()">
-                                        <option value="select">Select:</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="field">
-                            <!-- <label class="label">Select</label> -->
-                            <div class="container is-fluid m-2">
-                                <div class="buttons is-centered">
-                                    <button id="adminViewMetadataButtonId" onclick="adminToggleViewData()"
-                                        class="button is-rounded is-small has-text-weight-bold is-info is-inverted"
-                                        disabled>
-                                        Data
-                                    </button>
-                                    <button id="adminViewSpectrogramButtonId" onclick="adminToggleViewMap()"
-                                        class="button is-rounded is-small has-text-weight-bold is-info is---inverted"
-                                        disabled>
-                                        Map
-                                    </button>
-                                    <button id="adminViewSpectrogramButtonId" onclick="adminToggleViewMap()"
-                                        class="button is-rounded is-small has-text-weight-bold is-info is---inverted"
-                                        disabled>
-                                        Sound files
-                                    </button>
-                                </div>
+                    <div id="adminViewMetadataId" class="field is---hidden">
+                        <div class="control">
+                            <div class="table-container mx-5 my--2 p-2">
+                                <table class="table has-background-white-ter is-striped is-size-7">
+                                    <tbody>
+                                        <tr>
+                                            <td class="has-text-right" style="white-space: nowrap;">Monitoring night
+                                            </td>
+                                            <th colspan="5" style="width: 90%;"><span
+                                                    id="adminMonitoringNightId"></span></th>
+                                        </tr>
+                                        <tr>
+                                            <td class="has-text-right" style="white-space: nowrap;">Source folder
+                                            </td>
+                                            <th colspan="5"><span id="adminDirPathId"></span></th>
+                                        </tr>
+                                        <tr>
+                                            <td class="has-text-right" style="white-space: nowrap;">Number of sound
+                                                files</td>
+                                            <th colspan="1"><span id="adminNumberOfSoundFilesId"></span></th>
+                                            <td class="has-text-right" style="white-space: nowrap;">Number of Q1
+                                            </td>
+                                            <th colspan="3"><span id="adminNumberOfQ1Id"></span></th>
+                                        </tr>
+                                        <tr>
+                                            <td class="has-text-right" style="white-space: nowrap;">Number of "Not
+                                                Assigned"</td>
+                                            <th colspan="1"><span id="adminNumberOfNoAssignedId"></span></th>
+                                            <td class="has-text-right" style="white-space: nowrap;">Number of Q2
+                                            </td>
+                                            <th colspan="3" style="width: 60%;"><span id="adminNumberOfQ2Id"></span>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td class="has-text-right" style="white-space: nowrap;">Number of Q0
+                                                (trash)</td>
+                                            <th colspan="1"><span id="adminNumberOfQ0Id"></span></th>
+                                            <td class="has-text-right" style="white-space: nowrap;">Number of Q3
+                                            </td>
+                                            <th colspan="3" style="width: 60%;"><span id="adminNumberOfQ3Id"></span>
+                                            </th>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
+                    </div>
 
-                        <div id="adminViewMetadataId" class="field is---hidden">
-                            <div class="control">
-                                <div class="table-container mx-5 my--2 p-2">
-                                    <table class="table has-background-white-ter is-striped is-size-7">
-                                        <tbody>
-                                            <tr>
-                                                <td class="has-text-right" style="white-space: nowrap;">Monitoring night
-                                                </td>
-                                                <th colspan="5" style="width: 90%;"><span
-                                                        id="adminMonitoringNightId"></span></th>
-                                            </tr>
-                                            <tr>
-                                                <td class="has-text-right" style="white-space: nowrap;">Source folder
-                                                </td>
-                                                <th colspan="5"><span id="adminDirPathId"></span></th>
-                                            </tr>
-                                            <tr>
-                                                <td class="has-text-right" style="white-space: nowrap;">Number of sound
-                                                    files</td>
-                                                <th colspan="1"><span id="adminNumberOfSoundFilesId"></span></th>
-                                                <td class="has-text-right" style="white-space: nowrap;">Number of Q1
-                                                </td>
-                                                <th colspan="3"><span id="adminNumberOfQ1Id"></span></th>
-                                            </tr>
-                                            <tr>
-                                                <td class="has-text-right" style="white-space: nowrap;">Number of "Not
-                                                    Assigned"</td>
-                                                <th colspan="1"><span id="adminNumberOfNoAssignedId"></span></th>
-                                                <td class="has-text-right" style="white-space: nowrap;">Number of Q2
-                                                </td>
-                                                <th colspan="3" style="width: 60%;"><span id="adminNumberOfQ2Id"></span>
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <td class="has-text-right" style="white-space: nowrap;">Number of Q0
-                                                    (trash)</td>
-                                                <th colspan="1"><span id="adminNumberOfQ0Id"></span></th>
-                                                <td class="has-text-right" style="white-space: nowrap;">Number of Q3
-                                                </td>
-                                                <th colspan="3" style="width: 60%;"><span id="adminNumberOfQ3Id"></span>
-                                                </th>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                    <div class="container">
+                        <div class="buttons is-centered">
+                            <button id="adminPreviousId" onclick="adminPrevious()"
+                                class="button is-rounded is-small has-text-weight-bold is-info">Previous
+                                night</button>
+                            <button id="adminNextId" onclick="adminNext()"
+                                class="button is-rounded is-small has-text-weight-bold is-info">Next
+                                night</button>
                         </div>
+                    </div>
 
-                        <div class="container">
-                            <div class="buttons is-centered">
-                                <button id="adminPreviousId" onclick="adminPrevious()"
-                                    class="button is-rounded is-small has-text-weight-bold is-info">Previous
-                                    night</button>
-                                <button id="adminNextId" onclick="adminNext()"
-                                    class="button is-rounded is-small has-text-weight-bold is-info">Next
-                                    night</button>
-                                <button id="adminUpdateId" onclick="adminUpdate()"
-                                    class="button is-rounded is-small has-text-weight-bold is-info">Update</button>
-                            </div>
+                    <div class="field mt-4">
+                        <label class="label">Cleanup</label>
+                    </div>
+                    <div class="container mt-4 ml-2">
+                        <div class="buttons">
+                            <button id="adminRemoveQ0Id" onclick="adminCommand('confirmRemoveQ0')"
+                                class="button is-small is-rounded has-text-weight-bold is-info">
+                                Remove all Q0 (trash)
+                            </button>
+                            <button id="adminRemoveNaId" onclick="adminCommand('confirmRemoveNa')"
+                                class="button is-small is-rounded has-text-weight-bold is-info">
+                                Remove all "Not assigned"
+                            </button>
                         </div>
+                    </div>
 
-                        <!-- <div class="field pt-2">
-                            <div class="label">
-                                <label class="label">
-                                    Comments on monitoring night
-                                    <span id="adminRecordingShortInfoID"></span>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="field mx-2">
-                            <p class="control">
-                                <input class="input" type="text" id="adminCommentsId"
-                                    placeholder="Comments on monitoring night" onchange="adminSaveComments();">
-                            </p>
-                        </div> -->
-
-                        <div class="field mt-4">
-                            <label class="label">Cleanup</label>
-                        </div>
-                        <div class="container mt-4 ml-2">
-                            <div class="buttons">
-                                <button id="adminAutoId" onclick="adminCommand('confirmRemoveQ0')"
-                                    class="button is-small is-rounded has-text-weight-bold is-info">
+                    <div id="confirmRemoveQ0Id" style="visibility:hidden; overflow:hidden; height:0; width:0;">
+                        <div style="border:1px solid white; margin: 0px; padding: 25px;" class="p-2 m-2">
+                            <label class="label m-0">
+                                Do you really want to remove all Q0 (trash)?
+                            </label>
+                            <div class="field is-grouped is-grouped-centered">
+                                <button style="margin:5px;"
+                                    class="button is-small is-rounded has-text-weight-bold is-danger"
+                                    onclick="adminCommand('removeQ0')">
                                     Remove all Q0 (trash)
                                 </button>
-                                <button id="adminAutoId" onclick="adminCommand('confirmRemoveNa')"
-                                    class="button is-small is-rounded has-text-weight-bold is-info">
+                                <button style="margin:5px;"
+                                    class="button is-small is-rounded has-text-weight-bold is-info"
+                                    onclick="adminCommand('cancel')">
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="confirmRemoveNaId" style="visibility:hidden; overflow:hidden; height:0; width:0;">
+                        <div style="border:1px solid white; margin: 0px; padding: 25px;" class="p-2 m-2">
+                            <label class="label m-0">
+                                Do you really want to remove all "Not assigned"?
+                            </label>
+                            <div class="field is-grouped is-grouped-centered">
+                                <button style="margin:5px;"
+                                    class="button is-small is-rounded has-text-weight-bold is-danger"
+                                    onclick="adminCommand('removeNa')">
                                     Remove all "Not assigned"
                                 </button>
-                            </div>
-                        </div>
-
-                        <div id="confirmRemoveQ0Id" style="visibility:hidden; overflow:hidden; height:0; width:0;">
-                            <div style="border:1px solid white; margin: 0px; padding: 25px;" class="p-2 m-2">
-                                <label class="label m-0">
-                                    Do you really want to remove all Q0 (trash)?
-                                </label>
-                                <div class="field is-grouped is-grouped-centered">
-                                    <button style="margin:5px;"
-                                        class="button is-small is-rounded has-text-weight-bold is-danger"
-                                        onclick="adminCommand('removeQ0')">
-                                        Remove all Q0 (trash)
-                                    </button>
-                                    <button style="margin:5px;"
-                                        class="button is-small is-rounded has-text-weight-bold is-info"
-                                        onclick="adminCommand('cancel')">
-                                        Cancel
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="confirmRemoveNaId" style="visibility:hidden; overflow:hidden; height:0; width:0;">
-                            <div style="border:1px solid white; margin: 0px; padding: 25px;" class="p-2 m-2">
-                                <label class="label m-0">
-                                    Do you really want to remove all "Not assigned"?
-                                </label>
-                                <div class="field is-grouped is-grouped-centered">
-                                    <button style="margin:5px;"
-                                        class="button is-small is-rounded has-text-weight-bold is-danger"
-                                        onclick="adminCommand('removeNa')">
-                                        Remove all "Not assigned"
-                                    </button>
-                                    <button style="margin:5px;"
-                                        class="button is-small is-rounded has-text-weight-bold is-info"
-                                        onclick="adminCommand('cancel')">
-                                        Cancel
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="container ml-2 mt-4">
-                            <div class="buttons">
-                                <button id="adminAutoId" onclick="adminCommand('confirmDeleteNight')"
-                                    class="button is-small is-rounded has-text-weight-bold is-info">
-                                    Delete monitoring night
+                                <button style="margin:5px;"
+                                    class="button is-small is-rounded has-text-weight-bold is-info"
+                                    onclick="adminCommand('cancel')">
+                                    Cancel
                                 </button>
                             </div>
                         </div>
+                    </div>
 
-                        <div id="confirmDeleteNightId" style="visibility:hidden; overflow:hidden; height:0; width:0;"
-                            class="m-2">
-                            <div style="border:1px solid white; margin: 0px; padding: 25px;" class="p-2">
-                                <label class="label m-0">
-                                    Do you really want to remove all recorded files in this monitoring night?
-                                </label>
-                                <div class="field is-grouped is-grouped-centered">
-                                    <button style="margin:5px;"
-                                        class="button is-small is-rounded has-text-weight-bold is-danger"
-                                        onclick="adminCommand('deleteMonitoringNight')">
-                                        Delete monitoring event/night
-                                    </button>
-                                    <button style="margin:5px;"
-                                        class="button is-small is-rounded has-text-weight-bold is-info"
-                                        onclick="adminCommand('cancel')">
-                                        Cancel
-                                    </button>
-                                </div>
-                            </div>
+                    <div class="container ml-2 mt-4">
+                        <div class="buttons">
+                            <button id="adminDeleteNightId" onclick="adminCommand('confirmDeleteNight')"
+                                class="button is-small is-rounded has-text-weight-bold is-info">
+                                Delete monitoring night
+                            </button>
                         </div>
+                    </div>
 
-                        <div class="field mt-4">
-                            <label class="label">Reports</label>
-                        </div>
-                        <div class="container my-4 ml-2">
-                            <div class="buttons">
-                                <button id="admin-autoId" onclick="adminCommand('createReport')"
-                                    class="button is-small is-rounded has-text-weight-bold is-info">
-                                    Create report
+                    <div id="confirmDeleteNightId" style="visibility:hidden; overflow:hidden; height:0; width:0;"
+                        class="m-2">
+                        <div style="border:1px solid white; margin: 0px; padding: 25px;" class="p-2">
+                            <label class="label m-0">
+                                Do you really want to remove all recorded files in this monitoring night?
+                            </label>
+                            <div class="field is-grouped is-grouped-centered">
+                                <button style="margin:5px;"
+                                    class="button is-small is-rounded has-text-weight-bold is-danger"
+                                    onclick="adminCommand('deleteMonitoringNight')">
+                                    Delete monitoring event/night
                                 </button>
-                                <!-- <button id="admin-autoId" onclick="fetchXXX()"
-                                    class="button is-small is-rounded has-text-weight-bold is-info" disabled>
-                                    Preview report
-                                </button>
-                                <button id="admin-autoId" onclick="fetchXXX()"
-                                    class="button is-small is-rounded has-text-weight-bold is-info" disabled>
-                                    Download latest report
-                                </button> -->
-                            </div>
-                        </div>
-
-
-                        <!-- <div class="field mt-4">
-                            <label class="label">Rename commands</label>
-                        </div>
-                        <div class="container">
-                            <div class="buttons">
-                                <button id="admin-autoId" onclick="fetchXXX()"
-                                    class="button is-small is-rounded has-text-weight-bold is-info" disabled>
-                                    Rename sound files
-                                </button>
-                                <button id="admin-autoId" onclick="fetchXXX()"
-                                    class="button is-small is-rounded has-text-weight-bold is-info" disabled>
-                                    Adjust positions
+                                <button style="margin:5px;"
+                                    class="button is-small is-rounded has-text-weight-bold is-info"
+                                    onclick="adminCommand('cancel')">
+                                    Cancel
                                 </button>
                             </div>
-                        </div> -->
-
-                        <!-- <div class="field mt-4">
-                            <label class="label">Copy commands</label>
                         </div>
-                        <div class="container">
-                            <div class="buttons">
-                                <button id="adminAutoId" onclick="fetchXXX()"
-                                    class="button is-small is-rounded has-text-weight-bold is-info" disabled>
-                                    Copy monitoring night
-                                </button>
-                                <button id="adminAutoId" onclick="fetchXXX()"
-                                    class="button is-small is-rounded has-text-weight-bold is-info" disabled>
-                                    Copy all monitoring nights
-                                </button>
+                    </div>
+
+                    <div class="field mt-4">
+                        <label class="label">Reports</label>
+                    </div>
+                    <div class="container my-4 ml-2">
+                        <div class="buttons">
+                            <button id="adminCreateReportId" onclick="adminCommand('createReport')"
+                                class="button is-small is-rounded has-text-weight-bold is-info">
+                                Create report
+                            </button>
+                            <button id="adminDownloadReportId" onclick="adminCommand('createAndDownloadReport')"
+                                class="button is-small is-rounded has-text-weight-bold is-info">
+                                Create and download report
+                            </button>
+                        </div>
+                    </div>
+
+                </section>
+
+                <section id="adminSettingsId" class="section p-2 has-background-grey-light is-hidden">
+                    <div class="field">
+                        <div class="container is-fluid">
+                            <div class="is-pulled-right">
+                                <button class="delete is-large m-2" onclick="adminToggleSettings()"></button>
                             </div>
-                        </div> -->
-
-                    </section>
-
-                    <section id="adminSettingsId" class="section p-2 has-background-grey-light is-hidden">
-                        <div class="field">
-                            <div class="container is-fluid">
-                                <div class="is-pulled-right">
-                                    <button class="delete is-large m-2" onclick="adminToggleSettings()"></button>
-                                </div>
-                            </div>
                         </div>
-                        <div class="field">
-                            <label class="title is-4">Settings</label>
-                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="title is-4">Settings</label>
+                    </div>
 
-                        <div class="field">
-                            <label class="label">Filter&nbsp;on&nbsp;quality</label>
-                        </div>
+                    <div class="field">
+                        <label class="label">Filter&nbsp;on&nbsp;quality</label>
+                    </div>
 
-                    </section>
+                </section>
 
-                </div>
-            </article>
-        </div>
+            </div>
+        </article>
     </div>
-
-</body>
-
-<!-- </html> -->
+</div>
