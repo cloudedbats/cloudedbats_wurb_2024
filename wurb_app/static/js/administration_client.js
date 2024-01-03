@@ -132,7 +132,7 @@ async function adminExecuteCommand(sourceId, nightId, command) {
             }
         })
         .then(function (json) {
-            if (json.command == "createReport") {
+            if (json.command == "createAndDownloadReport") {
                 reportSrc = "/administration/downloads/report?";
                 reportSrc += "sourceId=";
                 reportSrc += json.sourceId;

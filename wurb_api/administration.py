@@ -122,7 +122,7 @@ async def administration_command(
             await wurb_core.cleanup.delete_monitoring_night(
                 source_id=sourceId, night_id=nightId
             )
-        elif command == "createReport":
+        elif command in ["createReport", "createAndDownloadReport"]:
             report_path = wurb_core.report_excel.get_report_path(
                 source_id=sourceId, night_id=nightId
             )
