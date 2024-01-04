@@ -22,7 +22,7 @@
 
                     <div class="field">
                         <label
-                            class="label">Source&nbsp;folder&nbsp;/&nbsp;monitoring&nbsp;night&nbsp;/&nbsp;file</label>
+                            class="label">Source&nbsp;folder&nbsp;/&nbsp;monitoring&nbsp;night&nbsp;/&nbsp;Recording</label>
                     </div>
                     <div class="field is-grouped">
                         <div class="control">
@@ -44,12 +44,12 @@
                     <div class="field is-grouped">
                         <div class="control">
                             <div class="select is-rounded is-small has-text-weight-bold is-info">
-                                <select id="annoSelectFileId" onchange="annoFileChanged()">
+                                <select id="annoSelectRecId" onchange="annoRecChanged()">
                                     <option value="select">Select:</option>
                                 </select>
                             </div>
                         </div>
-                        <button id="adminUpdateId" onclick="adminUpdate()"
+                        <button id="annoUpdateId" onclick="annoUpdate()"
                             class="button is-rounded is-small has-text-weight-bold is-info">
                             Update
                         </button>
@@ -291,11 +291,11 @@
                         <label class="title is-4">Settings</label>
                     </div>
 
-                    <div class="field is-hidden">
+                    <!-- <div class="field is-hidden">
                         <label class="label">Filter&nbsp;on&nbsp;quality</label>
-                    </div>
+                    </div> -->
 
-                    <div class="field is-hidden">
+                    <!-- <div class="field is-hidden">
                         <div class="content">
                             <div class="container">
                                 <div class="control has-text-weight-bold">
@@ -330,7 +330,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
                     <div class="field pt-2">
                         <label class="label">Quick keys (can't be changed)</label>

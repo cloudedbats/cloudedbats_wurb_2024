@@ -245,7 +245,7 @@ function startWebsocket(wsUrl) {
             updateLogTable(dataJson.logRows)
         }
     }
-    ws.onclose = function () {
+    ws.onclose = function (event) {
         // Try to reconnect in 5th seconds. Will continue...
         ws = null;
 
@@ -264,11 +264,14 @@ function startWebsocket(wsUrl) {
         let statusWhenDisconnected = {
             recStatus: waitText,
             deviceName: "",
-            detectorTime: "",
-            locationStatus: ""
+            detectorTime: "Disconnected",
+            locationStatus: "Disconnected"
         }
         updateStatus(statusWhenDisconnected)
 
         setTimeout(function () { startWebsocket(wsUrl) }, 5000);
+    }
+    ws.onerror = function (event) {
+        // alert("DEBUG: WebSocket error.")
     };
 };

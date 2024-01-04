@@ -29,6 +29,10 @@ async function getSourceDirs() {
                 option.value = content.id;
                 select.appendChild(option);
             }
+            // Select first row as default.
+            var select = byId("annoSelectSourceId");
+            select.selectedIndex = 1
+            annoSourceChanged()
         })
         .catch(function (err) {
             console.warn("Error in javascript fetch: ", err);
@@ -66,12 +70,77 @@ async function getNights(sourceId) {
                 option.value = content.id;
                 select.appendChild(option);
             }
+            // Select same row as before.
+            var select = byId("annoSelectNightId");
+            var found = false;
+            for (var i = 0; i < select.options.length; i++) {
+                if (select.options[i].value == selectedNightValue) {
+                    select.selectedIndex = i;
+                    found = true;
+                    break;
+                }
+            }
+            if (found == false) {
+                select.selectedIndex = 1;
+                annoNightChanged()
+            }
         })
         .catch(function (err) {
             console.warn("Error in javascript fetch: ", err);
         })
 };
 
+async function getRecordings(sourceId, nightId) {
+    fetch("/annotations/recordings?" + new URLSearchParams({
+        sourceId: sourceId,
+        nightId: nightId,
+    }), { method: "GET" })
+        .then(function (response) {
+            if (response.ok) {
+                return response.json();
+            } else {
+                return Promise.reject(response);
+            }
+        })
+        .then(function (json) {
+            // Populate options to select list.
+            var select = byId("annoSelectRecId");
+            // Empty.
+            while (select.firstChild) {
+                select.removeChild(select.firstChild);
+            }
+            // Add first option.
+            var option = document.createElement("option");
+            option.textContent = "Select:";
+            option.value = "select";
+            select.appendChild(option);
+            // Use received json.
+            for (var i = 0; i < json.length; i++) {
+                var content = json[i];
+                var option = document.createElement("option");
+                option.textContent = "Rec " + (i + 1) + ": " + content.localDate + " " + content.localTime;
+                option.value = content.recId;
+                select.appendChild(option);
+            }
+            // Select same row as before.
+            var select = byId("annoSelectRecId");
+            var found = false;
+            for (var i = 0; i < select.options.length; i++) {
+                if (select.options[i].value == selectedRecValue) {
+                    select.selectedIndex = i;
+                    found = true;
+                    break;
+                }
+            }
+            if (found == false) {
+                select.selectedIndex = 1;
+                annoRecChanged()
+            }
+        })
+        .catch(function (err) {
+            console.warn("Error in javascript fetch: ", err);
+        })
+}
 
 async function getRecordInfo(sourceId, nightId, recordId) {
     byId("annoRecordingShortInfoId").textContent = "";
@@ -159,7 +228,7 @@ async function getRecordInfo(sourceId, nightId, recordId) {
             // // document.body.appendChild(hidden_a);
             // // hidden_a.click();
             // // document.body.removeChild(hidden_a);
-            
+
 
 
 
@@ -212,6 +281,16 @@ async function getRecordInfo(sourceId, nightId, recordId) {
                     byId("annoLastId").disabled = false;
                 }
             }
+
+            if (byId("annoViewSpectrogramId").classList.contains("is-hidden")) {
+                // No action.
+            } else {
+                byId("annoSpectrogramLoadingId").classList.remove("is-hidden");
+                getSpectrogramAsBuffer(sourceId, nightId, recordId)
+            }
+            // Select row in recording list.
+            var select = byId("annoSelectRecId");
+            select.selectedIndex = json.index
         })
         .catch(function (err) {
             console.warn("Error in javascript fetch: ", err);
@@ -251,7 +330,7 @@ async function downloadRecFile(sourceId, nightId, recordId, recordFile) {
 };
 
 
- 
+
 
 async function getSpectrogramAsBuffer(sourceId, nightId, recordId) {
 
@@ -272,6 +351,7 @@ async function getSpectrogramAsBuffer(sourceId, nightId, recordId) {
         .then(function (json) {
 
             byId("annoSpectrogramBufferId").src = json.imageBufferSrc;
+            byId("annoSpectrogramLoadingId").classList.add("is-hidden");
 
         })
         .catch(function (err) {
@@ -280,4 +360,3 @@ async function getSpectrogramAsBuffer(sourceId, nightId, recordId) {
 };
 
 
- 

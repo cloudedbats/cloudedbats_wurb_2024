@@ -75,6 +75,27 @@ async def get_recording_nights(
 
 
 @annotations_router.get(
+    "/annotations/recordings",
+    tags=["Annotations"],
+    description="Get list of recordings.",
+)
+async def get_recordings(
+    sourceId: str,
+    nightId: str,
+):
+    """ """
+    try:
+        logger.debug("API called: get_recordings.")
+        json_data = wurb_core.record_manager.get_recordings(
+            source_id=sourceId, night_id=nightId
+        )
+        return JSONResponse(content=json_data)
+    except Exception as e:
+        message = "API - get_recordings. Exception: " + str(e)
+        logger.debug(message)
+
+
+@annotations_router.get(
     "/annotations/metadata",
     tags=["Annotations"],
     description="Get info for one sound recording.",

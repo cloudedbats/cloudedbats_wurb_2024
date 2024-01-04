@@ -5,9 +5,9 @@ var copyPasteBufferQuality = "";
 var copyPasteBufferTags = "";
 var copyPasteBufferComments = "";
 
-function XXXXX() {
-    alert("XXXXX...");
-}
+var selectedSourceValue = "";
+var selectedNightValue = "";
+var selectedRecValue = "";
 
 function annoToggleSettings() {
     if (byId("annoSettingsId").classList.contains("is-hidden")) {
@@ -26,40 +26,70 @@ function annoSourceLoad() {
 }
 
 function annoSourceChanged() {
-    var sourceId = byId("annoSelectSourceId").value;
-    getNights(sourceId);
+    selectedSourceValue = byId("annoSelectSourceId").value;
+    selectedNightValue = "";
+    selectedRecValue = "";
+    var select = byId("annoSelectNightId");
+    while (select.firstChild) {
+        select.removeChild(select.firstChild);
+    }
+    var select = byId("annoSelectRecId");
+    while (select.firstChild) {
+        select.removeChild(select.firstChild);
+    }
+    getNights(selectedSourceValue);
 }
 
 function annoNightChanged() {
-    var sourceId = byId("annoSelectSourceId").value;
-    var nightId = byId("annoSelectNightId").value;
-    //    var recordId = byId("annoRecordId").value;
-    getRecordInfo(sourceId, nightId, "");
+    selectedSourceValue = byId("annoSelectSourceId").value;
+    selectedNightValue = byId("annoSelectNightId").value;
+    selectedRecValue = byId("annoSelectRecId").value;
+    var select = byId("annoSelectRecId");
+    while (select.firstChild) {
+        select.removeChild(select.firstChild);
+    }
+    getRecordings(selectedSourceValue, selectedNightValue)
 }
 
-function annoClearFilter() {
-    try {
-        byId("annoFilterQ0Id").checked = false;
-        byId("annoFilterQ1Id").checked = false;
-        byId("annoFilterQ2Id").checked = false;
-        byId("annoFilterQ3Id").checked = false;
-        byId("annoFilterQNotAssignedId").checked = false;
-    } catch (err) {
-        // Block of code to handle errors
-    }
+function annoRecChanged() {
+    selectedSourceValue = byId("annoSelectSourceId").value;
+    selectedNightValue = byId("annoSelectNightId").value;
+    selectedRecValue = byId("annoSelectRecId").value;
+    getRecordInfo(selectedSourceValue, selectedNightValue, selectedRecValue);
 }
 
-function annoSetFilter() {
-    try {
-        byId("annoFilterQ0Id").checked = true;
-        byId("annoFilterQ1Id").checked = true;
-        byId("annoFilterQ2Id").checked = true;
-        byId("annoFilterQ3Id").checked = true;
-        byId("annoFilterQNotAssignedId").checked = true;
-    } catch (err) {
-        // Block of code to handle errors
-    }
+function annoUpdate() {
+    selectedSourceValue = byId("annoSelectSourceId").value;
+    selectedNightValue = byId("annoSelectNightId").value;
+    selectedRecValue = byId("annoSelectRecId").value;
+    getNights(selectedSourceValue);
+    getRecordings(selectedSourceValue, selectedNightValue)
+    getRecordInfo(selectedSourceValue, selectedNightValue, selectedRecValue);
 }
+
+// function annoClearFilter() {
+//     try {
+//         byId("annoFilterQ0Id").checked = false;
+//         byId("annoFilterQ1Id").checked = false;
+//         byId("annoFilterQ2Id").checked = false;
+//         byId("annoFilterQ3Id").checked = false;
+//         byId("annoFilterQNotAssignedId").checked = false;
+//     } catch (err) {
+//         // Block of code to handle errors
+//     }
+// }
+
+// function annoSetFilter() {
+//     try {
+//         byId("annoFilterQ0Id").checked = true;
+//         byId("annoFilterQ1Id").checked = true;
+//         byId("annoFilterQ2Id").checked = true;
+//         byId("annoFilterQ3Id").checked = true;
+//         byId("annoFilterQNotAssignedId").checked = true;
+//     } catch (err) {
+//         // Block of code to handle errors
+//     }
+// }
 
 function annoToggleViewMetadata() {
     if (byId("annoViewMetadataId").classList.contains("is-hidden")) {
@@ -71,20 +101,11 @@ function annoToggleViewMetadata() {
     };
 }
 
-// function annoToggleViewOverview() {
-//     if (byId("annoViewOverviewId").classList.contains("is-hidden")) {
-//         byId("annoViewOverview-buttonId").classList.add("is-inverted");
-//         byId("annoViewOverviewId").classList.remove("is-hidden");
-//     } else {
-//         byId("annoViewOverview-buttonId").classList.remove("is-inverted");
-//         byId("annoViewOverviewId").classList.add("is-hidden");
-//     };
-// }
-
 function annoToggleViewSpectrogram() {
     if (byId("annoViewSpectrogramId").classList.contains("is-hidden")) {
         byId("annoViewSpectrogramButtonId").classList.add("is-inverted");
         byId("annoViewSpectrogramId").classList.remove("is-hidden");
+        byId("annoSpectrogramLoadingId").classList.remove("is-hidden");
 
         var sourceId = currentRecord.sourceId;
         var nightId = currentRecord.nightId;
@@ -95,6 +116,7 @@ function annoToggleViewSpectrogram() {
     } else {
         byId("annoViewSpectrogramButtonId").classList.remove("is-inverted");
         byId("annoViewSpectrogramId").classList.add("is-hidden");
+        byId("annoSpectrogramLoadingId").classList.add("is-hidden");
     };
 }
 

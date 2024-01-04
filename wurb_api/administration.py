@@ -58,7 +58,7 @@ async def get_recording_sources(request: fastapi.Request):
 @admin_router.get(
     "/administration/nights",
     tags=["Administration"],
-    description="Get directories for recording events/nights.",
+    description="Get directories for recording nights.",
 )
 async def get_recording_nights(
     sourceId: str,

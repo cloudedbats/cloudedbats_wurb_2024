@@ -1,4 +1,7 @@
 
+var adminSelectedSourceValue = "";
+var adminSelectedNightValue = "";
+
 function adminToggleSettings() {
     if (byId("adminSettingsId").classList.contains("is-hidden")) {
         byId("adminBodyId").classList.add("is-hidden");
@@ -39,8 +42,14 @@ function adminSourceLoad() {
 }
 
 function adminSourceChanged() {
-    var sourceId = byId("adminSelectSourceId").value;
-    getAdminNights(sourceId);
+    adminSelectedSourceValue = byId("adminSelectSourceId").value;
+    adminSelectedNightValue = "";
+    var select = byId("adminSelectNightId");
+    while (select.firstChild) {
+        select.removeChild(select.firstChild);
+    }
+    getAdminNights(adminSelectedSourceValue);
+
 }
 
 function adminToggleViewData() {
@@ -78,9 +87,10 @@ function adminNext() {
 }
 
 function adminUpdate() {
-    var sourceId = byId("adminSelectSourceId").value;
-    var nightId = byId("adminSelectNightId").value;
-    getAdminNightInfo(sourceId, nightId);
+    adminSelectedSourceValue = byId("adminSelectSourceId").value;
+    adminSelectedNightValue = byId("adminSelectNightId").value;
+    getAdminNights(adminSelectedSourceValue);
+    getAdminNightInfo(adminSelectedSourceValue, adminSelectedNightValue);
 }
 
 // function adminGetComments() {

@@ -69,7 +69,7 @@ async def create_spectrogram(source_path):
         # Axes.
         ax1.set_ylabel("Frequency (kHz)")
         ax1.set_xlabel("Time (s)")
-        ax1.set_ylim((0, 100))
+        ax1.set_ylim((0, 120))
         # Grid.
         ax1.minorticks_on()
         ax1.grid(which="major", linestyle="-", linewidth="0.5", alpha=0.7)

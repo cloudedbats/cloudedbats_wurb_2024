@@ -86,6 +86,23 @@ class RecordManager(object):
         #
         return result
 
+    def get_recordings(self, source_id, night_id):
+        """ """
+        result = []
+        rec_files = self.get_rec_files(source_id, night_id)
+        for rec_file in sorted(rec_files):
+            rec_id = wurb_core.metadata.get_rec_id(rec_file)
+            _prefix, _utc, local_date, local_time = wurb_core.metadata.get_rec_keys(
+                rec_file
+            )
+            result_dict = {}
+            result_dict["recId"] = rec_id
+            result_dict["localDate"] = str(local_date)
+            result_dict["localTime"] = str(local_time)
+            result.append(result_dict)
+        #
+        return result
+
     def get_rec_files(self, source_id, night_id):
         """ """
         result = []

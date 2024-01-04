@@ -1,7 +1,7 @@
 
 async function getAdminSourceDirs() {
     // fetch("/module-admin/get-rec-sources", { method: "GET" })
-    fetch("/annotations/sources", { method: "GET" })
+    fetch("/administration/sources", { method: "GET" })
         .then(function (response) {
             if (response.ok) {
                 return response.json();
@@ -29,6 +29,10 @@ async function getAdminSourceDirs() {
                 option.value = content.id;
                 select.appendChild(option);
             }
+            // Select first row as default.
+            var select = byId("adminSelectSourceId");
+            select.selectedIndex = 1
+            adminSourceChanged()
         })
         .catch(function (err) {
             console.warn("Error in javascript fetch: ", err);
@@ -36,7 +40,7 @@ async function getAdminSourceDirs() {
 };
 
 async function getAdminNights(sourceId) {
-    fetch("/annotations/nights?" + new URLSearchParams({
+    fetch("/administration/nights?" + new URLSearchParams({
         sourceId: sourceId,
     }), { method: "GET" })
         .then(function (response) {
@@ -65,6 +69,20 @@ async function getAdminNights(sourceId) {
                 option.textContent = content.id;
                 option.value = content.id;
                 select.appendChild(option);
+            }
+            // Select same row as before.
+            var select = byId("adminSelectNightId");
+            var found = false;
+            for (var i = 0; i < select.options.length; i++) {
+                if (select.options[i].value == adminSelectedNightValue) {
+                    select.selectedIndex = i;
+                    found = true;
+                    break;
+                }
+            }
+            if (found == false) {
+                select.selectedIndex = 1;
+                adminNightChanged()
             }
         })
         .catch(function (err) {
