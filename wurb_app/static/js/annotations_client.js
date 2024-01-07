@@ -170,7 +170,7 @@ async function getRecordInfo(sourceId, nightId, recordId) {
             }
         })
         .then(function (json) {
-            var shortInfo = " for file " + json.index + " of " + json.maxIndex
+            var shortInfo = " - Record " + json.index + " of " + json.maxIndex
             byId("annoRecordingShortInfoId").textContent = shortInfo;
 
             byId("annoMetadataRecordFileId").textContent = json.recordFile;
@@ -195,10 +195,6 @@ async function getRecordInfo(sourceId, nightId, recordId) {
             annoSetQuality(json.quality);
             annoSetTags(json.tags);
             annoSetComments(json.comments);
-
-
-
-
 
             // // // imageSrc = "http://localhost:8080/annotations/spectrogram?"
             // // imageSrc = "/annotations/spectrogram?"
@@ -228,22 +224,6 @@ async function getRecordInfo(sourceId, nightId, recordId) {
             // // document.body.appendChild(hidden_a);
             // // hidden_a.click();
             // // document.body.removeChild(hidden_a);
-
-
-
-
-
-
-            // //  fileSrc = "http://localhost:8080/annotations/file?"
-            // fileSrc = "/annotations/file?"
-            // fileSrc += "sourceId="
-            // fileSrc += json.sourceId
-            // fileSrc += "&nightId="
-            // fileSrc += json.nightId
-            // fileSrc += "&recordId="
-            // fileSrc += json.recordId
-            // byId("annoDownloadId").href = fileSrc;
-            // byId("annoDownloadId").download = json.recordFile;
 
             byId("annoFirstTextId").textContent = "First"
             byId("annoLastTextId").textContent = "Last"
@@ -327,6 +307,35 @@ async function saveRecordInfo(sourceId, nightId, recordId, quality, tags, commen
 
 async function downloadRecFile(sourceId, nightId, recordId, recordFile) {
 
+    // reportSrc = "/administration/downloads/report?";
+    // reportSrc += "sourceId=";
+    // reportSrc += json.sourceId;
+    // reportSrc += "&nightId=";
+    // reportSrc += json.nightId;
+    // // Create temporary element.
+    // let hidden_a = document.createElement('a');
+    // hidden_a.setAttribute('href', reportSrc);
+    // hidden_a.setAttribute('download', json.report_name);
+    // document.body.appendChild(hidden_a);
+    // hidden_a.click();
+    // document.body.removeChild(hidden_a);
+
+
+    fileSrc = "/annotations/file?"
+    fileSrc += "sourceId="
+    fileSrc += sourceId
+    fileSrc += "&nightId="
+    fileSrc += nightId
+    fileSrc += "&recordId="
+    fileSrc += recordId
+    // Create temporary element.
+    let hidden_a = document.createElement('a');
+    hidden_a.setAttribute('href', fileSrc);
+    hidden_a.setAttribute('download', recordFile);
+    document.body.appendChild(hidden_a);
+    hidden_a.click();
+    document.body.removeChild(hidden_a);
+
 };
 
 
@@ -334,7 +343,7 @@ async function downloadRecFile(sourceId, nightId, recordId, recordFile) {
 
 async function getSpectrogramAsBuffer(sourceId, nightId, recordId) {
 
-    byId("annoSpectrogramBufferId").src = ""
+    // byId("annoSpectrogramBufferId").src = ""
 
     fetch("/annotations/spectrogram?" + new URLSearchParams({
         sourceId: sourceId,
@@ -349,8 +358,11 @@ async function getSpectrogramAsBuffer(sourceId, nightId, recordId) {
             }
         })
         .then(function (json) {
-
-            byId("annoSpectrogramBufferId").src = json.imageBufferSrc;
+            if (json.imageBufferSrc == null) {
+                byId("annoSpectrogramBufferId").src = "";
+            } else {
+                byId("annoSpectrogramBufferId").src = json.imageBufferSrc;
+            }
             byId("annoSpectrogramLoadingId").classList.add("is-hidden");
 
         })
