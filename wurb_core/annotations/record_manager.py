@@ -133,77 +133,105 @@ class RecordManager(object):
 
     async def get_rec_info(self, source_id, night_id, record_id):
         """ """
-        rec_file = self.get_rec_file(source_id, night_id, record_id)
-        rec_files = self.get_rec_files(source_id, night_id)
-        if rec_file == "":
-            if len(rec_files) > 0:
-                rec_file = rec_files[0]
-        prefix, utc_datetime, local_date, local_time = wurb_core.metadata.get_rec_keys(
-            rec_file
-        )
-        metadata = wurb_core.metadata.get_metadata(rec_file)
-        rec_ids = []
-        for rec in sorted(rec_files):
-            rec_ids.append(wurb_core.metadata.get_rec_id(rec))
-
-        if not record_id in ["", None]:
-            if not record_id in rec_ids:
-                print("ERROR: record_id is missing in the nights list.")
-
-        first_record_id = ""
-        previous_record_id = ""
-        next_record_id = ""
-        last_record_id = ""
-        last_record_id = ""
-        record_index = 0
-
-        if len(rec_files) > 0:
-            for index, rec_id in enumerate(rec_ids):
-                # Use first record if not specified.
-                if record_id in ["", None]:
-                    record_id = rec_id
-                # Always add last record during iteration.
-                last_record_id = rec_id
-                # Add firsts record during first iteration.
-                if first_record_id == "":
-                    first_record_id = rec_id
-                # Save index for current record.
-                if record_id == rec_id:
-                    record_index = index + 1
-                # Save next record.
-                if next_record_id == "":
-                    if rec_id > record_id:
-                        next_record_id = rec_id
-                # Save previous record.
-                if rec_id < record_id:
-                    previous_record_id = rec_id
-            # If current record is the last one.
-            if record_id == last_record_id:
-                next_record_id = last_record_id
-
         record_data = {
             "sourceId": source_id,
             "nightId": night_id,
             "recordId": record_id,
-            "firstRecordId": first_record_id,
-            "previousRecordId": previous_record_id,
-            "nextRecordId": next_record_id,
-            "lastRecordId": last_record_id,
-            "index": str(record_index),
-            "maxIndex": str(len(rec_files)),
-            "recordFile": rec_file.name,
-            "prefix": prefix,
-            "localDate": str(local_date),
-            "localTime": str(local_time),
-            "dateTimeUtc": str(utc_datetime),
-            "latitude": metadata.get("latitude", ""),
-            "longitude": metadata.get("longitude", ""),
-            "quality": metadata.get("annotationQuality", ""),
-            "tags": metadata.get("annotationTags", ""),
-            "comments": metadata.get("annotationComments", ""),
-            "peakKhz": metadata.get("peakKhz", ""),
-            "peakDbfs": metadata.get("peakDbfs", ""),
+            "firstRecordId": "",
+            "previousRecordId": "",
+            "nextRecordId": "",
+            "lastRecordId": "",
+            "index": 0,
+            "maxIndex": 0,
+            "recordFile": "",
+            "prefix": "",
+            "localDate": "",
+            "localTime": "",
+            "dateTimeUtc": "",
+            "latitude": "",
+            "longitude": "",
+            "quality": "",
+            "tags": "",
+            "comments": "",
+            "peakKhz": "",
+            "peakDbfs": "",
         }
+
+        rec_file = self.get_rec_file(source_id, night_id, record_id)
+        rec_files = self.get_rec_files(source_id, night_id)
+        if (rec_file == "") and len(rec_files) > 0:
+            if len(rec_files) > 0:
+                rec_file = rec_files[0]
+        if rec_file != "":
+            (
+                prefix,
+                utc_datetime,
+                local_date,
+                local_time,
+            ) = wurb_core.metadata.get_rec_keys(rec_file)
+            metadata = wurb_core.metadata.get_metadata(rec_file)
+            rec_ids = []
+            for rec in sorted(rec_files):
+                rec_ids.append(wurb_core.metadata.get_rec_id(rec))
+
+            if not record_id in ["", None]:
+                if not record_id in rec_ids:
+                    print("ERROR: record_id is missing in the nights list.")
+
+            first_record_id = ""
+            previous_record_id = ""
+            next_record_id = ""
+            last_record_id = ""
+            last_record_id = ""
+            record_index = 0
+
+            if len(rec_files) > 0:
+                for index, rec_id in enumerate(rec_ids):
+                    # Use first record if not specified.
+                    if record_id in ["", None]:
+                        record_id = rec_id
+                    # Always add last record during iteration.
+                    last_record_id = rec_id
+                    # Add firsts record during first iteration.
+                    if first_record_id == "":
+                        first_record_id = rec_id
+                    # Save index for current record.
+                    if record_id == rec_id:
+                        record_index = index + 1
+                    # Save next record.
+                    if next_record_id == "":
+                        if rec_id > record_id:
+                            next_record_id = rec_id
+                    # Save previous record.
+                    if rec_id < record_id:
+                        previous_record_id = rec_id
+                # If current record is the last one.
+                if record_id == last_record_id:
+                    next_record_id = last_record_id
+
+            record_data = {
+                "sourceId": source_id,
+                "nightId": night_id,
+                "recordId": record_id,
+                "firstRecordId": first_record_id,
+                "previousRecordId": previous_record_id,
+                "nextRecordId": next_record_id,
+                "lastRecordId": last_record_id,
+                "index": str(record_index),
+                "maxIndex": str(len(rec_files)),
+                "recordFile": rec_file.name,
+                "prefix": prefix,
+                "localDate": str(local_date),
+                "localTime": str(local_time),
+                "dateTimeUtc": str(utc_datetime),
+                "latitude": metadata.get("latitude", ""),
+                "longitude": metadata.get("longitude", ""),
+                "quality": metadata.get("annotationQuality", ""),
+                "tags": metadata.get("annotationTags", ""),
+                "comments": metadata.get("annotationComments", ""),
+                "peakKhz": metadata.get("peakKhz", ""),
+                "peakDbfs": metadata.get("peakDbfs", ""),
+            }
         return record_data
 
     def set_rec_info(self, source_id, night_id, record_id, quality, tags, comments):
