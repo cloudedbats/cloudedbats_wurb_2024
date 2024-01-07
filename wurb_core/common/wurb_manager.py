@@ -96,23 +96,26 @@ class WurbManager(object):
                 time_str = time.strftime("%H:%M:%S")
                 status_dict = await wurb_core.rec_manager.get_status_dict()
                 rec_status = status_dict.get("rec_status", "")
-                latitude, longitude = wurb_core.wurb_settings.get_valid_location()
-                with activity_log_path.open("a") as log_file:
-                    # Write row.
-                    log_file.write(
-                        utc_datetime_str
-                        + ","
-                        + date_str
-                        + ","
-                        + time_str
-                        + ","
-                        + str(latitude)
-                        + ","
-                        + str(longitude)
-                        + ","
-                        + rec_status
-                        + "\n"
-                    )
+                if rec_status not in [
+                    "No microphone available",
+                ]:
+                    latitude, longitude = wurb_core.wurb_settings.get_valid_location()
+                    with activity_log_path.open("a") as log_file:
+                        # Write row.
+                        log_file.write(
+                            utc_datetime_str
+                            + ","
+                            + date_str
+                            + ","
+                            + time_str
+                            + ","
+                            + str(latitude)
+                            + ","
+                            + str(longitude)
+                            + ","
+                            + rec_status
+                            + "\n"
+                        )
                 # Sleep until after next minute.
                 sleep_time = 60.5 - (time.time() % 60)
                 await asyncio.sleep(sleep_time)

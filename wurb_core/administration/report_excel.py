@@ -305,7 +305,7 @@ class ReportExcel(object):
 
     def get_report_path(self, source_id, night_id):
         """ """
-        report_path = "Report.xlsx"
+        report_path = pathlib.Path("Report.xlsx")
         if (source_id) and (night_id):
             source_dir = pathlib.Path(
                 wurb_core.record_manager.get_source_dir(source_id)
@@ -341,7 +341,7 @@ class ReportExcel(object):
             "wurb_activity.csv",
         )
         wurb_activity_content = []
-        if wurb_activity_path.exists:
+        if wurb_activity_path.exists():
             with wurb_activity_path.open("r") as file:
                 header = None
                 for row in file.readlines():
