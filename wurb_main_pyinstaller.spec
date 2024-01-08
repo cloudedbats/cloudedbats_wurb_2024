@@ -2,14 +2,16 @@
 
 
 a = Analysis(
-    ['wurb_main.py'],
+    ["wurb_main.py"],
     pathex=[],
     binaries=[],
     datas=[("wurb_config_default.yaml","."),
            ("wurb_app/static/css/*","./wurb_app/static/css/"),
            ("wurb_app/static/images/*","./wurb_app/static/images/"),
            ("wurb_app/static/js/*","./wurb_app/static/js/"),
-           ("wurb_app/templates/*","./wurb_app/templates/"),],
+           ("wurb_app/templates/*","./wurb_app/templates/"),
+           ("cloudedbats_logo.png","."),
+           ],
     hiddenimports=["wurb_api"],
     hookspath=[],
     hooksconfig={},
@@ -24,7 +26,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name="wurb_webserver",
+    name="wurb_2024_webserver",
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -35,7 +37,7 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon='wurb_app/static/images/cloudedbats_logo.png',
+    icon="cloudedbats_logo.png",
 )
 coll = COLLECT(
     exe,
@@ -44,5 +46,5 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name='wurb_main',
+    name="wurb_2024_webserver",
 )
