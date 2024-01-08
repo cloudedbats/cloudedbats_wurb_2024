@@ -97,7 +97,10 @@ class WurbManager(object):
                 status_dict = await wurb_core.rec_manager.get_status_dict()
                 rec_status = status_dict.get("rec_status", "")
                 if rec_status not in [
+                    "",
                     "No microphone available",
+                    "Recording OFF",
+                    "Recording OFF by scheduler",
                 ]:
                     latitude, longitude = wurb_core.wurb_settings.get_valid_location()
                     with activity_log_path.open("a") as log_file:

@@ -339,8 +339,6 @@ async function downloadRecFile(sourceId, nightId, recordId, recordFile) {
 };
 
 
-
-
 async function getSpectrogramAsBuffer(sourceId, nightId, recordId) {
 
     // byId("annoSpectrogramBufferId").src = ""
@@ -358,10 +356,12 @@ async function getSpectrogramAsBuffer(sourceId, nightId, recordId) {
             }
         })
         .then(function (json) {
-            if (json.imageBufferSrc == null) {
-                byId("annoSpectrogramBufferId").src = "";
-            } else {
-                byId("annoSpectrogramBufferId").src = json.imageBufferSrc;
+            if (json != null) {
+                if (json.imageBufferSrc == null) {
+                    byId("annoSpectrogramBufferId").src = "";
+                } else {
+                    byId("annoSpectrogramBufferId").src = json.imageBufferSrc;
+                }
             }
             byId("annoSpectrogramLoadingId").classList.add("is-hidden");
 
@@ -370,5 +370,3 @@ async function getSpectrogramAsBuffer(sourceId, nightId, recordId) {
             console.warn("Error in javascript fetch: ", err);
         })
 };
-
-

@@ -327,10 +327,12 @@ class ReportExcel(object):
         """ """
         metadata_rows = []
         # Get files for night.
-        for rec_file in wurb_core.record_manager.get_rec_files(source_id, night_id):
+        for index, rec_file in enumerate(wurb_core.record_manager.get_rec_files(source_id, night_id)):
             # Get metadata for recording.
             metadata = wurb_core.metadata.get_metadata(rec_file)
             metadata_rows.append(metadata)
+            if (index % 1000) == 0:
+                await asyncio.sleep(0.0)
 
         # Get wurb avtivity data.
         rec_dir_path = pathlib.Path(wurb_core.record_manager.get_source_dir(source_id))
@@ -360,9 +362,11 @@ class ReportExcel(object):
         # Summary worksheets.
         summary_worksheet = workbook.add_worksheet("Summary")
         self.add_content(summary_worksheet, metadata_rows, self.summary_columns)
+        await asyncio.sleep(0.0)
         # Detailed worksheets.
         detailed_worksheet = workbook.add_worksheet("Detailed")
         self.add_content(detailed_worksheet, metadata_rows, self.detailed_columns)
+        await asyncio.sleep(0.0)
         # WURB activity worksheets.
         wurb_activity_worksheet = workbook.add_worksheet("WURB activity")
         self.add_content(
@@ -373,7 +377,6 @@ class ReportExcel(object):
         self.add_about_content(about_worksheet)
 
         # === Done. Close workbook. ===
-        await asyncio.sleep(0.0)
         workbook.close()
 
     def add_content(self, worksheet, content_rows, columns):
