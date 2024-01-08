@@ -49,15 +49,12 @@ annotations:
     # - id: usb
     #   name: USB
     #   rec_dir: media/pi/REPLACE-USB-NAME/wurb_recordings
-    #   cache_dir: media/pi/REPLACE-USB-NAME/wurb_cache
     # - id: ssd
     #   name: SSD
     #   rec_dir: media/ssd/wurb_recordings
-    #   cache_dir: media/ssd/wurb_cache
     - id: local
       name: Local
       rec_dir: ../wurb_recordings
-      cache_dir: ../wurb_cache
 
 gps_reader:
   min_number_of_satellites: 3

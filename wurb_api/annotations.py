@@ -48,7 +48,6 @@ async def get_recording_sources(request: fastapi.Request):
     """ """
     try:
         logger.debug("API called: get_recording_sources.")
-        # json_data = {"source_dirs": ["../wurb_recordings", "../../wurb_recordings"]}
         json_data = wurb_core.record_manager.get_rec_sources()
         return JSONResponse(content=json_data)
     except Exception as e:

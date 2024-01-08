@@ -63,14 +63,6 @@ class RecordManager(object):
                 result = pathlib.Path(wurb_core.executable_path, source_dir).resolve()
         return result
 
-    def get_cache_dir(self, source_id):
-        """ """
-        result = ""
-        source = self.rec_sources_by_id.get(source_id, "")
-        if source:
-            result = source.get("cache_dir", "")
-        return result
-
     def get_rec_nights(self, source_id):
         """ """
         result = []
@@ -261,21 +253,3 @@ class RecordManager(object):
         if (source_id) and (night_id) and (record_id):
             file_path = str(self.get_rec_file(source_id, night_id, record_id))
         return str(file_path)
-
-    def get_spectrogram_path(self, source_id, night_id, record_id):
-        """ """
-        img_path = ""
-        if (source_id) and (night_id) and (record_id):
-            rec_path = str(self.get_rec_file(source_id, night_id, record_id))
-            img_path = self.get_spectrogram_path_by_rec(rec_path)
-        return str(img_path)
-
-    def get_spectrogram_path_by_rec(self, rec_file_path):
-        """ """
-        rec_path_str = str(rec_file_path)
-        rec_path_str = rec_path_str.replace(
-            "/wurb_recordings",
-            "/wurb_cache/spectrograms",
-        )
-        rec_path_str = rec_path_str.replace(".wav", "_SPECTROGRAM.jpg")
-        return str(rec_path_str)

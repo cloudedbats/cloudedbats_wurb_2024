@@ -90,23 +90,9 @@ class Metadata(object):
     def add_basic_metadata(self, rec_file_path):
         """ """
         rec_file_path = pathlib.Path(rec_file_path)
-        # metadata_file_path = self.get_metadata_file_path(rec_file_path)
         prefix, utc_datetime, local_date, local_time = self.get_rec_keys(rec_file_path)
         metadata = {}
         metadata["recFileName"] = rec_file_path.name
-        # recording["rec_file_path"] = str(rec_file_path.resolve())
-        # recording["metadata_file_name"] = metadata_file_path.name
-        # recording["metadata_file_path"] = str(metadata_file_path.resolve())
-
-        # recording["cache_file_name"] = rec_file_path.name.replace(
-        #     ".wav", "_SPECTROGRAM.jpg"
-        # )
-        # recording["cache_file_path"] = (
-        #     str(rec_file_path.resolve())
-        #     .replace("wurb_recordings", "wurb_cache/spectrograms")
-        #     .replace(".wav", "_SPECTROGRAM.jpg")
-        # )
-
         metadata["prefix"] = prefix
         metadata["dateTimeUtc"] = str(utc_datetime)
         metadata["dateLocal"] = str(local_date)
@@ -132,18 +118,6 @@ class Metadata(object):
         #
         return metadata
 
-        # metadata = {}
-        # rec_file_path = pathlib.Path(rec_file_path)
-        # metadata_file_path = self.get_metadata_file_path(rec_file_path)
-        # if not metadata_file_path.exists():
-        #     self.add_basic_metadata(rec_file_path)
-        # #
-        # with open(metadata_file_path, "r") as file:
-        #     # metadata = yaml.load(file, Loader=yaml.Loader)
-        #     metadata = yaml.safe_load(file)
-        # #
-        # return metadata
-
     def write_metadata(self, rec_file_path, metadata):
         """ """
         data_dir = self.get_data_dir(rec_file_path)
@@ -154,13 +128,6 @@ class Metadata(object):
         )
         # flat_metadata = self.flatten_metadata(metadata)
         metadata_db.set_values(metadata, identity=rec_id)
-
-        # rec_file_path = pathlib.Path(rec_file_path)
-        # metadata_file_path = self.get_metadata_file_path(rec_file_path)
-        # #
-        # with open(metadata_file_path, "w") as file:
-        #     file.writelines("\n".join(self.metadata_header_rows) + "\n")
-        #     yaml.dump(metadata, file, default_flow_style=False)
 
     def get_metadata(self, rec_file_path):
         """ """
