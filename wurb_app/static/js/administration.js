@@ -89,15 +89,5 @@ function adminNext() {
 function adminUpdate() {
     adminSelectedSourceValue = byId("adminSelectSourceId").value;
     adminSelectedNightValue = byId("adminSelectNightId").value;
-    getAdminNights(adminSelectedSourceValue);
     getAdminNightInfo(adminSelectedSourceValue, adminSelectedNightValue);
 }
-
-// function adminGetComments() {
-//     var comments = byId("adminCommentsId").value
-//     return comments;
-// }
-
-// function adminSetComments(comment) {
-//     byId("adminCommentsId").value = comment
-// }
