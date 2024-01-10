@@ -41,10 +41,35 @@ class RecDevices(object):
 
     def configure(self):
         """ """
+        # # Capture.
+        # self.capture_name_part_list = ["Pettersson", "UltraMic"]
+        # # Playback.
+        # self.playback_name_part_list = ["headphones", "MacBook"]
+
         # Capture.
-        self.capture_name_part_list = ["Pettersson", "UltraMic"]
+        self.capture_name_part_list = []
+        # self.capture_devices = []
+        audio_devices = wurb_core.config.get("audio_capture")
+        for audio_device in audio_devices:
+            name = audio_device.get("device_name", "")
+            if name:
+                self.capture_name_part_list.append(name)
+                # device_dict = {}
+                # device_dict["name"] = name
+                # device_dict["sampling_freq_hz"] = audio_device.get("sampling_freq_hz", "")
+                # self.capture_devices.append(device_dict)
         # Playback.
-        self.playback_name_part_list = ["headphones", "MacBook"]
+        self.playback_name_part_list = []
+        # self.playback_devices = []
+        audio_devices = wurb_core.config.get("audio_playback")
+        for audio_device in audio_devices:
+            name = audio_device.get("device_name", "")
+            if name:
+                self.playback_name_part_list.append(name)
+                # device_dict = {}
+                # device_dict["name"] = name
+                # device_dict["sampling_freq_hz"] = audio_device.get("sampling_freq_hz", "")
+                # self.playback_devices.append(device_dict)
 
     def get_capture_device_info(self):
         """ """
