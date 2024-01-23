@@ -44,10 +44,25 @@ class RecManager(object):
 
     def startup(self):
         """ """
-        # Load microphone info.
+        # Log connected microphones at startup.
+        available_devices = wurb_core.audio_capture.get_capture_devices()
+        try:
+            self.logger.debug("Connacted microphones at starup:")
+            for device_dict in available_devices:
+                device_full_name = device_dict["device_name"]
+                sampling_freq_hz = device_dict["sampling_freq_hz"]
+                message = (
+                    "- " + device_full_name + "   Frequency: " + str(sampling_freq_hz)
+                )
+                self.logger.debug(message)
+        except Exception as e:
+            message = "RecManager - startup. Exception: " + str(e)
+            self.logger.debug(message)
+        # Load microphone that match config.
         wurb_core.rec_devices.get_capture_device_info()
-
+        # Activate GPS.
         wurb_core.gps_reader.startup()
+        # Activte REcManager.
         self.control_loop = asyncio.create_task(
             self.rec_control_loop(), name="RecManager control task"
         )

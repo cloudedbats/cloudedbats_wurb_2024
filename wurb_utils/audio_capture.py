@@ -63,17 +63,9 @@ class AudioCapture:
                     info_dict["device_name"] = device_name
                     info_dict["input_channels"] = input_channels
                     info_dict["device_index"] = device_info.get("index", "")
-                    # info_dict["sampling_freq_hz"] = device_info.get(
-                    #     "defaultSampleRate", ""
-                    # )
-
-
-
-                    info_dict["sampling_freq_hz"] = "384000"
-
-
-
-
+                    info_dict["sampling_freq_hz"] = device_info.get(
+                        "defaultSampleRate", ""
+                    )
                     devices.append(info_dict)
         except Exception as e:
             self.logger.debug("AudioCapture - get_capture_devices: " + str(e))

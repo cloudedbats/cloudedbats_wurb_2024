@@ -177,6 +177,13 @@ class RecWorker(object):
                                 "Lost connection with the microphone. Rec. restarted."
                             )
                             self.logger.warning(message)
+                            # Check connected microphones.
+                            wurb_core.rec_devices.clear()
+                            if wurb_core.alsaaudio_used == False:
+                                # PyAudio needs to be terminated and reloaded.
+                                wurb_core.audio.terminate()
+                                wurb_core.audio = wurb_core.pyaudio.PyAudio()
+                            wurb_core.rec_devices.get_capture_device_info()
                             # Restart recording.
                             self.restart_activated = True
                             loop = asyncio.get_event_loop()
@@ -236,7 +243,7 @@ class RecWorker(object):
                                     await self.from_source_queue.put(False)  # Flush.
                                     return
 
-                                # Store in list-
+                                # Store in list.
                                 new_item = {}
                                 new_item["status"] = "data-Counter-" + str(
                                     sound_detected_counter

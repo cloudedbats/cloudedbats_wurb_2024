@@ -6,16 +6,35 @@ wurb_app:
   log_level: info
 
 audio_capture:
-  - device_name: Pettersson # All Pettersson USB mics.
-  - device_name: UltraMic # All Dodotronic USB mics.
-  - device_name: AudioMoth # AudioMoth in USB  mic mode.
-  # - device_name: MyMic # Replace  for your mic.
+  - device_name: Pettersson
+    sampling_freq_hz: 384000
+  - device_name: Pettersson
+    sampling_freq_hz: 256000
+  - device_name: Pettersson # Linux only.
+    sampling_freq_hz: 500000
+  - device_name: UltraMic # For Dodotronic.
+    sampling_freq_hz: 384000
+  - device_name: UltraMic # For Dodotronic.
+    sampling_freq_hz: 192000
+  - device_name: AudioMoth
+    sampling_freq_hz: 384000
+  - device_name: Realtek
+    sampling_freq_hz: 192000
+  # - device_name: PartOfDeviceName
+  #   sampling_freq_hz: 384000
+  #   channels: MONO # STEREO, MONO, MONO-LEFT, MONO-RIGHT.
 
 record:
-  target:
-    id: local
-    name: Local
-    rec_dir: ../wurb_recordings
+  targets:
+  #   - id: usb
+  #     name: USB
+  #     rec_dir: media/pi/REPLACE-USB-NAME/wurb_recordings
+  #   - id: ssd
+  #     name: SSD
+  #     rec_dir: media/ssd/wurb_recordings
+    - id: local
+      name: Local
+      rec_dir: ../wurb_recordings
 
 annotations:
   sources:
@@ -36,9 +55,7 @@ gps_reader:
   gps_devices:
     - /dev/ttyACM0 # Commonly used on Raspberry Pi.
     - /dev/ttyUSB0 # Commonly used on Raspberry Pi.
-    - /dev/tty.usbserial-2130 # For test on macOS.
-    - /dev/cu.usbmodem21301 # For test on macOS.
-    - /dev/cu.usbmodem101 # For test on macOS.
+    # - /dev/cu.usbmodem101 # For test on macOS.
   gps_control_loop_sleep_s: 20
 
 rec_manager:
@@ -55,7 +72,7 @@ audio_playback:
     buffer_max_size: 10000
     in_queue_length: 10
 
-audio_pitch_shifting:
+audio_playback_pitch_shifting:
   pitch_factor: 30
   volume_percent: 50
   filter_low_khz: 15.0

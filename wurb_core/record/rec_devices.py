@@ -21,106 +21,87 @@ class RecDevices(object):
             self.logger = logging.getLogger(logger_name)
         #
         self.clear()
+        self.config_capture_devices = []
+        self.config_playback_devices = []
         self.configure()
 
     def clear(self):
         """ """
         # Capture.
-        self.capture_device_info = {}
-        # info["device_name"] = self.capture_device_name
-        # info["sampling_freq_hz"] = self.capture_sampling_freq_hz
-        # info["device_index"] = self.capture_device_index
-        # info["input_channels"] = self.capture_channels
-
+        self.capture_device = None
         # Playback.
-        self.playback_device_info = {}
-        # info["device_name"] = self.capture_device_name
-        # info["sampling_freq_hz"] = self.capture_sampling_freq_hz
-        # info["device_index"] = self.capture_device_index
-        # info["input_channels"] = self.capture_channels
+        self.playback_device = None
 
     def configure(self):
         """ """
-        # # Capture.
-        # self.capture_name_part_list = ["Pettersson", "UltraMic"]
-        # # Playback.
-        # self.playback_name_part_list = ["headphones", "MacBook"]
-
         # Capture.
-        self.capture_name_part_list = []
-        # self.capture_devices = []
-        audio_devices = wurb_core.config.get("audio_capture")
-        for audio_device in audio_devices:
-            name = audio_device.get("device_name", "")
-            if name:
-                self.capture_name_part_list.append(name)
-                # device_dict = {}
-                # device_dict["name"] = name
-                # device_dict["sampling_freq_hz"] = audio_device.get("sampling_freq_hz", "")
-                # self.capture_devices.append(device_dict)
+        self.config_capture_devices = wurb_core.config.get("audio_capture")
         # Playback.
-        self.playback_name_part_list = []
-        # self.playback_devices = []
-        audio_devices = wurb_core.config.get("audio_playback")
-        for audio_device in audio_devices:
-            name = audio_device.get("device_name", "")
-            if name:
-                self.playback_name_part_list.append(name)
-                # device_dict = {}
-                # device_dict["name"] = name
-                # device_dict["sampling_freq_hz"] = audio_device.get("sampling_freq_hz", "")
-                # self.playback_devices.append(device_dict)
+        self.config_playback_devices = wurb_core.config.get("audio_playback")
 
     def get_capture_device_info(self):
         """ """
-        if "device_index" not in self.capture_device_info:
+        if self.capture_device == None:
             self.check_capture_devices()
         #
-        return self.capture_device_info
+        if self.capture_device in [None, {}]:
+            return {}
+        return self.capture_device
 
     def get_playback_device_info(self):
         """ """
         if "device_index" not in self.playback_device_info:
             self.check_playback_devices()
         #
+        if self.playback_device_info in [None, {}]:
+            return {}
         return self.playback_device_info
 
     def is_mic_available(self):
         """ """
-        device_index = self.capture_device_info.get("device_index", None)
-        if device_index == None:
+        if self.capture_device in [None, {}]:
             return False
         else:
             return True
 
     def is_speaker_available(self):
         """ """
-        device_index = self.playback_device_info.get("device_index", None)
-        if device_index == None:
+        if self.playback_device in [None, {}]:
             return False
         else:
             return True
 
     def check_capture_devices(self):
-        """For asyncio events."""
+        """ """
+        self.capture_device = None
         try:
-            devices = wurb_core.audio_capture.get_capture_devices()
-            devices_by_name = {}
-            for device in devices:
-                name = device.get("device_name", "")
-                devices_by_name[name] = device
             #
-            for device_name_part in self.capture_name_part_list:
+            available_devices = wurb_core.audio_capture.get_capture_devices()
+            #
+            for config_device_dict in self.config_capture_devices:
                 try:
-                    for device_by_name in devices_by_name.keys():
-                        if device_name_part in device_by_name:
-                            device_info = devices_by_name[device_by_name]
-                            self.capture_device_info = device_info
-                            # Done.
-                            return
-                except:
-                    pass
+                    config_name_part = config_device_dict["device_name"]
+                    # config_sampling_freq_hz = config_device_dict["sampling_freq_hz"]
+                    for device_dict in available_devices:
+                        device_full_name = device_dict["device_name"]
+                        if config_name_part in device_full_name:
+                            sampling_freq_hz = device_dict["sampling_freq_hz"]
 
+                            # if int(config_sampling_freq_hz) == int(sampling_freq_hz):
+                            if int(sampling_freq_hz) > 90000:
+                                self.capture_device = device_dict
+                                # Adjust to config.
+                                if "channels" in config_device_dict:
+                                    self.capture_device[
+                                        "channels"
+                                    ] = config_device_dict.get("channels", "")
+                                # Done.
+                                return
+                except Exception as e:
+                    message = "RecDevices - check_capture_devices-1. Exception: " + str(
+                        e
+                    )
+                    self.logger.debug(message)
             # # Check if Pettersson M500.
             # if not device_name:
             #     if self.pettersson_m500.is_m500_available():
@@ -132,31 +113,53 @@ class RecDevices(object):
             self.capture_device_info = {}
 
         except Exception as e:
-            message = "RecDevices - check_capture_devices. Exception: " + str(e)
+            message = "RecDevices - check_capture_devices-2. Exception: " + str(e)
             self.logger.debug(message)
 
     def check_playback_devices(self):
-        """For asyncio events."""
+        """ """
+        self.playback_device = None
         try:
-            devices = wurb_core.audio_playback.get_playback_devices()
-            devices_by_name = {}
-            for device in devices:
-                name = device.get("device_name", "")
-                devices_by_name[name] = device
             #
-            for device_name_part in self.playback_name_part_list:
+            available_devices = wurb_core.audio_playback.get_playback_devices()
+            #
+            for config_device_dict in self.config_playback_devices:
                 try:
-                    for device_by_name in devices_by_name.keys():
-                        if device_name_part in device_by_name:
-                            device_info = devices_by_name[device_by_name]
-                            self.playback_device_info = device_info
+                    config_name_part = config_device_dict["device_name"]
+                    for device_dict in available_devices:
+                        device_full_name = device_dict["device_name"]
+                        if config_name_part in device_full_name:
+                            self.playback_device = device_dict
+                            # Adjust to config.
+                            if "sampling_freq_hz" in config_device_dict:
+                                self.playback_device[
+                                    "sampling_freq_hz"
+                                ] = config_device_dict.get("sampling_freq_hz", "")
+                            if "period_size" in config_device_dict:
+                                self.playback_device[
+                                    "period_size"
+                                ] = config_device_dict.get("period_size", "")
+                            if "buffer_size" in config_device_dict:
+                                self.playback_device[
+                                    "buffer_size"
+                                ] = config_device_dict.get("buffer_size", "")
+                            if "buffer_max_size" in config_device_dict:
+                                self.playback_device[
+                                    "buffer_max_size"
+                                ] = config_device_dict.get("buffer_max_size", "")
+                            if "in_queue_length" in config_device_dict:
+                                self.playback_device[
+                                    "in_queue_length"
+                                ] = config_device_dict.get(
+                                    "chin_queue_lengthannels", ""
+                                )
                             # Done.
                             return
-                except:
-                    pass
-            # Not found.
-            self.playback_device_info = {}
-
+                except Exception as e:
+                    message = (
+                        "RecDevices - check_playback_devices-1. Exception: " + str(e)
+                    )
+                    self.logger.debug(message)
         except Exception as e:
-            message = "RecDevices - check_playback_devices. Exception: " + str(e)
+            message = "RecDevices - check_playback_devices-2. Exception: " + str(e)
             self.logger.debug(message)
