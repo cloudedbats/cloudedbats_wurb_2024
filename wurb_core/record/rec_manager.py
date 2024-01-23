@@ -166,6 +166,15 @@ class RecManager(object):
             # Perform action.
             if is_rec_mode_on:
                 is_mic_available = wurb_core.rec_devices.is_mic_available()
+                if not is_mic_available:
+                    # Try to find connected microphone.
+                    if wurb_core.alsaaudio_used == False:
+                        # PyAudio needs to be terminated and reloaded.
+                        wurb_core.audio.terminate()
+                        wurb_core.audio = wurb_core.pyaudio.PyAudio()
+                    wurb_core.rec_devices.get_capture_device_info()
+                    is_mic_available = wurb_core.rec_devices.is_mic_available()
+
                 if is_mic_available:
                     if is_scheduler_used:
                         # Check scheduler...

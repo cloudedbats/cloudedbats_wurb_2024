@@ -54,17 +54,21 @@ class RecWorker(object):
                 wurb_core.audio_capture.add_out_queue(self.from_source_queue)
             if self.to_target_queue == None:
                 self.to_target_queue = asyncio.Queue(maxsize=self.queue_max_size)
-            # Clear queues.
-            self.remove_items_from_queue(self.from_source_queue)
-            self.remove_items_from_queue(self.to_target_queue)
+            # # Clear queues.
+            # self.remove_items_from_queue(self.from_source_queue)
+            # self.remove_items_from_queue(self.to_target_queue)
             # Sound capture task.
             if self.source_worker == None:
+                # Clear queue.
+                self.remove_items_from_queue(self.from_source_queue)
                 self.source_worker = asyncio.create_task(
                     self.rec_source_worker(), name="RecWorker source task"
                 )
                 self.logger.debug("REC SOURCE STARTED.")
             # Sound process task.
             if self.process_worker == None:
+                # Clear queue.
+                self.remove_items_from_queue(self.to_target_queue)
                 self.process_worker = asyncio.create_task(
                     self.rec_process_worker(), name="RecWorker process task"
                 )
