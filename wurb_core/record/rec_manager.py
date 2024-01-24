@@ -47,12 +47,22 @@ class RecManager(object):
         # Log connected microphones at startup.
         available_devices = wurb_core.audio_capture.get_capture_devices()
         try:
-            self.logger.debug("Connacted microphones at starup:")
+            self.logger.debug("Connected microphones at startup:")
             for device_dict in available_devices:
                 device_full_name = device_dict["device_name"]
                 sampling_freq_hz = device_dict["sampling_freq_hz"]
+                input_channels = device_dict["input_channels"]
+                channels = "MONO"
+                if input_channels == 2:
+                    channels = "STEREO"
                 message = (
-                    "- " + device_full_name + "   Frequency: " + str(sampling_freq_hz)
+                    "- "
+                    + device_full_name
+                    + "   "
+                    + channels
+                    + " at "
+                    + str(sampling_freq_hz)
+                    + " Hz "
                 )
                 self.logger.debug(message)
         except Exception as e:

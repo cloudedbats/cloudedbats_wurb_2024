@@ -8,21 +8,28 @@ wurb_app:
 audio_capture:
   - device_name: Pettersson
     sampling_freq_hz: 384000
+    channels: MONO
   - device_name: Pettersson
     sampling_freq_hz: 256000
+    channels: MONO
   - device_name: Pettersson # Linux only.
     sampling_freq_hz: 500000
+    channels: MONO
   - device_name: UltraMic # For Dodotronic.
     sampling_freq_hz: 384000
+    channels: MONO
   - device_name: UltraMic # For Dodotronic.
     sampling_freq_hz: 192000
+    channels: MONO
   - device_name: AudioMoth
     sampling_freq_hz: 384000
-  - device_name: Realtek
+    channels: MONO
+  - device_name: Audio # Realtek
     sampling_freq_hz: 192000
+    channels: MONO-LEFT # From STEREO.
   # - device_name: PartOfDeviceName
   #   sampling_freq_hz: 384000
-  #   channels: MONO # STEREO, MONO, MONO-LEFT, MONO-RIGHT.
+  #   channels: MONO # MONO, MONO-LEFT, MONO-RIGHT.
 
 record:
   targets:

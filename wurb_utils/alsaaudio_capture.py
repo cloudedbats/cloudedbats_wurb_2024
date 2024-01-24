@@ -29,6 +29,7 @@ class AlsaAudioCapture:
         self.device_index = None
         self.device_name = ""
         self.channels = None
+        self.config_channels = None
         self.sampling_freq_hz = None
         self.frames_per_buffer = None
         self.buffer_size = None
@@ -49,6 +50,7 @@ class AlsaAudioCapture:
         info_dict["device_index"] = self.device_index
         info_dict["device_name"] = self.device_name
         info_dict["input_channels"] = self.channels
+        info_dict["config_channels"] = self.config_channels
         info_dict["sampling_freq_hz"] = self.sampling_freq_hz
         return info_dict
 
@@ -137,6 +139,7 @@ class AlsaAudioCapture:
         device_index,
         device_name,
         channels,
+        config_channels,
         sampling_freq_hz,
         frames_per_buffer,
         buffer_size,
@@ -145,6 +148,7 @@ class AlsaAudioCapture:
         self.device_index = device_index
         self.device_name = device_name
         self.channels = channels
+        self.config_channels = config_channels
         self.sampling_freq_hz = sampling_freq_hz
         self.frames_per_buffer = frames_per_buffer
         self.buffer_size = buffer_size
@@ -189,15 +193,12 @@ class AlsaAudioCapture:
         """ """
         pmc_capture = None
         self.capture_is_active = True
-        channels = 1
-        if self.channels.upper() in ["STEREO", "MONO-LEFT", "MONO-RIGHT"]:
-            channels = 2
         try:
             self.logger.debug("AlsaAudioCapture - Sound capture started.")
             pmc_capture = alsaaudio.PCM(
                 alsaaudio.PCM_CAPTURE,
                 alsaaudio.PCM_NORMAL,
-                channels=channels,
+                channels=self.channels,
                 rate=self.sampling_freq_hz,
                 format=alsaaudio.PCM_FORMAT_S16_LE,
                 periodsize=self.frames_per_buffer,
@@ -225,9 +226,9 @@ class AlsaAudioCapture:
                     # print("CAPTURE: length: ", length, "   data-len: ", len(in_data_int16))
 
                     # Convert stereo to mono by using either left or right channel.
-                    if self.channels.upper() == "MONO-LEFT":
+                    if self.config_channels.upper() == "MONO-LEFT":
                         in_data_int16 = in_data_int16[0::2].copy()
-                    if self.channels.upper() == "MONO-RIGHT":
+                    if self.config_channels.upper() == "MONO-RIGHT":
                         in_data_int16 = in_data_int16[1::2].copy()
                     # Concatenate
                     in_buffer_int16 = numpy.concatenate(

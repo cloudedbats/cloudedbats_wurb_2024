@@ -93,7 +93,7 @@ class RecDevices(object):
                                 # Adjust to config.
                                 if "channels" in config_device_dict:
                                     self.capture_device[
-                                        "channels"
+                                        "config_channels"
                                     ] = config_device_dict.get("channels", "")
                                 # Done.
                                 return

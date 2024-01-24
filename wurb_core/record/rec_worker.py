@@ -43,6 +43,7 @@ class RecWorker(object):
         self.connected_device_name = ""
         self.connected_device_index = ""
         self.connected_input_channels = ""
+        self.config_input_channels = ""
         self.connected_sampling_freq_hz = ""
 
     def start_recording(self):
@@ -115,6 +116,7 @@ class RecWorker(object):
             self.connected_device_name = device_info.get("device_name", "")
             self.connected_device_index = device_info.get("device_index", "")
             self.connected_input_channels = device_info.get("input_channels", "")
+            self.connected_config_channels = device_info.get("config_channels", "")
             self.connected_sampling_freq_hz = device_info.get("sampling_freq_hz", "")
             if self.connected_device_index == None:
                 self.logger.debug("NO MIC.")
@@ -128,7 +130,8 @@ class RecWorker(object):
             wurb_core.audio_capture.setup(
                 device_index=self.connected_device_index,
                 device_name=self.connected_device_name,
-                channels="MONO",
+                channels=self.connected_input_channels,
+                config_channels=self.connected_config_channels,
                 sampling_freq_hz=int(self.connected_sampling_freq_hz),
                 frames_per_buffer=frames_per_buffer,
                 buffer_size=process_buffer_size,
