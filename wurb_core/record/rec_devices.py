@@ -81,14 +81,13 @@ class RecDevices(object):
             for config_device_dict in self.config_capture_devices:
                 try:
                     config_name_part = config_device_dict["device_name"]
-                    # config_sampling_freq_hz = config_device_dict["sampling_freq_hz"]
+                    config_sampling_freq_hz = config_device_dict["sampling_freq_hz"]
                     for device_dict in available_devices:
                         device_full_name = device_dict["device_name"]
                         if config_name_part in device_full_name:
                             sampling_freq_hz = device_dict["sampling_freq_hz"]
 
-                            # if int(config_sampling_freq_hz) == int(sampling_freq_hz):
-                            if int(sampling_freq_hz) > 90000:
+                            if int(config_sampling_freq_hz) == int(sampling_freq_hz):
                                 self.capture_device = device_dict
                                 # Adjust to config.
                                 if "channels" in config_device_dict:

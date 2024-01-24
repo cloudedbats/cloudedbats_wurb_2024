@@ -164,10 +164,11 @@ class AudioCapture:
                 # print(numpy.max(in_data_int16))
 
                 # Convert stereo to mono by using either left or right channel.
-                if self.config_channels.upper() == "MONO-LEFT":
-                    in_data_int16 = in_data_int16[0::2].copy()
-                if self.config_channels.upper() == "MONO-RIGHT":
-                    in_data_int16 = in_data_int16[1::2].copy()
+                if self.channels == 2:
+                    if self.config_channels.upper() == "MONO-LEFT":
+                        in_data_int16 = in_data_int16[0::2].copy()
+                    if self.config_channels.upper() == "MONO-RIGHT":
+                        in_data_int16 = in_data_int16[1::2].copy()
                 # Concatenate
                 in_buffer_int16 = numpy.concatenate((in_buffer_int16, in_data_int16))
                 while len(in_buffer_int16) >= self.buffer_size:
