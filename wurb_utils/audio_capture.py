@@ -60,6 +60,9 @@ class AudioCapture:
                 device_info = self.audio.get_device_info_by_index(index)
                 device_name = device_info.get("name", "")
                 input_channels = device_info.get("maxInputChannels", "")
+                # # Test for Windows to remove devices with wrong rate.
+                # host_api = device_info.get("hostApi", "")
+                # if (int(input_channels) > 0) and (host_api == 2):
                 if int(input_channels) > 0:
                     info_dict = {}
                     info_dict["device_name"] = device_name
