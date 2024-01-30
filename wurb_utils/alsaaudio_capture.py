@@ -85,18 +85,16 @@ class AlsaAudioCapture:
                             card_index = card_dict.get("card_index", "")
                             if card_index != "":
                                 info_dict = {}
+                                info_dict["device_index"] = card_index
                                 info_dict["device_name"] = card_dict.get(
                                     "card_name", ""
                                 )
-                                info_dict["input_channels"] = 1  # TODO.
-                                info_dict["device_index"] = card_index
-
-                                info_dict[
-                                    "sampling_freq_hz"
-                                ] = self.get_max_sampling_freq(card_index)
-                                # info_dict["sampling_freq_hz"] = 384000.0
-
-                                # print("ALSA info_dict: ", info_dict)
+                                #
+                                more_info = self.get_more_device_info(card_index)
+                                info_dict["input_channels"] = more_info["channels"]
+                                info_dict["sampling_freq_hz"] = more_info["max_freq_hz"]
+                                info_dict["freq_list"] = more_info["freq_list"]
+                                print( info_dict["device_name"], ": ",  more_info["freq_list"])
 
                                 devices.append(info_dict)
         except Exception as e:
@@ -104,8 +102,9 @@ class AlsaAudioCapture:
             self.logger.debug(message)
         return devices
 
-    def get_max_sampling_freq(self, card_index):
+    def get_more_device_info(self, card_index):
         """Only for capture devices."""
+        more_info = {}
         max_freq = -99
         inp = None
         try:
@@ -113,26 +112,31 @@ class AlsaAudioCapture:
                 inp = alsaaudio.PCM(
                     alsaaudio.PCM_CAPTURE,
                     alsaaudio.PCM_NORMAL,
-                    channels=1,
                     format=alsaaudio.PCM_FORMAT_S16_LE,
                     device="sysdefault",
                     cardindex=card_index,
                 )
+                # Add more info.
+                info = inp.info()
+                more_info["channels"] = info["channels"]
+                more_info["default_freq_hz"] = info["rate"]
                 # Rates may be list, tuple or a single value.
                 rates = inp.getrates()
                 if type(rates) in [list, tuple]:
+                    more_info["freq_list"] = list(inp.getrates())
                     max_freq = inp.getrates()[-1]
+                    more_info["max_freq_hz"] = max_freq
                 else:
                     max_freq = inp.getrates()
+                    more_info["freq_list"] = [max_freq]
+                    more_info["max_freq_hz"] = max_freq
             except Exception as e:
-                message = "AlsaAudioCapture - get_max_sampling_freq. Exception: " + str(
-                    e
-                )
+                message = "AlsaAudioCapture - get_more_device_info. Exception: " + str(e)
                 self.logger.debug(message)
         finally:
             if inp:
                 inp.close()
-        return max_freq
+        return more_info
 
     def setup(
         self,
@@ -226,7 +230,7 @@ class AlsaAudioCapture:
                     # print("CAPTURE: length: ", length, "   data-len: ", len(in_data_int16))
 
                     # Convert stereo to mono by using either left or right channel.
-                    if self.channels == 2:
+                    if self.config_channels in ["MONO-LEFT", "MONO-RIGHT"]:
                         if self.config_channels.upper() == "MONO-LEFT":
                             in_data_int16 = in_data_int16[0::2].copy()
                         if self.config_channels.upper() == "MONO-RIGHT":

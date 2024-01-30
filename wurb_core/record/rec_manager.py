@@ -51,6 +51,7 @@ class RecManager(object):
             for device_dict in available_devices:
                 device_full_name = device_dict["device_name"]
                 sampling_freq_hz = device_dict["sampling_freq_hz"]
+                freq_list = device_dict.get("freq_list", sampling_freq_hz)
                 input_channels = device_dict["input_channels"]
                 channels = "MONO"
                 if input_channels == 2:
@@ -61,7 +62,8 @@ class RecManager(object):
                     + "   "
                     + channels
                     + " at "
-                    + str(sampling_freq_hz)
+                    # + str(sampling_freq_hz)
+                    + str(freq_list)
                     + " Hz "
                 )
                 self.logger.debug(message)
