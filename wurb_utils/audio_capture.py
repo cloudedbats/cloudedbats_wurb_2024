@@ -9,6 +9,11 @@ import logging
 import numpy
 import time
 
+try:
+    import sounddevice
+except:
+    pass
+
 
 class AudioCapture:
     """ """
@@ -50,13 +55,34 @@ class AudioCapture:
 
     def get_capture_devices(self):
         """ """
+        # Do not check if running.
         if self.capture_is_active == True:
             info_dict = self.get_selected_capture_device()
             return [info_dict]
+
+        # Select a specific hostapi if multiple are used.
+        valid_hostapi_names = []
+        # valid_hostapi_names += ["MME"] # On Windows.
+        # valid_hostapi_names += ["Windows DirectSound"] # On Windows.
+        valid_hostapi_names += ["Windows WASAPI"]  # On Windows.
+        # valid_hostapi_names += ["Windows WDM-KS"] # On Windows.
+        valid_hostapi_names += ["Core Audio"]  # On macOS.
+        #
+        device_id_list = []
+        hostapis = sounddevice.query_hostapis()
+        for hostapi in hostapis:
+            hostapi_name = hostapi["name"]
+            devices = hostapi["devices"]
+            if hostapi_name in valid_hostapi_names:
+                device_id_list += devices
+        # Fallback if hostapi not found. Use all.
+        if len(device_id_list) == 0:
+            number_of_devices = self.audio.get_device_count()
+            device_id_list = range(number_of_devices)
+        #
         devices = []
         try:
-            number_of_devices = self.audio.get_device_count()
-            for index in range(number_of_devices):
+            for index in device_id_list:
                 device_info = self.audio.get_device_info_by_index(index)
                 device_name = device_info.get("name", "")
                 input_channels = device_info.get("maxInputChannels", "")
@@ -167,7 +193,7 @@ class AudioCapture:
                 # print(numpy.max(in_data_int16))
 
                 # Convert stereo to mono by using either left or right channel.
-                if self.channels == 2:
+                if self.config_channels in ["MONO-LEFT", "MONO-RIGHT"]:
                     if self.config_channels.upper() == "MONO-LEFT":
                         in_data_int16 = in_data_int16[0::2].copy()
                     if self.config_channels.upper() == "MONO-RIGHT":

@@ -295,7 +295,7 @@ class RecWorker(object):
                                 # Accumulate in file queue.
                                 if first_sound_detected == True:
                                     sound_detected_counter += 1
-                                    if detected_peak_dbfs and detected_peak_dbfs:
+                                    if detected_peak_dbfs and max_peak_dbfs:
                                         if detected_peak_dbfs > max_peak_dbfs:
                                             max_peak_hz = detected_peak_hz
                                             max_peak_dbfs = detected_peak_dbfs

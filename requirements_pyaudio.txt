@@ -9,6 +9,7 @@ requests
 # Audio.
 ### pyalsaaudio # For Raspberry Pi.
 pyaudio # For macOS, Windows, etc.
+sounddevice # For macOS, Windows, etc.
 # Calculations.
 numpy
 scipy
