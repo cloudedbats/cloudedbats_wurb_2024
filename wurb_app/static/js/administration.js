@@ -14,6 +14,62 @@ function adminToggleSettings() {
     };
 }
 
+function adminSourceLoad() {
+    getAdminSourceDirs()
+}
+
+function adminSourceChanged() {
+    adminSelectedSourceValue = byId("adminSelectSourceId").value;
+    adminSelectedNightValue = "";
+    var select = byId("adminSelectNightId");
+    while (select.firstChild) {
+        select.removeChild(select.firstChild);
+    }
+    getAdminNights(adminSelectedSourceValue);
+
+}
+
+function adminNightChanged() {
+    adminSelectedSourceValue = byId("adminSelectSourceId").value;
+    adminSelectedNightValue = byId("adminSelectNightId").value;
+    getAdminNightInfo(adminSelectedSourceValue, adminSelectedNightValue)
+}
+
+function adminUpdate() {
+    adminSelectedSourceValue = byId("adminSelectSourceId").value;
+    getAdminNights(adminSelectedSourceValue);
+}
+
+function adminToggleViewData() {
+    alert("adminToggleViewData...");
+}
+
+function adminToggleViewMap() {
+    alert("adminToggleViewMap...");
+}
+
+function adminToggleViewMap() {
+    alert("adminToggleViewMap...");
+}
+
+function adminPrevious() {
+    optionList = byId("adminSelectNightId");
+    optionIndex = optionList.selectedIndex;
+    if (optionIndex > 1) {
+        optionList.selectedIndex = optionIndex - 1;
+    }
+    adminNightChanged()
+}
+
+function adminNext() {
+    optionList = byId("adminSelectNightId");
+    optionIndex = optionList.selectedIndex;
+    if (optionIndex < optionList.options.length - 1) {
+        optionList.selectedIndex = optionIndex + 1;
+    }
+    adminNightChanged()
+}
+
 function adminCommand(command) {
     // let selectedValue = byId("recModeSelectId").options[byId("recModeSelectId").selectedIndex].value
     hideDivision(byId("confirmRemoveQ0Id"));
@@ -32,63 +88,8 @@ function adminCommand(command) {
         var sourceId = byId("adminSelectSourceId").value;
         var nightId = byId("adminSelectNightId").value;
         adminExecuteCommand(sourceId, nightId, command);
+
         adminUpdate()
     }
 
-}
-
-function adminSourceLoad() {
-    getAdminSourceDirs()
-}
-
-function adminSourceChanged() {
-    adminSelectedSourceValue = byId("adminSelectSourceId").value;
-    adminSelectedNightValue = "";
-    var select = byId("adminSelectNightId");
-    while (select.firstChild) {
-        select.removeChild(select.firstChild);
-    }
-    getAdminNights(adminSelectedSourceValue);
-
-}
-
-function adminToggleViewData() {
-    alert("adminToggleViewData...");
-}
-
-function adminToggleViewMap() {
-    alert("adminToggleViewMap...");
-}
-
-function adminToggleViewMap() {
-    alert("adminToggleViewMap...");
-}
-
-function adminNightChanged() {
-    adminUpdate()
-}
-
-function adminPrevious() {
-    optionList = byId("adminSelectNightId");
-    optionIndex = optionList.selectedIndex;
-    if (optionIndex > 1) {
-        optionList.selectedIndex = optionIndex - 1;
-    }
-    adminUpdate()
-}
-
-function adminNext() {
-    optionList = byId("adminSelectNightId");
-    optionIndex = optionList.selectedIndex;
-    if (optionIndex < optionList.options.length - 1) {
-        optionList.selectedIndex = optionIndex + 1;
-    }
-    adminUpdate()
-}
-
-function adminUpdate() {
-    adminSelectedSourceValue = byId("adminSelectSourceId").value;
-    adminSelectedNightValue = byId("adminSelectNightId").value;
-    getAdminNights(selectedSourceValue);
-    getAdminNightInfo(adminSelectedSourceValue, adminSelectedNightValue);
 }

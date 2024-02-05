@@ -31,7 +31,11 @@ async function getAdminSourceDirs() {
             }
             // Select first row as default.
             var select = byId("adminSelectSourceId");
-            select.selectedIndex = 1
+            if (json.length >= 1) {
+                select.selectedIndex = 1
+            } else {
+                select.selectedIndex = 0
+            }
             adminSourceChanged()
         })
         .catch(function (err) {
@@ -81,9 +85,13 @@ async function getAdminNights(sourceId) {
                 }
             }
             if (found == false) {
-                select.selectedIndex = 1;
-                adminNightChanged()
+                if (json.length >= 1) {
+                    select.selectedIndex = 1
+                } else {
+                    select.selectedIndex = 0
+                }
             }
+            adminNightChanged()
         })
         .catch(function (err) {
             console.warn("Error in javascript fetch: ", err);
@@ -117,7 +125,6 @@ async function getAdminNightInfo(sourceId, nightId) {
             }
         })
         .then(function (json) {
-
             byId("adminMonitoringNightId").textContent = json.monitoringNight
             byId("adminDirPathId").textContent = json.dirPath
             byId("adminNumberOfSoundFilesId").textContent = json.numberOfSoundFiles

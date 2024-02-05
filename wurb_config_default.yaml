@@ -19,27 +19,64 @@ audio_capture:
 
 record:
   targets:
-  #   - id: usb
-  #     name: USB
-  #     rec_dir: media/pi/REPLACE-USB-NAME/wurb_recordings
-  #   - id: ssd
-  #     name: SSD
-  #     rec_dir: media/ssd/wurb_recordings
+    - id: sda1
+      name: USB-1
+      os: Linux
+      media_path: /media/USB-sda1
+      rec_dir: wurb_recordings
+    - id: sdb1
+      name: USB-2
+      os: Linux
+      media_path: /media/USB-sdb1
+      rec_dir: wurb_recordings
+    # - id: ssd
+    #   name: SSD
+    #   os: Linux
+    #   media_path: /mnt/ssd
+    #   rec_dir: wurb_recordings
+    # - id: sharedFolderWurb01
+    #   name: Shared folder WURB01
+    #   os: Windows
+    #   rec_dir: C:/Users/Public/wurb01/wurb_recordings
+    # - id: usbWurb01
+    #   name: USB Wurb01
+    #   os: Darwin
+    #   media_path: /Volumes/Wurb01
+    #   rec_dir: wurb_recordings
     - id: local
       name: Local
       rec_dir: ../wurb_recordings
+      free_disk_limit: 500 # Unit MB.
 
 annotations:
   sources:
     - id: local
       name: Local
       rec_dir: ../wurb_recordings
+    - id: sda1
+      name: USB-1
+      os: Linux
+      media_path: /media/USB-sda1
+      rec_dir: wurb_recordings
+    - id: sdb1
+      name: USB-2
+      os: Linux
+      media_path: /media/USB-sdb1
+      rec_dir: wurb_recordings
     # - id: sharedFolderWurb01
     #   name: Shared folder WURB01
+    #   os: Windows
     #   rec_dir: C:/Users/Public/wurb01/wurb_recordings
+    # - id: usbWurb01
+    #   name: USB Wurb01
+    #   os: Darwin
+    #   media_path: /Volumes/Wurb01
+    #   rec_dir: wurb_recordings
     # - id: ssd
     #   name: SSD
-    #   rec_dir: /media/ssd/wurb_recordings
+    #   os: Linux
+    #   media_path: /mnt/ssd
+    #   rec_dir: wurb_recordings
 
 gps_reader:
   min_number_of_satellites: 3

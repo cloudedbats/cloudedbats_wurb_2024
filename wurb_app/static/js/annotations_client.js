@@ -31,7 +31,11 @@ async function getSourceDirs() {
             }
             // Select first row as default.
             var select = byId("annoSelectSourceId");
-            select.selectedIndex = 1
+            if (json.length >= 1) {
+                select.selectedIndex = 1
+            } else {
+                select.selectedIndex = 0
+            }
             annoSourceChanged()
         })
         .catch(function (err) {
@@ -81,9 +85,14 @@ async function getNights(sourceId) {
                 }
             }
             if (found == false) {
-                select.selectedIndex = 1;
-                annoNightChanged()
+                if (json.length >= 1) {
+                    select.selectedIndex = 1
+                } else {
+                    select.selectedIndex = 0
+                }
+                // annoNightChanged()
             }
+            annoNightChanged()
         })
         .catch(function (err) {
             console.warn("Error in javascript fetch: ", err);
@@ -133,9 +142,14 @@ async function getRecordings(sourceId, nightId) {
                 }
             }
             if (found == false) {
-                select.selectedIndex = 1;
-                annoRecChanged()
+                if (json.length >= 1) {
+                    select.selectedIndex = 1
+                } else {
+                    select.selectedIndex = 0
+                }
+                // annoRecChanged()
             }
+            annoRecChanged()
         })
         .catch(function (err) {
             console.warn("Error in javascript fetch: ", err);

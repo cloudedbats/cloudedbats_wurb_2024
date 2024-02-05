@@ -43,7 +43,6 @@ function annoSourceChanged() {
 function annoNightChanged() {
     selectedSourceValue = byId("annoSelectSourceId").value;
     selectedNightValue = byId("annoSelectNightId").value;
-    selectedRecValue = byId("annoSelectRecId").value;
     var select = byId("annoSelectRecId");
     while (select.firstChild) {
         select.removeChild(select.firstChild);
@@ -60,11 +59,7 @@ function annoRecChanged() {
 
 function annoUpdate() {
     selectedSourceValue = byId("annoSelectSourceId").value;
-    selectedNightValue = byId("annoSelectNightId").value;
-    selectedRecValue = byId("annoSelectRecId").value;
     getNights(selectedSourceValue);
-    getRecordings(selectedSourceValue, selectedNightValue)
-    getRecordInfo(selectedSourceValue, selectedNightValue, selectedRecValue);
 }
 
 // function annoClearFilter() {
@@ -145,10 +140,10 @@ function annoFirst() {
     if (textContent == "Previous night") {
         optionList = byId("annoSelectNightId");
         optionIndex = optionList.selectedIndex;
-        optionList.selectedIndex = optionIndex - 1;
-        var sourceId = byId("annoSelectSourceId").value;
-        var nightId = byId("annoSelectNightId").value;
-        getRecordInfo(sourceId, nightId, "");
+        if (optionIndex > 1) {
+            optionList.selectedIndex = optionIndex - 1;
+            annoNightChanged();
+        }
     } else {
         var sourceId = byId("annoSelectSourceId").value;
         var nightId = byId("annoSelectNightId").value;
@@ -173,10 +168,10 @@ function annoLast() {
     if (textContent == "Next night") {
         optionList = byId("annoSelectNightId");
         optionIndex = optionList.selectedIndex;
-        optionList.selectedIndex = optionIndex + 1;
-        var sourceId = byId("annoSelectSourceId").value;
-        var nightId = byId("annoSelectNightId").value;
-        getRecordInfo(sourceId, nightId, "");
+        if (optionIndex < (optionList.length - 1)) {
+            optionList.selectedIndex = optionIndex + 1;
+            annoNightChanged();
+        }
     } else {
         var sourceId = byId("annoSelectSourceId").value;
         var nightId = byId("annoSelectNightId").value;

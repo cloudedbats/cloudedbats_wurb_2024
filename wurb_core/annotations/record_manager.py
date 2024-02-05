@@ -7,6 +7,7 @@
 # import asyncio
 import logging
 import pathlib
+import platform
 
 # import datetime
 # import dateutil.parser
@@ -37,17 +38,20 @@ class RecordManager(object):
 
     def configure(self):
         """ """
+        platform_os = platform.system()  # Linux, Windows or Darwin (for macOS).
         sources = wurb_core.config.get("annotations.sources")
         for source in sources:
             id = source.get("id", "")
+            os = source.get("os", "")
             if id:
-                # For rec_sources.
-                source_dict = {}
-                source_dict["id"] = source.get("id", "")
-                source_dict["name"] = source.get("name", "")
-                self.rec_sources.append(source_dict)
-                # For rec_sources_by_id.
-                self.rec_sources_by_id[id] = source
+                if os in [platform_os, ""]:
+                    # For rec_sources.
+                    source_dict = {}
+                    source_dict["id"] = source.get("id", "")
+                    source_dict["name"] = source.get("name", "")
+                    self.rec_sources.append(source_dict)
+                    # For rec_sources_by_id.
+                    self.rec_sources_by_id[id] = source
 
     def get_rec_sources(self):
         """ """
@@ -58,9 +62,12 @@ class RecordManager(object):
         result = ""
         source = self.rec_sources_by_id.get(source_id, "")
         if source:
+            media_path = source.get("media_path", "")
             source_dir = source.get("rec_dir", "")
             if source_dir:
-                result = pathlib.Path(wurb_core.executable_path, source_dir).resolve()
+                result = pathlib.Path(
+                    wurb_core.executable_path, media_path, source_dir
+                ).resolve()
         return result
 
     def get_rec_nights(self, source_id):

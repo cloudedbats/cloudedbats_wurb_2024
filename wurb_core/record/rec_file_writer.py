@@ -60,9 +60,13 @@ class RecFileWriter(object):
 
     def prepare_rec_target_dir(self):
         """ """
-        target_directory = pathlib.Path(
-            wurb_core.executable_path.parent, "wurb_recordings"
-        )
+
+        target_directory = wurb_core.wurb_rpi.get_wavefile_target_dir_path()
+
+        # target_directory = pathlib.Path(
+        #     wurb_core.executable_path.parent, "wurb_recordings"
+        # )
+
         file_directory = wurb_core.wurb_settings.get_setting("fileDirectory")
         date_option = wurb_core.wurb_settings.get_setting("fileDirectoryDateOption")
 

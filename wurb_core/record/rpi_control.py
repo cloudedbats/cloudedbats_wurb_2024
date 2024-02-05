@@ -10,6 +10,7 @@ import os
 import datetime
 import pathlib
 import psutil
+import platform
 
 import wurb_core
 
@@ -32,9 +33,11 @@ class WurbRaspberryPi(object):
     def clear(self):
         """ """
         self.os_raspbian = None
+        self.rec_targets = []
 
     def configure(self):
         """ """
+        self.rec_targets = wurb_core.config.get("record.targets")
 
     async def rpi_control(self, command):
         """ """
@@ -98,68 +101,47 @@ class WurbRaspberryPi(object):
     #         dir_path.mkdir(parents=True)
     #     return dir_path
 
-    # def get_wavefile_target_dir_path(self):
-    #     """ """
-    #     file_directory = wurb_core.wurb_settings.get_setting("fileDirectory")
-    #     # Add date to file directory.
-    #     date_option = wurb_core.wurb_settings.get_setting("fileDirectoryDateOption")
-    #     used_date_str = ""
-    #     if date_option in ["date-pre-true", "date-post-true"]:
-    #         used_date = datetime.datetime.now()
-    #         used_date_str = used_date.strftime("%Y-%m-%d")
-    #     if date_option in ["date-pre-after", "date-post-after"]:
-    #         used_date = datetime.datetime.now() + datetime.timedelta(hours=12)
-    #         used_date_str = used_date.strftime("%Y-%m-%d")
-    #     if date_option in ["date-pre-before", "date-post-before"]:
-    #         used_date = datetime.datetime.now() - datetime.timedelta(hours=12)
-    #         used_date_str = used_date.strftime("%Y-%m-%d")
-    #     if date_option in ["date-pre-true", "date-pre-after", "date-pre-before"]:
-    #         file_directory = used_date_str + "_" + file_directory
-    #     if date_option in ["date-post-true", "date-post-after", "date-post-before"]:
-    #         file_directory = file_directory + "_" + used_date_str
-    #     # Defaults for RPi.
-    #     target_rpi_media_path = "/media/pi/"  # For RPi USB.
-    #     target_rpi_internal_path = "/home/pi/"  # For RPi SD card with user 'pi'.
-    #     dir_path = None
+    def get_wavefile_target_dir_path(self):
+        """ """
+        try:
+            # Check mounted USB memory sticks. At least 20 MB left.
+            platform_os = platform.system()  # Linux, Windows or Darwin (for macOS).
 
-    #     # Example code:
-    #     # hdd = psutil.disk_usage(str(dir_path))
-    #     # total_disk = hdd.total / (2**20)
-    #     # used_disk = hdd.used / (2**20)
-    #     # free_disk = hdd.free / (2**20)
-    #     # percent_disk = hdd.percent
-    #     # print("Total disk: ", total_disk, "MB")
-    #     # print("Used disk: ", used_disk, "MB")
-    #     # print("Free disk: ", free_disk, "MB")
-    #     # print("Percent: ", percent_disk, "%")
+            for rec_target in self.rec_targets:
+                media_path = rec_target.get("media_path", "")
+                media_path = pathlib.Path(media_path)
+                os = rec_target.get("os", "")
+                rec_dir = rec_target.get("rec_dir", "")
+                free_disk_limit = rec_target.get("free_disk_limit", 100)  # Unit MB.
+                if os in [platform_os, ""]:
+                    # Directory may exist even when no USB attached.
+                    # Use is_mount instead of exists.
+                    if media_path.is_mount():
+                        hdd = psutil.disk_usage(str(media_path))
+                        free_disk = hdd.free / (2**20)  # To MB.
+                        free_disk_limit = float(free_disk_limit)
+                        if free_disk >= free_disk_limit:  # 20 MB.
+                            # Return when media is found.
+                            return pathlib.Path(media_path, rec_dir)
 
-    #     # Check mounted USB memory sticks. At least 20 MB left.
-    #     rpi_media_path = pathlib.Path(target_rpi_media_path)
-    #     if rpi_media_path.exists():
-    #         for usb_stick_name in sorted(list(rpi_media_path.iterdir())):
-    #             usb_stick_path = pathlib.Path(rpi_media_path, usb_stick_name)
-    #             # Directory may exist even when no USB attached.
-    #             if usb_stick_path.is_mount():
-    #                 hdd = psutil.disk_usage(str(usb_stick_path))
-    #                 free_disk = hdd.free / (2 ** 20)  # To MB.
-    #                 if free_disk >= 20.0:  # 20 MB.
-    #                     return pathlib.Path(usb_stick_path, file_directory)
+            message = "Not enough space left to store recordings."
+            self.logger.error(message)
+        except Exception as e:
+            message = "Failed to find media for recordings. Exception: " + str(e)
+            self.logger.debug(message)
 
-    #     # Check internal SD card. At least 500 MB left.
-    #     rpi_internal_path = pathlib.Path(target_rpi_internal_path)
-    #     if rpi_internal_path.exists():
-    #         hdd = psutil.disk_usage(str(rpi_internal_path))
-    #         free_disk = hdd.free / (2 ** 20)  # To MB.
-    #         if free_disk >= 500.0:  # 500 MB.
-    #             return pathlib.Path(rpi_internal_path, "wurb_recordings", file_directory)
-    #         else:
-    #             message = "RPi Not enough space left on RPi SD card."
-    #             self.logger.error(message)
-    #             return None  # Not enough space left on RPi SD card.
+        return None
 
-    #     # Default for not Raspberry Pi.
-    #     dir_path = pathlib.Path("wurb_recordings", file_directory)
-    #     return dir_path
+        # Example code for psutil.disk_usage:
+        # hdd = psutil.disk_usage(str(dir_path))
+        # total_disk = hdd.total / (2**20)
+        # used_disk = hdd.used / (2**20)
+        # free_disk = hdd.free / (2**20)
+        # percent_disk = hdd.percent
+        # print("Total disk: ", total_disk, "MB")
+        # print("Used disk: ", used_disk, "MB")
+        # print("Free disk: ", free_disk, "MB")
+        # print("Percent: ", percent_disk, "%")
 
     def is_os_raspbian(self):
         """Check OS version for Raspberry Pi."""
