@@ -116,12 +116,16 @@ class WurbRaspberryPi(object):
                 if os in [platform_os, ""]:
                     # Directory may exist even when no USB attached.
                     # Use is_mount instead of exists.
-                    if media_path.is_mount():
-                        hdd = psutil.disk_usage(str(media_path))
-                        free_disk = hdd.free / (2**20)  # To MB.
-                        free_disk_limit = float(free_disk_limit)
-                        if free_disk >= free_disk_limit:  # 20 MB.
-                            # Return when media is found.
+                    if platform_os == "Linux":
+                        if media_path.is_mount():
+                            hdd = psutil.disk_usage(str(media_path))
+                            free_disk = hdd.free / (2**20)  # To MB.
+                            free_disk_limit = float(free_disk_limit)
+                            if free_disk >= free_disk_limit:  # 20 MB.
+                                # Return when media is found.
+                                return pathlib.Path(media_path, rec_dir)
+                    else:
+                        if media_path.exists():
                             return pathlib.Path(media_path, rec_dir)
 
             message = "Not enough space left to store recordings."

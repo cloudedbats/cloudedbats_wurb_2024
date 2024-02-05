@@ -29,18 +29,19 @@ record:
       os: Linux
       media_path: /media/USB-sdb1
       rec_dir: wurb_recordings
+    - id: sharedFolder
+      name: Shared folder
+      os: Windows
+      media_path: C:/Users/Public/Bats
+      rec_dir: wurb_recordings
     # - id: ssd
     #   name: SSD
     #   os: Linux
     #   media_path: /mnt/ssd
     #   rec_dir: wurb_recordings
-    # - id: sharedFolderWurb01
-    #   name: Shared folder WURB01
-    #   os: Windows
-    #   rec_dir: C:/Users/Public/wurb01/wurb_recordings
     # - id: usbWurb01
     #   name: USB Wurb01
-    #   os: Darwin
+    #   os: Darwin # Darwin=macOS.
     #   media_path: /Volumes/Wurb01
     #   rec_dir: wurb_recordings
     - id: local
@@ -63,19 +64,20 @@ annotations:
       os: Linux
       media_path: /media/USB-sdb1
       rec_dir: wurb_recordings
-    # - id: sharedFolderWurb01
-    #   name: Shared folder WURB01
-    #   os: Windows
-    #   rec_dir: C:/Users/Public/wurb01/wurb_recordings
-    # - id: usbWurb01
-    #   name: USB Wurb01
-    #   os: Darwin
-    #   media_path: /Volumes/Wurb01
-    #   rec_dir: wurb_recordings
+    - id: sharedFolder
+      name: Shared folder
+      os: Windows
+      media_path: C:/Users/Public/Bats
+      rec_dir: wurb_recordings
     # - id: ssd
     #   name: SSD
     #   os: Linux
     #   media_path: /mnt/ssd
+    #   rec_dir: wurb_recordings
+    # - id: usbWurb01
+    #   name: USB Wurb01
+    #   os: Darwin
+    #   media_path: /Volumes/Wurb01
     #   rec_dir: wurb_recordings
 
 gps_reader:
