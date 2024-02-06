@@ -6,9 +6,9 @@ After=network.target
 [Service]
 Restart=always
 TimeoutStopSec=10s
-User=pi
-WorkingDirectory=/home/pi/cloudedbats_wurb_2024
-ExecStart=/home/pi/cloudedbats_wurb_2024/venv/bin/python3 /home/pi/cloudedbats_wurb_2024/wurb_main.py
+User=wurb
+WorkingDirectory=/home/wurb/cloudedbats_wurb_2024
+ExecStart=/home/wurb/cloudedbats_wurb_2024/venv/bin/python3 /home/wurb/cloudedbats_wurb_2024/wurb_main.py
 
 [Install]
 WantedBy=multi-user.target

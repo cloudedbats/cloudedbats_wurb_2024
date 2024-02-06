@@ -41,7 +41,7 @@ class WurbRaspberryPi(object):
 
     async def rpi_control(self, command):
         """ """
-        # First check: OS Raspbian. Only valid for Raspbian and user pi.
+        # First check: OS Raspbian. Only valid for Raspverry Pi OS.
         if self.is_os_raspbian():
             # Select command.
             if command == "rpiShutdown":
@@ -63,7 +63,7 @@ class WurbRaspberryPi(object):
             self.logger.warning(message)
 
     async def set_detector_time(self, posix_time_s, cmd_source=""):
-        """Only valid for Raspbian and user pi."""
+        """Only valid for Raspbian and user wurb."""
         try:
             local_datetime = datetime.datetime.fromtimestamp(posix_time_s)
             # utc_datetime = datetime.datetime.utcfromtimestamp(posix_time_s)
@@ -79,8 +79,8 @@ class WurbRaspberryPi(object):
             self.logger.info(message)
             # First check: OS Raspbian.
             if self.is_os_raspbian():
-                # Second check: User pi exists. Perform: "date --set".
-                os.system('cd /home/pi && sudo date --set "' + time_string + '"')
+                # Second check: User wurb exists. Perform: "date --set".
+                os.system('cd /home/wurb && sudo date --set "' + time_string + '"')
             else:
                 # Logging.
                 message = "Detector time update failed, not Raspbian OS."
@@ -91,7 +91,7 @@ class WurbRaspberryPi(object):
 
     # def get_settings_dir_path(self):
     #     """ """
-    #     rpi_dir_path = "/home/pi/"  # For RPi SD card with user 'pi'.
+    #     rpi_dir_path = "/home/wurb/"  # For RPi SD card with user 'wurb'.
     #     # Default for not Raspberry Pi.
     #     dir_path = pathlib.Path("wurb_settings")
     #     if pathlib.Path(rpi_dir_path).exists():
@@ -177,7 +177,7 @@ class WurbRaspberryPi(object):
         self.logger.info(message)
         await asyncio.sleep(1.0)
         #
-        os.system("cd /home/pi && sudo shutdown -h now")
+        os.system("cd /home/wurb && sudo shutdown -h now")
 
     async def rpi_reboot(self):
         """ """
@@ -187,7 +187,7 @@ class WurbRaspberryPi(object):
             self.logger.info(message)
             await asyncio.sleep(1.0)
             #
-            os.system("cd /home/pi && sudo reboot")
+            os.system("cd /home/wurb && sudo reboot")
         except Exception as e:
             message = "WurbRaspberryPi - rpi_reboot. Exception: " + str(e)
             self.logger.debug(message)

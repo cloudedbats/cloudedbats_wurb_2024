@@ -171,8 +171,8 @@ class RecFileWriter(object):
         self.wave_file.setframerate(self.sampling_freq_hz)
         # Logging.
         target_path_str = str(self.rec_target_dir_path)
-        target_path_str = target_path_str.replace("/media/pi/", "USB:")
-        target_path_str = target_path_str.replace("/home/pi/", "SD-card:/home/pi/")
+        target_path_str = target_path_str.replace("/media/", "USB:/media/")
+        target_path_str = target_path_str.replace("/home/wurb/", "Local:/home/wurb/")
         message_rec_type = ""
         if self.rec_type == "TE":
             message_rec_type = "(TE) "
