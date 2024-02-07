@@ -9,23 +9,23 @@ That version is well tested by many users and works well
 both as a mobile detector and for stationary use.
 
 More info here:
-https://github.com/cloudedbats/cloudedbats_wurb_2020
+<https://github.com/cloudedbats/cloudedbats_wurb_2020>
 
 ## Introduction
 
 This GitHub repository contains the software needed to build a bat detector
 that can be used both for active and passive monitoring.
 
-The software is completely open and free.
+The software is completely open and free, based on the MIT software license.
 
-Please also share the recordings made by this software for free (CC0 or CC-BY) because
-we have to cooperate more to learn more about bats (but it's only a recommendation,
-it's ok if you just store all recording on you own drive).
+Please also consider sharing the recordings made by this software for free
+(with the license CC0 or CC-BY). We have to collaborate more to learn
+more about bats.
 
-What you need to build your own bat detector is this:
+What you need to build your own bat detector is:
 
 - An ultrasonic USB microphone. Normally one that can sample at 384 kHz, but 192 kHz will
-be enough for common bat species.
+be enough for many common bat species.
 - A Raspberry Pi computer. Raspberry Pi 5 is recommended but it will work on other models too.
 - An SD card for all software and settings, recordings, etc.
 - Power supply. 5V USB charger or Powerbank will work in most cases.
@@ -50,7 +50,7 @@ Another page called "Administration" can then use this information in various wa
 For example, it will be possible to remove trash files directly in the detector,
 or to generate an Excel report containing annotations and other useful metadata.
 
-Another difference is that the new software is more generic and it will be possible to 
+Another difference is that the new software is more generic and it will be possible to
 generate executable files for both Windows and macOS.
 
 ## For developers and early adopters
@@ -93,6 +93,9 @@ This is my primary test setup:
 - Any 5V power supply (including solar panel + LiFePO4 battery).
 - Ethernet cable or HUAWEI E3372 for 4G/LTE.
 (both are optional but good during test and development when the detector is running as a WiFi hotspot).
+
+By default microphones from Pettersson, Dodotronic, AudioMoth, etc. are identified automatically.
+Other microphones can be used after modifications in the configuration file.
 
 ### Install the Raspberry Pi OS
 
@@ -149,7 +152,7 @@ Now it should be up and running. Start a web browser with this address:
 
 ### Extra on Raspberry Pi
 
-This is needed if you are planning to use the Pettersson M500 microphone, 
+This is needed if you are planning to use the Pettersson M500 microphone,
 the one that is running at 500 kHz. (Note, not implemented in WURB-2024 yet.)
 
     sudo cp raspberrypi_files/pettersson_m500_batmic.rules /etc/udev/rules.d/
@@ -162,14 +165,19 @@ in a hotspot mode and enable it's own WiFi network.
     sudo nmcli con modify wurb-hotspot wifi-sec.psk chiroptera
     sudo nmcli con modify wurb-hotspot 802-11-wireless.mode ap 802-11-wireless.band bg ipv4.method shared
 
-If you run this "nmtui" tool and deactivate the connection to your home network the
-detector will directly switch over to the hotspot mode. The SSH session will stop immediately since the
-Raspberry Pi only contains one WiFi unit that either can be used to connect to a WiFi network, or to
-run as a hotspot. The hotspot mode is really useful if you have the 4G/LTE modem attached.
-To get back you have to us an Ethernet cable to connect with SSH (or connect screen, mouse and keyboard
-to your Raspberry Pi).
+Use this tool to check the network connections:
 
     sudo nmtui
+
+If you run the "nmtui" tool and deactivate the connection to your home network the
+detector will directly switch over to the hotspot mode.
+The SSH session will stop immediately since the Raspberry Pi only contains one WiFi unit
+that either can be used to connect to a WiFi network, or to run as a hotspot.
+The hotspot mode is really useful if you have the 4G/LTE modem attached, or an Ethernet cable.
+In the example above the WiFi ame will be "WiFi-wurb01" and password "chiroptera".
+
+When using the hotspot the detector will use the IP address 10.42.0.1 and then
+"<http://wurb01.local:8080>" can be used to access the detectors user interface.
 
 ### USB ###
 
@@ -220,7 +228,7 @@ Then you have to do a reboot.
 You can test the sleep functionality with this.
 The Raspberry Pi will then be turned off for 10 minutes (600 sec)
 and then turned on automatically.
-Nice to put as a cron job to save battery during daytime.
+This can be set up to run as a cron job to save battery during daytime.
 
     echo +600 | sudo tee /sys/class/rtc/rtc0/wakealarm
     sudo halt
@@ -229,6 +237,8 @@ Nice to put as a cron job to save battery during daytime.
 
 First step is to check that Python is installed.
 Then the WURB-2024 has to be installed.
+Dependent on how Python is installed on your computer you may have to
+type in the whole path to Python.
 
     git clone https://github.com/cloudedbats/cloudedbats_wurb_2024.git
     cd cloudedbats_wurb_2024/
@@ -237,7 +247,7 @@ Then the WURB-2024 has to be installed.
     pip install -r requirements_pyaudio.txt
 
 The detector should now be possible to run.
-Then start a web browser with the address "http://localhost:8080".
+Then start a web browser with the address "<http://localhost:8080>".
 
     python3 wurb_main.py
 
@@ -248,8 +258,25 @@ To build an executable "exe" file run this.
 
 The exe-file will then be created in a directory called "dist".
 
+## Configurations for the detector
+
+When the detector is started for the first time three directories will be created.
+They are wurb_settings, wurb_logging and wurb_recordings.
+The two first directories are located on the SD card directly under /home/wurb,
+but wurb_recordings can be placed at some different locations depending
+on configuration settings and available devices for storage.
+
+Check the file wurb_settings/wurb_config.yaml and make adjustments if needed.
+
+If you want to use another type of microphones, then attach it to the detector
+and start the detector.
+In the log file wurb_logging/wurb_debug_log.txt there will be some
+info about connected devices that can be used in the wurb_config.yaml file.
+
+More info on this topic later...
+
 ## Contact
 
 Arnold Andreasson, Sweden.
 
-info@cloudedbats.org
+<info@cloudedbats.org>
