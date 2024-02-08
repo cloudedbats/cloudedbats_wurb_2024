@@ -66,7 +66,7 @@ That kind of deployments will be easier to explain in this new version.
 completely rewritten.
 - A system for basic configuration was needed. A YAML-based system is now used for that.
 - Sqlite is a better choice for settings than text files. Also used for annotations.
-- Sound management differ on different platform. There are now support for both ALSA (for Linux)
+- Sound management differ on different platform. There is now support for both ALSA (for Linux)
 and PortAudio (Windows, macOS).
 
 The detector is developed as a "full-stack" web application. The backend uses Python with asyncio to
@@ -105,16 +105,17 @@ This instruction is more "minimalistic".
 - Use the "Raspberry Pi Imager" to install the operating system.
 - Select Raspberry Pi OS Lite (32-bit), Debian Bookworm - no desktop.
 
-Edit settings. User must be "wurb", replace other parts to match your needs:
+Edit settings. User must be "wurb".
+Replace other parts, marked as bold, to match your needs:
 
-- Hostname: wurb01
+- Hostname: **wurb01**
 - User: wurb
-- Password: secret-password
-- WiFi SSID: home-network
-- Password: home-network-password
-- Wireless LAN country: SE
-- Time zone: Europe/Stockholm
-- Keyboard: se
+- Password: **secret-password**
+- WiFi SSID: **home-network**
+- Password: **home-network-password**
+- Wireless LAN country: **SE**
+- Time zone: **Europe/Stockholm**
+- Keyboard: **se**
 - Activate SSH. Is located under the tab "Services".
 
 ### Basic configuration
@@ -157,7 +158,7 @@ the one that is running at 500 kHz. (Note, not implemented in WURB-2024 yet.)
 
     sudo cp raspberrypi_files/pettersson_m500_batmic.rules /etc/udev/rules.d/
 
-If the detector should be accessed away from the home network, the it can run
+If the detector should be accessed away from the home network, then it can run
 in a hotspot mode and enable it's own WiFi network.
 
     sudo nmcli con add con-name wurb-hotspot ifname wlan0 type wifi ssid WiFi-wurb01
@@ -176,8 +177,9 @@ that either can be used to connect to a WiFi network, or to run as a hotspot.
 The hotspot mode is really useful if you have the 4G/LTE modem attached, or an Ethernet cable.
 In the example above the WiFi ame will be "WiFi-wurb01" and password "chiroptera".
 
-When using the hotspot the detector will use the IP address 10.42.0.1 and then
-"<http://wurb01.local:8080>" can be used to access the detectors user interface.
+When using the hotspot the detector will use the IP address 10.42.0.1 and then either
+"<http://wurb01.local:8080>" or "<http://10.42.0.1:8080>" can be used to access the detectors
+user interface.
 
 ### USB ###
 
