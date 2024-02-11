@@ -83,7 +83,7 @@ class WurbRaspberryPi(object):
                 os.system('cd /home/wurb && sudo date --set "' + time_string + '"')
             else:
                 # Logging.
-                message = "Detector time update failed, not Raspbian OS."
+                message = "Detector time update failed, not Raspberry Pi OS."
                 self.logger.warning(message)
         except Exception as e:
             message = "WurbRaspberryPi - set_detector_time. Exception: " + str(e)

@@ -9,6 +9,7 @@ import serial_asyncio
 import logging
 import pathlib
 import datetime
+import platform
 
 
 class GpsReader(object):
@@ -282,50 +283,52 @@ class GpsReader(object):
             self.gps_latitude = latitude_dd
             self.gps_longitude = longitude_dd
 
-            # # Check if detector time should be set.
-            # try:
-            #     if not self.first_gps_time_received:
-            #         # Wait for GPS to stabilize.
-            #         self.first_gps_time_counter -= 1
-            #         if self.first_gps_time_counter <= 0:
-            #             if self.gps_datetime_utc:
-            #                 if self.is_time_valid(self.gps_datetime_utc):
-            #                     self.first_gps_time_received = True
-            #                     # Set detector unit time.
-            #                     gps_local_time = self.gps_datetime_utc.replace(
-            #                         tzinfo=datetime.timezone.utc
-            #                     ).astimezone()
-            #                     gps_local_timestamp = gps_local_time.timestamp()
+            # Check if detector time should be set.
+            # Don't do this for desktop apps on Windows and macOS.
+            if platform.system() in ["Linux"]:
+                try:
+                    if not self.first_gps_time_received:
+                        # Wait for GPS to stabilize.
+                        self.first_gps_time_counter -= 1
+                        if self.first_gps_time_counter <= 0:
+                            if self.gps_datetime_utc:
+                                if self.is_time_valid(self.gps_datetime_utc):
+                                    self.first_gps_time_received = True
+                                    # Set detector unit time.
+                                    gps_local_time = self.gps_datetime_utc.replace(
+                                        tzinfo=datetime.timezone.utc
+                                    ).astimezone()
+                                    gps_local_timestamp = gps_local_time.timestamp()
 
-            #                     # Connect to main loop.
-            #                     asyncio.run_coroutine_threadsafe(
-            #                         self.wurb_rpi.set_detector_time(
-            #                             gps_local_timestamp,
-            #                             cmd_source="from GPS",
-            #                         ),
-            #                         asyncio.get_event_loop(),
-            #                     )
-            #     else:
-            #         # Compare detector time and GPS time.
-            #         datetime_utc = datetime.datetime.utcnow()
-            #         diff = self.gps_datetime_utc - datetime_utc
-            #         diff_in_s = diff.total_seconds()
-            #         if abs(diff_in_s) > self.max_time_diff_s:
-            #             # Set detector unit time.
-            #             gps_local_time = self.gps_datetime_utc.replace(
-            #                 tzinfo=datetime.timezone.utc
-            #             ).astimezone()
-            #             gps_local_timestamp = gps_local_time.timestamp()
-            #             # Connect to main loop.
-            #             asyncio.run_coroutine_threadsafe(
-            #                 self.wurb_rpi.set_detector_time(
-            #                     gps_local_timestamp, cmd_source="from GPS"
-            #                 ),
-            #                 asyncio.get_event_loop(),
-            #             )
-            # except Exception as e:
-            #    message = "GpsReader - parse_nmea. Exception: " + str(e)
-            #    self.logger.debug(message)
+                                    # Connect to main loop.
+                                    asyncio.run_coroutine_threadsafe(
+                                        self.wurb_rpi.set_detector_time(
+                                            gps_local_timestamp,
+                                            cmd_source="from GPS",
+                                        ),
+                                        asyncio.get_event_loop(),
+                                    )
+                    else:
+                        # Compare detector time and GPS time.
+                        datetime_utc = datetime.datetime.utcnow()
+                        diff = self.gps_datetime_utc - datetime_utc
+                        diff_in_s = diff.total_seconds()
+                        if abs(diff_in_s) > self.max_time_diff_s:
+                            # Set detector unit time.
+                            gps_local_time = self.gps_datetime_utc.replace(
+                                tzinfo=datetime.timezone.utc
+                            ).astimezone()
+                            gps_local_timestamp = gps_local_time.timestamp()
+                            # Connect to main loop.
+                            asyncio.run_coroutine_threadsafe(
+                                self.wurb_rpi.set_detector_time(
+                                    gps_local_timestamp, cmd_source="from GPS"
+                                ),
+                                asyncio.get_event_loop(),
+                            )
+                except Exception as e:
+                    message = "GpsReader - parse_nmea. Exception: " + str(e)
+                    self.logger.debug(message)
 
             # Check if lat/long changed.
             lat_dd = round(self.gps_latitude, 5)
