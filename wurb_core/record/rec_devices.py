@@ -6,6 +6,7 @@
 
 import logging
 import wurb_core
+import wurb_utils
 
 
 class RecDevices(object):
@@ -90,29 +91,33 @@ class RecDevices(object):
                                 config_sampling_freq_hz = config_device_dict[
                                     "sampling_freq_hz"
                                 ]
-                                self.capture_device[
-                                    "sampling_freq_hz"
-                                ] = config_sampling_freq_hz
+                                self.capture_device["sampling_freq_hz"] = (
+                                    config_sampling_freq_hz
+                                )
                             if "channels" in config_device_dict:
-                                self.capture_device[
-                                    "config_channels"
-                                ] = config_device_dict.get("channels", "")
+                                self.capture_device["config_channels"] = (
+                                    config_device_dict.get("channels", "")
+                                )
+                            # Done.
+                            return
+                    # Also check if Pettersson M500.
+                    if wurb_core.m500.is_m500_available():
+                        device_name = wurb_core.m500.device_name
+                        if config_name_part in device_name:
+                            self.capture_device = {}
+                            self.capture_device["device_index"] = 9999
+                            self.capture_device["device_name"] = device_name
+                            self.capture_device["input_channels"] = 1
+                            self.capture_device["config_channels"] = "MONO"
+                            self.capture_device["sampling_freq_hz"] = (
+                                wurb_core.m500.sampling_freq_hz
+                            )
                             # Done.
                             return
                 except Exception as e:
-                    message = "RecDevices - check_capture_devices-1. Exception: " + str(
-                        e
-                    )
+                    message = "RecDevices - check_capture_devices-1. Exception: "
+                    message += str(e)
                     self.logger.debug(message)
-            # # Check if Pettersson M500.
-            # if not device_name:
-            #     if self.pettersson_m500.is_m500_available():
-            #         device_name = self.pettersson_m500.get_device_name()
-            #         sampling_freq_hz = self.pettersson_m500.get_sampling_freq_hz()
-            # # Check if another ALSA mic. is specified in advanced settings.
-
-            # Not found.
-            self.capture_device_info = {}
 
         except Exception as e:
             message = "RecDevices - check_capture_devices-2. Exception: " + str(e)
@@ -134,26 +139,26 @@ class RecDevices(object):
                             self.playback_device = device_dict
                             # Adjust to config.
                             if "sampling_freq_hz" in config_device_dict:
-                                self.playback_device[
-                                    "sampling_freq_hz"
-                                ] = config_device_dict.get("sampling_freq_hz", "")
+                                self.playback_device["sampling_freq_hz"] = (
+                                    config_device_dict.get("sampling_freq_hz", "")
+                                )
                             if "period_size" in config_device_dict:
-                                self.playback_device[
-                                    "period_size"
-                                ] = config_device_dict.get("period_size", "")
+                                self.playback_device["period_size"] = (
+                                    config_device_dict.get("period_size", "")
+                                )
                             if "buffer_size" in config_device_dict:
-                                self.playback_device[
-                                    "buffer_size"
-                                ] = config_device_dict.get("buffer_size", "")
+                                self.playback_device["buffer_size"] = (
+                                    config_device_dict.get("buffer_size", "")
+                                )
                             if "buffer_max_size" in config_device_dict:
-                                self.playback_device[
-                                    "buffer_max_size"
-                                ] = config_device_dict.get("buffer_max_size", "")
+                                self.playback_device["buffer_max_size"] = (
+                                    config_device_dict.get("buffer_max_size", "")
+                                )
                             if "in_queue_length" in config_device_dict:
-                                self.playback_device[
-                                    "in_queue_length"
-                                ] = config_device_dict.get(
-                                    "chin_queue_lengthannels", ""
+                                self.playback_device["in_queue_length"] = (
+                                    config_device_dict.get(
+                                        "chin_queue_lengthannels", ""
+                                    )
                                 )
                             # Done.
                             return
