@@ -67,6 +67,19 @@ class RecManager(object):
                     + " Hz "
                 )
                 self.logger.debug(message)
+            # Also check Pettersson M500.
+            if wurb_core.m500.is_m500_available():
+                message = (
+                    "- "
+                    + wurb_core.m500.device_name
+                    + "   "
+                    + "MONO"
+                    + " at "
+                    + str(wurb_core.m500.sampling_freq_hz)
+                    + " Hz "
+                )
+                self.logger.debug(message)
+
         except Exception as e:
             message = "RecManager - startup. Exception: " + str(e)
             self.logger.debug(message)

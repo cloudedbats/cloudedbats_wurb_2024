@@ -49,10 +49,15 @@ class RecWorker(object):
     def start_recording(self):
         """ """
         try:
+            device_info = wurb_core.rec_devices.get_capture_device_info()
+            device_name = device_info.get("device_name", "")
             # Create queues.
             if self.from_source_queue == None:
                 self.from_source_queue = asyncio.Queue(maxsize=self.queue_max_size)
-                wurb_core.audio_capture.add_out_queue(self.from_source_queue)
+                if device_name == "Pettersson M500 (500kHz)":
+                    wurb_core.m500.add_out_queue(self.from_source_queue)
+                else:
+                    wurb_core.audio_capture.add_out_queue(self.from_source_queue)
             if self.to_target_queue == None:
                 self.to_target_queue = asyncio.Queue(maxsize=self.queue_max_size)
             # # Clear queues.
@@ -86,9 +91,14 @@ class RecWorker(object):
     async def stop_recording(self):
         """ """
         try:
+            device_info = wurb_core.rec_devices.get_capture_device_info()
+            device_name = device_info.get("device_name", "")
             # Sound capture task.
             if self.source_worker != None:
-                await wurb_core.audio_capture.stop()
+                if device_name == "Pettersson M500 (500kHz)":
+                    await wurb_core.m500.stop()
+                else:
+                    await wurb_core.audio_capture.stop()
                 self.source_worker.cancel()
                 self.source_worker = None
                 self.logger.debug("REC SOURCE CANCELED.")
@@ -118,7 +128,7 @@ class RecWorker(object):
             self.connected_input_channels = device_info.get("input_channels", "")
             self.connected_config_channels = device_info.get("config_channels", "")
             self.connected_sampling_freq_hz = device_info.get("sampling_freq_hz", "")
-            if self.connected_device_index == None:
+            if self.connected_device_index in [None, ""]:
                 self.logger.debug("NO MIC.")
                 return
 
@@ -127,17 +137,31 @@ class RecWorker(object):
             process_buffer_size = int(float(self.connected_sampling_freq_hz) / 4)
             # frames_per_buffer = int(float(self.connected_sampling_freq_hz) / 8)
             frames_per_buffer = int(1024.0 * 4)
-            wurb_core.audio_capture.setup(
-                device_index=self.connected_device_index,
-                device_name=self.connected_device_name,
-                channels=self.connected_input_channels,
-                config_channels=self.connected_config_channels,
-                sampling_freq_hz=int(self.connected_sampling_freq_hz),
-                frames_per_buffer=frames_per_buffer,
-                buffer_size=process_buffer_size,
-            )
+            if self.connected_device_name == "Pettersson M500 (500kHz)":
+                wurb_core.m500.setup(
+                    device_index=self.connected_device_index,
+                    device_name=self.connected_device_name,
+                    channels=self.connected_input_channels,
+                    config_channels=self.connected_config_channels,
+                    sampling_freq_hz=int(self.connected_sampling_freq_hz),
+                    frames_per_buffer=frames_per_buffer,
+                    buffer_size=process_buffer_size,
+                )
+            else:
+                wurb_core.audio_capture.setup(
+                    device_index=self.connected_device_index,
+                    device_name=self.connected_device_name,
+                    channels=self.connected_input_channels,
+                    config_channels=self.connected_config_channels,
+                    sampling_freq_hz=int(self.connected_sampling_freq_hz),
+                    frames_per_buffer=frames_per_buffer,
+                    buffer_size=process_buffer_size,
+                )
 
-            await wurb_core.audio_capture.start()
+            if self.connected_device_name == "Pettersson M500 (500kHz)":
+                await wurb_core.m500.start()
+            else:
+                await wurb_core.audio_capture.start()                
             self.logger.debug("RecWorker - Sound capture started.")
         except Exception as e:
             message = "RecWorker - rec_source_worker. Exception: " + str(e)

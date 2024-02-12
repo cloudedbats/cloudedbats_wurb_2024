@@ -11,7 +11,10 @@ audio_capture:
   - device_name: AudioMoth
     sampling_freq_hz: 384000
   - device_name: Realtek USB2.0 Audio
-    sampling_freq_hz: 96000 # Adjust Settings-System-Sound if Windows.
+    sampling_freq_hz: 96000
+    channels: MONO-LEFT # From STEREO.
+  - device_name: USB Audio
+    sampling_freq_hz: 192000
     channels: MONO-LEFT # From STEREO.
   # - device_name: PART-OF-DEVICE-NAME
   #   sampling_freq_hz: 384000 # Adjust Settings-System-Sound if Windows.
@@ -29,11 +32,11 @@ record:
       os: Linux
       media_path: /media/USB-sdb1
       rec_dir: wurb_recordings
-    - id: sharedFolder
-      name: Shared folder
-      os: Windows
-      media_path: C:/Users/Public/Bats
-      rec_dir: wurb_recordings
+    # - id: sharedFolder
+    #   name: Shared folder
+    #   os: Windows
+    #   media_path: C:/Users/Public/Bats
+    #   rec_dir: wurb_recordings
     # - id: ssd
     #   name: SSD
     #   os: Linux

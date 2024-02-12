@@ -85,6 +85,8 @@ else:
     audio = pyaudio.PyAudio()  # Only one instance allowed.
     audio_capture = wurb_utils.AudioCapture(audio, logger_name=logger_name)
     audio_playback = wurb_utils.AudioPlayback(audio, logger_name=logger_name)
+# Pettersson M500.
+m500 = wurb_utils.PetterssonM500(logger_name=logger_name)
 
 # Record and live.
 rec_manager = RecManager(config, wurb_logger)
