@@ -7,8 +7,8 @@
 import asyncio
 import time
 import numpy
-import array
 import logging
+import platform
 
 from wurb_utils import pettersson_m500_batmic
 
@@ -20,10 +20,12 @@ class PetterssonM500:
         """ """
         self.logger = logging.getLogger(logger_name)
         self.clear()
-        # USB driver for M500.
-        self.pettersson_m500 = pettersson_m500_batmic.PetterssonM500BatMic()
-        self.pettersson_m500.stop_stream()
-        self.pettersson_m500.reset()
+        # USB driver for M500. Only on Linux.
+        self.pettersson_m500 = None
+        if platform.system() == "Linux":
+            self.pettersson_m500 = pettersson_m500_batmic.PetterssonM500BatMic()
+            self.pettersson_m500.stop_stream()
+            self.pettersson_m500.reset()
 
     def clear(self):
         # Specific for M500.
@@ -44,7 +46,11 @@ class PetterssonM500:
 
     def is_m500_available(self):
         """ """
+        if self.pettersson_m500 == None:
+            return False
+        #
         return self.pettersson_m500.is_available()
+
 
     def is_capture_running(self):
         """ """
@@ -104,6 +110,8 @@ class PetterssonM500:
 
     async def stop(self):
         """ """
+        if self.pettersson_m500 == None:
+            return
         try:
             self.capture_is_active = False
             self.pettersson_m500.stop_stream()
@@ -117,6 +125,8 @@ class PetterssonM500:
 
     def run_capture(self):
         """ """
+        if self.pettersson_m500 == None:
+            return
         try:
             self.stream_time_s = time.time()
             self.pettersson_m500.start_stream()

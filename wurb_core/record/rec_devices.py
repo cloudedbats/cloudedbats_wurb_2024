@@ -45,8 +45,6 @@ class RecDevices(object):
         if self.capture_device == None:
             self.check_capture_devices()
         #
-        if self.capture_device in [None, {}]:
-            return {}
         return self.capture_device
 
     def get_playback_device_info(self):
@@ -54,8 +52,6 @@ class RecDevices(object):
         if "device_index" not in self.playback_device_info:
             self.check_playback_devices()
         #
-        if self.playback_device_info in [None, {}]:
-            return {}
         return self.playback_device_info
 
     def is_mic_available(self):
@@ -118,7 +114,8 @@ class RecDevices(object):
                     message = "RecDevices - check_capture_devices-1. Exception: "
                     message += str(e)
                     self.logger.debug(message)
-
+            # Not found.
+            self.capture_device = {}
         except Exception as e:
             message = "RecDevices - check_capture_devices-2. Exception: " + str(e)
             self.logger.debug(message)
