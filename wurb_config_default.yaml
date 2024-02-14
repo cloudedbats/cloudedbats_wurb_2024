@@ -10,8 +10,8 @@ audio_capture:
   - device_name: UltraMic # For Dodotronic.
   - device_name: AudioMoth
     sampling_freq_hz: 384000
-  - device_name: Realtek USB2.0 Audio
-    sampling_freq_hz: 96000
+  - device_name: USB2.0 Audio
+    sampling_freq_hz: 192000
     channels: MONO-LEFT # From STEREO.
   - device_name: USB Audio
     sampling_freq_hz: 192000
@@ -32,11 +32,15 @@ record:
       os: Linux
       media_path: /media/USB-sdb1
       rec_dir: wurb_recordings
+    - id: local
+      name: Local
+      executable_path_as_base: true
+      rec_dir: ../wurb_recordings
+      free_disk_limit: 500 # Unit MB.
     # - id: sharedFolder
     #   name: Shared folder
     #   os: Windows
-    #   media_path: C:/Users/Public/Bats
-    #   rec_dir: wurb_recordings
+    #   rec_dir: C:/Users/Public/Bats/wurb_recordings
     # - id: ssd
     #   name: SSD
     #   os: Linux
@@ -47,15 +51,12 @@ record:
     #   os: Darwin # Darwin=macOS.
     #   media_path: /Volumes/Wurb01
     #   rec_dir: wurb_recordings
-    - id: local
-      name: Local
-      rec_dir: ../wurb_recordings
-      free_disk_limit: 500 # Unit MB.
 
 annotations:
   sources:
     - id: local
       name: Local
+      executable_path_as_base: true
       rec_dir: ../wurb_recordings
     - id: sda1
       name: USB-1
@@ -67,11 +68,10 @@ annotations:
       os: Linux
       media_path: /media/USB-sdb1
       rec_dir: wurb_recordings
-    - id: sharedFolder
-      name: Shared folder
-      os: Windows
-      media_path: C:/Users/Public/Bats
-      rec_dir: wurb_recordings
+    # - id: sharedFolder
+    #   name: Shared folder
+    #   os: Windows
+    #   rec_dir: C:/Users/Public/Bats/wurb_recordings
     # - id: ssd
     #   name: SSD
     #   os: Linux

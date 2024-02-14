@@ -62,12 +62,15 @@ class RecordManager(object):
         result = ""
         source = self.rec_sources_by_id.get(source_id, "")
         if source:
+            executable_path_as_base = source.get("executable_path_as_base", False)
             media_path = source.get("media_path", "")
-            source_dir = source.get("rec_dir", "")
-            if source_dir:
-                result = pathlib.Path(
-                    wurb_core.executable_path, media_path, source_dir
-                ).resolve()
+            rec_dir = source.get("rec_dir", "")
+            if executable_path_as_base:
+                result = pathlib.Path(wurb_core.executable_path, rec_dir).resolve()
+            elif len(media_path) > 0:
+                result = pathlib.Path(media_path, rec_dir).resolve()
+            else:
+                result = pathlib.Path(rec_dir).resolve()
         return result
 
     def get_rec_nights(self, source_id):

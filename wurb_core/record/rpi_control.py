@@ -104,29 +104,37 @@ class WurbRaspberryPi(object):
     def get_wavefile_target_dir_path(self):
         """ """
         try:
-            # Check mounted USB memory sticks. At least 20 MB left.
             platform_os = platform.system()  # Linux, Windows or Darwin (for macOS).
-
             for rec_target in self.rec_targets:
-                media_path = rec_target.get("media_path", "")
-                media_path = pathlib.Path(media_path)
                 os = rec_target.get("os", "")
+                executable_path_as_base = rec_target.get(
+                    "executable_path_as_base", False
+                )
+                media_path = rec_target.get("media_path", "")
                 rec_dir = rec_target.get("rec_dir", "")
-                free_disk_limit = rec_target.get("free_disk_limit", 100)  # Unit MB.
-                if os in [platform_os, ""]:
-                    # Directory may exist even when no USB attached.
-                    # Use is_mount instead of exists.
-                    if platform_os == "Linux":
-                        if media_path.is_mount():
-                            hdd = psutil.disk_usage(str(media_path))
-                            free_disk = hdd.free / (2**20)  # To MB.
-                            free_disk_limit = float(free_disk_limit)
-                            if free_disk >= free_disk_limit:  # 20 MB.
-                                # Return when media is found.
-                                return pathlib.Path(media_path, rec_dir)
-                    else:
-                        if media_path.exists():
-                            return pathlib.Path(media_path, rec_dir)
+                #
+                if executable_path_as_base:
+                    base_path = pathlib.Path(wurb_core.executable_path)
+                    return pathlib.Path(base_path, rec_dir).resolve()
+                elif len(media_path) > 0:
+                    media_path = pathlib.Path(media_path)
+                    free_disk_limit = rec_target.get("free_disk_limit", 100)  # Unit MB.
+                    if os in [platform_os, ""]:
+                        # Directory may exist even when no USB attached.
+                        # Use is_mount instead of exists on Linux.
+                        if platform_os == "Linux":
+                            if media_path.is_mount():
+                                hdd = psutil.disk_usage(str(media_path))
+                                free_disk = hdd.free / (2**20)  # To MB.
+                                free_disk_limit = float(free_disk_limit)
+                                if free_disk >= free_disk_limit:
+                                    # Return when media is found.
+                                    return pathlib.Path(media_path, rec_dir).resolve()
+                        else:
+                            if media_path.exists():
+                                return pathlib.Path(media_path, rec_dir).resolve()
+                else:
+                    return pathlib.Path(rec_dir).resolve()
 
             message = "Not enough space left to store recordings."
             self.logger.error(message)
