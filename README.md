@@ -139,7 +139,7 @@ Basic installation
 ### The WURB-2024 detector software
 
     sudo apt install git python3-venv python3-dev libatlas-base-dev -y
-    sudo apt install pulseaudio python3-numpy python3-scipy -y
+    sudo apt install pulseaudio python3-numpy python3-scipy pmount -y
 
     git clone https://github.com/cloudedbats/cloudedbats_wurb_2024.git
     cd cloudedbats_wurb_2024/
@@ -159,10 +159,12 @@ Now it should be up and running. Start a web browser with this address:
 ### Extra on Raspberry Pi
 
 This is needed if you are planning to use the Pettersson M500 microphone,
-the one that is running at 500 kHz. (Note, not implemented in WURB-2024 yet.)
+the one that is running at 500 kHz.
 
     cd /home/wurb/cloudedbats_wurb_2024
     sudo cp raspberrypi_files/pettersson_m500_batmic.rules /etc/udev/rules.d/
+    sudo udevadm control --reload-rules
+    sudo udevadm trigger
 
 If the detector should be accessed away from the home network, then it can run
 in a hotspot mode and enable it's own WiFi network.
@@ -194,12 +196,13 @@ If you are planning to store recorded files on USB memory sticks the you have to
 mount them manually via SSH, or install some software that mounts them automatically.
 These commands will setup the automatic version.
 
-    sudo apt install pmount -y
     cd /home/wurb/cloudedbats_wurb_2024
     sudo cp raspberrypi_files/usb_pmount.rules /etc/udev/rules.d/
     sudo cp raspberrypi_files/usb_pmount_handler@.service /lib/systemd/system/
     sudo cp raspberrypi_files/usb_pmount_script /usr/local/bin/
     sudo chmod +x /usr/local/bin/usb_pmount_script
+    sudo udevadm control --reload-rules
+    sudo udevadm trigger
 
 Some useful commands to check attached USB devices are:
 
