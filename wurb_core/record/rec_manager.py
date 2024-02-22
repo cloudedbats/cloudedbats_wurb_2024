@@ -190,6 +190,7 @@ class RecManager(object):
 
             # Perform action.
             if is_rec_mode_on:
+                wurb_core.rec_devices.check_capture_devices()
                 is_mic_available = wurb_core.rec_devices.is_mic_available()
                 if not is_mic_available:
                     # Try to find connected microphone.

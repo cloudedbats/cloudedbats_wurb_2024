@@ -100,7 +100,7 @@ class WurbManager(object):
                     "",
                     "No microphone available",
                     "Recording OFF",
-                    "Recording OFF by scheduler",
+                    # "Recording OFF by scheduler",
                 ]:
                     latitude, longitude = wurb_core.wurb_settings.get_valid_location()
                     with activity_log_path.open("a") as log_file:

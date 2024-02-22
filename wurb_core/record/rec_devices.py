@@ -69,8 +69,7 @@ class RecDevices(object):
             return True
 
     def check_capture_devices(self):
-        """ """
-        self.capture_device = None
+        capture_device = {}
         try:
             #
             available_devices = wurb_core.audio_capture.get_capture_devices()
@@ -81,34 +80,36 @@ class RecDevices(object):
                     for device_dict in available_devices:
                         device_full_name = device_dict["device_name"]
                         if config_name_part in device_full_name:
-                            self.capture_device = device_dict
+                            capture_device = device_dict
                             # Adjust to config.
                             if "sampling_freq_hz" in config_device_dict:
                                 config_sampling_freq_hz = config_device_dict[
                                     "sampling_freq_hz"
                                 ]
-                                self.capture_device["sampling_freq_hz"] = (
+                                capture_device["sampling_freq_hz"] = (
                                     config_sampling_freq_hz
                                 )
                             if "channels" in config_device_dict:
-                                self.capture_device["config_channels"] = (
+                                capture_device["config_channels"] = (
                                     config_device_dict.get("channels", "")
                                 )
                             # Done.
+                            self.capture_device = capture_device
                             return
                     # Also check if Pettersson M500.
                     if wurb_core.m500.is_m500_available():
                         device_name = wurb_core.m500.device_name
                         if config_name_part in device_name:
-                            self.capture_device = {}
-                            self.capture_device["device_index"] = 9999
-                            self.capture_device["device_name"] = device_name
-                            self.capture_device["input_channels"] = 1
-                            self.capture_device["config_channels"] = "MONO"
-                            self.capture_device["sampling_freq_hz"] = (
+                            capture_device = {}
+                            capture_device["device_index"] = 9999
+                            capture_device["device_name"] = device_name
+                            capture_device["input_channels"] = 1
+                            capture_device["config_channels"] = "MONO"
+                            capture_device["sampling_freq_hz"] = (
                                 wurb_core.m500.sampling_freq_hz
                             )
                             # Done.
+                            self.capture_device = capture_device
                             return
                 except Exception as e:
                     message = "RecDevices - check_capture_devices-1. Exception: "
