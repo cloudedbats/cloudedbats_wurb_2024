@@ -87,15 +87,20 @@ Also contact me if you want a download link to an executable file to test the de
 This is my primary test setup:
 
 - Raspberry Pi 5.
-- SD: SanDisk ExtremePRO - 64GB, read 200, write 90 MB/s.
+- SD: SanDisk Extreme PRO - 64GB, read 200, write 90 MB/s.
 - Microphone: Pettersson u384.
 - USB memory: SanDisk Ultra USB 3.0
 - Any 5V power supply (including solar panel + LiFePO4 battery).
-- Ethernet cable or HUAWEI E3372 for 4G/LTE.
-(both are optional but good during test and development when the detector is running as a WiFi hotspot).
+- Ethernet cable, an extra USB WiFi or HUAWEI E3372 for 4G/LTE.
+  They are optional but good during test and development when the detector is running as a WiFi hotspot
+  and the built in WiFi is used for that.
 
 By default microphones from Pettersson, Dodotronic, AudioMoth, etc. are identified automatically.
 Other microphones can be used after modifications in the configuration file.
+
+I have used PoE (Power-Over-Ethernet), WiFi and 4G/LTE for permanent stations that are deployed 
+all year around with automatic sync (with rsync) of recorded files to my home server. 
+This year I have started to test file backup to Dropbox with rclone in the detector.  
 
 ### Install the Raspberry Pi OS
 
@@ -128,13 +133,13 @@ Basic installation
 
     sudo apt update
     sudo apt upgrade -y
-    # Run this if you want additional configurations.
+    # Run this if you want to do additional configurations.
     sudo raspi-config
 
 ### The WURB-2024 detector software
 
-    sudo apt install git python3-venv python3-dev libatlas-base-dev pmount -y
-    sudo apt install pulseaudio python3-numpy python3-scipy -y
+    sudo apt install git python3-venv python3-dev libatlas-base-dev -y
+    sudo apt install pulseaudio python3-numpy python3-scipy pmount -y
 
     git clone https://github.com/cloudedbats/cloudedbats_wurb_2024.git
     cd cloudedbats_wurb_2024/
@@ -154,14 +159,19 @@ Now it should be up and running. Start a web browser with this address:
 ### Extra on Raspberry Pi
 
 This is needed if you are planning to use the Pettersson M500 microphone,
-the one that is running at 500 kHz. (Note, not implemented in WURB-2024 yet.)
+the one that is running at 500 kHz.
 
+    cd /home/wurb/cloudedbats_wurb_2024
     sudo cp raspberrypi_files/pettersson_m500_batmic.rules /etc/udev/rules.d/
+    sudo udevadm control --reload-rules
+    sudo udevadm trigger
 
 If the detector should be accessed away from the home network, then it can run
 in a hotspot mode and enable it's own WiFi network.
+In the example below the WiFi name will be "WiFi-Wurb" and password "chiroptera".
+Use different names to avoid conflicts if there are more detectors in range.
 
-    sudo nmcli con add con-name wurb-hotspot ifname wlan0 type wifi ssid WiFi-wurb01
+    sudo nmcli con add con-name wurb-hotspot ifname wlan0 type wifi ssid WiFi-Wurb
     sudo nmcli con modify wurb-hotspot wifi-sec.key-mgmt wpa-psk
     sudo nmcli con modify wurb-hotspot wifi-sec.psk chiroptera
     sudo nmcli con modify wurb-hotspot 802-11-wireless.mode ap 802-11-wireless.band bg ipv4.method shared
@@ -174,8 +184,7 @@ If you run the "nmtui" tool and deactivate the connection to your home network t
 detector will directly switch over to the hotspot mode.
 The SSH session will stop immediately since the Raspberry Pi only contains one WiFi unit
 that either can be used to connect to a WiFi network, or to run as a hotspot.
-The hotspot mode is really useful if you have the 4G/LTE modem attached, or an Ethernet cable.
-In the example above the WiFi ame will be "WiFi-wurb01" and password "chiroptera".
+Then you have to use an Ethernet cable, and extra USB WiFi or a 4G/LTE modem to reach internet.
 
 When using the hotspot the detector will use the IP address 10.42.0.1 and then either
 "<http://wurb01.local:8080>" or "<http://10.42.0.1:8080>" can be used to access the detectors
@@ -187,10 +196,13 @@ If you are planning to store recorded files on USB memory sticks the you have to
 mount them manually via SSH, or install some software that mounts them automatically.
 These commands will setup the automatic version.
 
+    cd /home/wurb/cloudedbats_wurb_2024
     sudo cp raspberrypi_files/usb_pmount.rules /etc/udev/rules.d/
     sudo cp raspberrypi_files/usb_pmount_handler@.service /lib/systemd/system/
     sudo cp raspberrypi_files/usb_pmount_script /usr/local/bin/
     sudo chmod +x /usr/local/bin/usb_pmount_script
+    sudo udevadm control --reload-rules
+    sudo udevadm trigger
 
 Some useful commands to check attached USB devices are:
 
