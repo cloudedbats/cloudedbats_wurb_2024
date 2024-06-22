@@ -11,6 +11,8 @@ import pathlib
 import datetime
 import platform
 
+import wurb_core
+
 
 class GpsReader(object):
     """GPS reader for USB GPS Receiver."""
@@ -302,7 +304,7 @@ class GpsReader(object):
 
                                     # Connect to main loop.
                                     asyncio.run_coroutine_threadsafe(
-                                        self.wurb_rpi.set_detector_time(
+                                        wurb_core.wurb_rpi.set_detector_time(
                                             gps_local_timestamp,
                                             cmd_source="from GPS",
                                         ),
@@ -310,7 +312,7 @@ class GpsReader(object):
                                     )
                     else:
                         # Compare detector time and GPS time.
-                        datetime_utc = datetime.datetime.utcnow()
+                        datetime_utc = datetime.datetime.now(datetime.UTC)
                         diff = self.gps_datetime_utc - datetime_utc
                         diff_in_s = diff.total_seconds()
                         if abs(diff_in_s) > self.max_time_diff_s:
@@ -321,7 +323,7 @@ class GpsReader(object):
                             gps_local_timestamp = gps_local_time.timestamp()
                             # Connect to main loop.
                             asyncio.run_coroutine_threadsafe(
-                                self.wurb_rpi.set_detector_time(
+                                wurb_core.wurb_rpi.set_detector_time(
                                     gps_local_timestamp, cmd_source="from GPS"
                                 ),
                                 asyncio.get_event_loop(),
