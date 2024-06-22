@@ -189,15 +189,29 @@ async def get_spectrogram(
             night_id=nightId,
             record_id=recordId,
         )
-        # Example: "<img src='data:image/png;base64,{buffer}'/>"
-        buffer = await wurb_core.create_spectrogram(spectrogram_path)
-        buffer_src = "data:image/png;base64,"
-        buffer_src += buffer
-        json_data = {
-            "imageBufferSrc": buffer_src,
-        }
-        return JSONResponse(content=json_data)
+        if spectrogram_path == "":
+            pass  # Return the smallest image.
+        else:
+            # Example: "<img src='data:image/png;base64,{buffer}'/>"
+            buffer = wurb_core.spectrogram.create_spectrogram(spectrogram_path)
+            if buffer is None:
+                pass  # Return the smallest image.
+            else:
+                buffer_src = "data:image/png;base64,"
+                buffer_src += buffer
+                json_data = {
+                    "imageBufferSrc": buffer_src,
+                }
+                return JSONResponse(content=json_data)
 
     except Exception as e:
         message = "API - get_spectrogram. Exception: " + str(e)
         logger.debug(message)
+
+    # Return the smallest image possible.
+    buffer_src = "data:image/png;base64,"
+    buffer_src += "R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+    json_data = {
+        "imageBufferSrc": buffer_src,
+    }
+    return JSONResponse(content=json_data)
