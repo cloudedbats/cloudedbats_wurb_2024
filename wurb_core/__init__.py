@@ -6,7 +6,7 @@ import os
 import sys
 import pathlib
 
-__version__ = "2024.1.0"
+__version__ = "2024.1.1"
 
 # Absolute paths to working directory and executable.
 workdir_path = pathlib.Path(__file__).parent.parent.resolve()

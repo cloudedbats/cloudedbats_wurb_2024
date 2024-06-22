@@ -97,10 +97,13 @@ class RecordManager(object):
             _prefix, _utc, local_date, local_time = wurb_core.metadata.get_rec_keys(
                 rec_file
             )
+            metadata = wurb_core.metadata.get_metadata(rec_file)
             result_dict = {}
             result_dict["recId"] = rec_id
             result_dict["localDate"] = str(local_date)
             result_dict["localTime"] = str(local_time)
+            result_dict["peakKhz"] = metadata.get("peakKhz", "")
+            result_dict["peakDbfs"] = metadata.get("peakDbfs", "")
             result.append(result_dict)
         #
         return result

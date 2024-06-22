@@ -127,7 +127,9 @@ async function getRecordings(sourceId, nightId) {
             for (var i = 0; i < json.length; i++) {
                 var content = json[i];
                 var option = document.createElement("option");
-                option.textContent = "Rec " + (i + 1) + ": " + content.localDate + " " + content.localTime;
+                option.textContent = "Rec " + (i + 1) + ": "
+                option.textContent += content.localDate + " " + content.localTime
+                option.textContent += " - " + content.peakKhz + " kHz";
                 option.value = content.recId;
                 select.appendChild(option);
             }
