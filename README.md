@@ -138,12 +138,13 @@ Basic installation
 
 ### The WURB-2024 detector software
 
-    sudo apt install git python3-venv python3-dev libatlas-base-dev -y
-    sudo apt install pulseaudio python3-numpy python3-scipy pmount -y
-
+    sudo apt install git python3-venv python3-dev -y
+    sudo apt install  libatlas-base-dev libopenblas-dev -y
+    sudo apt install pulseaudio pmount -y
+    
     git clone https://github.com/cloudedbats/cloudedbats_wurb_2024.git
     cd cloudedbats_wurb_2024/
-    python -m venv --system-site-packages venv
+    python -m venv venv
     source venv/bin/activate
     pip install -r requirements.txt
 
