@@ -10,8 +10,8 @@ requests
 pyalsaaudio # For RPi.
 ### pyaudio # For macOS, Windows, etc.
 # Calculations.
-### numpy # Use "sudo apt install python3-numpy".
-### scipy # Use "sudo apt install python3-scipy".
+numpy
+scipy
 # Files.
 psutil
 pyusb
