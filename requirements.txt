@@ -1,4 +1,6 @@
 
+--prefer-binary
+
 # API and web.
 fastapi
 uvicorn
