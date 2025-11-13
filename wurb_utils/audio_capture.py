@@ -8,20 +8,19 @@ import asyncio
 import logging
 import numpy
 import time
-
-try:
-    import sounddevice
-except:
-    pass
+import sounddevice
+import pyaudio
 
 
 class AudioCapture:
     """ """
 
-    def __init__(self, audio, logger_name="DefaultLogger"):
+    # def __init__(self, audio, logger_name="DefaultLogger"):
+    def __init__(self, logger_name="DefaultLogger"):
         """ """
         self.logger = logging.getLogger(logger_name)
-        self.audio = audio
+        # self.audio = audio
+        self.audio = None
         self.clear()
 
     def clear(self):
@@ -77,11 +76,15 @@ class AudioCapture:
                 device_id_list += devices
         # Fallback if hostapi not found. Use all.
         if len(device_id_list) == 0:
+            if self.audio == None:
+                self.audio = pyaudio.PyAudio()
             number_of_devices = self.audio.get_device_count()
             device_id_list = range(number_of_devices)
         #
         devices = []
         try:
+            if self.audio == None:
+                self.audio = pyaudio.PyAudio()
             for index in device_id_list:
                 device_info = self.audio.get_device_info_by_index(index)
                 device_name = device_info.get("name", "")
@@ -137,7 +140,7 @@ class AudioCapture:
                     self.logger.debug(
                         "AudioCapture - Start: Capture is still running, will be stopped... "
                     )
-                    self.stop()
+                    await self.stop()
 
             # Use executor for the IO-blocking part.
             self.main_loop = asyncio.get_event_loop()
@@ -165,7 +168,8 @@ class AudioCapture:
         self.capture_is_active = True
         try:
             self.logger.debug("AudioCapture - Sound capture started.")
-            # p = pyaudio.PyAudio()
+            if self.audio == None:
+                self.audio = pyaudio.PyAudio()
             stream = self.audio.open(
                 format=self.audio.get_format_from_width(2),
                 channels=self.channels,
@@ -250,5 +254,6 @@ class AudioCapture:
             self.capture_is_active = False
             if stream:
                 stream.close()
-            # p.terminate()
+            self.audio.terminate()
+            self.audio = None
             self.capture_is_running = False
