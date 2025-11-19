@@ -9,8 +9,8 @@ aiofiles
 websockets
 requests
 # Audio.
-pyalsaaudio # For RPi.
-### pyaudio # For macOS, Windows, etc.
+pyaudio
+sounddevice
 # Calculations.
 numpy
 scipy

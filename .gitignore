@@ -6,3 +6,6 @@ __pycache__
 # Pyinstaller.
 build
 dist
+# WURB
+wurb_logging/**
+wurb_settings/**

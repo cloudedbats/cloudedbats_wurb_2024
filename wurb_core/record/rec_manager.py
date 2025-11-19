@@ -8,6 +8,7 @@ import asyncio
 import logging
 
 import wurb_core
+import wurb_utils
 
 
 class RecManager(object):
@@ -194,10 +195,15 @@ class RecManager(object):
                 is_mic_available = wurb_core.rec_devices.is_mic_available()
                 if not is_mic_available:
                     # Try to find connected microphone.
-                    if wurb_core.alsaaudio_used == False:
-                        # PyAudio needs to be terminated and reloaded.
-                        wurb_core.audio.terminate()
-                        wurb_core.audio = wurb_core.pyaudio.PyAudio()
+                    # PyAudio has to be terminated and reloaded.
+                    # wurb_core.audio.terminate()
+                    # wurb_core.audio = wurb_core.pyaudio.PyAudio()
+
+
+                    # wurb_core.audio_capture = wurb_utils.AudioCapture(wurb_core.audio, logger_name=wurb_core.logger_name)
+                    # wurb_core.audio_playback = wurb_utils.AudioPlayback(wurb_core.audio, logger_name=wurb_core.logger_name)
+
+
                     wurb_core.rec_devices.get_capture_device_info()
                     is_mic_available = wurb_core.rec_devices.is_mic_available()
 

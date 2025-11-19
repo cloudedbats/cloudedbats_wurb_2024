@@ -8,6 +8,8 @@ wurb_app:
 audio_capture:
   - device_name: Pettersson
   - device_name: UltraMic # For Dodotronic.
+  - device_name: PIPPYG
+  - device_name: Bat_Detector
   - device_name: AudioMoth
     sampling_freq_hz: 384000
   - device_name: USB2.0 Audio

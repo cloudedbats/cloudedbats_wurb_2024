@@ -8,20 +8,19 @@ import asyncio
 import logging
 import numpy
 import time
-
-try:
-    import sounddevice
-except:
-    pass
+import sounddevice
+import pyaudio
 
 
 class AudioCapture:
     """ """
 
-    def __init__(self, audio, logger_name="DefaultLogger"):
+    # def __init__(self, audio, logger_name="DefaultLogger"):
+    def __init__(self, logger_name="DefaultLogger"):
         """ """
         self.logger = logging.getLogger(logger_name)
-        self.audio = audio
+        # self.audio = audio
+        self.audio = None
         self.clear()
 
     def clear(self):
@@ -53,54 +52,90 @@ class AudioCapture:
         info_dict["sampling_freq_hz"] = self.sampling_freq_hz
         return info_dict
 
+    def refresh_device_list(device=None):
+        """Needed for plug-and-play."""
+        sounddevice._terminate()
+        sounddevice._initialize()
+
     def get_capture_devices(self):
         """ """
         # Do not check if running.
         if self.capture_is_active == True:
             info_dict = self.get_selected_capture_device()
             return [info_dict]
-
-        # Select a specific hostapi if multiple are used.
-        valid_hostapi_names = []
-        # valid_hostapi_names += ["MME"] # On Windows.
-        # valid_hostapi_names += ["Windows DirectSound"] # On Windows.
-        valid_hostapi_names += ["Windows WASAPI"]  # On Windows.
-        # valid_hostapi_names += ["Windows WDM-KS"] # On Windows.
-        valid_hostapi_names += ["Core Audio"]  # On macOS.
         #
-        device_id_list = []
-        hostapis = sounddevice.query_hostapis()
-        for hostapi in hostapis:
-            hostapi_name = hostapi["name"]
-            devices = hostapi["devices"]
-            if hostapi_name in valid_hostapi_names:
-                device_id_list += devices
-        # Fallback if hostapi not found. Use all.
-        if len(device_id_list) == 0:
-            number_of_devices = self.audio.get_device_count()
-            device_id_list = range(number_of_devices)
+        self.refresh_device_list()
         #
         devices = []
         try:
-            for index in device_id_list:
-                device_info = self.audio.get_device_info_by_index(index)
-                device_name = device_info.get("name", "")
-                input_channels = device_info.get("maxInputChannels", "")
-                # # Test for Windows to remove devices with wrong rate.
-                # host_api = device_info.get("hostApi", "")
-                # if (int(input_channels) > 0) and (host_api == 2):
-                if int(input_channels) > 0:
+            device_list = sounddevice.query_devices(device=None)
+            for device in device_list:
+                input_channels = device.get("max_input_channels", 0)
+                if input_channels > 0:
                     info_dict = {}
-                    info_dict["device_name"] = device_name
+                    info_dict["device_name"] = device.get("name", "")
                     info_dict["input_channels"] = input_channels
-                    info_dict["device_index"] = device_info.get("index", "")
-                    info_dict["sampling_freq_hz"] = device_info.get(
-                        "defaultSampleRate", ""
-                    )
+                    info_dict["device_index"] = device.get("index", -1)
+                    info_dict["sampling_freq_hz"] = device.get("default_samplerate", -1)
                     devices.append(info_dict)
         except Exception as e:
             self.logger.debug("AudioCapture - get_capture_devices: " + str(e))
         return devices
+
+    # def get_capture_devices(self):
+    #     """ """
+    #     # Do not check if running.
+    #     if self.capture_is_active == True:
+    #         info_dict = self.get_selected_capture_device()
+    #         return [info_dict]
+
+    #     self.refresh_device_list()
+
+    #     # Select a specific hostapi if multiple are used.
+    #     valid_hostapi_names = []
+    #     # valid_hostapi_names += ["MME"] # On Windows.
+    #     # valid_hostapi_names += ["Windows DirectSound"] # On Windows.
+    #     valid_hostapi_names += ["Windows WASAPI"]  # On Windows.
+    #     # valid_hostapi_names += ["Windows WDM-KS"] # On Windows.
+    #     valid_hostapi_names += ["Core Audio"]  # On macOS.
+    #     #
+    #     device_id_list = []
+    #     hostapis = sounddevice.query_hostapis()
+    #     for hostapi in hostapis:
+    #         hostapi_name = hostapi["name"]
+    #         devices = hostapi["devices"]
+    #         if hostapi_name in valid_hostapi_names:
+    #             device_id_list += devices
+    #     # Fallback if hostapi not found. Use all.
+    #     if len(device_id_list) == 0:
+    #         if self.audio == None:
+    #             self.audio = pyaudio.PyAudio()
+    #         number_of_devices = self.audio.get_device_count()
+    #         device_id_list = range(number_of_devices)
+    #     #
+    #     devices = []
+    #     try:
+    #         if self.audio == None:
+    #             self.audio = pyaudio.PyAudio()
+    #         for index in device_id_list:
+    #             device_info = self.audio.get_device_info_by_index(index)
+    #             device_name = device_info.get("name", "")
+    #             input_channels = device_info.get("maxInputChannels", "")
+    #             # # Test for Windows to remove devices with wrong rate.
+    #             # host_api = device_info.get("hostApi", "")
+    #             # if (int(input_channels) > 0) and (host_api == 2):
+    #             if int(input_channels) > 0:
+    #                 info_dict = {}
+    #                 info_dict["device_name"] = device_name
+    #                 info_dict["input_channels"] = input_channels
+    #                 info_dict["device_index"] = device_info.get("index", "")
+    #                 info_dict["sampling_freq_hz"] = device_info.get(
+    #                     "defaultSampleRate", ""
+    #                 )
+    #                 devices.append(info_dict)
+    #     except Exception as e:
+    #         self.logger.debug("AudioCapture - get_capture_devices: " + str(e))
+    #     return devices
 
     def setup(
         self,
@@ -137,7 +172,7 @@ class AudioCapture:
                     self.logger.debug(
                         "AudioCapture - Start: Capture is still running, will be stopped... "
                     )
-                    self.stop()
+                    await self.stop()
 
             # Use executor for the IO-blocking part.
             self.main_loop = asyncio.get_event_loop()
@@ -165,7 +200,8 @@ class AudioCapture:
         self.capture_is_active = True
         try:
             self.logger.debug("AudioCapture - Sound capture started.")
-            # p = pyaudio.PyAudio()
+            if self.audio == None:
+                self.audio = pyaudio.PyAudio()
             stream = self.audio.open(
                 format=self.audio.get_format_from_width(2),
                 channels=self.channels,
@@ -250,5 +286,6 @@ class AudioCapture:
             self.capture_is_active = False
             if stream:
                 stream.close()
-            # p.terminate()
+            self.audio.terminate()
+            self.audio = None
             self.capture_is_running = False
