@@ -32,7 +32,7 @@ class WurbRaspberryPi(object):
 
     def clear(self):
         """ """
-        self.os_raspbian = None
+        self.os_debian = None
         self.rec_targets = []
 
     def configure(self):
@@ -41,8 +41,8 @@ class WurbRaspberryPi(object):
 
     async def rpi_control(self, command):
         """ """
-        # First check: OS Raspbian. Only valid for Raspverry Pi OS.
-        if self.is_os_raspbian():
+        # First check: Debian. Only valid for Debian OS.
+        if self.is_os_debian():
             # Select command.
             if command == "rpiShutdown":
                 await self.rpi_shutdown()
@@ -59,11 +59,11 @@ class WurbRaspberryPi(object):
                 self.logger.error(message)
         else:
             # Logging.
-            message = "Raspberry Pi command failed (" + command + "), not Raspbian OS."
+            message = "Raspberry Pi command failed (" + command + "), not Debian OS."
             self.logger.warning(message)
 
     async def set_detector_time(self, posix_time_s, cmd_source=""):
-        """Only valid for Raspbian and user wurb."""
+        """Only valid for Debian and user wurb."""
         try:
             local_datetime = datetime.datetime.fromtimestamp(posix_time_s)
             # utc_datetime = datetime.datetime.utcfromtimestamp(posix_time_s)
@@ -78,12 +78,12 @@ class WurbRaspberryPi(object):
                 message += " (" + cmd_source + ")."
             self.logger.info(message)
             # First check: OS Raspbian.
-            if self.is_os_raspbian():
+            if self.is_os_debian():
                 # Second check: User wurb exists. Perform: "date --set".
                 os.system('cd /home/wurb && sudo date --set "' + time_string + '"')
             else:
                 # Logging.
-                message = "Detector time update failed, not Raspberry Pi OS."
+                message = "Detector time update failed, not Debian OS."
                 self.logger.warning(message)
         except Exception as e:
             message = "WurbRaspberryPi - set_detector_time. Exception: " + str(e)
@@ -92,7 +92,7 @@ class WurbRaspberryPi(object):
     # def get_settings_dir_path(self):
     #     """ """
     #     rpi_dir_path = "/home/wurb/"  # For RPi SD card with user 'wurb'.
-    #     # Default for not Raspberry Pi.
+    #     # Default for not Debian.
     #     dir_path = pathlib.Path("wurb_settings")
     #     if pathlib.Path(rpi_dir_path).exists():
     #         dir_path = pathlib.Path(rpi_dir_path, "wurb_settings")
@@ -182,10 +182,10 @@ class WurbRaspberryPi(object):
         # print("Free disk: ", free_disk, "MB")
         # print("Percent: ", percent_disk, "%")
 
-    def is_os_raspbian(self):
+    def is_os_debian(self):
         """Check OS version for Raspberry Pi."""
-        if self.os_raspbian is not None:
-            return self.os_raspbian
+        if self.os_debian is not None:
+            return self.os_debian
         else:
             try:
                 os_version_path = pathlib.Path("/etc/os-release")
@@ -193,17 +193,17 @@ class WurbRaspberryPi(object):
                     with os_version_path.open("r") as os_file:
                         os_file_content = os_file.read()
                         # print("Content of /etc/os-release: ", os_file_content)
-                        if "raspbian" in os_file_content:
-                            self.os_raspbian = True
+                        if "DEBIAN" in os_file_content.upper():
+                            self.os_debian = True
                         else:
-                            self.os_raspbian = False
+                            self.os_debian = False
                 else:
-                    self.os_raspbian = False
+                    self.os_debian = False
             except Exception as e:
-                message = "WurbRaspberryPi - is_os_raspbian. Exception: " + str(e)
+                message = "WurbRaspberryPi - is_os_debian. Exception: " + str(e)
                 self.logger.debug(message)
         #
-        return self.os_raspbian
+        return self.os_debian
 
     async def rpi_shutdown(self):
         """ """
