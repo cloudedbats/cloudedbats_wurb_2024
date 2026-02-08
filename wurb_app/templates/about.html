@@ -1,46 +1,32 @@
-<div class="tile is-parent is-vertical">
-    <article class="tile is-child box has-background-grey-lighter">
-        <p class="title is-4 m-0">About</p>
-        <p class="subtitle is-5 m-0">CloudedBats WURB-2024</p>
-        <p class="subtitle is-6">Version: {{ wurb_version }}</p>
+<div class="tile is-parent is-vertical m-5">
+    <article class="tile is-child box">
+
+        <div class="field">
+            <div class="container is-fluid">
+                <div class="is-pulled-right">
+                    <button class="delete is-large m-2" onclick="activateModuleCamera()"></button>
+                </div>
+            </div>
+        </div>
+
+        <p class="title m-0 mb-2">About</p>
+        <p class="subtitle m-0">CloudedBats WURB-2026</p>
+        <p class="subtitle is-size-7">Version: {{ wurb_version }}</p>
         <div class="content">
             <p>
-                CloudedBats WURB-2024 is a Do-It-Yourself, DIY, bat detector.
-                It is based on three main parts; a small computer called Raspberry Pi,
-                an ultrasonic microphone, and free and open source software.
-                Then there are some optional parts like GPS dongle, etc.
+                The Do-It-Yourself ultrasonic sound detector for bat monitoring.
             </p>
             <p>
-                <strong>Note: </strong>
-                CloudedBats WURB-2024 is under development. Please use the earlier major version
-                until the new one is finished and well tested. Link to the earlier version:
-                <a href="https://github.com/cloudedbats/cloudedbats_wurb_2020">
-                    CloudedBats WURB-2020.
-                </a>
-            </p>
-            <p>
-                Useful links (only available when the WURB detector
-                is connected to internet):
+                Read more on GitHub:
             <ul>
                 <li>
-                    <a href="https://cloudedbats.github.io">
-                        About the CloudedBats project (https://cloudedbats.github.io).</a>
-                </li>
-                <li>
-                    <a
-                        href="https://github.com/cloudedbats/cloudedbats_wurb_2020/blob/master/docs/user_manual_basic.md#cloudedbats-wurb">
-                        User manual (only available for the WURB-2020 version).</a>
-                </li>
-                <li>
-                    <a href="https://github.com/cloudedbats/cloudedbats_wurb_2024">
-                        Source code and installation instructions.</a>
-                </li>
-                <li>
-                    <a href="/docs">REST API for developers.</a>
+                    <a href="https://github.com/cloudedbats/wurb_2026">
+                        https://github.com/cloudedbats/wurb_2026
+                    </a>
                 </li>
             </ul>
             </p>
-            <p>
+            <p class="is-size-7">
                 Developed by: Arnold&nbsp;Andreasson,&nbsp;Sweden.<br />
                 Contact and feedback: info@cloudedbats.org
             </p>

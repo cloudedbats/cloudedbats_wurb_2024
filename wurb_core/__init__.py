@@ -6,7 +6,7 @@ import os
 import sys
 import pathlib
 
-__version__ = "2024.1.1"
+__version__ = "2026.0.0-development"
 
 # Absolute paths to working directory and executable.
 workdir_path = pathlib.Path(__file__).parent.parent.resolve()
@@ -76,7 +76,7 @@ audio_capture = wurb_utils.AudioCapture(logger_name=logger_name)
 # Pettersson M500.
 m500 = wurb_utils.PetterssonM500(logger_name=logger_name)
 
-# Record and live.
+# Record.
 rec_manager = RecManager(config, wurb_logger)
 rec_devices = RecDevices(config, wurb_logger)
 rec_worker = RecWorker(config, wurb_logger)

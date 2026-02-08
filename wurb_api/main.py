@@ -51,7 +51,6 @@ async def shutdown_event():
 
 # Include modules.
 app.include_router(wurb_api.record_router)
-app.include_router(wurb_api.live_router)
 app.include_router(wurb_api.annotations_router)
 app.include_router(wurb_api.admin_router)
 app.include_router(wurb_api.about_router)
@@ -76,5 +75,7 @@ async def load_main_application_page(request: fastapi.Request):
 
 @app.get("/favicon.ico", include_in_schema=False)
 async def favicon():
-    favicon_path = pathlib.Path(wurb_core.workdir_path, "wurb_app/static/images/favicon.ico")
+    favicon_path = pathlib.Path(
+        wurb_core.workdir_path, "wurb_app/static/images/favicon.ico"
+    )
     return fastapi.responses.FileResponse(favicon_path)

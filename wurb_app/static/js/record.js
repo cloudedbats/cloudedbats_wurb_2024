@@ -72,9 +72,6 @@ function modeSelectOnChange(updateDetector) {
     else if (selectedValue == "detector-power-off") {
         showDivision(byId("recDetectorPowerOffId"));
     }
-    // Trigging Audio feedback sliders
-    byId("liveFeedbackVolumeSliderId").oninput()
-    byId("liveFeedbackPitchSliderId").oninput()
 }
 
 // For the geographic location tile.
@@ -164,29 +161,6 @@ function geoLocationSourceOnChange(updateDetector) {
 //   alert(`Geo location from client:\nERROR(" + error.code + " : " + error.message);
 // };
 
-function audioFeedbackSliders() {
-    // Update slider values.
-    byId("liveFeedbackVolumeId").innerHTML = "[" + byId("liveFeedbackVolumeSliderId").value + "%]";
-    byId("liveFeedbackPitchId").innerHTML = "[1/" + byId("liveFeedbackPitchSliderId").value + "]";
-    // On changes.
-    byId("liveFeedbackVolumeSliderId").oninput = function () {
-        byId("liveFeedbackVolumeId").innerHTML = "[" + this.value + "%]";
-    }
-    byId("liveFeedbackVolumeSliderId").onchange = function () {
-        // Send to server.
-        byId("liveFeedbackVolumeId").innerHTML = "[" + this.value + "%]";
-        setAudioFeedback()
-    }
-    byId("liveFeedbackPitchSliderId").oninput = function () {
-        byId("liveFeedbackPitchId").innerHTML = "[1/" + this.value + "]";
-    }
-    byId("liveFeedbackPitchSliderId").onchange = function () {
-        // Send to server.
-        byId("liveFeedbackPitchId").innerHTML = "[1/" + this.value + "]";
-        setAudioFeedback()
-    }
-}
-
 // Used for the main tabs in the settings tile.
 function hideShowSettingsTabs(tabName) {
     byId("tabSettingsBasicId").classList.remove("is-active");
@@ -250,11 +224,6 @@ function updateSettings(settings) {
     byId("recDetectionAlgorithmId").value = settings.detectionAlgorithm
     byId("recRecLengthId").value = settings.recLengthS
     byId("recTypeId").value = settings.recType
-    byId("liveFeedbackOnOffId").value = settings.feedbackOnOff
-    byId("liveFeedbackVolumeSliderId").value = settings.feedbackVolume
-    byId("liveFeedbackPitchSliderId").value = settings.feedbackPitch
-    byId("liveFeedbackFilterLowId").value = settings.feedbackFilterLowKhz
-    byId("liveFeedbackFilterLowId").value = settings.feedbackFilterHighKhz
     byId("settingsStartupOptionId").value = settings.startupOption
     byId("recSchedulerStartEventId").value = settings.schedulerStartEvent
     byId("recSchedulerStartAdjustId").value = settings.schedulerStartAdjust
@@ -264,10 +233,6 @@ function updateSettings(settings) {
     // byId("recSchedulerPostActionDelayId").value = settings.schedulerPostActionDelay
 
     modeSelectOnChange(updateDetector = false)
-
-    // Trigging Audio feedback sliders
-    byId("liveFeedbackVolumeSliderId").oninput()
-    byId("liveFeedbackPitchSliderId").oninput()
 }
 
 function saveUserDefaultSettings() {

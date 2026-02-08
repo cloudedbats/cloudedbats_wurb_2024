@@ -24,11 +24,9 @@ function showDivision(divId) {
 
 function hideModules() {
     byId("moduleRecordId").classList.remove("is-inverted");
-    byId("moduleLiveId").classList.remove("is-inverted");
     byId("moduleAnnotationsId").classList.remove("is-inverted");
     byId("moduleAdminId").classList.remove("is-inverted");
     byId("heroBodyRecordId").classList.add("is-hidden");
-    byId("heroBodyLiveId").classList.add("is-hidden");
     byId("heroBodyAnnotationsId").classList.add("is-hidden");
     byId("heroBodyAdminId").classList.add("is-hidden");
     byId("heroBodyAboutId").classList.add("is-hidden");
@@ -38,12 +36,6 @@ function activateModuleRecord() {
     hideModules();
     byId("moduleRecordId").classList.add("is-inverted");
     byId("heroBodyRecordId").classList.remove("is-hidden");
-};
-
-function activateModuleLive() {
-    hideModules();
-    byId("moduleLiveId").classList.add("is-inverted");
-    byId("heroBodyLiveId").classList.remove("is-hidden");
 };
 
 function activateModuleAnnotations() {
@@ -85,25 +77,6 @@ function fetchModuleRecord() {
 
 
 
-        })
-        .catch(function (err) {
-            console.warn("Error in javascript fetch: ", err);
-        })
-};
-
-function fetchModuleLive() {
-    hideModules()
-    fetch("/pages/live", { method: "GET" })
-        .then(function (response) {
-            if (response.ok) {
-                return response.text();
-            } else {
-                return Promise.reject(response);
-            }
-        })
-        .then(function (html) {
-            byId("heroBodyLiveId").innerHTML = html;
-            byId("moduleLiveId").classList.remove("is-inverted");
         })
         .catch(function (err) {
             console.warn("Error in javascript fetch: ", err);
@@ -178,7 +151,6 @@ function fetchModules() {
 
 function fetchAllModules() {
     fetchModuleRecord();
-    fetchModuleLive();
     fetchModuleAnnotations();
     fetchModuleAdministration();
     fetchModuleAbout();
@@ -187,8 +159,6 @@ function fetchAllModules() {
 };
 
 function loadWebsocket() {
-
-    audioFeedbackSliders();
 
     var ws_url = (window.location.protocol === "https:") ? "wss://" : "ws://"
     ws_url += window.location.host // Note: Host includes port.
