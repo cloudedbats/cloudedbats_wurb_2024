@@ -5,7 +5,9 @@
 # License: MIT License (see LICENSE or http://opensource.org/licenses/mit).
 
 import asyncio
-import serial_asyncio
+# import serial_asyncio
+import serial_asyncio_fast
+import serial.tools.list_ports
 import logging
 import pathlib
 import datetime
@@ -60,8 +62,8 @@ class GpsReader(object):
             "gps_reader.accepted_detector_time_diff_s", 60
         )
         self.gps_loop_sleep_s = config.get("gps_reader.gps_loop_sleep_s", 20)
-        self.gps_devices = config.get(
-            "gps_reader.gps_devices", ["/dev/ttyACM0", "/dev/ttyUSB0"]
+        self.gps_device_whitelist = config.get(
+            "gps_reader.gps_device_whitelist", ["1546:01A8", "067B:2303"]
         )
 
     def startup(self):
@@ -157,15 +159,23 @@ class GpsReader(object):
         try:
             # Check if USB GPS is connected.
             gps_device_path_found = None
-            # for gps_device_path in ["/dev/ttyACM0", "/dev/ttyUSB0", "/dev/tty.usbserial-2130"]:
-            for gps_device_path in self.gps_devices:
-                gps_device = pathlib.Path(gps_device_path)
-                if gps_device.exists():
-                    gps_device_path_found = gps_device_path
+            for info in serial.tools.list_ports.comports():
+                if gps_device_path_found != None:
                     break
+                id_string = "Device: " + info.device + " HWID: " + info.hwid
+                # print(id_string)
+
+                for whitelist_item in self.gps_device_whitelist:
+                    if whitelist_item.upper() in id_string.upper():
+                        gps_device = pathlib.Path(info.device)
+                        if gps_device.exists():
+                            gps_device_path_found = str(gps_device)
+                            break
+
             # Read serial, if connected.
             if gps_device_path_found:
-                self.serial_coro = serial_asyncio.create_serial_connection(
+                # self.serial_coro = serial_asyncio.create_serial_connection(
+                self.serial_coro = serial_asyncio_fast.create_serial_connection(
                     asyncio.get_event_loop(),
                     ReadGpsSerialNmea,
                     gps_device_path_found,  # For example "/dev/ttyACM0".
@@ -364,7 +374,7 @@ class GpsReader(object):
 
 
 class ReadGpsSerialNmea(asyncio.Protocol):
-    """Serial connection for serial_asyncio."""
+    """Serial connection for serial_asyncio/serial_asyncio_fast."""
 
     def __init__(self):
         """ """

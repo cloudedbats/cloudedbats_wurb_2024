@@ -22,7 +22,8 @@ matplotlib
 pybase64
 # GPS.
 pyserial
-pyserial-asyncio
+# pyserial-asyncio
+pyserial-asyncio-fast
 # Date/time and sun/moon..
 pytz
 python-dateutil

@@ -6,6 +6,7 @@
 
 import asyncio
 import logging
+import serial.tools.list_ports
 
 import wurb_core
 import wurb_utils
@@ -80,7 +81,20 @@ class RecManager(object):
                     + " Hz "
                 )
                 self.logger.debug(message)
+        except Exception as e:
+            message = "RecManager - startup. Exception: " + str(e)
+            self.logger.debug(message)
 
+        # Log connected serial devices (like GPS and LoRa) at startup.
+        try:
+            comports = serial.tools.list_ports.comports()
+            if len(comports) > 0:
+                self.logger.debug("Connected serial devices at startup:")
+                for info in serial.tools.list_ports.comports():
+                    message = "- Device: " + info.device + " HWID: " + info.hwid
+                    self.logger.debug(message)
+            else:
+                self.logger.debug("No serial devices are connected at startup.")
         except Exception as e:
             message = "RecManager - startup. Exception: " + str(e)
             self.logger.debug(message)
@@ -199,10 +213,8 @@ class RecManager(object):
                     # wurb_core.audio.terminate()
                     # wurb_core.audio = wurb_core.pyaudio.PyAudio()
 
-
                     # wurb_core.audio_capture = wurb_utils.AudioCapture(wurb_core.audio, logger_name=wurb_core.logger_name)
                     # wurb_core.audio_playback = wurb_utils.AudioPlayback(wurb_core.audio, logger_name=wurb_core.logger_name)
-
 
                     wurb_core.rec_devices.get_capture_device_info()
                     is_mic_available = wurb_core.rec_devices.is_mic_available()
