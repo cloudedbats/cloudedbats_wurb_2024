@@ -406,11 +406,13 @@ class ReadGpsSerialNmea(asyncio.Protocol):
                             self.gps_manager.parse_nmea(row)
         except Exception as e:
             message = "GpsReader - data_received. Exception: " + str(e)
-            self.logger.debug(message)
+            # self.logger.debug(message)
+            print(message)
 
     def connection_lost(self, exc):
         pass
         # # Logging debug.
         # if self.gps_manager:
         #     message = "GPS:ReadGpsSerialNmea: connection_lost."
-        #     self.logger.debug(message)
+        # #     self.logger.debug(message)
+        #     print(message)
