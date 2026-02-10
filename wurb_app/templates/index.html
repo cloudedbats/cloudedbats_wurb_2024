@@ -67,16 +67,16 @@
                 <!-- <div id="heroBodyCameraId">
                     <p class="subtitle m-5">Loading...</p>
                 </div> -->
-                <div id="heroBodyRecordId" class="is-centered is-hidden">
+                <div id="heroBodyRecordId" class="is-centered" hidden>
                     <p class="title m-5">NOT LOADED...</p>
                 </div>
-                <div id="heroBodyAnnotationsId" class="is-centered is-hidden">
+                <div id="heroBodyAnnotationsId" class="is-centered" hidden>
                     <p class="title m-5">NOT LOADED...</p>
                 </div>
-                <div id="heroBodyAdminId" class="is-centered is-hidden">
+                <div id="heroBodyAdminId" class="is-centered" hidden>
                     <p class="title m-5">NOT LOADED...</p>
                 </div>
-                <div id="heroBodyAboutId" class="is-centered is-hidden">
+                <div id="heroBodyAboutId" class="is-centered" hidden>
                     <!-- <p class="subtitle m-5">Loading...</p> -->
                 </div>
 
@@ -84,7 +84,7 @@
             </div>
         </div>
 
-        <div class="hero-foot has-background-black">
+        <div class="hero-foot has-background-black p-4">
             <nav class="tabs is-fullwidth">
                 <ul class="is-pulled-left">
                     <li>
@@ -93,13 +93,10 @@
                     <li>
                         <p class="pl-1"><span id="detectorTimeId"></span></p>
                     </li>
-                    <!-- <li>
-                        <p class="is-clickable is-pulled-right m-2 mr-4" onclick="toggleModuleAbout()">About</>
-                    </li> -->
                 </ul>
                 <ul class="is-pulled-right">
                     <li>
-                        <p class="is-clickable is-pulled-right mr-3" onclick="activateModuleAbout()">About</>
+                        <p class="is-clickable is-pulled-right mr-3" onclick="toggleModuleAbout()">About</>
                     </li>
                 </ul>
             </nav>

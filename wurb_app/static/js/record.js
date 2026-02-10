@@ -1,27 +1,26 @@
 
-
 function recToggleSettings() {
-    if (byId("recSettingsId").classList.contains("is-hidden")) {
-        byId("recBodyId").classList.add("is-hidden");
-        byId("recSettingsId").classList.remove("is-hidden");
+    if (byId("recSettingsId").hidden == true) {
+        byId("recRecordId").hidden = true;
+        byId("recLocationId").hidden = true;
+        byId("recSettingsId").hidden = false;
+        byId("buttonSettingsId").classList.add('is-inverted');
         byId("recSettingsTextId").textContent = "Hide settings";
     } else {
-        byId("recSettingsId").classList.add("is-hidden");
-        byId("recBodyId").classList.remove("is-hidden");
+        byId("recRecordId").hidden = false;
+        byId("recLocationId").hidden = false;
+        byId("recSettingsId").hidden = true;
+        byId('buttonSettingsId').classList.remove('is-inverted');
         byId("recSettingsTextId").textContent = "Show settings";
     };
 }
 
-function geoToggleSettings() {
-    if (byId("geoSettingsId").classList.contains("is-hidden")) {
-        byId("geoBodyId").classList.add("is-hidden");
-        byId("geoSettingsId").classList.remove("is-hidden");
-        byId("geoSettingsTextId").textContent = "Hide settings";
-    } else {
-        byId("geoSettingsId").classList.add("is-hidden");
-        byId("geoBodyId").classList.remove("is-hidden");
-        byId("geoSettingsTextId").textContent = "Show settings";
-    };
+function recHideSettings() {
+    byId("recRecordId").hidden = false;
+    byId("recLocationId").hidden = false;
+    byId("recSettingsId").hidden = true;
+    byId('buttonSettingsId').classList.remove('is-inverted');
+    byId("recSettingsTextId").textContent = "Show settings";
 }
 
 // For detector mode.
@@ -217,11 +216,11 @@ function updateSettings(settings) {
 
     byId("recModeSelectId").value = settings.recMode
     byId("recFileDirectoryId").value = settings.fileDirectory
-    byId("recFileDirectoryDateOptionId").value = settings.fileDirectoryDateOption
+    // byId("recFileDirectoryDateOptionId").value = settings.fileDirectoryDateOption
     byId("recFilenamePrefixId").value = settings.filenamePrefix
     byId("recDetectionLimitId").value = settings.detectionLimitKhz
     byId("recDetectionSensitivityId").value = settings.detectionSensitivityDbfs
-    byId("recDetectionAlgorithmId").value = settings.detectionAlgorithm
+    // byId("recDetectionAlgorithmId").value = settings.detectionAlgorithm
     byId("recRecLengthId").value = settings.recLengthS
     byId("recTypeId").value = settings.recType
     byId("settingsStartupOptionId").value = settings.startupOption

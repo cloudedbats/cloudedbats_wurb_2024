@@ -26,35 +26,46 @@ function hideModules() {
     byId("moduleRecordId").classList.remove("is-inverted");
     byId("moduleAnnotationsId").classList.remove("is-inverted");
     byId("moduleAdminId").classList.remove("is-inverted");
-    byId("heroBodyRecordId").classList.add("is-hidden");
-    byId("heroBodyAnnotationsId").classList.add("is-hidden");
-    byId("heroBodyAdminId").classList.add("is-hidden");
-    byId("heroBodyAboutId").classList.add("is-hidden");
+    byId("heroBodyRecordId").hidden = true;
+    byId("heroBodyAnnotationsId").hidden = true;
+    byId("heroBodyAdminId").hidden = true;
+    byId("heroBodyAboutId").hidden = true;
 };
 
 function activateModuleRecord() {
     hideModules();
     byId("moduleRecordId").classList.add("is-inverted");
-    byId("heroBodyRecordId").classList.remove("is-hidden");
+    byId("heroBodyRecordId").hidden = false;
+    recHideSettings();
 };
 
 function activateModuleAnnotations() {
     hideModules()
     byId("moduleAnnotationsId").classList.add("is-inverted");
-    byId("heroBodyAnnotationsId").classList.remove("is-hidden");
+    byId("heroBodyAnnotationsId").hidden = false;
 };
 
 function activateModuleAdministration() {
     hideModules()
     byId("moduleAdminId").classList.add("is-inverted");
-    byId("heroBodyAdminId").classList.remove("is-hidden");
+    byId("heroBodyAdminId").hidden = false;
 };
 
 function activateModuleAbout() {
     hideModules()
     // byId("moduleAdminId").classList.add("is-inverted");
-    byId("heroBodyAboutId").classList.remove("is-hidden");
+    byId("heroBodyAboutId").hidden = false;
 };
+
+function toggleModuleAbout() {
+    if (byId('heroBodyAboutId').hidden) {
+        // byId("moduleAdminId").classList.add("is-inverted");
+        activateModuleAbout()
+    } else {
+        // byId("moduleAdminId").classList.add("is-inverted");
+        activateModuleRecord();
+    }
+}
 
 function fetchModuleRecord() {
     hideModules()

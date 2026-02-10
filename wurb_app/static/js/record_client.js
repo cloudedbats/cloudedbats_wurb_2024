@@ -1,4 +1,4 @@
-
+let wsDisconnectedCounter = 0;
 
 // async function recModeOnChange() {
 //     try {
@@ -130,11 +130,11 @@ async function saveSettings(settingsType) {
         let settings = {
             recMode: byId("recModeSelectId").value,
             fileDirectory: byId("recFileDirectoryId").value,
-            fileDirectoryDateOption: byId("recFileDirectoryDateOptionId").value,
+            // fileDirectoryDateOption: byId("recFileDirectoryDateOptionId").value,
             filenamePrefix: byId("recFilenamePrefixId").value,
             detectionLimitKhz: byId("recDetectionLimitId").value,
             detectionSensitivityDbfs: byId("recDetectionSensitivityId").value,
-            detectionAlgorithm: byId("recDetectionAlgorithmId").value,
+            // detectionAlgorithm: byId("recDetectionAlgorithmId").value,
             recLengthS: byId("recRecLengthId").value,
             recType: byId("recTypeId").value,
             startupOption: byId("settingsStartupOptionId").value,
@@ -243,30 +243,50 @@ function startWebsocket(wsUrl) {
     ws.onclose = function (event) {
         // Try to reconnect in 5th seconds. Will continue...
         ws = null;
+        updateDisconnectedInfo();
 
-        if (waitTextNr == 0) {
-            waitText = "Waiting for response from detector..."
-        } else if (waitTextNr == 1) {
-            waitText = "Waiting for response from detector."
-        } else if (waitTextNr == 2) {
-            waitText = "Waiting for response from detector.."
-        }
-        waitTextNr += 1
-        if (waitTextNr >= 3) {
-            waitTextNr = 0
-        }
+        // if (waitTextNr == 0) {
+        //     waitText = "Waiting for response from detector..."
+        // } else if (waitTextNr == 1) {
+        //     waitText = "Waiting for response from detector."
+        // } else if (waitTextNr == 2) {
+        //     waitText = "Waiting for response from detector.."
+        // }
+        // waitTextNr += 1
+        // if (waitTextNr >= 3) {
+        //     waitTextNr = 0
+        // }
 
-        let statusWhenDisconnected = {
-            recStatus: waitText,
-            deviceName: "",
-            detectorTime: "Disconnected",
-            locationStatus: "Disconnected"
-        }
-        updateStatus(statusWhenDisconnected)
+        // let statusWhenDisconnected = {
+        //     recStatus: waitText,
+        //     deviceName: "",
+        //     detectorTime: "Disconnected",
+        //     locationStatus: "Disconnected"
+        // }
+        // updateStatus(statusWhenDisconnected)
 
         setTimeout(function () { startWebsocket(wsUrl) }, 5000);
     }
     ws.onerror = function (event) {
-        // alert("DEBUG: WebSocket error.")
+        // updateDisconnectedInfo();
     };
 };
+
+function updateDisconnectedInfo() {
+    let waitText = 'DISCONNECTED';
+    if (wsDisconnectedCounter == 0) {
+        waitText = 'DISCONNECTED.';;
+    } else if (wsDisconnectedCounter == 1) {
+        waitText = 'DISCONNECTED..';
+    } else if (wsDisconnectedCounter == 2) {
+        waitText = 'DISCONNECTED...';
+    }
+    wsDisconnectedCounter += 1;
+    if (wsDisconnectedCounter >= 3) {
+        wsDisconnectedCounter = 0;
+    }
+    let statusWhenDisconnected = {
+        detectorTime: waitText
+    }
+    updateStatus(statusWhenDisconnected);
+}

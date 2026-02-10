@@ -10,13 +10,13 @@ var selectedNightValue = "";
 var selectedRecValue = "";
 
 function annoToggleSettings() {
-    if (byId("annoSettingsId").classList.contains("is-hidden")) {
-        byId("annoBodyId").classList.add("is-hidden");
-        byId("annoSettingsId").classList.remove("is-hidden");
+    if (byId("annoSettingsId").hidden == false) {
+        byId("annoBodyId").hidden = true;
+        byId("annoSettingsId").hidden = false;
         byId("annoShowSettingsTextId").textContent = "Hide settings";
     } else {
-        byId("annoSettingsId").classList.add("is-hidden");
-        byId("annoBodyId").classList.remove("is-hidden");
+        byId("annoSettingsId").hidden = true;
+        byId("annoBodyId").hidden = false;
         byId("annoShowSettingsTextId").textContent = "Show settings";
     };
 }
@@ -87,20 +87,20 @@ function annoUpdate() {
 // }
 
 function annoToggleViewMetadata() {
-    if (byId("annoViewMetadataId").classList.contains("is-hidden")) {
+    if (byId("annoViewMetadataId").hidden == false) {
         byId("annoViewMetadataButtonId").classList.add("is-inverted");
-        byId("annoViewMetadataId").classList.remove("is-hidden");
+        byId("annoViewMetadataId").hidden = false;
     } else {
         byId("annoViewMetadataButtonId").classList.remove("is-inverted");
-        byId("annoViewMetadataId").classList.add("is-hidden");
+        byId("annoViewMetadataId").hidden = true;
     };
 }
 
 function annoToggleViewSpectrogram() {
-    if (byId("annoViewSpectrogramId").classList.contains("is-hidden")) {
+    if (byId("annoViewSpectrogramId").hidden == false) {
         byId("annoViewSpectrogramButtonId").classList.add("is-inverted");
-        byId("annoViewSpectrogramId").classList.remove("is-hidden");
-        byId("annoSpectrogramLoadingId").classList.remove("is-hidden");
+        byId("annoViewSpectrogramId").hidden = false;
+        byId("annoSpectrogramLoadingId").hidden = false;
 
         var sourceId = currentRecord.sourceId;
         var nightId = currentRecord.nightId;
@@ -110,18 +110,18 @@ function annoToggleViewSpectrogram() {
 
     } else {
         byId("annoViewSpectrogramButtonId").classList.remove("is-inverted");
-        byId("annoViewSpectrogramId").classList.add("is-hidden");
-        byId("annoSpectrogramLoadingId").classList.add("is-hidden");
+        byId("annoViewSpectrogramId").hidden = true;
+        byId("annoSpectrogramLoadingId").hidden = true;
     };
 }
 
 function annoToggleViewDetails() {
-    if (byId("annoViewDetailsId").classList.contains("is-hidden")) {
+    if (byId("annoViewDetailsId").hidden == false) {
         byId("annoViewDetailsButtonId").classList.add("is-inverted");
-        byId("annoViewDetailsId").classList.remove("is-hidden");
+        byId("annoViewDetailsId").hidden = false;
     } else {
         byId("annoViewDetailsButtonId").classList.remove("is-inverted");
-        byId("annoViewDetailsId").classList.add("is-hidden");
+        byId("annoViewDetailsId").hidden = true;
     };
 }
 

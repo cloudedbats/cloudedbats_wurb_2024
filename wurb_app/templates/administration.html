@@ -1,14 +1,14 @@
-<article class="message m-0 is-fullwidth has-background-grey-dark mb-1 pb-2">
+<article class="message is-fullwidth has-background-grey-dark mb-1 pb-2">
 
     <div class="message-header is-bordered">
         <span id="cameraTitleId">Administration</span>
     </div>
 
-    <div id="adminBodyId" class="p-2">
-        <p class="ml-2 mb-2">
+    <div id="adminBodyId">
+        <p class="mx-5 my-2">
             Source&nbsp;folders&nbsp;/&nbsp;Monitoring&nbsp;nights
         </p>
-        <div class="buttons is--centered mb-2">
+        <div class="buttons is--centered mx-4 mb-2">
             <div class="select is-rounded is-size-7">
                 <select id="adminSelectSourceId" onchange="adminSourceChanged()">
                     <option value="select">Select:</option>
@@ -22,7 +22,7 @@
             <button id="adminUpdateId" onclick="adminUpdate()" class="button is-rounded is-size-7 ml-2">Update</button>
         </div>
 
-        <div class="container is-fluid mb-2 mt-0">
+        <div class="container is-fluid mx-4 mb-2 mt-0">
             <div class="buttons is-centered mt-0">
                 <button id="adminViewMetadataButtonId" onclick="adminToggleViewData()"
                     class="button is-rounded is-size-7">
@@ -34,8 +34,8 @@
             </div>
         </div>
 
-        <div class="table-container mb-2">
-            <table class="table is-size-7">
+        <div class="table-container mx-4 mb-2">
+            <table class="table has-background-grey is-size-7">
                 <tbody>
                     <tr>
                         <td class="has-text-right" style="white-space: nowrap;">Monitoring night
@@ -77,7 +77,7 @@
             </table>
         </div>
 
-        <div class="container is-fluid mt-0">
+        <div class="container is-fluid mx-4 mt-0">
             <div class="buttons is-centered mt-0">
                 <button id="adminPreviousId" onclick="adminPrevious()" class="button is-rounded is-size-7">
                     Previous night
@@ -89,12 +89,12 @@
         </div>
     </div>
 
-    <p class="ml-2 mb-2">
+    <p class="mx-5 my-2">
         Cleanup
     </p>
 
-    <div class="buttons mb-2">
-        <button id="adminRemoveQ0Id" onclick="adminCommand('confirmRemoveQ0')" class="button is-rounded is-size-7 ml-4">
+    <div class="buttons mx-4 mb-2">
+        <button id="adminRemoveQ0Id" onclick="adminCommand('confirmRemoveQ0')" class="button is-rounded is-size-7">
             Remove all Q0 (trash)
         </button>
         <button id="adminRemoveNaId" onclick="adminCommand('confirmRemoveNa')" class="button is-rounded is-size-7 ml-1">
@@ -102,7 +102,7 @@
         </button>
     </div>
 
-    <div id="confirmRemoveQ0Id" style="visibility:hidden; overflow:hidden; height:0; width:0;">
+    <div id="confirmRemoveQ0Id" class="mx-4" style="visibility:hidden; overflow:hidden; height:0; width:0;">
         <div style="border:1px solid white; margin: 0px; padding: 25px;" class="p-2 m-2">
             <label class="label m-0">
                 Do you really want to remove all Q0 (trash)?
@@ -121,7 +121,7 @@
     </div>
 
 
-    <div id="confirmRemoveNaId" style="visibility:hidden; overflow:hidden; height:0; width:0;">
+    <div id="confirmRemoveNaId" class="mx-4" style="visibility:hidden; overflow:hidden; height:0; width:0;">
         <div style="border:1px solid white; margin: 0px; padding: 25px;" class="p-2 m-2">
             <label class="label m-0">
                 Do you really want to remove all "Not assigned"?
@@ -139,9 +139,9 @@
         </div>
     </div>
 
-    <div class="buttons">
+    <div class="buttons mx-4">
         <button id="adminDeleteNightId" onclick="adminCommand('confirmDeleteNight')"
-            class="button is-rounded is-size-7 ml-4">
+            class="button is-rounded is-size-7">
             Delete monitoring night
         </button>
     </div>
@@ -164,7 +164,7 @@
         </div>
     </div>
 
-    <p class="ml-2 mb-2">
+    <p class="mx-5 my-2">
         Reports
     </p>
     <div class="container">

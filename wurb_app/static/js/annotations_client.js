@@ -278,10 +278,10 @@ async function getRecordInfo(sourceId, nightId, recordId) {
                 }
             }
 
-            if (byId("annoViewSpectrogramId").classList.contains("is-hidden")) {
+            if (byId("annoViewSpectrogramId").hidden == false) {
                 // No action.
             } else {
-                byId("annoSpectrogramLoadingId").classList.remove("is-hidden");
+                byId("annoSpectrogramLoadingId").hidden = false;
                 getSpectrogramAsBuffer(sourceId, nightId, recordId)
             }
             // Select row in recording list.
@@ -379,7 +379,7 @@ async function getSpectrogramAsBuffer(sourceId, nightId, recordId) {
                     byId("annoSpectrogramBufferId").src = json.imageBufferSrc;
                 }
             }
-            byId("annoSpectrogramLoadingId").classList.add("is-hidden");
+            byId("annoSpectrogramLoadingId").hidden = true;
 
         })
         .catch(function (err) {
