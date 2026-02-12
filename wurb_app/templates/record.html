@@ -1,7 +1,7 @@
 <article class="message is-fullwidth has-background-grey-dark mb-1 pb-2">
     <div class="message-header is-bordered">
         <span id="cameraTitleId">Sound recorder</span>
-        <div class="select is-rounded is-size-6">
+        <div class="select is-rounded is-size-7">
             <select id="recModeSelectId" onchange="modeSelectOnChange(updateDetector=true)">
                 <option value="mode-off">
                     Microphone - Off
@@ -146,7 +146,7 @@
     <article class="message is-fullwidth has-background-grey-dark mb-1 pb-2">
         <div class="message-header is-bordered">
             <span id="cameraTitleId">Geographic location</span>
-            <div class="select is-rounded is-size-6">
+            <div class="select is-rounded is-size-7">
                 <select id="geoSourceSelectId" onchange="geoLocationSourceOnChange(updateDetector=true)">
                     <option value="geo-not-used">Not used</option>
                     <option value="geo-manual">Manually entered</option>
@@ -523,10 +523,10 @@
 
         <div class="container is-fluid">
             <div class="buttons is-centered p-2">
-                <button style="margin:5px;" class="button is-rounded" onclick="saveSettings()">
+                <button style="margin:5px;" class="button is-rounded is-size-7" onclick="saveSettings()">
                     Save
                 </button>
-                <button style="margin:5px;" class="button is-rounded" onclick="getSettings()">
+                <button style="margin:5px;" class="button is-rounded is-size-7" onclick="getSettings()">
                     Cancel
                 </button>
             </div>

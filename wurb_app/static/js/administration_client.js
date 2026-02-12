@@ -143,6 +143,71 @@ async function getAdminNightInfo(sourceId, nightId) {
         })
 };
 
+async function getActivityData(sourceId, nightId) {
+
+    diagramArray = []
+    diagramDateTime = []
+
+    fetch("/annotations/recordings?" + new URLSearchParams({
+        sourceId: sourceId,
+        nightId: nightId,
+    }), { method: "GET" })
+        .then(function (response) {
+            if (response.ok) {
+                return response.json();
+            } else {
+                return Promise.reject(response);
+            }
+        })
+        .then(function (json) {
+            // Use received json.
+            for (var i = 0; i < json.length; i++) {
+                var content = json[i];
+                // Prepare for diagram.
+                diagramArray.push(content.peakKhz)
+                diagramDateTime.push(content.localDate + " " + content.localTime)
+            }
+            // Draw diagram.
+            // Define Data
+            const data = [{
+                x: diagramDateTime,
+                y: diagramArray,
+                mode: "markers"
+            }];
+
+            // Define Layout
+            const layout = {
+                paper_bgcolor: "rgb(228, 228, 228)",
+                plot_bgcolor: "rgb(228, 228, 228)",
+                // xaxis: { range: [40, 160], title: "Time" },
+                // xaxis: { range: ["2024-04-19 18:47:00", "2024-04-19 22:50_00"], type: "date", title: "Time" },
+                xaxis: { type: "date" },
+                yaxis: { range: [0, 101], title: { text: "Peak frequency (kHz)" } },
+                title: { text: nightId },
+                margin: {
+                    l: 55,
+                    r: 20,
+                    b: 40,
+                    t: 50,
+                    pad: 4
+                },
+            };
+
+            var config = {
+                responsive: true, autosize: true, scrollZoom: true, displaylogo: false,
+
+                modeBarButtonsToRemove: ["XXXzoom2d", "XXXpan2d", "select2d", "lasso2d", "zoomIn2d", "zoomOut2d", "autoScale2d", "XXXresetScale2d"]
+            }
+
+            // Display using Plotly.
+            Plotly.newPlot("activityPlotId", data, layout, config);
+
+        })
+        .catch(function (err) {
+            console.warn("Error in javascript fetch: ", err);
+        })
+}
+
 async function adminExecuteCommand(sourceId, nightId, command) {
     fetch("/administration/command?" + new URLSearchParams({
         sourceId: sourceId,

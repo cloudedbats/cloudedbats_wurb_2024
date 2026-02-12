@@ -24,57 +24,82 @@
 
         <div class="container is-fluid mx-4 mb-2 mt-0">
             <div class="buttons is-centered mt-0">
-                <button id="adminViewMetadataButtonId" onclick="adminToggleViewData()"
-                    class="button is-rounded is-size-7">
+                <button id="adminViewDataButtonId" onclick="adminToggleViewData()" class="button is-rounded is-size-7">
                     Data
                 </button>
+                <button id="adminViewActivityButtonId" onclick="adminToggleViewActivity()"
+                    class="button is-rounded is-size-7">
+                    Activity
+                </button>
                 <button id="adminViewMapButtonId" onclick="adminToggleViewMap()" class="button is-rounded is-size-7">
-                    Diagram
+                    Map
                 </button>
             </div>
         </div>
 
-        <div class="table-container mx-4 mb-2">
-            <table class="table has-background-grey is-size-7">
-                <tbody>
-                    <tr>
-                        <td class="has-text-right" style="white-space: nowrap;">Monitoring night
-                        </td>
-                        <th colspan="5" style="width: 90%;"><span id="adminMonitoringNightId"></span></th>
-                    </tr>
-                    <tr>
-                        <td class="has-text-right" style="white-space: nowrap;">Source folder
-                        </td>
-                        <th colspan="5"><span id="adminDirPathId"></span></th>
-                    </tr>
-                    <tr>
-                        <td class="has-text-right" style="white-space: nowrap;">Number of sound
-                            files</td>
-                        <th colspan="1"><span id="adminNumberOfSoundFilesId"></span></th>
-                        <td class="has-text-right" style="white-space: nowrap;">Number of Q1
-                        </td>
-                        <th colspan="3"><span id="adminNumberOfQ1Id"></span></th>
-                    </tr>
-                    <tr>
-                        <td class="has-text-right" style="white-space: nowrap;">Number of "Not
-                            Assigned"</td>
-                        <th colspan="1"><span id="adminNumberOfNoAssignedId"></span></th>
-                        <td class="has-text-right" style="white-space: nowrap;">Number of Q2
-                        </td>
-                        <th colspan="3" style="width: 60%;"><span id="adminNumberOfQ2Id"></span>
-                        </th>
-                    </tr>
-                    <tr>
-                        <td class="has-text-right" style="white-space: nowrap;">Number of Q0
-                            (trash)</td>
-                        <th colspan="1"><span id="adminNumberOfQ0Id"></span></th>
-                        <td class="has-text-right" style="white-space: nowrap;">Number of Q3
-                        </td>
-                        <th colspan="3" style="width: 60%;"><span id="adminNumberOfQ3Id"></span>
-                        </th>
-                    </tr>
-                </tbody>
-            </table>
+        <div style="min-height: 160px">
+            <div id="adminViewDataId" class="table-container mx-4 mb-2">
+                <table class="table has-background-grey is-size-7">
+                    <tbody>
+                        <tr>
+                            <td class="has-text-right" style="white-space: nowrap;">Monitoring night
+                            </td>
+                            <th colspan="5" style="width: 90%;"><span id="adminMonitoringNightId"></span></th>
+                        </tr>
+                        <tr>
+                            <td class="has-text-right" style="white-space: nowrap;">Source folder
+                            </td>
+                            <th colspan="5"><span id="adminDirPathId"></span></th>
+                        </tr>
+                        <tr>
+                            <td class="has-text-right" style="white-space: nowrap;">Number of sound
+                                files</td>
+                            <th colspan="1"><span id="adminNumberOfSoundFilesId"></span></th>
+                            <td class="has-text-right" style="white-space: nowrap;">Number of Q1
+                            </td>
+                            <th colspan="3"><span id="adminNumberOfQ1Id"></span></th>
+                        </tr>
+                        <tr>
+                            <td class="has-text-right" style="white-space: nowrap;">Number of "Not
+                                Assigned"</td>
+                            <th colspan="1"><span id="adminNumberOfNoAssignedId"></span></th>
+                            <td class="has-text-right" style="white-space: nowrap;">Number of Q2
+                            </td>
+                            <th colspan="3" style="width: 60%;"><span id="adminNumberOfQ2Id"></span>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td class="has-text-right" style="white-space: nowrap;">Number of Q0
+                                (trash)</td>
+                            <th colspan="1"><span id="adminNumberOfQ0Id"></span></th>
+                            <td class="has-text-right" style="white-space: nowrap;">Number of Q3
+                            </td>
+                            <th colspan="3" style="width: 60%;"><span id="adminNumberOfQ3Id"></span>
+                            </th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="adminViewActivityId" class="fixed-grid has-3-cols m-4" hidden>
+                <div class="grid">
+                    <!-- <div class="cell"></div> -->
+                    <div class="cell is-col-span-3">
+                        <div class="is-centered is-3by1" id="activityPlotId" style="height: 250px"></div>
+                    </div>
+                    <!-- <div class="cell"></div> -->
+                </div>
+            </div>
+
+            <div id="adminViewMapId" class="fixed-grid has-3-cols m-4" hidden>
+                <div class="grid">
+                    <!-- <div class="cell"></div> -->
+                    <div class="cell is-col-span-3">
+                        <div class="is-centered is-3by1" id="leafletMapId" style="height: 250px"></div>
+                    </div>
+                    <!-- <div class="cell"></div> -->
+                </div>
+            </div>
         </div>
 
         <div class="container is-fluid mx-4 mt-0">

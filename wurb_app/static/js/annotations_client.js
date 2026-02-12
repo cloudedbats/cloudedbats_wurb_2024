@@ -278,7 +278,7 @@ async function getRecordInfo(sourceId, nightId, recordId) {
                 }
             }
 
-            if (byId("annoViewSpectrogramId").hidden == false) {
+            if (byId("annoViewSpectrogramId").hidden == true) {
                 // No action.
             } else {
                 byId("annoSpectrogramLoadingId").hidden = false;

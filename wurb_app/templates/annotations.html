@@ -46,67 +46,75 @@
             </div>
         </div>
 
-        <div id="annoViewMetadataId" class="table-container mb-2t mx-4">
-            <table class="table has-background-grey is-size-7">
-                <tbody>
-                    <tr>
-                        <td class="has-text-right" style="white-space: nowrap;">File</td>
-                        <th colspan="5" style="white-space: nowrap;"><span style="white-space: nowrap;"
-                                id="annoMetadataRecordFileId"></span>
-                        </th>
-                    </tr>
-                    <tr>
-                        <td class="has-text-right" style="white-space: nowrap;">Quality</td>
-                        <th colspan="1" style="white-space: nowrap;"><span id="annoMetadataQualityId"></span></th>
-                        <td class="has-text-right" style="white-space: nowrap;">Tags</td>
-                        <th colspan="3" style="white-space: nowrap;"><span id="annoMetadataTagsId"></span></th>
-                    </tr>
-                    <tr>
-                        <td class="has-text-right" style="white-space: nowrap;">Comments</td>
-                        <th colspan="5" style="white-space: nowrap;"><span id="annoMetadataCommentsId"></span></th>
-                    </tr>
-                    <tr>
-                        <td class="has-text-right" style="white-space: nowrap;">Local date</td>
-                        <th colspan="1" style="white-space: nowrap;"><span id="annoMetadataLocalDateId"></span></th>
-                        <td class="has-text-right" style="white-space: nowrap;">Latitude</td>
-                        <th colspan="1" style="white-space: nowrap;"><span id="annoMetadataLatitudeId"></span></th>
-                        <td class="has-text-right" style="white-space: nowrap;">Peak (kHz)</td>
-                        <th colspan="1" style="white-space: nowrap; width: 90%;"><span
-                                id="annoMetadataPeakKhzId"></span></th>
-                    </tr>
-                    <tr>
-                        <td class="has-text-right" style="white-space: nowrap;">Local time</td>
-                        <th colspan="1" style="white-space: nowrap;"><span id="annoMetadataLocalTimeId"></span></th>
-                        <td class="has-text-right" style="white-space: nowrap;">Longitude</td>
-                        <th colspan="1" style="white-space: nowrap;"><span id="annoMetadataLongitudeId"></span></th>
-                        <td class="has-text-right" style="white-space: nowrap;">Peak (dBFS)</td>
-                        <th colspan="1" style="white-space: nowrap; width: 90%;"><span
-                                id="annoMetadataPeakDbfsId"></span></th>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div id="annoViewSpectrogramId" class="field " hidden>
-            <div class="control">
-                <figure class="image is-3by1">
-                    <img id="annoSpectrogramBufferId">
-                    <div id="annoSpectrogramLoadingId" class="is-overlay is-3by1 has-background-grey-lighter"
-                        style="opacity: 0.5;" hidden>
-                        <label class="label is-centered pt-6">
-                            Loading...
-                        </label>
-                    </div>
-                </figure>
+        <div style="min-height: 160px">
+            <div id="annoViewMetadataId" class="table-container mb-2t mx-4">
+                <table class="table has-background-grey is-size-7">
+                    <tbody>
+                        <tr>
+                            <td class="has-text-right" style="white-space: nowrap;">File</td>
+                            <th colspan="5" style="white-space: nowrap;"><span style="white-space: nowrap;"
+                                    id="annoMetadataRecordFileId"></span>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td class="has-text-right" style="white-space: nowrap;">Quality</td>
+                            <th colspan="1" style="white-space: nowrap;"><span id="annoMetadataQualityId"></span>
+                            </th>
+                            <td class="has-text-right" style="white-space: nowrap;">Tags</td>
+                            <th colspan="3" style="white-space: nowrap;"><span id="annoMetadataTagsId"></span></th>
+                        </tr>
+                        <tr>
+                            <td class="has-text-right" style="white-space: nowrap;">Comments</td>
+                            <th colspan="5" style="white-space: nowrap;"><span id="annoMetadataCommentsId"></span>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td class="has-text-right" style="white-space: nowrap;">Local date</td>
+                            <th colspan="1" style="white-space: nowrap;"><span id="annoMetadataLocalDateId"></span>
+                            </th>
+                            <td class="has-text-right" style="white-space: nowrap;">Latitude</td>
+                            <th colspan="1" style="white-space: nowrap;"><span id="annoMetadataLatitudeId"></span>
+                            </th>
+                            <td class="has-text-right" style="white-space: nowrap;">Peak (kHz)</td>
+                            <th colspan="1" style="white-space: nowrap; width: 90%;"><span
+                                    id="annoMetadataPeakKhzId"></span></th>
+                        </tr>
+                        <tr>
+                            <td class="has-text-right" style="white-space: nowrap;">Local time</td>
+                            <th colspan="1" style="white-space: nowrap;"><span id="annoMetadataLocalTimeId"></span>
+                            </th>
+                            <td class="has-text-right" style="white-space: nowrap;">Longitude</td>
+                            <th colspan="1" style="white-space: nowrap;"><span id="annoMetadataLongitudeId"></span>
+                            </th>
+                            <td class="has-text-right" style="white-space: nowrap;">Peak (dBFS)</td>
+                            <th colspan="1" style="white-space: nowrap; width: 90%;"><span
+                                    id="annoMetadataPeakDbfsId"></span></th>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-        </div>
 
-        <div id="annoViewDetailsId" class="field" hidden>
-            <div class="control has-background-success">
-                <figure class="image is-3by1">
-                    <iframe class="has-ratio" width="100" height="100" src="" frameborder="5" allowfullscreen>
-                    </iframe>
-                </figure>
+            <div id="annoViewSpectrogramId" class="field " hidden>
+                <div class="control">
+                    <figure class="image is-3by1">
+                        <img id="annoSpectrogramBufferId">
+                        <div id="annoSpectrogramLoadingId" class="is-overlay is-3by1 has-background-grey-lighter"
+                            style="opacity: 0.5;" hidden>
+                            <label class="label is-centered pt-6">
+                                Loading...
+                            </label>
+                        </div>
+                    </figure>
+                </div>
+            </div>
+
+            <div id="annoViewDetailsId" class="field" hidden>
+                <div class="control has-background-success">
+                    <figure class="image is-3by1">
+                        <iframe class="has-ratio" width="100" height="100" src="" frameborder="5" allowfullscreen>
+                        </iframe>
+                    </figure>
+                </div>
             </div>
         </div>
 

@@ -9,18 +9,6 @@ var selectedSourceValue = "";
 var selectedNightValue = "";
 var selectedRecValue = "";
 
-function annoToggleSettings() {
-    if (byId("annoSettingsId").hidden == false) {
-        byId("annoBodyId").hidden = true;
-        byId("annoSettingsId").hidden = false;
-        byId("annoShowSettingsTextId").textContent = "Hide settings";
-    } else {
-        byId("annoSettingsId").hidden = true;
-        byId("annoBodyId").hidden = false;
-        byId("annoShowSettingsTextId").textContent = "Show settings";
-    };
-}
-
 function annoSourceLoad() {
     getSourceDirs()
 }
@@ -62,32 +50,8 @@ function annoUpdate() {
     getNights(selectedSourceValue);
 }
 
-// function annoClearFilter() {
-//     try {
-//         byId("annoFilterQ0Id").checked = false;
-//         byId("annoFilterQ1Id").checked = false;
-//         byId("annoFilterQ2Id").checked = false;
-//         byId("annoFilterQ3Id").checked = false;
-//         byId("annoFilterQNotAssignedId").checked = false;
-//     } catch (err) {
-//         // Block of code to handle errors
-//     }
-// }
-
-// function annoSetFilter() {
-//     try {
-//         byId("annoFilterQ0Id").checked = true;
-//         byId("annoFilterQ1Id").checked = true;
-//         byId("annoFilterQ2Id").checked = true;
-//         byId("annoFilterQ3Id").checked = true;
-//         byId("annoFilterQNotAssignedId").checked = true;
-//     } catch (err) {
-//         // Block of code to handle errors
-//     }
-// }
-
 function annoToggleViewMetadata() {
-    if (byId("annoViewMetadataId").hidden == false) {
+    if (byId("annoViewMetadataId").hidden == true) {
         byId("annoViewMetadataButtonId").classList.add("is-inverted");
         byId("annoViewMetadataId").hidden = false;
     } else {
@@ -97,7 +61,7 @@ function annoToggleViewMetadata() {
 }
 
 function annoToggleViewSpectrogram() {
-    if (byId("annoViewSpectrogramId").hidden == false) {
+    if (byId("annoViewSpectrogramId").hidden == true) {
         byId("annoViewSpectrogramButtonId").classList.add("is-inverted");
         byId("annoViewSpectrogramId").hidden = false;
         byId("annoSpectrogramLoadingId").hidden = false;
@@ -116,7 +80,7 @@ function annoToggleViewSpectrogram() {
 }
 
 function annoToggleViewDetails() {
-    if (byId("annoViewDetailsId").hidden == false) {
+    if (byId("annoViewDetailsId").hidden == true) {
         byId("annoViewDetailsButtonId").classList.add("is-inverted");
         byId("annoViewDetailsId").hidden = false;
     } else {
