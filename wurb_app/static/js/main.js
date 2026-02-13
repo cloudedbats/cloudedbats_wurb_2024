@@ -108,8 +108,8 @@ function fetchModuleAnnotations() {
             byId("heroBodyAnnotationsId").innerHTML = html;
             byId("moduleAnnotationsId").classList.remove("is-inverted");
 
-            annoSourceLoad()
-            adminSourceLoad()
+            annoSourceLoad();
+            adminSourceLoad();
 
         })
         .catch(function (err) {

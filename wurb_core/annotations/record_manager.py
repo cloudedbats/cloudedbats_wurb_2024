@@ -104,6 +104,8 @@ class RecordManager(object):
             result_dict["localTime"] = str(local_time)
             result_dict["peakKhz"] = metadata.get("peakKhz", "")
             result_dict["peakDbfs"] = metadata.get("peakDbfs", "")
+            result_dict["latitude"] = metadata.get("latitude", "")
+            result_dict["longitude"] = metadata.get("longitude", "")
             result.append(result_dict)
         #
         return result
