@@ -116,7 +116,6 @@ async function getAdminNightInfo(sourceId, nightId) {
 
     byId("adminPreviousId").disabled = true;
     byId("adminNextId").disabled = true;
-    byId("adminUpdateId").disabled = true;
 
     fetch("/administration/info?" + new URLSearchParams({
         sourceId: sourceId,
@@ -138,10 +137,6 @@ async function getAdminNightInfo(sourceId, nightId) {
             byId("adminNumberOfQ2Id").textContent = json.numberOfQ2
             byId("adminNumberOfQ3Id").textContent = json.numberOfQ3
             byId("adminNumberOfNoAssignedId").textContent = json.numberOfNoAssigned
-
-            byId("adminPreviousId").disabled = false;
-            byId("adminNextId").disabled = false;
-            byId("adminUpdateId").disabled = false;
         })
         .catch(function (err) {
             console.warn("Error in javascript fetch: ", err);

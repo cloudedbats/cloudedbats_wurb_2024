@@ -154,6 +154,18 @@ function adminNightChanged() {
         (byId("adminViewMapId").hidden == false)) {
         getRecordingsData(adminSelectedSourceValue, adminSelectedNightValue);
     }
+    optionList = byId("adminSelectNightId");
+    optionIndex = optionList.selectedIndex;
+    if (optionIndex <= 1) {
+        byId("adminPreviousId").disabled = true;
+    } else {
+        byId("adminPreviousId").disabled = false;
+    }
+    if (optionIndex >= optionList.options.length - 1) {
+        byId("adminNextId").disabled = true;
+    } else {
+        byId("adminNextId").disabled = false;
+    }
 }
 
 function adminUpdate() {
@@ -200,8 +212,8 @@ function adminPrevious() {
     optionIndex = optionList.selectedIndex;
     if (optionIndex > 1) {
         optionList.selectedIndex = optionIndex - 1;
+        adminNightChanged()
     }
-    adminNightChanged()
 }
 
 function adminNext() {
@@ -209,9 +221,10 @@ function adminNext() {
     optionIndex = optionList.selectedIndex;
     if (optionIndex < optionList.options.length - 1) {
         optionList.selectedIndex = optionIndex + 1;
+        adminNightChanged()
     }
-    adminNightChanged()
 }
+
 
 function adminCommand(command) {
     // let selectedValue = byId("recModeSelectId").options[byId("recModeSelectId").selectedIndex].value

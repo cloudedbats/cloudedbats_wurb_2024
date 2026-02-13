@@ -42,6 +42,12 @@ class SqliteDb(object):
         if self.db_conn == None:
             self.db_conn = sqlite3.connect(self.db_file_path)
 
+    def disconnect(self):
+        """ """
+        if self.db_conn != None:
+            self.db_conn.close()
+            self.db_conn = None
+
     def set_value(self, key, value, identity="NA"):
         """ """
         self.connect()
@@ -73,6 +79,7 @@ class SqliteDb(object):
             self.db_conn.commit()
         finally:
             c.close()
+            self.disconnect()
 
     def get_value(self, key, identity="NA"):
         """ """
@@ -96,6 +103,7 @@ class SqliteDb(object):
             return result
         finally:
             c.close()
+            self.disconnect()
 
     def set_values(self, data_dict, identity="NA"):
         """ """
@@ -130,6 +138,7 @@ class SqliteDb(object):
             self.db_conn.commit()
         finally:
             c.close()
+            self.disconnect()
 
     def get_values(self, identity="NA"):
         """ """
@@ -145,6 +154,7 @@ class SqliteDb(object):
             return result_dict
         finally:
             c.close()
+            self.disconnect()
 
     def delete_rows(self, identity_list):
         """ """
@@ -158,3 +168,4 @@ class SqliteDb(object):
             self.db_conn.commit()
         finally:
             c.close()
+            self.disconnect()

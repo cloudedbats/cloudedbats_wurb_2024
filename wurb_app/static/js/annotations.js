@@ -91,8 +91,6 @@ function annoToggleViewSpectrogram() {
         var nightId = currentRecord.nightId;
         var recordId = currentRecord.recordId;
         getSpectrogramAsBuffer(sourceId, nightId, recordId);
-
-
     } else {
         byId("annoViewSpectrogramButtonId").classList.remove("is-inverted");
         byId("annoViewSpectrogramId").hidden = true;
@@ -137,16 +135,28 @@ function annoFirst() {
     }
 }
 function annoPrevious() {
-    var sourceId = byId("annoSelectSourceId").value;
-    var nightId = byId("annoSelectNightId").value;
-    var recordId = currentRecord.previousRecordId;
-    getRecordInfo(sourceId, nightId, recordId);
+    if (byId("heroBodyAnnotationsId").hidden == false) {
+        var sourceId = byId("annoSelectSourceId").value;
+        var nightId = byId("annoSelectNightId").value;
+        var recordId = currentRecord.previousRecordId;
+        getRecordInfo(sourceId, nightId, recordId);
+    }
+    if (byId("heroBodyAdminId").hidden == false) {
+        // For the administration page and for shortcuts.
+        adminPrevious()
+    }
 }
 function annoNext() {
-    var sourceId = byId("annoSelectSourceId").value;
-    var nightId = byId("annoSelectNightId").value;
-    var recordId = currentRecord.nextRecordId;
-    getRecordInfo(sourceId, nightId, recordId);
+    if (byId("heroBodyAnnotationsId").hidden == false) {
+        var sourceId = byId("annoSelectSourceId").value;
+        var nightId = byId("annoSelectNightId").value;
+        var recordId = currentRecord.nextRecordId;
+        getRecordInfo(sourceId, nightId, recordId);
+    }
+    if (byId("heroBodyAdminId").hidden == false) {
+        // For the administration page and for shortcuts.
+        adminNext()
+    }
 }
 function annoLast() {
     var textContent = byId("annoLastTextId").textContent;
@@ -166,24 +176,34 @@ function annoLast() {
 }
 
 function annoSetQ0() {
-    byId("annoQ0Id").checked = true;
-    annoSaveAnnotations();
+    if (byId("heroBodyAnnotationsId").hidden == false) {
+        byId("annoQ0Id").checked = true;
+        annoSaveAnnotations();
+    }
 }
 function annoSetQ1() {
-    byId("annoQ1Id").checked = true;
-    annoSaveAnnotations();
+    if (byId("heroBodyAnnotationsId").hidden == false) {
+        byId("annoQ1Id").checked = true;
+        annoSaveAnnotations();
+    }
 }
 function annoSetQ2() {
-    byId("annoQ2Id").checked = true;
-    annoSaveAnnotations();
+    if (byId("heroBodyAnnotationsId").hidden == false) {
+        byId("annoQ2Id").checked = true;
+        annoSaveAnnotations();
+    }
 }
 function annoSetQ3() {
-    byId("annoQ3Id").checked = true;
-    annoSaveAnnotations();
+    if (byId("heroBodyAnnotationsId").hidden == false) {
+        byId("annoQ3Id").checked = true;
+        annoSaveAnnotations();
+    }
 }
 function annoSetQNotAssigned() {
-    byId("annoQNotAssignedId").checked = true;
-    annoSaveAnnotations();
+    if (byId("heroBodyAnnotationsId").hidden == false) {
+        byId("annoQNotAssignedId").checked = true;
+        annoSaveAnnotations();
+    }
 }
 function toggleTag(tagObject) {
     if (tagObject.classList.contains("is-inverted")) {
@@ -196,30 +216,37 @@ function toggleTag(tagObject) {
 }
 
 function annoQuickClear() {
-    annoSetQuality("Not assigned");
-    annoSetTags("");
-    annoSetComments("");
-    annoSaveAnnotations();
-    // copyPasteBufferActive = false;
-    // copyPasteBufferQuality = "";
-    // copyPasteBufferTags = "";
-    // copyPasteBufferComments = "";
-    // annoEnableDisableButtons();
-
+    if (byId("heroBodyAnnotationsId").hidden == false) {
+        annoSetQuality("Not assigned");
+        annoSetTags("");
+        annoSetComments("");
+        annoSaveAnnotations();
+        // copyPasteBufferActive = false;
+        // copyPasteBufferQuality = "";
+        // copyPasteBufferTags = "";
+        // copyPasteBufferComments = "";
+        // annoEnableDisableButtons();
+    }
 }
 function annoQuickCopy() {
-    annoCopyAnnotations();
-    copyPasteBufferActive = true;
-    annoEnableDisableButtons();
+    if (byId("heroBodyAnnotationsId").hidden == false) {
+        annoCopyAnnotations();
+        copyPasteBufferActive = true;
+        annoEnableDisableButtons();
+    }
 }
 function annoQuickPaste() {
-    annoPasteAnnotations();
-    annoSaveAnnotations();
+    if (byId("heroBodyAnnotationsId").hidden == false) {
+        annoPasteAnnotations();
+        annoSaveAnnotations();
+    }
 }
 function annoQuickPasteNext() {
-    annoPasteAnnotations();
-    annoSaveAnnotations();
-    annoNext();
+    if (byId("heroBodyAnnotationsId").hidden == false) {
+        annoPasteAnnotations();
+        annoSaveAnnotations();
+        annoNext();
+    }
 }
 
 function annoQuickDownload() {
