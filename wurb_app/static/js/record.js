@@ -11,7 +11,7 @@ function recToggleSettings() {
         byId("recLocationId").hidden = false;
         byId("recSettingsId").hidden = true;
         byId('buttonSettingsId').classList.remove('is-inverted');
-        byId("recSettingsTextId").textContent = "Show settings";
+        byId("recSettingsTextId").textContent = "Settings";
     };
 }
 
@@ -20,7 +20,7 @@ function recHideSettings() {
     byId("recLocationId").hidden = false;
     byId("recSettingsId").hidden = true;
     byId('buttonSettingsId').classList.remove('is-inverted');
-    byId("recSettingsTextId").textContent = "Show settings";
+    byId("recSettingsTextId").textContent = "Settings";
 }
 
 // For detector mode.

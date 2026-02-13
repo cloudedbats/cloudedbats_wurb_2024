@@ -43,6 +43,7 @@ function activateModuleAnnotations() {
     hideModules()
     byId("moduleAnnotationsId").classList.add("is-inverted");
     byId("heroBodyAnnotationsId").hidden = false;
+    annoHideShortcuts();
 };
 
 function activateModuleAdministration() {

@@ -9,6 +9,27 @@ var selectedSourceValue = "";
 var selectedNightValue = "";
 var selectedRecValue = "";
 
+function annoToggleShortcuts() {
+    if (byId("annoShortcutsId").hidden == true) {
+        byId("annoBodyId").hidden = true;
+        byId("annoShortcutsId").hidden = false;
+        byId("buttonShortcutsId").classList.add('is-inverted');
+        byId("annoShortcutsTextId").textContent = "Hide shortcuts";
+    } else {
+        byId("annoBodyId").hidden = false;
+        byId("annoShortcutsId").hidden = true;
+        byId('buttonShortcutsId').classList.remove('is-inverted');
+        byId("annoShortcutsTextId").textContent = "Shortcuts";
+    };
+}
+
+function annoHideShortcuts() {
+    byId("annoBodyId").hidden = false;
+    byId("annoShortcutsId").hidden = true;
+    byId('buttonShortcutsId').classList.remove('is-inverted');
+    byId("annoShortcutsTextId").textContent = "Shortcuts";
+}
+
 function annoSourceLoad() {
     getSourceDirs()
 }
