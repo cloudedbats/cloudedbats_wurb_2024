@@ -26,7 +26,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name="wurb_2024_webserver",
+    name="wurb_2026_webserver",
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -46,5 +46,5 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name="wurb_2024_webserver",
+    name="wurb_2026_webserver",
 )

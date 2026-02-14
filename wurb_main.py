@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
-# Project: https://cloudedbats.github.io
+# Project: https://github.com/cloudedbats/wurb_2026
 # Author: Arnold Andreasson, info@cloudedbats.org
 # License: MIT License (see LICENSE or http://opensource.org/licenses/mit).
 
@@ -23,8 +23,8 @@ async def main():
     logger = logging.getLogger(logger_name)
     logger.info("")
     logger.info("")
-    logger.info("Welcome to CloudedBats WURB-2024")
-    logger.info("Project: https://cloudedbats.github.io")
+    logger.info("Welcome to CloudedBats WURB-2026")
+    logger.info("Project: https://github.com/cloudedbats/wurb_2026")
     logger.info("================ ^ö^ =================")
     logger.info("")
 

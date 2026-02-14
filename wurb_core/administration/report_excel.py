@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
-# Project: https://cloudedbats.github.io
+# Project: https://github.com/cloudedbats/wurb_2026
 # Author: Arnold Andreasson, info@cloudedbats.org
 # License: MIT License (see LICENSE or http://opensource.org/licenses/mit).
 
@@ -477,14 +477,14 @@ class ReportExcel(object):
         # Rows.
         readme_text = [
             [""],
-            ["CloudedBats WURB-2024, version " + wurb_core.__version__ + "."],
+            ["CloudedBats WURB-2026, version " + wurb_core.__version__ + "."],
             [""],
             ["This Excel file is a part of the CloudedBats open source project:"],
-            ["- https://cloudedbats.github.io"],
+            ["- https://github.com/cloudedbats"],
             [""],
             ["For developers: "],
             ["Source code to generate the Excel file can be found here:"],
-            ["- https://github.com/cloudedbats/cloudedbats_wurb_2024"],
+            ["- https://github.com/cloudedbats/wurb_2026"],
             [""],
         ]
         #

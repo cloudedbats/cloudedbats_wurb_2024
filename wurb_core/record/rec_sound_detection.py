@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
-# Project: http://cloudedbats.org
+# Project: https://github.com/cloudedbats/wurb_2026
 # Author: Arnold Andreasson, info@cloudedbats.org
 # License: MIT License (see LICENSE or http://opensource.org/licenses/mit).
+
 
 import logging
 import numpy as np

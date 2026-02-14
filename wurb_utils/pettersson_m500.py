@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
-# Project: https://cloudedbats.github.io
+# Project: https://github.com/cloudedbats/wurb_2026
 # Copyright (c) 2020-present Arnold Andreasson
 # License: MIT License (see LICENSE or http://opensource.org/licenses/mit).
 

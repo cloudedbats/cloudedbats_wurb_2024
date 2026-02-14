@@ -22,9 +22,9 @@ matplotlib
 pybase64
 # GPS.
 pyserial
-# pyserial-asyncio
+# pyserial-asyncio # Not maintained.
 pyserial-asyncio-fast
-# Date/time and sun/moon..
+# Date/time and sun/moon.
 pytz
 python-dateutil
 astral
@@ -35,3 +35,5 @@ xlsxwriter
 # VS Code.
 pylint
 black
+# Executables.
+pyinstaller

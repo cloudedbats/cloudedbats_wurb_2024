@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
-# Project: https://cloudedbats.github.io
+# Project: https://github.com/cloudedbats/wurb_2026
 # Author: Arnold Andreasson, info@cloudedbats.org
 # License: MIT License (see LICENSE or http://opensource.org/licenses/mit).
 
@@ -37,7 +37,7 @@ class Metadata(object):
     def configure(self):
         """ """
         # self.metadata_header_rows = [
-        #     "# Metadata for CloudedBats WURB-2024.",
+        #     "# Metadata for CloudedBats WURB-2026.",
         #     "#" "---",
         # ]
 

@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
-# Cloudedbats WURB-2024.
+# Cloudedbats WURB-2026.
 
 import os
 import sys
