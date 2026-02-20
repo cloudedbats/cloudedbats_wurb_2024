@@ -1,6 +1,6 @@
 # CloudedBats WURB-2024
 
-Next major release - work in progress...
+**This code is no longer maintained. Please used WURB-2026 instead: <https://github.com/cloudedbats/wurb_2026>** 
 
 ## For ordinary users
 
